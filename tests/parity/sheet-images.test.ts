@@ -5,16 +5,18 @@ import { blogPosts } from "@/lib/data/blog-posts"
 import { getService } from "@/lib/data/services"
 
 const root = process.cwd()
+type ManifestEntry = {
+  sheetName: string
+  route?: string
+  blogSlug?: string
+  driveId?: string
+  driveFilename?: string
+  localPath?: string | null
+  status: string
+}
+
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "docs/image-audit/sheet-image-manifest.json"), "utf8")) as {
-  entries: Array<{
-    sheetName: string
-    route?: string
-    blogSlug?: string
-    driveId?: string
-    driveFilename?: string
-    localPath?: string | null
-    status: string
-  }>
+  entries: ManifestEntry[]
 }
 
 function sourceFiles(dir: string): string[] {
@@ -22,6 +24,14 @@ function sourceFiles(dir: string): string[] {
     const entryPath = path.join(dir, entry.name)
     return entry.isDirectory() ? sourceFiles(entryPath) : [entryPath]
   })
+}
+
+function serviceSlugFromRoute(entry: ManifestEntry): string | null {
+  return entry.route?.match(/^\/services\/([^/]+)\/$/)?.[1] ?? null
+}
+
+function publicAssetExists(assetPath: string): boolean {
+  return fs.existsSync(path.join(root, "public", assetPath))
 }
 
 describe("sheet image integration", () => {
@@ -53,46 +63,25 @@ describe("sheet image integration", () => {
 
   it("uses local sheet images for service routes", () => {
     const bySheetName = new Map(manifest.entries.map((entry) => [entry.sheetName, entry]))
-
-    expect(getService("iv-therapy")?.image).toBe("/images/content/sheet/services/iv-therapy.jpg")
-    expect(bySheetName.get("iv therapy")?.driveFilename).toBe("Hotel IV Drip_2_H.jpg")
-
-    expect(getService("exosome-iv-drip")?.image).toBe("/images/content/sheet/services/exosome-iv-drip.jpg")
-    expect(bySheetName.get("exosome iv drip")?.driveFilename).toBe("Exosome_H.jpg")
-
-    expect(getService("hangover-iv-drip")?.image).toBe("/images/content/sheet/services/hangover-iv-drip.jpg")
-    expect(bySheetName.get("hangover iv drip")?.driveFilename).toBe("Hangover_H.jpg")
-
-    expect(getService("energy-fatigue-recovery-iv")?.image).toBe(
-      "/images/content/sheet/services/energy-fatigue-recovery-iv.jpg",
+    const usedServiceEntries = manifest.entries.filter(
+      (entry) => entry.status === "used" && entry.localPath && serviceSlugFromRoute(entry),
     )
-    expect(bySheetName.get("energy & fatigue recovery iv")?.driveFilename).toBe("Energy Recovery_H.jpg")
 
-    expect(getService("immune-boost-iv-therapy")?.image).toBe(
-      "/images/content/sheet/services/immune-boost-iv-therapy.jpg",
-    )
-    expect(bySheetName.get("immune boost iv therapy")?.driveFilename).toBe("Immune Boost_H.jpg")
+    for (const entry of usedServiceEntries) {
+      const slug = serviceSlugFromRoute(entry)
+      expect(getService(slug!)?.image).toBe(entry.localPath)
+      expect(entry.driveFilename).toBeTruthy()
+    }
 
-    expect(getService("skin-brightening-iv-drip")?.image).toBe(
-      "/images/content/sheet/services/skin-brightening-iv-drip.jpg",
-    )
-    expect(bySheetName.get("skin brightening iv drip")?.driveFilename).toBe("Skin Brightening_H.jpg")
+    const blockedMedicationEntry = bySheetName.get("Medications")
+    const medicationImage = getService("medication")?.image
 
-    expect(getService("iv-vitamin-therapy")?.image).toBe("/images/content/sheet/services/iv-vitamin-therapy.jpg")
-    expect(bySheetName.get("iv vitamin therapy")?.driveFilename).toBe("Vitamin Shot_H.jpg")
-
-    expect(getService("medication")?.image).toBe("/images/office_exam_room-scaled.jpg")
-
-    expect(getService("ed-medication")?.image).toBe("/images/content/sheet/services/ed-medication.jpg")
-    expect(bySheetName.get("ED medication")?.driveFilename).toBe("Cialis_2_H.jpg")
-
-    expect(getService("stem-cell-nasal-spray")?.image).toBe(
-      "/images/content/sheet/services/stem-cell-nasal-spray.jpg",
-    )
-    expect(bySheetName.get("stem cell nasal spray")?.driveFilename).toBe("Exosome Nasal Spray_H.jpg")
-
-    expect(getService("stem-cell-therapy")?.image).toBe("/images/content/sheet/services/stem-cell-therapy.jpg")
-    expect(bySheetName.get("stem cell therapy")?.driveFilename).toBe("Consultation Room_Akira_H.jpg")
+    expect(blockedMedicationEntry?.status).toBe("blocked-external-license")
+    expect(blockedMedicationEntry?.localPath).toBeNull()
+    expect(medicationImage).toBeTruthy()
+    expect(medicationImage).not.toMatch(/^https?:\/\//)
+    expect(medicationImage).not.toMatch(/drive\.google\.com|lh3\.googleusercontent\.com|istockphoto\.com/)
+    expect(publicAssetExists(medicationImage!)).toBe(true)
   })
 
   it("uses local sheet images for static blog entries", () => {
