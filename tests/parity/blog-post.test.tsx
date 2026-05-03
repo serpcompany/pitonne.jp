@@ -4,6 +4,17 @@ import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 
 describe("blog post parity", () => {
+  it("loads static posts from markdown files with frontmatter", () => {
+    const post = getBlogPostBySlug("iv-therapy-for-hangover")
+
+    expect(post).toMatchObject({
+      sourcePath: "content/blog/iv-therapy-for-hangover.md",
+      title: "IV Therapy for Hangover: What It May Help With and What It Cannot Do",
+    })
+    expect(post?.content).toContain('## What People Usually Mean by "IV Therapy for Hangover"')
+    expect(post?.content).not.toContain("<h2>")
+  })
+
   it("renders markdown prose plus live discovery sections around the final takeaway", () => {
     const post = getBlogPostBySlug("iv-therapy-for-dehydration")
     expect(post).toBeDefined()

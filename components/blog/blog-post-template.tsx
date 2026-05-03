@@ -1,4 +1,6 @@
 import Link from "next/link"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { PortableText } from "@portabletext/react"
 import { PageHero } from "@/components/shared/page-hero"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
@@ -22,17 +24,21 @@ export interface BlogPostViewModel {
 }
 
 function splitFinalTakeaway(content: string) {
-  const marker = /<h2>\s*Final Takeaway\s*<\/h2>/i
-  const parts = content.split(marker)
+  const marker = /^##\s+Final Takeaway\s*$/im
+  const match = content.match(marker)
 
-  if (parts.length < 2) {
+  if (!match || match.index === undefined) {
     return { before: content, final: "" }
   }
 
   return {
-    before: parts[0],
-    final: `<h2>Final Takeaway</h2>${parts.slice(1).join("<h2>Final Takeaway</h2>")}`,
+    before: content.slice(0, match.index).trim(),
+    final: content.slice(match.index).trim(),
   }
+}
+
+function MarkdownContent({ content }: { content: string }) {
+  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
 }
 
 function BlogContent({ post }: { post: BlogPostViewModel }) {
@@ -49,9 +55,9 @@ function BlogContent({ post }: { post: BlogPostViewModel }) {
 
   return (
     <div className="blog-prose">
-      <div dangerouslySetInnerHTML={{ __html: content.before }} />
+      <MarkdownContent content={content.before} />
       <BlogDiscoverySection post={post} />
-      {content.final ? <div dangerouslySetInnerHTML={{ __html: content.final }} /> : null}
+      {content.final ? <MarkdownContent content={content.final} /> : null}
     </div>
   )
 }

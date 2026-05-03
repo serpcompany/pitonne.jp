@@ -2,8 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
-import { getPosts, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
-import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
+import { getAllBlogPosts, getAllCategories } from "@/lib/data/blog-posts"
 import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -20,30 +19,15 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  // Try to fetch from Sanity, fallback to static posts
-  const sanityConfigured = isSanityConfigured()
-  const sanityPosts = sanityConfigured ? await getPosts() : []
-  
-  // Use Sanity posts if available, otherwise use static posts
-  const posts = sanityPosts.length > 0 
-    ? sanityPosts.map(post => ({
-        slug: post.slug.current,
-        title: post.title,
-        date: formatSanityDate(post.publishedAt),
-        excerpt: post.excerpt || "",
-        readingTime: post.estimatedReadingTime,
-        featureImage: post.mainImage ? urlFor(post.mainImage).width(600).height(400).url() : undefined,
-        category: post.categories?.[0]?.title || "Wellness",
-      }))
-    : blogPosts.map(post => ({
-        slug: post.slug,
-        title: post.title,
-        date: new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        excerpt: post.excerpt,
-        readingTime: post.readingTime,
-        featureImage: post.featureImage,
-        category: post.category,
-      }))
+  const posts = getAllBlogPosts().map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    date: new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+    excerpt: post.excerpt,
+    readingTime: post.readingTime,
+    featureImage: post.featureImage,
+    category: post.category,
+  }))
 
   const featuredPost = posts[0]
   const otherPosts = posts.slice(1)
