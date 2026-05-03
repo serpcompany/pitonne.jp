@@ -15,6 +15,7 @@ export interface Service {
   keyPoints: string[]
   faqs: FAQ[]
   relatedServices: string[]
+  image?: string
 }
 
 export const services: Service[] = [
@@ -23,6 +24,7 @@ export const services: Service[] = [
     slug: "exosome-iv-drip",
     name: "Exosome IV Drip",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "Exosome IV therapy delivers powerful regenerative factors derived from stem cell supernatant to support cellular repair, recovery, and overall wellness.",
     fullDescription: "Exosome IV therapy delivers powerful regenerative factors derived from stem cell supernatants to support cellular repair, recovery, and overall wellness. This advanced treatment may help promote healthy aging, improve energy levels, and support recovery from physical stress or injury. Exosome therapy is commonly used to enhance vitality, optimize performance, and support the body's natural healing processes.",
     benefits: [
@@ -61,6 +63,7 @@ export const services: Service[] = [
     slug: "hangover-iv-drip",
     name: "Hangover IV Drip",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "Hangover IV therapy delivers rapid hydration, vitamins, and electrolytes directly into the bloodstream to help relieve common hangover symptoms.",
     fullDescription: "Hangover IV therapy delivers rapid hydration, vitamins, and electrolytes directly into the bloodstream to help relieve common hangover symptoms. This treatment may help reduce nausea, headaches, fatigue, and dehydration while supporting faster recovery after alcohol consumption. Hangover IV drips are a fast and effective way to restore energy and help you feel better quickly.",
     benefits: [
@@ -99,6 +102,7 @@ export const services: Service[] = [
     slug: "immune-boost-iv-therapy",
     name: "Immune Boost IV Therapy",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "Immune boost IV therapy provides high-quality vitamins, antioxidants, and hydration designed to support immune system health.",
     fullDescription: "Immune boost IV therapy provides high-quality vitamins, antioxidants, and hydration designed to support immune system health. This treatment may help the body defend against illness, improve recovery from fatigue, and strengthen overall wellness. Many patients use immune IV therapy during seasonal changes or times of increased stress to help maintain optimal health.",
     benefits: [
@@ -136,6 +140,7 @@ export const services: Service[] = [
     slug: "iv-vitamin-therapy",
     name: "IV Vitamin Therapy",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "IV vitamin therapy delivers essential vitamins, minerals, and hydration directly into the bloodstream for maximum absorption and effectiveness.",
     fullDescription: "IV vitamin therapy delivers essential vitamins, minerals, and hydration directly into the bloodstream for maximum absorption and effectiveness. This treatment may help improve energy levels, support immune function, and promote overall wellness. IV vitamin therapy is commonly used to support recovery, boost vitality, and help maintain optimal health.",
     benefits: [
@@ -178,6 +183,7 @@ export const services: Service[] = [
     slug: "energy-fatigue-recovery-iv",
     name: "Energy & Fatigue Recovery IV",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "Energy and fatigue recovery IV therapy provides a powerful blend of hydration, vitamins, and nutrients designed to help restore energy levels and reduce tiredness.",
     fullDescription: "Energy and fatigue recovery IV therapy provides a powerful blend of hydration, vitamins, and nutrients designed to help restore energy levels and reduce tiredness. This treatment may support mental clarity, improve focus, and promote faster recovery from physical or mental fatigue. Many patients choose this IV drip to boost daily performance and overall wellness.",
     benefits: [
@@ -216,6 +222,7 @@ export const services: Service[] = [
     slug: "skin-brightening-iv-drip",
     name: "Skin Brightening IV Drip",
     category: "iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
     shortDescription: "Skin brightening IV therapy delivers antioxidants and skin-supporting nutrients directly into the bloodstream to help promote clearer, healthier-looking skin.",
     fullDescription: "Skin brightening IV therapy delivers antioxidants and skin-supporting nutrients directly into the bloodstream to help promote clearer, healthier-looking skin. This treatment may support skin repair, improve skin tone, and protect against environmental stressors such as sun exposure. Many patients use skin brightening IV drips to support radiant skin and overall skin wellness.",
     benefits: [
@@ -255,6 +262,7 @@ export const services: Service[] = [
     slug: "stem-cell-nasal-spray",
     name: "Stem Cell Nasal Spray",
     category: "stem-cell",
+    image: "/images/office_exam_room-scaled.jpg",
     shortDescription: "Stem cell nasal spray delivers regenerative factors through a convenient nasal application to support brain health, cognitive function, and overall wellness.",
     fullDescription: "Stem cell nasal spray delivers regenerative factors through a convenient nasal application to support brain health, cognitive function, and overall wellness. This innovative treatment may help improve mental clarity, support memory function, and promote neurological health. The nasal delivery method allows for efficient absorption and is part of our comprehensive stem cell therapy options.",
     benefits: [
@@ -294,6 +302,7 @@ export const services: Service[] = [
     slug: "ed-medication",
     name: "ED Medication",
     category: "medication",
+    image: "/images/aic_office_reception_2-scaled.jpg",
     shortDescription: "Prescription ED medication such as Viagra or Cialis helps improve blood flow and support healthy erectile function.",
     fullDescription: "Prescription ED medication such as Viagra or Cialis helps improve blood flow and support healthy erectile function. This treatment may help men achieve and maintain a stronger, longer-lasting erection while improving sexual confidence and performance. Our providers offer discreet consultations and personalized treatment plans to ensure safe, effective results tailored to your individual needs.",
     benefits: [

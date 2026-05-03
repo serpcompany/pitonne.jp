@@ -112,10 +112,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border">
       <nav className="container mx-auto flex items-center justify-between px-4 py-4 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <span className="text-xl font-serif font-medium tracking-wide">Pitonne</span>
-        </Link>
+{/* Logo */}
+  <Link href="/" className="flex items-center">
+    <img 
+      src="/images/pitt-wordlogo-blk-32.svg" 
+      alt="Pitonne Stem Cell & IV Therapy" 
+      className="h-8 w-auto"
+    />
+  </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">

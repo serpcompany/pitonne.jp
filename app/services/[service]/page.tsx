@@ -43,13 +43,24 @@ export default async function ServiceDetailPage({ params }: Props) {
     <div className="bg-background">
       {/* Hero Section */}
       <section className="relative py-20 md:py-28">
-        <div className="absolute inset-0 bg-[#f5ebe0]/50" />
+        {service.image ? (
+          <div className="absolute inset-0">
+            <img 
+              src={service.image} 
+              alt={service.name}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-[#1a1a1a]/60" />
+          </div>
+        ) : (
+          <div className="absolute inset-0 bg-[#f5ebe0]/50" />
+        )}
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mb-6 font-serif text-4xl font-bold text-foreground md:text-5xl">
+            <h1 className={`mb-6 font-serif text-4xl font-bold md:text-5xl ${service.image ? 'text-white' : 'text-foreground'}`}>
               {service.name}
             </h1>
-            <p className="text-lg text-muted-foreground md:text-xl">
+            <p className={`text-lg md:text-xl ${service.image ? 'text-white/90' : 'text-muted-foreground'}`}>
               {service.shortDescription}
             </p>
           </div>

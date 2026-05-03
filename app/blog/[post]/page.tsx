@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPostBySlug as getSanityPost, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
 import { PortableText } from "@portabletext/react"
-import { blogPosts, getPostBySlug, getPostsByCategory } from "@/lib/data/blog-posts"
+import { blogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 
 interface Props {
   params: Promise<{ post: string }>
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   
   // Fallback to static
-  const staticPost = getPostBySlug(postSlug)
+  const staticPost = getBlogPostBySlug(postSlug)
   if (staticPost) {
     return {
       title: `${staticPost.title} | Pitonne Blog`,
@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: Props) {
   
   // Fallback to static
   if (!post) {
-    const staticPost = getPostBySlug(postSlug)
+    const staticPost = getBlogPostBySlug(postSlug)
     if (staticPost) {
       post = {
         title: staticPost.title,
@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   // Get related posts from same category
-  const relatedPosts = getPostsByCategory(post.categorySlug)
+  const relatedPosts = getBlogPostsByCategory(post.categorySlug)
     .filter(p => p.slug !== postSlug)
     .slice(0, 3)
 
