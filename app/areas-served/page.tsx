@@ -7,35 +7,63 @@ export const metadata: Metadata = {
   description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas.",
 }
 
-const areas = [
-  { name: "Roppongi", slug: "roppongi", ward: "Minato" },
-  { name: "Azabu Juban", slug: "azabu-juban", ward: "Minato" },
-  { name: "Hiroo", slug: "hiroo", ward: "Minato" },
-  { name: "Akasaka", slug: "akasaka", ward: "Minato" },
-  { name: "Nishi-Azabu", slug: "nishi-azabu", ward: "Minato" },
-  { name: "Mita", slug: "mita", ward: "Minato" },
-  { name: "Shibuya", slug: "shibuya", ward: "Shibuya" },
-  { name: "Ebisu", slug: "ebisu", ward: "Shibuya" },
-  { name: "Daikanyama", slug: "daikanyama", ward: "Shibuya" },
-  { name: "Harajuku", slug: "harajuku", ward: "Shibuya" },
-  { name: "Omotesando", slug: "omotesando", ward: "Shibuya" },
-  { name: "Ginza", slug: "ginza", ward: "Chuo" },
-  { name: "Marunouchi", slug: "marunouchi", ward: "Chiyoda" },
-  { name: "Otemachi", slug: "otemachi", ward: "Chiyoda" },
-  { name: "Shinagawa", slug: "shinagawa", ward: "Shinagawa" },
-  { name: "Meguro", slug: "meguro", ward: "Meguro" },
-  { name: "Nakameguro", slug: "nakameguro", ward: "Meguro" },
-  { name: "Shinjuku", slug: "shinjuku", ward: "Shinjuku" },
-  { name: "Yotsuya", slug: "yotsuya", ward: "Shinjuku" },
-  { name: "Ikebukuro", slug: "ikebukuro", ward: "Toshima" },
-  { name: "Aoyama", slug: "aoyama", ward: "Minato" },
-  { name: "Toranomon", slug: "toranomon", ward: "Minato" },
-  { name: "Shimbashi", slug: "shimbashi", ward: "Minato" },
-  { name: "Odaiba", slug: "odaiba", ward: "Minato" },
-  { name: "Toyosu", slug: "toyosu", ward: "Koto" },
-  { name: "Nihonbashi", slug: "nihonbashi", ward: "Chuo" },
-  { name: "Tsukiji", slug: "tsukiji", ward: "Chuo" },
-  { name: "Roppongi Hills", slug: "roppongi-hills", ward: "Minato" },
+const wards = [
+  {
+    name: "Minato",
+    slug: "minato",
+    areas: [
+      { name: "Roppongi", slug: "roppongi" },
+      { name: "Azabu Juban", slug: "azabu-juban" },
+      { name: "Hiroo", slug: "hiroo" },
+      { name: "Akasaka", slug: "akasaka" },
+      { name: "Toranomon", slug: "toranomon" },
+      { name: "Shimbashi", slug: "shimbashi" },
+    ]
+  },
+  {
+    name: "Shibuya",
+    slug: "shibuya",
+    areas: [
+      { name: "Ebisu", slug: "ebisu" },
+      { name: "Daikanyama", slug: "daikanyama" },
+      { name: "Hiroo", slug: "hiroo" },
+      { name: "Omotesando", slug: "omotesando" },
+      { name: "Harajuku", slug: "harajuku" },
+      { name: "Yoyogi", slug: "yoyogi" },
+      { name: "Yoyogi Uehara", slug: "yoyogi-uehara" },
+      { name: "Sendagaya", slug: "sendagaya" },
+    ]
+  },
+  {
+    name: "Chuo",
+    slug: "chuo",
+    areas: [
+      { name: "Ginza", slug: "ginza" },
+      { name: "Nihonbashi", slug: "nihonbashi" },
+      { name: "Tsukiji", slug: "tsukiji" },
+      { name: "Hatchobori", slug: "hatchobori" },
+    ]
+  },
+  {
+    name: "Chiyoda",
+    slug: "chiyoda",
+    areas: [
+      { name: "Tokyo Station", slug: "tokyo-station" },
+      { name: "Otemachi", slug: "otemachi" },
+      { name: "Kanda", slug: "kanda" },
+      { name: "Akihabara", slug: "akihabara" },
+      { name: "Iidabashi", slug: "iidabashi" },
+    ]
+  },
+  {
+    name: "Shinagawa",
+    slug: "shinagawa",
+    areas: [
+      { name: "Gotanda", slug: "gotanda" },
+      { name: "Osaki", slug: "osaki" },
+      { name: "Takanawa", slug: "takanawa" },
+    ]
+  },
 ]
 
 export default function AreasServedPage() {
@@ -63,22 +91,36 @@ export default function AreasServedPage() {
         </div>
       </section>
 
-      {/* Areas Grid */}
+      {/* Wards Grid */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {areas.map((area) => (
-              <Link
-                key={area.slug}
-                href={`/areas-served/${area.slug}`}
-                className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-[#faf9f7] hover:bg-[#f5ebe0] hover:border-[#d4c4a8] transition-all"
-              >
-                <MapPin className="h-5 w-5 text-[#4AA69D] shrink-0" />
-                <div>
-                  <p className="font-medium group-hover:text-[#4AA69D] transition-colors">{area.name}</p>
-                  <p className="text-xs text-muted-foreground">{area.ward} Ward</p>
+          <div className="space-y-12">
+            {wards.map((ward) => (
+              <div key={ward.slug}>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-serif">{ward.name} Ward</h2>
+                  <Link 
+                    href={`/areas-served/${ward.slug}`}
+                    className="text-sm text-[#4AA69D] hover:underline"
+                  >
+                    View all in {ward.name} &rarr;
+                  </Link>
                 </div>
-              </Link>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {ward.areas.map((area) => (
+                    <Link
+                      key={area.slug}
+                      href={`/areas-served/${ward.slug}/${area.slug}`}
+                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-[#faf9f7] hover:bg-[#f5ebe0] hover:border-[#d4c4a8] transition-all"
+                    >
+                      <MapPin className="h-5 w-5 text-[#4AA69D] shrink-0" />
+                      <div>
+                        <p className="font-medium group-hover:text-[#4AA69D] transition-colors">{area.name}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

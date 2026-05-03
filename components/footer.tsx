@@ -7,8 +7,8 @@ const quickLinks = [
   { name: "Services", href: "/services" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
-  { name: "Privacy Policy", href: "/privacy-policy" },
-  { name: "Terms of Use", href: "/terms-of-use" },
+  { name: "Privacy Policy", href: "/legal/privacy-policy" },
+  { name: "Terms & Conditions", href: "/legal/terms-conditions" },
   { name: "Medical Disclaimer", href: "/medical-disclaimer" },
 ]
 
@@ -23,13 +23,13 @@ const openHours = [
 ]
 
 const areasServed = [
-  { name: "Roppongi", href: "/areas-served/roppongi" },
-  { name: "Azabu Juban", href: "/areas-served/azabu-juban" },
-  { name: "Minato / Hiroo", href: "/areas-served/hiroo" },
-  { name: "Akasaka", href: "/areas-served/akasaka" },
+  { name: "Roppongi", href: "/areas-served/minato/roppongi" },
+  { name: "Azabu Juban", href: "/areas-served/minato/azabu-juban" },
+  { name: "Hiroo", href: "/areas-served/minato/hiroo" },
+  { name: "Akasaka", href: "/areas-served/minato/akasaka" },
   { name: "Shibuya", href: "/areas-served/shibuya" },
-  { name: "Ebisu", href: "/areas-served/ebisu" },
-  { name: "Ginza", href: "/areas-served/ginza" },
+  { name: "Ebisu", href: "/areas-served/shibuya/ebisu" },
+  { name: "Ginza", href: "/areas-served/chuo/ginza" },
   { name: "Shinagawa", href: "/areas-served/shinagawa" },
 ]
 
