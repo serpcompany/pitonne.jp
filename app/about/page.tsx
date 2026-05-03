@@ -10,16 +10,19 @@ const team = [
   {
     name: "Kanako Shimizu",
     role: "Registered Nurse & Public Health Nurse",
+    image: "/images/kana-scaled.jpg",
     bio: "Kanako is involved in the operation of a regenerative medicine clinic, with a focus on health optimization and preventive care. As a registered nurse and public health nurse, she supports treatments using stem cell conditioned media and provides wellness support including corporate programs, weight management, and fasting guidance. She believes in helping people care for their health before illness develops, while balancing preventive care with conventional medicine.",
   },
   {
     name: "Saori Tsubaki",
     role: "Registered Nurse & Public Health Nurse",
+    image: "/images/saori-scaled.jpg",
     bio: "Saori is involved in health support within the field of regenerative medicine, drawing on her knowledge and experience as a registered nurse and public health nurse. She values supporting each individual's daily well-being through treatment assistance using stem cell conditioned media, as well as preventive care, body maintenance, weight management, and corporate wellness programs.",
   },
   {
     name: "Akira Mikami",
     role: "Physician",
+    image: "/images/akira_about_3x4-1-scaled.jpg",
     bio: "Since my years as a resident physician, I have practiced medicine with the words \"Patient First\" held close to my heart. Providing the kind of medical care that I would want to receive myself has always been the foundation of why I chose to become a physician. I believe that as long as I remain true to this principle, it will guide me in making the right decisions for my patients.",
   },
 ]
@@ -75,15 +78,14 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Image placeholder */}
+            {/* Clinic Reception Image */}
             <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg overflow-hidden flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-white/50 flex items-center justify-center">
-                    <span className="text-3xl font-serif text-[#8bb3b0]">P</span>
-                  </div>
-                  <p className="text-sm">Clinic Reception</p>
-                </div>
+              <div className="aspect-[4/3] rounded-lg overflow-hidden">
+                <img 
+                  src="/images/aic_office_reception_2-scaled.jpg" 
+                  alt="Pitonne clinic reception area"
+                  className="w-full h-full object-cover"
+                />
               </div>
               {/* Decorative leaf */}
               <div className="absolute -right-6 top-0 w-16 h-24 opacity-40 hidden lg:block">

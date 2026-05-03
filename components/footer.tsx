@@ -121,7 +121,11 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div>
-            <h3 className="text-xl font-serif mb-4">Pitonne</h3>
+            <img 
+              src="/images/pitt-wordlogo-white-32.svg" 
+              alt="Pitonne" 
+              className="h-8 w-auto mb-4"
+            />
             <p className="text-sm text-white/80 mb-2">Pitonne Stem Cell & IV Therapy</p>
             <address className="text-sm text-white/70 not-italic space-y-1">
               <p>106-0031 Tokyo, Minato City, Nishiazabu,</p>
