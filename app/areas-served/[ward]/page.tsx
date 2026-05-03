@@ -26,6 +26,9 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
     notFound()
   }
 
+  const mapQuery = encodeURIComponent(`${ward.name}, Tokyo, Japan`)
+  const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
+
   return (
     <div className="bg-background">
       {/* Hero Section */}
@@ -76,6 +79,33 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="py-16 bg-card">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="mb-8 text-center">
+            <h2 className="font-serif text-3xl text-foreground mb-4">
+              Map of {ward.name}, Tokyo
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Use this map to orient around {ward.name} Ward and the neighborhoods Pitonne serves in central Tokyo.
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-border bg-background">
+            <iframe
+              src={mapEmbedUrl}
+              width="100%"
+              height="360"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={`${ward.name}, Tokyo map`}
+              className="block w-full"
+            />
           </div>
         </div>
       </section>

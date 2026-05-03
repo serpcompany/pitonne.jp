@@ -14,6 +14,8 @@ export interface BlogPost {
   }
   readingTime: number
   featured?: boolean
+  relatedServiceSlugs?: string[]
+  tags?: string[]
 }
 
 export const blogPosts: BlogPost[] = [
@@ -476,6 +478,33 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPos
   return blogPosts
     .filter(post => post.slug !== currentSlug && post.categorySlug === currentPost.categorySlug)
     .slice(0, limit)
+}
+
+const blogServiceMap: Record<string, string[]> = {
+  "iv-therapy-for-hangover": ["hangover-iv-drip", "iv-therapy"],
+  "iv-therapy-for-fatigue": ["energy-fatigue-recovery-iv", "iv-therapy"],
+  "iv-therapy-for-dehydration": ["iv-therapy", "iv-vitamin-therapy"],
+  "exosome-iv-drip-cost": ["exosome-iv-drip", "iv-therapy"],
+}
+
+export function getRelatedServiceSlugsForPost(post: Pick<BlogPost, "slug" | "relatedServiceSlugs" | "categorySlug">): string[] {
+  if (post.relatedServiceSlugs?.length) {
+    return post.relatedServiceSlugs
+  }
+
+  if (blogServiceMap[post.slug]) {
+    return blogServiceMap[post.slug]
+  }
+
+  return post.categorySlug === "iv-therapy" ? ["iv-therapy"] : []
+}
+
+export function getBlogPostsForService(serviceSlug: string, limit: number = 3): BlogPost[] {
+  const matchingPosts = getAllBlogPosts()
+    .filter((post) => getRelatedServiceSlugsForPost(post).includes(serviceSlug))
+    .slice(0, limit)
+
+  return matchingPosts.length > 0 ? matchingPosts : getAllBlogPosts().slice(0, limit)
 }
 
 export function getAllCategories(): { name: string; slug: string; count: number }[] {

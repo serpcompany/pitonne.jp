@@ -1,0 +1,111 @@
+import fs from "node:fs"
+import path from "node:path"
+
+const root = process.cwd()
+const failures = []
+
+function read(file) {
+  return fs.readFileSync(path.join(root, file), "utf8")
+}
+
+const footer = read("components/footer.tsx")
+const header = read("components/header.tsx")
+const home = read("app/page.tsx")
+const layout = read("app/layout.tsx")
+const siteData = read("lib/data/site.ts")
+const serviceDetailPage = read("app/services/[service]/page.tsx")
+const serviceDetailTemplate = read("components/services/service-detail-template.tsx")
+const areaDetailPage = read("components/area-detail-page.tsx")
+const blogPostPage = read("app/blog/[post]/page.tsx")
+const blogPostTemplate = read("components/blog/blog-post-template.tsx")
+const globalsCss = read("app/globals.css")
+
+const expectedBusinessInfo = [
+  "070-2194-0199",
+  "pitonne.am@gmail.com",
+  "106-0031 Tokyo, Minato City, Nishiazabu",
+  "3 Chome−17−22 モダンフォルム西麻布 1階",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+  "10:00 - 19:00",
+  "https://ssv.onemorehand.jp/hic_pitonne/",
+]
+
+for (const value of expectedBusinessInfo) {
+  if (!footer.includes(value) && !layout.includes(value) && !siteData.includes(value)) {
+    failures.push(`Missing Sheet business info in footer/layout: ${value}`)
+  }
+}
+
+for (const [file, source] of [
+  ["components/header.tsx", header],
+  ["components/footer.tsx", footer],
+  ["app/page.tsx", home],
+]) {
+  if (source.includes("/services/medications")) {
+    failures.push(`${file} links to non-canonical /services/medications`)
+  }
+  if (source.includes("/medical-disclaimer")) {
+    failures.push(`${file} links to non-canonical /medical-disclaimer`)
+  }
+}
+
+for (const disallowed of ["placeholder", "logoipsum", "glowence"]) {
+  const matches = [
+    ["app/page.tsx", home],
+    ["components/header.tsx", header],
+    ["components/footer.tsx", footer],
+  ].flatMap(([file, source]) =>
+    source.toLowerCase().includes(disallowed) ? [file] : []
+  )
+  if (matches.length > 0) {
+    failures.push(`Visible code references disallowed demo asset term "${disallowed}": ${matches.join(", ")}`)
+  }
+}
+
+if (!serviceDetailPage.includes("ServiceDetailTemplate") || !serviceDetailTemplate.includes("Breadcrumbs")) {
+  failures.push("Service detail hero must include breadcrumb navigation back to Services")
+}
+
+if (!serviceDetailTemplate.includes("Home") || !serviceDetailTemplate.includes("service.name")) {
+  failures.push("Service detail breadcrumbs must include Home and the current service label")
+}
+
+const heroSource = serviceDetailTemplate.slice(
+  serviceDetailTemplate.indexOf("<section"),
+  serviceDetailTemplate.indexOf('<section className="py-16')
+)
+
+if (heroSource.includes("absolute inset-0") || heroSource.includes("object-cover")) {
+  failures.push("Service detail hero must not use a background image or overlay")
+}
+
+if (!areaDetailPage.includes("www.google.com/maps") || !areaDetailPage.includes("<iframe")) {
+  failures.push("Area detail page template must include a Google Maps embed")
+}
+
+if (!areaDetailPage.includes("mapQuery") || !areaDetailPage.includes("areaName") || !areaDetailPage.includes("wardName")) {
+  failures.push("Area map embed must be generated from the current area and ward")
+}
+
+if (!blogPostPage.includes("BlogPostTemplate") || !blogPostTemplate.includes("blog-prose")) {
+  failures.push("Blog post content must use the project-owned blog-prose formatting class")
+}
+
+for (const selector of [".blog-prose h2", ".blog-prose p", ".blog-prose ul", ".blog-prose li"]) {
+  if (!globalsCss.includes(selector)) {
+    failures.push(`Missing blog prose CSS selector: ${selector}`)
+  }
+}
+
+if (failures.length) {
+  console.error(failures.join("\n"))
+  process.exit(1)
+}
+
+console.log("Content audit passed.")

@@ -1,0 +1,47 @@
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { ServiceCardGrid } from "@/components/services/service-card-grid"
+import type { Service, ServiceCategorySection } from "@/lib/data/services"
+
+type Section = ServiceCategorySection & { services: Service[] }
+
+export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
+  return (
+    <div className="bg-background">
+      <section className="bg-[#faf9f7] py-16 lg:py-20">
+        <div className="container mx-auto px-4">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Services" },
+            ]}
+          />
+          <h1 className="mb-6 font-serif text-4xl text-foreground md:text-5xl">Our Services</h1>
+          <p className="max-w-3xl text-lg text-muted-foreground">
+            Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services.
+            Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.
+          </p>
+        </div>
+      </section>
+
+      {sections.map((section, index) => (
+        <section
+          key={section.slug}
+          data-testid={`service-section-${section.slug}`}
+          className={`py-16 lg:py-20 ${index % 2 === 0 ? "bg-card" : "bg-background"}`}
+        >
+          <div className="container mx-auto px-4">
+            <div className="mb-8 flex items-center justify-between gap-6">
+              <h2 className="font-serif text-3xl text-foreground md:text-4xl">{section.title}</h2>
+              <Link href={section.href} className="flex items-center gap-1 text-[#4AA69D] hover:underline">
+                View all <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <ServiceCardGrid services={section.services} cardClassName={index % 2 === 0 ? "bg-background" : "bg-card"} />
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}

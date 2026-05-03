@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 
 interface AreaPageProps {
   areaName: string
@@ -14,24 +15,35 @@ interface AreaPageProps {
 const faqs = (areaName: string, wardName: string) => [
   {
     question: `Can I book a consultation if I am staying in ${areaName}, ${wardName}, Tokyo?`,
-    answer: `Yes. Patients staying in ${areaName}, ${wardName}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step.`
+    answer: `Yes. Patients staying in ${areaName}, ${wardName}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step.`,
   },
   {
     question: `What services are available for ${areaName} patients?`,
-    answer: "Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability."
+    answer: "Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability.",
   },
   {
     question: `Do you offer hotel or home visits near ${areaName}, ${wardName}, Tokyo?`,
-    answer: "In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible."
+    answer: "In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible.",
   },
   {
     question: "What should I include when I contact Pitonne?",
-    answer: "Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints."
+    answer: "Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints.",
+  },
+]
+
+const careAvailable = [
+  {
+    title: "IV Therapy",
+    items: ["Hangover IV Drip", "Energy & Fatigue Recovery IV", "Immune Boost IV Therapy", "Skin Brightening IV Drip"],
   },
   {
-    question: `How convenient is ${areaName} for Pitonne patients?`,
-    answer: `${areaName} in ${wardName} is part of Pitonne's central Tokyo service area, allowing patients to coordinate consultation timing around home, hotel, office, or travel plans.`
-  }
+    title: "Stem Cell Therapy",
+    items: ["Stem Cell Nasal Spray", "Exosome IV Drip", "Regenerative wellness planning"],
+  },
+  {
+    title: "Medications",
+    items: ["ED Medication", "Discreet consultation", "Prescription guidance"],
+  },
 ]
 
 export function AreaDetailPage({
@@ -42,264 +54,175 @@ export function AreaDetailPage({
   description,
   highlights,
   landmarks,
-  otherAreas
+  otherAreas,
 }: AreaPageProps) {
   const areaFaqs = faqs(areaName, wardName)
-  
+  const mapQuery = encodeURIComponent(`${areaName}, ${wardName}, Tokyo, Japan`)
+  const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
+
   return (
     <div className="bg-background">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <nav className="mb-6 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-[#4AA69D]">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <Link href="/areas-served" className="hover:text-[#4AA69D]">Areas Served</Link>
-            <span className="mx-2">&gt;</span>
-            <Link href={`/areas-served/${wardSlug}`} className="hover:text-[#4AA69D]">{wardName}</Link>
-            <span className="mx-2">&gt;</span>
-            <span className="text-foreground">{areaName}</span>
-          </nav>
-          <p className="text-sm uppercase tracking-widest text-[#4AA69D] mb-4">
-            {areaNameJa} · {wardName}, Tokyo
-          </p>
-          <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-            Stem Cell & IV Therapy in {areaName}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {description}
-          </p>
+      <section className="bg-[#faf9f7] py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-4xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Areas Served", href: "/areas-served/" },
+                { label: wardName, href: `/areas-served/${wardSlug}/` },
+                { label: areaName },
+              ]}
+            />
+            <p className="mb-4 text-sm uppercase tracking-widest text-[#4AA69D]">
+              {areaNameJa} · {wardName}, Tokyo
+            </p>
+            <h1 className="mb-6 font-serif text-4xl text-foreground md:text-5xl">
+              Stem Cell & IV Therapy in {areaName}, {wardName}, Tokyo
+            </h1>
+            <p className="max-w-3xl text-lg text-muted-foreground">{description}</p>
+          </div>
         </div>
       </section>
 
-      {/* Highlights Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h2 className="font-serif text-2xl text-foreground mb-6">Location Highlights</h2>
-              <ul className="space-y-3">
-                {highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                    <span className="text-muted-foreground">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h2 className="font-serif text-2xl text-foreground mb-6">Nearby Landmarks</h2>
-              <ul className="space-y-3">
-                {landmarks.map((landmark, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                    <span className="text-muted-foreground">{landmark}</span>
-                  </li>
-                ))}
-              </ul>
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="mb-8 text-center font-serif text-3xl text-foreground">Care Available</h2>
+            <div className="grid gap-6 md:grid-cols-3">
+              {careAvailable.map((group) => (
+                <div key={group.title} className="rounded-lg border border-border bg-card p-6">
+                  <h3 className="mb-4 font-semibold text-foreground">{group.title}</h3>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    {group.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#4AA69D]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-16 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <h2 className="font-serif text-3xl text-foreground mb-4 text-center">
-            Care Available in {areaName}
-          </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            We bring premium wellness services directly to your hotel, residence, or office in {areaName}. 
-            Our licensed medical professionals provide discreet, professional care at your convenience.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h3 className="font-semibold text-foreground mb-4">IV Therapy</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Hangover IV Drip</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Energy & Fatigue Recovery</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Immune Boost IV</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Skin Brightening IV</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>IV Vitamin Therapy</span>
-                </li>
-              </ul>
-              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
-                View all services &rarr;
-              </Link>
-            </div>
-            
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h3 className="font-semibold text-foreground mb-4">Stem Cell Therapy</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Exosome IV Drip</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Stem Cell Nasal Spray</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Regenerative Treatments</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Wellness Consultations</span>
-                </li>
-              </ul>
-              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
-                View all services &rarr;
-              </Link>
-            </div>
-            
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h3 className="font-semibold text-foreground mb-4">Medications</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>ED Medication</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Discreet Consultations</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Prescription Services</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#4AA69D]">&#10003;</span>
-                  <span>Follow-Up Support</span>
-                </li>
-              </ul>
-              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
-                View all services &rarr;
-              </Link>
+      <section className="bg-card py-16">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="mb-8 text-center font-serif text-3xl text-foreground">How To Get Started</h2>
+            <div className="grid gap-6 md:grid-cols-3">
+              {["Send Request", "Clinical Review", "Care Planning"].map((step, index) => (
+                <div key={step} className="text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] text-lg font-bold text-white">
+                    {index + 1}
+                  </div>
+                  <h3 className="mb-2 font-medium text-foreground">{step}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {index === 0 && "Share your location, timing, and the service you want to discuss."}
+                    {index === 1 && "The team reviews your goals, health history, and clinical suitability."}
+                    {index === 2 && "Pitonne confirms the appropriate next step for clinic or visit-based care."}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="font-serif text-3xl text-foreground mb-12 text-center">
-            How To Get Started
-          </h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#4AA69D] rounded-full flex items-center justify-center text-white text-xl font-bold">
-                1
-              </div>
-              <h3 className="font-medium text-foreground mb-2">Consultation</h3>
-              <p className="text-sm text-muted-foreground">
-                Discuss symptoms, goals, and health history
+        <div className="container mx-auto px-4">
+          <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <div>
+              <h2 className="mb-4 font-serif text-3xl text-foreground">Local Access</h2>
+              <p className="mb-6 text-muted-foreground">
+                Pitonne coordinates wellness consultations and visit-based care around {areaName}, {wardName}, Tokyo.
               </p>
+              {(highlights.length > 0 || landmarks.length > 0) && (
+                <div className="grid gap-6 md:grid-cols-2">
+                  {highlights.length > 0 && (
+                    <div>
+                      <h3 className="mb-3 font-semibold text-foreground">Area Notes</h3>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        {highlights.map((highlight) => (
+                          <li key={highlight}>{highlight}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {landmarks.length > 0 && (
+                    <div>
+                      <h3 className="mb-3 font-semibold text-foreground">Nearby Landmarks</h3>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        {landmarks.map((landmark) => (
+                          <li key={landmark}>{landmark}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#4AA69D] rounded-full flex items-center justify-center text-white text-xl font-bold">
-                2
-              </div>
-              <h3 className="font-medium text-foreground mb-2">Personalized Plan</h3>
-              <p className="text-sm text-muted-foreground">
-                Provider recommends the right treatment approach
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#4AA69D] rounded-full flex items-center justify-center text-white text-xl font-bold">
-                3
-              </div>
-              <h3 className="font-medium text-foreground mb-2">Treatment</h3>
-              <p className="text-sm text-muted-foreground">
-                In-clinic, hotel visit, or home visit
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 bg-[#4AA69D] rounded-full flex items-center justify-center text-white text-xl font-bold">
-                4
-              </div>
-              <h3 className="font-medium text-foreground mb-2">Follow-Up</h3>
-              <p className="text-sm text-muted-foreground">
-                Ongoing guidance and next-step planning
-              </p>
+            <div className="overflow-hidden rounded-lg border border-border bg-card">
+              <iframe
+                src={mapEmbedUrl}
+                width="100%"
+                height="320"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={`${areaName}, ${wardName}, Tokyo map`}
+                className="block w-full"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQs */}
-      <section className="py-16 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <h2 className="font-serif text-3xl text-foreground mb-10 text-center">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
-            {areaFaqs.map((faq, index) => (
-              <div key={index} className="bg-card p-6 rounded-lg border border-border">
-                <h3 className="font-semibold text-foreground mb-3">{faq.question}</h3>
-                <p className="text-muted-foreground">{faq.answer}</p>
-              </div>
-            ))}
+      <section className="bg-[#faf9f7] py-16">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-10 text-center font-serif text-3xl text-foreground">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              {areaFaqs.map((faq) => (
+                <div key={faq.question} className="border-b border-border pb-6 last:border-0">
+                  <h3 className="mb-3 font-semibold text-foreground">{faq.question}</h3>
+                  <p className="text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h2 className="font-serif text-3xl text-foreground mb-6">
-            Ready to Book in {areaName}?
-          </h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Use the consultation form to share your location in {areaName}, preferred timing, 
-            and the type of care you want to discuss.
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="mb-6 font-serif text-3xl text-foreground">Contact Pitonne</h2>
+          <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
+            Contact Pitonne to ask about consultation options for {areaName}, {wardName}, Tokyo, or review all services before reaching out.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/contact" 
-              className="inline-block bg-[#4AA69D] text-white px-8 py-4 rounded-full hover:bg-[#3d8b83] transition-colors"
-            >
-              Contact Pitonne
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
+            <Link href="/contact/" className="inline-block rounded-md bg-[#4AA69D] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8a83]">
+              Contact Us
             </Link>
-            <a 
-              href="tel:070-2194-0199" 
-              className="inline-block bg-transparent border-2 border-foreground text-foreground px-8 py-4 rounded-full hover:bg-foreground hover:text-background transition-colors"
-            >
-              Call: 070-2194-0199
-            </a>
+            <Link href="/services/" className="inline-block rounded-md border border-foreground px-8 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground hover:text-background">
+              View Services
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Other Areas */}
       {otherAreas.length > 0 && (
-        <section className="py-12 border-t border-border">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h3 className="font-semibold text-foreground mb-6 text-center">
-              Other Areas in {wardName}
-            </h3>
-            <div className="flex flex-wrap gap-3 justify-center">
+        <section className="border-t border-border py-12">
+          <div className="container mx-auto max-w-4xl px-4">
+            <h3 className="mb-6 text-center font-semibold text-foreground">Other Areas in {wardName}</h3>
+            <div className="flex flex-wrap justify-center gap-3">
               {otherAreas.map((area) => (
-                <Link 
+                <Link
                   key={area.slug}
-                  href={`/areas-served/${wardSlug}/${area.slug}`} 
-                  className="px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
+                  href={`/areas-served/${wardSlug}/${area.slug}/`}
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-[#4AA69D] hover:text-[#4AA69D]"
                 >
                   {area.name}
                 </Link>

@@ -13,8 +13,8 @@ const legalPages = [
     description: "How we collect, use, and protect your personal information.",
   },
   {
-    title: "Terms & Conditions",
-    href: "/legal/terms-conditions",
+    title: "Terms of Use",
+    href: "/legal/terms-and-conditions/",
     description: "Terms of service for using Pitonne wellness services.",
   },
   {

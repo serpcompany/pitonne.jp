@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { Instagram, Facebook, Linkedin, Youtube, Twitter, MapPin, Music, Podcast, Pin } from "lucide-react"
+import { businessInfo } from "@/lib/data/site"
+import { canonicalRoutes } from "@/lib/data/routes"
 
 // Custom SVG icons for platforms not in lucide
 function TikTokIcon({ className }: { className?: string }) {
@@ -35,30 +37,20 @@ function ApplePodcastIcon({ className }: { className?: string }) {
 }
 
 const quickLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-  { name: "Privacy Policy", href: "/legal/privacy-policy" },
-  { name: "Terms & Conditions", href: "/legal/terms-conditions" },
-  { name: "Medical Disclaimer", href: "/medical-disclaimer" },
-]
-
-const openHours = [
-  { day: "Monday", hours: "10:00 - 19:00" },
-  { day: "Tuesday", hours: "Closed" },
-  { day: "Wednesday", hours: "Closed" },
-  { day: "Thursday", hours: "10:00 - 19:00" },
-  { day: "Friday", hours: "10:00 - 19:00" },
-  { day: "Saturday", hours: "Closed" },
-  { day: "Sunday", hours: "Closed" },
+  { name: "Home", href: canonicalRoutes.home },
+  { name: "About", href: canonicalRoutes.about },
+  { name: "Services", href: canonicalRoutes.services },
+  { name: "Blog", href: canonicalRoutes.blog },
+  { name: "Contact", href: canonicalRoutes.contact },
+  { name: "Privacy Policy", href: canonicalRoutes.privacyPolicy },
+  { name: "Terms of Use", href: canonicalRoutes.termsConditions },
+  { name: "Medical Disclaimer", href: canonicalRoutes.medicalDisclaimer },
 ]
 
 const areasServed = [
   { name: "Roppongi", href: "/areas-served/minato/roppongi" },
   { name: "Azabu Juban", href: "/areas-served/minato/azabu-juban" },
-  { name: "Hiroo", href: "/areas-served/minato/hiroo" },
+  { name: "Minato / Hiroo", href: "/areas-served/minato/hiroo/" },
   { name: "Akasaka", href: "/areas-served/minato/akasaka" },
   { name: "Shibuya", href: "/areas-served/shibuya" },
   { name: "Ebisu", href: "/areas-served/shibuya/ebisu" },
@@ -128,11 +120,16 @@ export function Footer() {
             />
             <p className="text-sm text-white/80 mb-2">Pitonne Stem Cell & IV Therapy</p>
             <address className="text-sm text-white/70 not-italic space-y-1">
-              <p>106-0031 Tokyo, Minato City, Nishiazabu,</p>
-              <p>3 Chome-17-22 1F</p>
+              <p>{businessInfo.addressLine1}</p>
+              <p>{businessInfo.addressLine2}</p>
               <p className="pt-2">
-                <a href="tel:070-2194-0199" className="hover:text-white transition-colors">
-                  070-2194-0199
+                <a href={`tel:${businessInfo.phone}`} className="hover:text-white transition-colors">
+                  {businessInfo.phone}
+                </a>
+              </p>
+              <p>
+                <a href={`mailto:${businessInfo.email}`} className="hover:text-white transition-colors">
+                  {businessInfo.email}
                 </a>
               </p>
             </address>
@@ -159,7 +156,7 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Open Hours</h4>
             <ul className="space-y-1.5">
-              {openHours.map((item) => (
+              {businessInfo.hours.map((item) => (
                 <li key={item.day} className="flex justify-between text-sm">
                   <span className="text-white/70">{item.day}</span>
                   <span className={item.hours === "Closed" ? "text-white/50" : "text-white/90"}>

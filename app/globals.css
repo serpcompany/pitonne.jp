@@ -132,3 +132,79 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .blog-prose {
+    max-width: none;
+    color: var(--muted-foreground);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  .blog-prose > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .blog-prose h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--foreground);
+    font-family: var(--font-serif), serif;
+    font-size: clamp(1.65rem, 2.5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .blog-prose h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--foreground);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .blog-prose p {
+    color: var(--muted-foreground);
+  }
+
+  .blog-prose ul,
+  .blog-prose ol {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: var(--muted-foreground);
+  }
+
+  .blog-prose ul {
+    list-style: disc;
+  }
+
+  .blog-prose ol {
+    list-style: decimal;
+  }
+
+  .blog-prose li {
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+  }
+
+  .blog-prose strong {
+    color: var(--foreground);
+    font-weight: 700;
+  }
+
+  .blog-prose a {
+    color: #4AA69D;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .blog-prose blockquote {
+    border-left: 3px solid #4AA69D;
+    margin: 2rem 0;
+    padding-left: 1.25rem;
+    color: var(--foreground);
+    font-style: italic;
+  }
+}

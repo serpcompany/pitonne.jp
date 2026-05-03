@@ -3,105 +3,24 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
+import { areaNavigation, canonicalRoutes, serviceNavigation } from "@/lib/data/routes"
+import { businessInfo } from "@/lib/data/site"
 
 const servicesMenu = {
-  categories: [
-    {
-      name: "IV Therapy",
-      href: "/services/iv-therapy",
-      items: [
-        { name: "Exosome IV Drip", href: "/services/exosome-iv-drip" },
-        { name: "Hangover IV Drip", href: "/services/hangover-iv-drip" },
-        { name: "Immune Boost IV", href: "/services/immune-boost-iv-therapy" },
-        { name: "IV Vitamin Therapy", href: "/services/iv-vitamin-therapy" },
-        { name: "Energy & Fatigue Recovery", href: "/services/energy-fatigue-recovery-iv" },
-        { name: "Skin Brightening IV", href: "/services/skin-brightening-iv-drip" },
-      ]
-    },
-    {
-      name: "Stem Cell Therapy",
-      href: "/services/stem-cell-therapy",
-      items: [
-        { name: "Stem Cell Nasal Spray", href: "/services/stem-cell-nasal-spray" },
-      ]
-    },
-    {
-      name: "Medications",
-      href: "/services/medications",
-      items: [
-        { name: "ED Medication", href: "/services/ed-medication" },
-      ]
-    },
-  ]
+  categories: serviceNavigation,
 }
 
 const areasMenu = {
-  wards: [
-    {
-      name: "Minato",
-      nameJa: "港区",
-      href: "/areas-served/minato",
-      areas: [
-        { name: "Roppongi", href: "/areas-served/minato/roppongi" },
-        { name: "Azabu Juban", href: "/areas-served/minato/azabu-juban" },
-        { name: "Hiroo", href: "/areas-served/minato/hiroo" },
-        { name: "Akasaka", href: "/areas-served/minato/akasaka" },
-        { name: "Toranomon", href: "/areas-served/minato/toranomon" },
-        { name: "Shimbashi", href: "/areas-served/minato/shimbashi" },
-      ]
-    },
-    {
-      name: "Shibuya",
-      nameJa: "渋谷区",
-      href: "/areas-served/shibuya",
-      areas: [
-        { name: "Ebisu", href: "/areas-served/shibuya/ebisu" },
-        { name: "Daikanyama", href: "/areas-served/shibuya/daikanyama" },
-        { name: "Omotesando", href: "/areas-served/shibuya/omotesando" },
-        { name: "Harajuku", href: "/areas-served/shibuya/harajuku" },
-        { name: "Yoyogi", href: "/areas-served/shibuya/yoyogi" },
-      ]
-    },
-    {
-      name: "Chuo",
-      nameJa: "中央区",
-      href: "/areas-served/chuo",
-      areas: [
-        { name: "Ginza", href: "/areas-served/chuo/ginza" },
-        { name: "Nihonbashi", href: "/areas-served/chuo/nihonbashi" },
-        { name: "Tsukiji", href: "/areas-served/chuo/tsukiji" },
-      ]
-    },
-    {
-      name: "Chiyoda",
-      nameJa: "千代田区",
-      href: "/areas-served/chiyoda",
-      areas: [
-        { name: "Tokyo Station", href: "/areas-served/chiyoda/tokyo-station" },
-        { name: "Otemachi", href: "/areas-served/chiyoda/otemachi" },
-        { name: "Akihabara", href: "/areas-served/chiyoda/akihabara" },
-      ]
-    },
-    {
-      name: "Shinagawa",
-      nameJa: "品川区",
-      href: "/areas-served/shinagawa",
-      areas: [
-        { name: "Gotanda", href: "/areas-served/shinagawa/gotanda" },
-        { name: "Takanawa", href: "/areas-served/shinagawa/takanawa" },
-        { name: "Osaki", href: "/areas-served/shinagawa/osaki" },
-      ]
-    },
-  ]
+  wards: areaNavigation,
 }
 
 const navigation = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services", hasDropdown: "services" },
-  { name: "Areas Served", href: "/areas-served", hasDropdown: "areas" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: canonicalRoutes.home },
+  { name: "About", href: canonicalRoutes.about },
+  { name: "Services", href: canonicalRoutes.services, hasDropdown: "services" },
+  { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
+  { name: "Blog", href: canonicalRoutes.blog },
+  { name: "Contact", href: canonicalRoutes.contact },
 ]
 
 export function Header() {
@@ -224,12 +143,12 @@ export function Header() {
 
         {/* Phone & CTA */}
         <div className="hidden lg:flex items-center gap-6">
-          <a href="tel:070-2194-0199" className="flex items-center gap-2 text-sm font-medium">
+          <a href={`tel:${businessInfo.phone}`} className="flex items-center gap-2 text-sm font-medium">
             <Phone className="h-4 w-4" />
-            070-2194-0199
+            {businessInfo.phone}
           </a>
           <Link 
-            href="/contact"
+            href={canonicalRoutes.contact}
             className="bg-[#4AA69D] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
           >
             Contact Us

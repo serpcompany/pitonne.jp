@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { Check } from "lucide-react"
+import { canonicalRoutes } from "@/lib/data/routes"
+import { businessInfo } from "@/lib/data/site"
 
 const services = [
   {
@@ -17,7 +19,7 @@ const services = [
   {
     title: "Medications",
     description: "Prescription-based support delivered with discretion and physician review where appropriate.",
-    href: "/services/medications",
+    href: canonicalRoutes.medication,
     image: "/images/aic_office_reception_2-scaled.jpg",
   },
   {
@@ -32,17 +34,17 @@ const blogPosts = [
   {
     date: "April 29, 2026",
     title: "What Is An Exosome IV Drip? Differences From Stem Cell Conditioned Media, Cost, And Risks Explained",
-    href: "/blog/exosome-iv-drip",
+    href: "/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained",
   },
   {
     date: "March 16, 2026",
     title: "IV Therapy For Fatigue: When Low Energy May Point To Hydration Support",
-    href: "/blog/iv-therapy-fatigue",
+    href: "/blog/iv-therapy-for-fatigue",
   },
   {
     date: "March 16, 2026",
     title: "IV Therapy For Hangover: What It May Help With And What It Cannot Do",
-    href: "/blog/iv-therapy-hangover",
+    href: "/blog/iv-therapy-for-hangover",
   },
 ]
 
@@ -81,7 +83,7 @@ export default function HomePage() {
             Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.
           </p>
           <Link 
-            href="/contact"
+            href={businessInfo.bookingUrl}
             className="inline-block bg-[#1a1a1a] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#333] transition-colors"
           >
             Book Consultation
