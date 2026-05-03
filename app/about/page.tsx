@@ -115,6 +115,8 @@ export default function AboutPage() {
               </p>
               <Link 
                 href={businessInfo.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
               >
                 Book Consultation

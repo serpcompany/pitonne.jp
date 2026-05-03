@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
-import { ContactForm } from "@/components/contact-form"
+import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { canonicalUrl } from "@/lib/seo"
+
+const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
 
 export const metadata: Metadata = {
   title: "Contact Pitonne",
@@ -33,10 +34,22 @@ export default function ContactPage() {
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
             <div>
               <h2 className="text-2xl font-serif mb-6">Send Us a Message</h2>
-              <ContactForm />
+              <div className="rounded-lg border border-border bg-card p-8">
+                <p className="mb-6 text-muted-foreground">
+                  Use Pitonne&apos;s secure inquiry form to request a consultation or ask questions about services.
+                </p>
+                <a
+                  href={inquiryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#4AA69D] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8a83] sm:w-auto"
+                >
+                  Open Inquiry Form
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
             </div>
 
             {/* Contact Info */}
@@ -62,8 +75,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:contact@pitonne.jp" className="text-muted-foreground hover:text-[#4AA69D] transition-colors">
-                      contact@pitonne.jp
+                    <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#4AA69D] transition-colors">
+                      pitonne.am@gmail.com
                     </a>
                   </div>
                 </div>
@@ -100,13 +113,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Map placeholder */}
-              <div className="mt-8 aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <MapPin className="h-8 w-8 mx-auto mb-2 text-[#4AA69D]" />
-                  <p className="text-sm">Nishi-Azabu, Tokyo</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

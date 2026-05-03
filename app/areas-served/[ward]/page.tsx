@@ -189,6 +189,8 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
           </p>
           <Link 
             href="/contact" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-[#4AA69D] text-white px-8 py-4 rounded-full hover:bg-[#3d8b83] transition-colors"
           >
             Contact Pitonne

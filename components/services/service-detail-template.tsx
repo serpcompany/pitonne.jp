@@ -33,7 +33,7 @@ export function ServiceDetailTemplate({
             <main className="min-w-0">
               {service.image && (
                 <div className="mb-12 overflow-hidden rounded-lg border border-border">
-                  <img src={service.image} alt={service.name} className="h-auto w-full" />
+                  <img src={service.image} alt={service.name} className="max-h-[420px] w-full object-cover" />
                 </div>
               )}
 

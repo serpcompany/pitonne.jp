@@ -30,6 +30,8 @@ describe("service page parity", () => {
     expect(screen.getByRole("heading", { name: "Related Services" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Related Posts" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Book Consultation" })).toHaveAttribute("href", businessInfo.bookingUrl)
+    expect(screen.getByRole("link", { name: "Book Consultation" })).toHaveAttribute("target", "_blank")
+    expect(screen.getByRole("img", { name: "Stem Cell Nasal Spray" })).toHaveClass("max-h-[420px]", "object-cover")
     expect(screen.queryByText("Ready to Get Started?")).not.toBeInTheDocument()
     expect(document.querySelector("[style*='background-image']")).not.toBeInTheDocument()
   })

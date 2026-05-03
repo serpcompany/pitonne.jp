@@ -71,6 +71,7 @@ describe("SEO parity", () => {
     expect(urls).not.toContain(`${SITE_URL}/medical-disclaimer/`)
     expect(urls).not.toContain(`${SITE_URL}/legal/terms-and-conditions/`)
     expect(urls).not.toContain(`${SITE_URL}/services/medications/`)
+    expect(urls).not.toContain(`${SITE_URL}/areas-served/chiyoda/tokyo-station/`)
     expect(urls.every((url) => url.startsWith(SITE_URL))).toBe(true)
   })
 

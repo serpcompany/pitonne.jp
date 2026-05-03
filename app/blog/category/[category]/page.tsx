@@ -155,6 +155,8 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
           </p>
           <Link 
             href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
           >
             Contact Us

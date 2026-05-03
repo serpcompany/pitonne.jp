@@ -119,13 +119,13 @@ describe("sheet image integration", () => {
     expect(offenders.map((file) => path.relative(root, file))).toEqual([])
   })
 
-  it("renders sheet images on page templates that previously had no image slot", () => {
+  it("renders sheet images on service templates without forcing a standalone blog hero image", () => {
     const parentServiceSource = fs.readFileSync(path.join(root, "components/services/service-parent-template.tsx"), "utf8")
     const servicesIndexSource = fs.readFileSync(path.join(root, "components/services/services-index-template.tsx"), "utf8")
     const blogIndexSource = fs.readFileSync(path.join(root, "app/blog/page.tsx"), "utf8")
 
     expect(parentServiceSource).toContain("service.image")
     expect(servicesIndexSource).toContain("/images/content/sheet/services/services.jpg")
-    expect(blogIndexSource).toContain("/images/content/sheet/blog/blog.jpg")
+    expect(blogIndexSource).not.toContain("/images/content/sheet/blog/blog.jpg")
   })
 })

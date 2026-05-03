@@ -84,7 +84,9 @@ export default function HomePage() {
           </p>
           <Link 
             href={businessInfo.bookingUrl}
-            className="inline-block bg-[#1a1a1a] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#333] transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
           >
             Book Consultation
           </Link>

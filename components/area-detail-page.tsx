@@ -193,7 +193,12 @@ export function AreaDetailPage({
             Contact Pitonne to ask about consultation options for {areaName}, {wardName}, Tokyo, or review all services before reaching out.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <Link href="/contact/" className="inline-block rounded-md bg-[#4AA69D] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8a83]">
+            <Link
+              href="/contact/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-md bg-[#4AA69D] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8a83]"
+            >
               Contact Us
             </Link>
             <Link href="/services/" className="inline-block rounded-md border border-foreground px-8 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground hover:text-background">

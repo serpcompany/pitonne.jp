@@ -24,6 +24,7 @@ describe("blog post parity", () => {
           category: post!.category,
           categorySlug: post!.categorySlug,
           author: post!.author,
+          featureImage: post!.featureImage,
           relatedServiceSlugs: post!.relatedServiceSlugs,
           tags: post!.tags,
         }}
@@ -37,7 +38,11 @@ describe("blog post parity", () => {
     expect(renderedText.indexOf("Related Pitonne Services")).toBeGreaterThan(0)
     expect(renderedText.indexOf("Related Pitonne Services")).toBeLessThan(renderedText.indexOf("Final Takeaway"))
     expect(screen.getByRole("heading", { name: "Contact Pitonne" })).toBeInTheDocument()
-    expect(screen.getByText("Share This")).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("target", "_blank")
+    expect(screen.queryByText("Share This")).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "X" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "Facebook" })).not.toBeInTheDocument()
+    expect(screen.getByRole("img", { name: post!.title })).toHaveClass("max-h-[420px]", "object-cover")
     expect(screen.getAllByRole("link", { name: "Blog" }).some((link) => link.getAttribute("href") === "/blog")).toBe(true)
     expect(screen.getByRole("heading", { name: "Read Our Latest Posts" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Questions About This Topic?" })).not.toBeInTheDocument()

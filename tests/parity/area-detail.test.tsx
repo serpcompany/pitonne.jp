@@ -4,6 +4,10 @@ import { AreaDetailPage } from "@/components/area-detail-page"
 import { getArea } from "@/lib/data/areas"
 
 describe("area detail parity", () => {
+  it("does not treat Tokyo Station as a Chiyoda area", () => {
+    expect(getArea("chiyoda", "tokyo-station")).toBeUndefined()
+  })
+
   it("renders the live-style area template with map, local access, and contact actions", () => {
     const area = getArea("minato", "hiroo")
     expect(area).toBeDefined()
@@ -30,6 +34,7 @@ describe("area detail parity", () => {
     expect(screen.getByTitle("Hiroo, Minato, Tokyo map")).toHaveAttribute("src", expect.stringContaining("output=embed"))
     expect(screen.getByRole("heading", { name: "Contact Pitonne" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("href", "/contact")
+    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("target", "_blank")
     expect(screen.getByRole("link", { name: "View Services" })).toHaveAttribute("href", "/services")
     expect(screen.queryByRole("link", { name: /Call:/ })).not.toBeInTheDocument()
   })

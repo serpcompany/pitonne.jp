@@ -56,36 +56,6 @@ function BlogContent({ post }: { post: BlogPostViewModel }) {
   )
 }
 
-function ShareRow({ post }: { post: BlogPostViewModel }) {
-  const postUrl = `/blog/${post.slug}/`
-
-  return (
-    <div className="mt-10 border-t border-border pt-6">
-      <p className="mb-3 text-sm font-semibold text-foreground">Share This</p>
-      <div className="flex flex-wrap gap-3">
-        <Link href={`https://twitter.com/intent/tweet?url=${postUrl}`} className="text-sm text-[#4AA69D] hover:underline">
-          X
-        </Link>
-        <Link href={`https://www.facebook.com/sharer/sharer.php?u=${postUrl}`} className="text-sm text-[#4AA69D] hover:underline">
-          Facebook
-        </Link>
-        <Link href="/blog/" className="text-sm text-[#4AA69D] hover:underline">
-          Blog
-        </Link>
-      </div>
-      {post.tags && post.tags.length > 0 && (
-        <div className="mt-5 flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
 function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
   if (latestPosts.length === 0) {
     return null
@@ -171,8 +141,8 @@ export function BlogPostTemplate({
       {post.featureImage && (
         <section className="bg-card">
           <div className="container mx-auto -mt-8 px-4">
-            <div className="mx-auto max-w-4xl">
-              <img src={post.featureImage} alt={post.title} className="w-full rounded-lg shadow-lg" />
+            <div className="mx-auto max-w-3xl">
+              <img src={post.featureImage} alt={post.title} className="max-h-[420px] w-full rounded-lg object-cover shadow-lg" />
             </div>
           </div>
         </section>
@@ -182,7 +152,6 @@ export function BlogPostTemplate({
         <div className="container mx-auto px-4">
           <article className="mx-auto max-w-3xl">
             <BlogContent post={post} />
-            <ShareRow post={post} />
           </article>
         </div>
       </section>

@@ -149,6 +149,8 @@ export function Header() {
           </a>
           <Link 
             href={canonicalRoutes.contact}
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-[#4AA69D] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
           >
             Contact Us
@@ -269,6 +271,8 @@ export function Header() {
               </a>
               <Link 
                 href="/contact"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full bg-[#4AA69D] text-white text-center px-5 py-2.5 rounded-md text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
