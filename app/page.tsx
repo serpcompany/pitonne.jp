@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Check } from "lucide-react"
 import { canonicalRoutes } from "@/lib/data/routes"
-import { businessInfo } from "@/lib/data/site"
+import { BookingButton } from "@/components/shared/booking-button"
 
 const services = [
   {
@@ -89,14 +89,7 @@ export default function HomePage() {
           <p className="max-w-xl mx-auto text-muted-foreground mb-8">
             Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.
           </p>
-          <Link 
-            href={businessInfo.bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
-          >
-            Book Consultation
-          </Link>
+          <BookingButton className="px-8" />
         </div>
       </section>
 
