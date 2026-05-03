@@ -1,464 +1,240 @@
-"use client"
+import Link from "next/link"
+import { Check } from "lucide-react"
 
-import Image from "next/image"
+const services = [
+  {
+    title: "IV Therapy",
+    description: "Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.",
+    href: "/services/iv-therapy",
+  },
+  {
+    title: "Stem Cell Therapy",
+    description: "Regenerative wellness support focused on practical delivery options and individualized care planning.",
+    href: "/services/stem-cell-therapy",
+  },
+  {
+    title: "Medications",
+    description: "Prescription-based support delivered with discretion and physician review where appropriate.",
+    href: "/services/medications",
+  },
+  {
+    title: "Wellness Consultations",
+    description: "Discreet access to medication options supported by careful review and straightforward next steps.",
+    href: "/services",
+  },
+]
 
-export default function DesignDocumentation() {
+const blogPosts = [
+  {
+    date: "April 29, 2026",
+    title: "What Is An Exosome IV Drip? Differences From Stem Cell Conditioned Media, Cost, And Risks Explained",
+    href: "/blog/exosome-iv-drip",
+  },
+  {
+    date: "March 16, 2026",
+    title: "IV Therapy For Fatigue: When Low Energy May Point To Hydration Support",
+    href: "/blog/iv-therapy-fatigue",
+  },
+  {
+    date: "March 16, 2026",
+    title: "IV Therapy For Hangover: What It May Help With And What It Cannot Do",
+    href: "/blog/iv-therapy-hangover",
+  },
+]
+
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-[#2d2d2d] text-white">
-        <div className="container mx-auto flex h-20 items-center justify-between px-4">
-          <div>
-            <h1 className="text-2xl font-bold">Pitonne Design Documentation</h1>
-            <p className="text-sm text-white/70">Website Migration Guide: WordPress to Next.js</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <a 
-              href="https://pitonne.jp" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="rounded-md border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition-colors"
-            >
-              View Live Site
-            </a>
+    <>
+      {/* Hero Section */}
+      <section className="relative bg-[#faf9f7] overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute left-0 bottom-0 w-48 h-48 opacity-60">
+          <svg viewBox="0 0 200 200" className="w-full h-full text-[#8bb3b0]">
+            <ellipse cx="50" cy="150" rx="80" ry="60" fill="currentColor" opacity="0.3" />
+            <path d="M60 180 Q80 120 70 80 Q90 100 100 60" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
+            <path d="M80 170 Q100 130 90 100 Q110 115 115 85" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
+          </svg>
+        </div>
+        <div className="absolute right-0 top-20 w-48 h-64 opacity-40">
+          <svg viewBox="0 0 200 300" className="w-full h-full text-[#8bb3b0]">
+            <path d="M150 50 Q170 100 160 150 Q180 200 170 250" stroke="currentColor" strokeWidth="3" fill="none" />
+            <path d="M160 80 Q140 100 150 120" stroke="currentColor" strokeWidth="2" fill="none" />
+            <path d="M165 120 Q185 140 175 160" stroke="currentColor" strokeWidth="2" fill="none" />
+            <path d="M155 180 Q135 200 145 220" stroke="currentColor" strokeWidth="2" fill="none" />
+          </svg>
+        </div>
+
+        <div className="container mx-auto px-4 py-20 lg:py-32 text-center relative z-10">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">
+            Concierge Wellness in Tokyo
+          </p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif mb-6 text-balance">
+            Pitonne Stem<br />
+            Cell & IV Therapy
+          </h1>
+          <p className="max-w-xl mx-auto text-muted-foreground mb-8">
+            Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.
+          </p>
+          <Link 
+            href="/contact"
+            className="inline-block bg-[#1a1a1a] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#333] transition-colors"
+          >
+            Book Consultation
+          </Link>
+        </div>
+      </section>
+
+      {/* Who We Are Section */}
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Image placeholder */}
+            <div className="relative">
+              <div className="aspect-[4/3] bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg overflow-hidden flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/50 flex items-center justify-center">
+                    <span className="text-4xl font-serif text-[#8bb3b0]">P</span>
+                  </div>
+                  <p className="text-sm">Clinic Interior</p>
+                </div>
+              </div>
+              {/* Decorative leaf */}
+              <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-16 h-32 opacity-30 hidden lg:block">
+                <svg viewBox="0 0 60 120" className="w-full h-full text-[#8bb3b0]">
+                  <path d="M30 10 Q50 40 40 70 Q30 100 30 110" stroke="currentColor" strokeWidth="2" fill="none" />
+                  <path d="M30 30 Q20 45 25 55" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                  <path d="M35 50 Q45 60 40 75" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
+                Who We Are
+              </p>
+              <h2 className="text-3xl md:text-4xl font-serif mb-6">
+                Concierge Wellness Support, Backed By{" "}
+                <span className="italic">Clinical Care.</span>
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care. In-home and hotel visit care. Registered nurse-led support. Central Tokyo concierge service.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3">
+                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <span>In-home and hotel visit care</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <span>Registered nurse-led support</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <span>Central Tokyo concierge service</span>
+                </li>
+              </ul>
+              <Link 
+                href="/about"
+                className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
+              >
+                About Pitonne
+              </Link>
+            </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Introduction */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Design System Overview</h2>
-          <p className="mb-6 text-lg text-muted-foreground">
-            This documentation captures the complete design system from pitonne.jp for migration to Figma and rebuilding in Next.js.
-          </p>
-          
-          {/* Quick Stats */}
-          <div className="grid gap-4 md:grid-cols-4 mb-8">
-            <div className="rounded-lg border border-border bg-card p-4 text-center">
-              <p className="text-3xl font-bold text-[#4AA69D]">8</p>
-              <p className="text-sm text-muted-foreground">Pages Captured</p>
-            </div>
-            <div className="rounded-lg border border-border bg-card p-4 text-center">
-              <p className="text-3xl font-bold text-[#4AA69D]">8</p>
-              <p className="text-sm text-muted-foreground">Brand Colors</p>
-            </div>
-            <div className="rounded-lg border border-border bg-card p-4 text-center">
-              <p className="text-3xl font-bold text-[#4AA69D]">2</p>
-              <p className="text-sm text-muted-foreground">Font Families</p>
-            </div>
-            <div className="rounded-lg border border-border bg-card p-4 text-center">
-              <p className="text-3xl font-bold text-[#4AA69D]">28+</p>
-              <p className="text-sm text-muted-foreground">Tokyo Areas</p>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Brand Summary</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <ul className="space-y-2 text-muted-foreground">
-                <li><strong className="text-foreground">Business:</strong> Pitonne Stem Cell & IV Therapy</li>
-                <li><strong className="text-foreground">Location:</strong> Nishi Azabu, Tokyo, Japan</li>
-                <li><strong className="text-foreground">Phone:</strong> 070-2194-0199</li>
-                <li><strong className="text-foreground">Address:</strong> 106-0031 Tokyo, Minato City, Nishiazabu, 3 Chome-17-22 1F</li>
-              </ul>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><strong className="text-foreground">Target Audience:</strong> Busy professionals, travelers, health-conscious clients</li>
-                <li><strong className="text-foreground">Brand Tone:</strong> Premium, clinical yet warm, discreet, professional</li>
-                <li><strong className="text-foreground">Services:</strong> IV Therapy, Stem Cell Therapy, Medications, Wellness Consultations</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Color Palette */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Color Palette</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <ColorSwatch name="Peach/Cream" hex="#F5E6DA" usage="Hero backgrounds, section accents" />
-            <ColorSwatch name="Soft Peach" hex="#E8D4C8" usage="Card backgrounds, hover states" />
-            <ColorSwatch name="Muted Teal" hex="#89A8A0" usage="Decorative leaf illustrations" />
-            <ColorSwatch name="Dark Charcoal" hex="#2D2D2D" usage="Primary text, headings" />
-            <ColorSwatch name="Warm Brown" hex="#8B7355" usage="Footer background, CTA buttons" />
-            <ColorSwatch name="Pure White" hex="#FFFFFF" usage="Page backgrounds, cards" />
-            <ColorSwatch name="Light Gray" hex="#F8F8F8" usage="Subtle section backgrounds" />
-            <ColorSwatch name="Teal Accent" hex="#4AA69D" usage="Primary CTA button" />
-          </div>
-        </section>
-
-        {/* Typography */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Typography</h2>
-          <div className="space-y-6">
-            <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="mb-4 text-xl font-semibold">Font Families</h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Headings & Display</p>
-                  <p className="font-serif text-2xl">Playfair Display (or similar serif)</p>
-                  <p className="text-sm text-muted-foreground">Used for: Main headings, section titles, emphasis words like "Clinical Care" in italics</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Body & UI</p>
-                  <p className="text-2xl">Inter / System Sans-Serif</p>
-                  <p className="text-sm text-muted-foreground">Used for: Body text, navigation, buttons, labels</p>
-                </div>
-              </div>
-            </div>
-            <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="mb-4 text-xl font-semibold">Type Scale</h3>
-              <div className="space-y-4">
-                <TypeSpec name="Hero Title" size="48-64px" weight="400" example="Pitonne Stem Cell & IV Therapy" />
-                <TypeSpec name="Section Label" size="12-14px" weight="500" example="WHO WE ARE" tracking="wide" />
-                <TypeSpec name="Section Heading" size="32-40px" weight="400" example="Concierge Wellness Support" />
-                <TypeSpec name="Card Title" size="20-24px" weight="500" example="IV Therapy" />
-                <TypeSpec name="Body Text" size="16px" weight="400" example="Pitonne is a concierge wellness service..." />
-                <TypeSpec name="Small/Caption" size="14px" weight="400" example="April 25, 2026" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Components */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">UI Components</h2>
-          
-          {/* Navigation */}
-          <div className="mb-8 rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Navigation Bar</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between rounded-lg border border-border/50 bg-white p-4">
-                <div className="flex items-center gap-8">
-                  <span className="font-serif text-xl">Pitonne</span>
-                  <nav className="flex gap-6 text-sm">
-                    <span>Home</span>
-                    <span>About</span>
-                    <span>Services</span>
-                    <span>Areas Served</span>
-                    <span>Blog</span>
-                    <span>Contact</span>
-                  </nav>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm">070-2194-0199</span>
-                  <button className="rounded-md bg-[#4AA69D] px-4 py-2 text-sm text-white">Contact Us</button>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Sticky header with logo, navigation links, phone number, and primary CTA button
-              </p>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="mb-8 rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Buttons</h3>
-            <div className="flex flex-wrap gap-4">
-              <button className="rounded-md bg-[#4AA69D] px-6 py-3 text-white">Primary CTA (Teal)</button>
-              <button className="rounded-md border border-[#2D2D2D] bg-[#2D2D2D] px-6 py-3 text-white">Secondary (Dark)</button>
-              <button className="rounded-md border border-[#2D2D2D] bg-transparent px-6 py-3 text-[#2D2D2D]">Outlined</button>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Rounded corners (8px), consistent padding, clear hierarchy
+      {/* Services Section */}
+      <section className="py-20 lg:py-28 bg-[#faf9f7]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              Our Services
+            </p>
+            <h2 className="text-3xl md:text-4xl font-serif mb-4">
+              Explore All Our <span className="italic">Services</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
+              From mobile IV therapy support and stem cell treatment consultations to online prescription services, Pitonne offers discreet, personalized care tailored to each client&apos;s needs.
             </p>
           </div>
 
-          {/* Service Cards */}
-          <div className="mb-8 rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Service Cards</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-lg border border-border/50 bg-white p-6 transition-shadow hover:shadow-lg">
-                <h4 className="mb-2 font-serif text-lg">IV Therapy</h4>
-                <p className="text-sm text-muted-foreground">Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.</p>
-              </div>
-              <div className="rounded-lg border border-border/50 bg-white p-6 transition-shadow hover:shadow-lg">
-                <h4 className="mb-2 font-serif text-lg">Stem Cell Therapy</h4>
-                <p className="text-sm text-muted-foreground">Regenerative wellness support focused on practical delivery options and individualized care planning.</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Cards with subtle border, white background, hover shadow effect. Image cards on services page include photo overlays.
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service) => (
+              <Link
+                key={service.title}
+                href={service.href}
+                className="group bg-white rounded-lg p-6 border border-border hover:shadow-lg transition-all duration-300"
+              >
+                <div className="h-32 bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-md mb-4 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/70 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {service.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+        {/* Decorative leaf */}
+        <div className="absolute right-0 top-20 w-32 h-48 opacity-30 hidden lg:block">
+          <svg viewBox="0 0 120 180" className="w-full h-full text-[#d4c4a8]">
+            <path d="M60 20 Q90 60 80 100 Q70 140 60 170" stroke="currentColor" strokeWidth="2" fill="none" />
+            <path d="M65 40 Q85 50 80 70" stroke="currentColor" strokeWidth="1.5" fill="none" />
+            <path d="M55 80 Q35 95 45 115" stroke="currentColor" strokeWidth="1.5" fill="none" />
+            <path d="M70 120 Q90 130 85 150" stroke="currentColor" strokeWidth="1.5" fill="none" />
+          </svg>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-12">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4">
+              Blog
             </p>
+            <h2 className="text-3xl md:text-4xl font-serif">
+              Read Our Latest Posts
+            </h2>
           </div>
 
-          {/* Decorative Elements */}
-          <div className="mb-8 rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Decorative Elements</h3>
-            <div className="space-y-4">
-              <div className="flex gap-8">
-                <div className="h-24 w-24 rounded-full bg-[#89A8A0]/30" />
-                <div className="h-24 w-32 rounded-full bg-[#89A8A0]/20" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                <strong>Leaf Illustrations:</strong> Muted teal botanical/leaf shapes appear as decorative accents throughout the site. They are positioned in corners and alongside headings.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                <strong>Blob Shapes:</strong> Soft, organic blob shapes in peach/cream colors appear in hero sections and as background accents.
-              </p>
-            </div>
+          <div className="max-w-3xl mx-auto space-y-0">
+            {blogPosts.map((post, index) => (
+              <Link
+                key={index}
+                href={post.href}
+                className="block group"
+              >
+                <div className="flex items-start gap-4 py-5 border-b border-border">
+                  <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
+                    {post.date}
+                  </span>
+                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#4AA69D] transition-colors">
+                    {post.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
           </div>
-        </section>
 
-        {/* Page Screenshots */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Page Screenshots</h2>
-          <p className="mb-6 text-muted-foreground">Full-page screenshots captured from the live site for reference:</p>
-          
-          <div className="grid gap-8">
-            <PagePreview 
-              title="Homepage" 
-              image="/screenshots/01-homepage.png" 
-              description="Hero section with title and CTA, Who We Are section, Services overview grid, Blog posts preview, Footer"
-              url="/"
-            />
-            <PagePreview 
-              title="About Page" 
-              image="/screenshots/02-about.png" 
-              description="About header, Why We Exist section with clinic photo, How We Support You section, Team member cards"
-              url="/about"
-            />
-            <PagePreview 
-              title="Services Page" 
-              image="/screenshots/03-services.png" 
-              description="Services overview, IV Therapy cards with images, Stem Cell Therapy section, Medications section"
-              url="/services"
-            />
-            <PagePreview 
-              title="Areas Served" 
-              image="/screenshots/04-areas-served.png" 
-              description="Grid of Tokyo areas/neighborhoods served with location pins"
-              url="/areas-served"
-            />
-            <PagePreview 
-              title="Blog Page" 
-              image="/screenshots/05-blog.png" 
-              description="Blog listing with article titles, dates, and simple list layout"
-              url="/blog"
-            />
-            <PagePreview 
-              title="IV Therapy Service" 
-              image="/screenshots/07-iv-therapy.png" 
-              description="IV Therapy service detail page with treatment cards: Energy & Fatigue Recovery, Exosome IV Drip, Hangover IV, Immune Boost, IV Vitamin, Skin Brightening"
-              url="/services/iv-therapy"
-            />
-            <PagePreview 
-              title="Stem Cell Therapy" 
-              image="/screenshots/08-stem-cell-therapy.png" 
-              description="Stem Cell Therapy service page featuring Stem Cell Nasal Spray treatment"
-              url="/services/stem-cell-therapy"
-            />
-            <PagePreview 
-              title="Area Detail Page (Roppongi)" 
-              image="/screenshots/12-roppongi.png" 
-              description="Individual area page with services available, FAQs, and local access information"
-              url="/areas-served/minato/roppongi"
-            />
+          <div className="text-center mt-10">
+            <Link 
+              href="/blog"
+              className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
+            >
+              View All Posts
+            </Link>
           </div>
-        </section>
-
-        {/* Site Structure */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Site Structure</h2>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <pre className="overflow-x-auto text-sm font-mono bg-muted/50 p-4 rounded-lg">
-{`pitonne.jp/
-├── / (Homepage)
-│
-├── /about (About Pitonne)
-│
-├── /services (All Services Overview)
-│   ├── /services/iv-therapy (IV Therapy category)
-│   │   ├── Exosome IV Drip
-│   │   ├── Hangover IV Drip
-│   │   ├── Energy & Fatigue Recovery IV
-│   │   ├── Skin Brightening IV Drip
-│   │   ├── Immune Boost IV Therapy
-│   │   └── IV Vitamin Therapy
-│   ├── /services/stem-cell-therapy (Stem Cell category)
-│   │   └── Stem Cell Nasal Spray
-│   └── /services/medications (Medications category)
-│       └── ED Medication
-│
-├── /areas-served (Tokyo neighborhoods grid - 28+ areas)
-│   └── /areas-served/minato/[area] (Individual area pages)
-│       ├── /roppongi, /azabu-juban, /hiroo, /akasaka
-│       ├── /shibuya, /ebisu, /ginza, /shinagawa
-│       └── ... and many more
-│
-├── /blog (Blog listing)
-│   └── Individual blog posts (article pages)
-│
-├── /contact (External form → ssv.onemorehand.jp)
-│
-├── /privacy-policy
-├── /terms-of-use
-└── /medical-disclaimer`}
-            </pre>
-          </div>
-        </section>
-
-        {/* Footer Structure */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Footer Structure</h2>
-          <div className="rounded-lg bg-[#8B7355] p-8 text-white">
-            <div className="grid gap-8 md:grid-cols-4">
-              <div>
-                <h4 className="mb-4 font-serif text-lg">Pitonne</h4>
-                <p className="text-sm opacity-80">Pitonne Stem Cell & IV Therapy</p>
-                <p className="text-sm opacity-80">106-0031 Tokyo, Minato City, Nishiazabu,</p>
-                <p className="text-sm opacity-80">3 Chome-17-22 1F</p>
-                <p className="text-sm opacity-80">070-2194-0199</p>
-              </div>
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Quick Links</h4>
-                <ul className="space-y-2 text-sm opacity-80">
-                  <li>Home</li>
-                  <li>About</li>
-                  <li>Services</li>
-                  <li>Blog</li>
-                  <li>Contact</li>
-                  <li>Privacy Policy</li>
-                  <li>Terms of Use</li>
-                  <li>Medical Disclaimer</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Open Hours</h4>
-                <ul className="space-y-1 text-sm opacity-80">
-                  <li>Monday: 10:00 - 19:00</li>
-                  <li>Tuesday: 10:00 - 19:00</li>
-                  <li>Wednesday: Closed</li>
-                  <li>Thursday: 10:00 - 19:00</li>
-                  <li>Friday: 10:00 - 19:00</li>
-                  <li>Saturday: Closed</li>
-                  <li>Sunday: Closed</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="mb-4 text-sm font-semibold">Areas Served</h4>
-                <ul className="space-y-1 text-sm opacity-80">
-                  <li>View All Areas</li>
-                  <li>Roppongi</li>
-                  <li>Azabu Juban</li>
-                  <li>Minato / Hiroo</li>
-                  <li>Akasaka</li>
-                  <li>Shibuya</li>
-                  <li>Ebisu</li>
-                  <li>Ginza</li>
-                  <li>Shinagawa</li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 flex items-center justify-between border-t border-white/20 pt-6">
-              <div className="flex gap-4">
-                <span className="text-sm opacity-60">Instagram</span>
-                <span className="text-sm opacity-60">X</span>
-                <span className="text-sm opacity-60">Facebook</span>
-                <span className="text-sm opacity-60">Threads</span>
-                <span className="text-sm opacity-60">LinkedIn</span>
-                <span className="text-sm opacity-60">TikTok</span>
-                <span className="text-sm opacity-60">YouTube</span>
-              </div>
-              <span className="text-sm opacity-60">© Pitonne</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Figma Export Notes */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold font-serif">Figma Design File Notes</h2>
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="mb-4 text-xl font-semibold">Recommended Figma Structure</h3>
-            <ul className="space-y-3 text-muted-foreground">
-              <li><strong>Page 1 - Design System:</strong> Colors, Typography, Components, Icons</li>
-              <li><strong>Page 2 - Homepage:</strong> Desktop (1440px), Tablet (768px), Mobile (375px)</li>
-              <li><strong>Page 3 - About:</strong> All breakpoints</li>
-              <li><strong>Page 4 - Services:</strong> All breakpoints</li>
-              <li><strong>Page 5 - Areas Served:</strong> All breakpoints</li>
-              <li><strong>Page 6 - Blog:</strong> Listing + Article template</li>
-              <li><strong>Page 7 - Contact:</strong> Custom form design (replace external form)</li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Next Steps */}
-        <section>
-          <h2 className="mb-6 text-3xl font-bold font-serif">Next Steps for Migration</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="mb-4 text-xl font-semibold">For Figma</h3>
-              <ol className="list-decimal space-y-2 pl-4 text-muted-foreground">
-                <li>Create design tokens (colors, spacing, typography)</li>
-                <li>Build component library (buttons, cards, navigation)</li>
-                <li>Design each page using screenshots as reference</li>
-                <li>Add responsive variants for each page</li>
-                <li>Create a custom contact form design</li>
-              </ol>
-            </div>
-            <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="mb-4 text-xl font-semibold">For Next.js</h3>
-              <ol className="list-decimal space-y-2 pl-4 text-muted-foreground">
-                <li>Set up Next.js 16 with App Router</li>
-                <li>Configure Tailwind with custom theme colors</li>
-                <li>Install Playfair Display + Inter from Google Fonts</li>
-                <li>Build reusable components (Header, Footer, Cards)</li>
-                <li>Create each page route</li>
-                <li>Add CMS integration for blog posts</li>
-                <li>Build native contact form with API route</li>
-              </ol>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  )
-}
-
-function ColorSwatch({ name, hex, usage }: { name: string; hex: string; usage: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <div className="mb-3 h-16 w-full rounded-md" style={{ backgroundColor: hex }} />
-      <p className="font-medium">{name}</p>
-      <p className="font-mono text-sm text-muted-foreground">{hex}</p>
-      <p className="mt-2 text-sm text-muted-foreground">{usage}</p>
-    </div>
-  )
-}
-
-function TypeSpec({ name, size, weight, example, tracking }: { name: string; size: string; weight: string; example: string; tracking?: string }) {
-  return (
-    <div className="border-b border-border/50 pb-4">
-      <div className="flex items-baseline justify-between">
-        <span className="font-medium">{name}</span>
-        <span className="text-sm text-muted-foreground">{size} / {weight} {tracking && `/ ${tracking}`}</span>
-      </div>
-      <p className="mt-1 text-muted-foreground">{example}</p>
-    </div>
-  )
-}
-
-function PagePreview({ title, image, description, url }: { title: string; image: string; description: string; url?: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        {url && (
-          <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">
-            {url}
-          </code>
-        )}
-      </div>
-      <div className="mb-4 overflow-hidden rounded-lg border border-border">
-        <Image 
-          src={image} 
-          alt={`${title} screenshot`} 
-          width={1200} 
-          height={800} 
-          className="w-full object-cover object-top"
-          style={{ maxHeight: '500px' }}
-        />
-      </div>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </div>
+        </div>
+      </section>
+    </>
   )
 }

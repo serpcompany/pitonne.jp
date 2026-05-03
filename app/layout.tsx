@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 import './globals.css'
 
 const inter = Inter({ 
@@ -14,8 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Pitonne Design Documentation | Website Migration Guide',
-  description: 'Comprehensive design documentation for Pitonne website migration from WordPress to Next.js',
+  title: 'Pitonne | Stem Cell & IV Therapy in Tokyo',
+  description: 'Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -44,7 +46,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased bg-background">
-        {children}
+        <Header />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
