@@ -144,9 +144,13 @@ export default function AboutPage() {
                 key={member.name}
                 className="bg-[#faf9f7] rounded-lg p-6 border border-border"
               >
-                {/* Avatar placeholder */}
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#e8d4c8] to-[#d4c4a8] flex items-center justify-center">
-                  <span className="text-2xl font-serif text-white">{member.name.charAt(0)}</span>
+                {/* Team Member Photo */}
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h3 className="text-lg font-semibold text-center mb-1">{member.name}</h3>
                 <p className="text-sm text-[#4AA69D] text-center mb-4">{member.role}</p>

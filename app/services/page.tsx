@@ -59,25 +59,33 @@ export default function ServicesPage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group block bg-background rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
+                className="group block bg-background rounded-lg border border-border overflow-hidden hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
-                  <div className="w-6 h-6 rounded-full bg-[#d4c4a8] group-hover:bg-white transition-colors" />
+                {service.image && (
+                  <div className="h-40 overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {service.shortDescription}
+                  </p>
+                  <ul className="space-y-1">
+                    {service.keyPoints.slice(0, 3).map((point, index) => (
+                      <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {service.shortDescription}
-                </p>
-                <ul className="space-y-1">
-                  {service.keyPoints.slice(0, 3).map((point, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
               </Link>
             ))}
           </div>
@@ -99,25 +107,33 @@ export default function ServicesPage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group block bg-card rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
+                className="group block bg-card rounded-lg border border-border overflow-hidden hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-[#e8d4c8] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
-                  <div className="w-6 h-6 rounded-full bg-[#8bb3b0] group-hover:bg-white transition-colors" />
+                {service.image && (
+                  <div className="h-40 overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {service.shortDescription}
+                  </p>
+                  <ul className="space-y-1">
+                    {service.keyPoints.slice(0, 3).map((point, index) => (
+                      <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {service.shortDescription}
-                </p>
-                <ul className="space-y-1">
-                  {service.keyPoints.slice(0, 3).map((point, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
               </Link>
             ))}
 
@@ -126,25 +142,33 @@ export default function ServicesPage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group block bg-card rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
+                className="group block bg-card rounded-lg border border-border overflow-hidden hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-[#e8d4c8] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
-                  <div className="w-6 h-6 rounded-full bg-[#8bb3b0] group-hover:bg-white transition-colors" />
+                {service.image && (
+                  <div className="h-40 overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {service.shortDescription}
+                  </p>
+                  <ul className="space-y-1">
+                    {service.keyPoints.slice(0, 3).map((point, index) => (
+                      <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {service.shortDescription}
-                </p>
-                <ul className="space-y-1">
-                  {service.keyPoints.slice(0, 3).map((point, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
               </Link>
             ))}
           </div>
@@ -166,25 +190,33 @@ export default function ServicesPage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group block bg-background rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
+                className="group block bg-background rounded-lg border border-border overflow-hidden hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
-                  <div className="w-6 h-6 rounded-full bg-[#d4c4a8] group-hover:bg-white transition-colors" />
+                {service.image && (
+                  <div className="h-40 overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {service.shortDescription}
+                  </p>
+                  <ul className="space-y-1">
+                    {service.keyPoints.slice(0, 3).map((point, index) => (
+                      <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {service.shortDescription}
-                </p>
-                <ul className="space-y-1">
-                  {service.keyPoints.slice(0, 3).map((point, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
               </Link>
             ))}
           </div>

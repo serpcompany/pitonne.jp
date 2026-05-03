@@ -6,21 +6,25 @@ const services = [
     title: "IV Therapy",
     description: "Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.",
     href: "/services/iv-therapy",
+    image: "/images/office_iv_patient_chairs-scaled.jpg",
   },
   {
     title: "Stem Cell Therapy",
     description: "Regenerative wellness support focused on practical delivery options and individualized care planning.",
     href: "/services/stem-cell-therapy",
+    image: "/images/office_exam_room-scaled.jpg",
   },
   {
     title: "Medications",
     description: "Prescription-based support delivered with discretion and physician review where appropriate.",
     href: "/services/medications",
+    image: "/images/aic_office_reception_2-scaled.jpg",
   },
   {
     title: "Wellness Consultations",
     description: "Discreet access to medication options supported by careful review and straightforward next steps.",
     href: "/services",
+    image: "/images/aic_office_reception_2-scaled.jpg",
   },
 ]
 
@@ -47,21 +51,22 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative bg-[#faf9f7] overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute left-0 bottom-0 w-48 h-48 opacity-60">
-          <svg viewBox="0 0 200 200" className="w-full h-full text-[#8bb3b0]">
-            <ellipse cx="50" cy="150" rx="80" ry="60" fill="currentColor" opacity="0.3" />
-            <path d="M60 180 Q80 120 70 80 Q90 100 100 60" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
-            <path d="M80 170 Q100 130 90 100 Q110 115 115 85" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
-          </svg>
+        {/* Decorative Leaf Elements */}
+        <div className="absolute left-0 bottom-0 w-32 h-48 opacity-60">
+          <img 
+            src="/images/Leaf-3.png" 
+            alt="" 
+            className="w-full h-full object-contain"
+            aria-hidden="true"
+          />
         </div>
-        <div className="absolute right-0 top-20 w-48 h-64 opacity-40">
-          <svg viewBox="0 0 200 300" className="w-full h-full text-[#8bb3b0]">
-            <path d="M150 50 Q170 100 160 150 Q180 200 170 250" stroke="currentColor" strokeWidth="3" fill="none" />
-            <path d="M160 80 Q140 100 150 120" stroke="currentColor" strokeWidth="2" fill="none" />
-            <path d="M165 120 Q185 140 175 160" stroke="currentColor" strokeWidth="2" fill="none" />
-            <path d="M155 180 Q135 200 145 220" stroke="currentColor" strokeWidth="2" fill="none" />
-          </svg>
+        <div className="absolute right-0 top-20 w-24 h-40 opacity-50">
+          <img 
+            src="/images/Leaf-2-e1744282707104.png" 
+            alt="" 
+            className="w-full h-full object-contain"
+            aria-hidden="true"
+          />
         </div>
 
         <div className="container mx-auto px-4 py-20 lg:py-32 text-center relative z-10">
@@ -88,15 +93,14 @@ export default function HomePage() {
       <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Image placeholder */}
+            {/* Clinic Image */}
             <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg overflow-hidden flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/50 flex items-center justify-center">
-                    <span className="text-4xl font-serif text-[#8bb3b0]">P</span>
-                  </div>
-                  <p className="text-sm">Clinic Interior</p>
-                </div>
+              <div className="aspect-[4/3] rounded-lg overflow-hidden">
+                <img 
+                  src="/images/office_iv_patient_chairs-scaled.jpg" 
+                  alt="Pitonne IV therapy patient area"
+                  className="w-full h-full object-cover"
+                />
               </div>
               {/* Decorative leaf */}
               <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-16 h-32 opacity-30 hidden lg:block">
@@ -167,10 +171,12 @@ export default function HomePage() {
                 href={service.href}
                 className="group bg-white rounded-lg p-6 border border-border hover:shadow-lg transition-all duration-300"
               >
-                <div className="h-32 bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-md mb-4 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/70 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
-                  </div>
+                <div className="h-32 rounded-md mb-4 overflow-hidden">
+                  <img 
+                    src={service.image} 
+                    alt={service.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
                   {service.title}
