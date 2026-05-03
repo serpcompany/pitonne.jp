@@ -1,5 +1,5 @@
 ---
-title: Medications
+title: Medication
 slug: medication
 kind: parent
 category: medication
@@ -12,8 +12,8 @@ fullDescription: >-
   a partner physician. After your consultation, eligible prescriptions can be
   arranged for clinic pickup or local delivery, including bike courier service
   in select central Tokyo areas.
-image: /images/office_exam_room-scaled.jpg
-imageSourcePath: /images/office_exam_room-scaled.jpg
+image: /images/medication.jpeg
+imageSourcePath: /images/medication.jpeg
 benefits:
   - Private online consultations with a partner physician
   - Discreet support for personal health concerns

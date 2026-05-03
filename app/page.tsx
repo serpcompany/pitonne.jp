@@ -18,16 +18,16 @@ const services = [
     image: "/images/content/sheet/services/stem-cell-therapy.jpg",
   },
   {
-    title: "Medications",
+    title: "Medication",
     description: "Prescription-based support delivered with discretion and physician review where appropriate.",
     href: canonicalRoutes.medication,
-    image: "/images/office_exam_room-scaled.jpg",
+    image: "/images/medication.jpeg",
   },
   {
     title: "Wellness Consultations",
     description: "Discreet access to medication options supported by careful review and straightforward next steps.",
     href: "/services",
-    image: "/images/aic_office_reception_2-scaled.jpg",
+    image: "/images/wellness-consultation.jpg",
   },
 ]
 
