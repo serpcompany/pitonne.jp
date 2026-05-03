@@ -1,0 +1,159 @@
+import type { Metadata } from "next"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { categories, getPostsByCategory, getCategoryBySlug } from "@/lib/data/blog-posts"
+
+export async function generateStaticParams() {
+  return categories.map((category) => ({ category: category.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category: categorySlug } = await params
+  const category = getCategoryBySlug(categorySlug)
+  if (!category) return { title: "Category Not Found | Pitonne" }
+  
+  return {
+    title: `${category.name} Articles | Pitonne Blog`,
+    description: category.description,
+  }
+}
+
+export default async function BlogCategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categorySlug } = await params
+  const category = getCategoryBySlug(categorySlug)
+  
+  if (!category) {
+    notFound()
+  }
+
+  const categoryPosts = getPostsByCategory(categorySlug)
+
+  return (
+    <div className="bg-background">
+      {/* Hero Section */}
+      <section className="relative py-16 md:py-20 bg-[#f5ebe0]">
+        <div className="container mx-auto px-4">
+          <nav className="text-sm text-muted-foreground mb-8">
+            <Link href="/" className="hover:text-foreground">Home</Link>
+            <span className="mx-2">&gt;</span>
+            <Link href="/blog" className="hover:text-foreground">Blog</Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-foreground">{category.name}</span>
+          </nav>
+          
+          <div className="max-w-3xl">
+            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#4AA69D] text-white rounded-full mb-4">
+              Category
+            </span>
+            <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">
+              {category.name}
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              {category.description}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Navigation */}
+      <section className="py-6 bg-card border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link 
+              href="/blog"
+              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
+            >
+              All
+            </Link>
+            {categories.map(cat => (
+              <Link 
+                key={cat.slug}
+                href={`/blog/category/${cat.slug}`}
+                className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
+                  cat.slug === categorySlug 
+                    ? "bg-[#4AA69D] text-white" 
+                    : "border border-border hover:border-[#4AA69D] hover:text-[#4AA69D]"
+                }`}
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Posts */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          {categoryPosts.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
+              {categoryPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                      <time>
+                        {new Date(post.publishedAt).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </time>
+                      <span>&middot;</span>
+                      <span>{post.readingTime} min read</span>
+                    </div>
+                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-muted-foreground text-sm line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
+              </div>
+              <p className="text-muted-foreground mb-6">No articles found in this category yet.</p>
+              <Link 
+                href="/blog"
+                className="text-[#4AA69D] hover:underline"
+              >
+                View all articles
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 md:py-16 bg-[#f5ebe0]">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl font-serif text-foreground mb-4">
+            Have Questions?
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+            Our team is ready to help you learn more about {category.name.toLowerCase()} and how it might benefit you.
+          </p>
+          <Link 
+            href="/contact"
+            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+          >
+            Contact Us
+          </Link>
+        </div>
+      </section>
+    </div>
+  )
+}
