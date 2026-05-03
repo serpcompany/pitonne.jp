@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { PageHero } from "@/components/shared/page-hero"
 
 interface AreaPageProps {
   areaName: string
@@ -62,27 +62,17 @@ export function AreaDetailPage({
 
   return (
     <div className="bg-background">
-      <section className="bg-[#faf9f7] py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-4xl">
-            <Breadcrumbs
-              items={[
-                { label: "Home", href: "/" },
-                { label: "Areas Served", href: "/areas-served/" },
-                { label: wardName, href: `/areas-served/${wardSlug}/` },
-                { label: areaName },
-              ]}
-            />
-            <p className="mb-4 text-sm uppercase tracking-widest text-[#4AA69D]">
-              {areaNameJa} · {wardName}, Tokyo
-            </p>
-            <h1 className="mb-6 font-serif text-4xl text-foreground md:text-5xl">
-              Stem Cell & IV Therapy in {areaName}, {wardName}, Tokyo
-            </h1>
-            <p className="max-w-3xl text-lg text-muted-foreground">{description}</p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Areas Served", href: "/areas-served/" },
+          { label: wardName, href: `/areas-served/${wardSlug}/` },
+          { label: areaName },
+        ]}
+        eyebrow={`${areaNameJa} · ${wardName}, Tokyo`}
+        title={`Stem Cell & IV Therapy in ${areaName}, ${wardName}, Tokyo`}
+        description={description}
+      />
 
       <section className="py-16">
         <div className="container mx-auto px-4">

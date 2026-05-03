@@ -1,5 +1,5 @@
-import Link from "next/link"
 import type { Metadata } from "next"
+import { PageHero } from "@/components/shared/page-hero"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Pitonne Stem Cell & IV Therapy",
@@ -9,19 +9,15 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
-        <div className="container mx-auto px-4 relative z-10">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <span>Privacy Policy</span>
-          </nav>
-          
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Privacy Policy</h1>
-          <p className="text-muted-foreground">Last updated: January 1, 2026</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Privacy Policy" },
+        ]}
+        title="Privacy Policy"
+        meta="Last updated: January 1, 2026"
+        size="compact"
+      />
 
       {/* Content */}
       <section className="py-16 lg:py-20 bg-white">

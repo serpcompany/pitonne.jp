@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { PortableText } from "@portabletext/react"
-import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { PageHero } from "@/components/shared/page-hero"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
 import type { BlogPost } from "@/lib/data/blog-posts"
 
@@ -124,51 +124,49 @@ export function BlogPostTemplate({
 }) {
   return (
     <div className="bg-background">
-      <section className="bg-[#faf9f7] py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Blog", href: "/blog/" },
-              { label: "Article" },
-            ]}
-          />
-
-          <div className="max-w-3xl">
-            <Link
-              href={`/blog/category/${post.categorySlug}/`}
-              className="mb-4 inline-block rounded-full bg-[#4AA69D] px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-[#3d8a83]"
-            >
-              {post.category}
-            </Link>
-            <div className="mb-4 flex items-center gap-4 text-sm text-muted-foreground">
-              <time>{post.date}</time>
-              {post.readingTime && (
-                <>
-                  <span>&middot;</span>
-                  <span>{post.readingTime} min read</span>
-                </>
-              )}
-            </div>
-            <h1 className="font-serif text-3xl leading-tight text-foreground md:text-4xl lg:text-5xl">{post.title}</h1>
-            {post.author && (
-              <div className="mt-6 flex items-center gap-3">
-                {post.author.image ? (
-                  <img src={post.author.image} alt={post.author.name} className="h-12 w-12 rounded-full object-cover" />
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] font-medium text-white">
-                    {post.author.name.charAt(0)}
-                  </div>
-                )}
-                <div>
-                  <span className="block font-medium text-foreground">{post.author.name}</span>
-                  {post.author.role && <span className="text-sm text-muted-foreground">{post.author.role}</span>}
-                </div>
-              </div>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Blog", href: "/blog/" },
+          { label: "Article" },
+        ]}
+        eyebrow={
+          <Link
+            href={`/blog/category/${post.categorySlug}/`}
+            className="inline-block rounded-full bg-[#4AA69D] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#3d8a83]"
+          >
+            {post.category}
+          </Link>
+        }
+        meta={
+          <div className="flex items-center gap-4">
+            <time>{post.date}</time>
+            {post.readingTime && (
+              <>
+                <span>&middot;</span>
+                <span>{post.readingTime} min read</span>
+              </>
             )}
           </div>
-        </div>
-      </section>
+        }
+        title={post.title}
+      >
+        {post.author && (
+          <div className="flex items-center gap-3">
+            {post.author.image ? (
+              <img src={post.author.image} alt={post.author.name} className="h-12 w-12 rounded-full object-cover" />
+            ) : (
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] font-medium text-white">
+                {post.author.name.charAt(0)}
+              </div>
+            )}
+            <div>
+              <span className="block font-medium text-foreground">{post.author.name}</span>
+              {post.author.role && <span className="text-sm text-muted-foreground">{post.author.role}</span>}
+            </div>
+          </div>
+        )}
+      </PageHero>
 
       {post.featureImage && (
         <section className="bg-card">

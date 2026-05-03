@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { PageHero } from "@/components/shared/page-hero"
 
 export const metadata: Metadata = {
   title: "Legal | Pitonne",
@@ -27,17 +28,14 @@ const legalPages = [
 export default function LegalPage() {
   return (
     <div className="bg-[#faf9f7]">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h1 className="font-serif text-4xl md:text-5xl text-[#1a1a1a] mb-6">
-            Legal Information
-          </h1>
-          <p className="text-lg text-[#666] max-w-2xl mx-auto">
-            Important legal documents and policies governing the use of Pitonne services.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Legal" },
+        ]}
+        title="Legal Information"
+        description="Important legal documents and policies governing the use of Pitonne services."
+      />
 
       {/* Legal Pages Grid */}
       <section className="py-16">

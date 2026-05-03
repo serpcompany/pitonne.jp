@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { PageHero } from "@/components/shared/page-hero"
 import { ServiceCardGrid } from "@/components/services/service-card-grid"
 import type { Service, ServiceCategorySection } from "@/lib/data/services"
 
@@ -9,21 +9,14 @@ type Section = ServiceCategorySection & { services: Service[] }
 export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
   return (
     <div className="bg-background">
-      <section className="bg-[#faf9f7] py-16 lg:py-20">
-        <div className="container mx-auto px-4">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Services" },
-            ]}
-          />
-          <h1 className="mb-6 font-serif text-4xl text-foreground md:text-5xl">Our Services</h1>
-          <p className="max-w-3xl text-lg text-muted-foreground">
-            Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services.
-            Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Services" },
+        ]}
+        title="Our Services"
+        description="Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo."
+      />
 
       {sections.map((section, index) => (
         <section

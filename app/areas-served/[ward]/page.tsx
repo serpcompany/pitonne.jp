@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { PageHero } from "@/components/shared/page-hero"
 import { getWard, wards } from "@/lib/data/areas"
 
 export async function generateStaticParams() {
@@ -31,25 +32,16 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
 
   return (
     <div className="bg-background">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <nav className="mb-6 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-[#4AA69D]">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <Link href="/areas-served" className="hover:text-[#4AA69D]">Areas Served</Link>
-            <span className="mx-2">&gt;</span>
-            <span className="text-foreground">{ward.name}</span>
-          </nav>
-          <p className="text-sm uppercase tracking-widest text-[#4AA69D] mb-4">{ward.nameJa}</p>
-          <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-            Stem Cell & IV Therapy in {ward.name}, Tokyo
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {ward.description}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Areas Served", href: "/areas-served/" },
+          { label: ward.name },
+        ]}
+        eyebrow={ward.nameJa}
+        title={`Stem Cell & IV Therapy in ${ward.name}, Tokyo`}
+        description={ward.description}
+      />
 
       {/* Areas Grid */}
       <section className="py-16">

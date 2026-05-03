@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
+import { PageHero } from "@/components/shared/page-hero"
 import { wards } from "@/lib/data/areas"
 
 export const metadata: Metadata = {
@@ -11,27 +12,14 @@ export const metadata: Metadata = {
 export default function AreasServedPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-background overflow-hidden py-16 lg:py-20">
-        <div className="absolute left-0 bottom-0 w-32 h-32 opacity-50">
-          <svg viewBox="0 0 120 120" className="w-full h-full text-[#8bb3b0]">
-            <ellipse cx="30" cy="90" rx="50" ry="40" fill="currentColor" opacity="0.3" />
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <span className="text-foreground">Areas Served</span>
-          </nav>
-          
-          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">Areas Served</h1>
-          <p className="max-w-3xl text-muted-foreground text-lg">
-            Pitonne provides concierge wellness services throughout central Tokyo. Our registered nurses travel to your home or hotel to deliver premium IV therapy, stem cell treatments, and wellness consultations.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Areas Served" },
+        ]}
+        title="Areas Served"
+        description="Pitonne provides concierge wellness services throughout central Tokyo. Our registered nurses travel to your home or hotel to deliver premium IV therapy, stem cell treatments, and wellness consultations."
+      />
 
       {/* Wards Grid */}
       <section className="py-16 lg:py-20 bg-card">

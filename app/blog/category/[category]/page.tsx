@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { PageHero } from "@/components/shared/page-hero"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 
 export async function generateStaticParams() {
@@ -33,30 +34,16 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
 
   return (
     <div className="bg-background">
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <Link href="/blog" className="hover:text-foreground">Blog</Link>
-            <span className="mx-2">&gt;</span>
-            <span className="text-foreground">{category.name}</span>
-          </nav>
-          
-          <div className="max-w-3xl">
-            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#4AA69D] text-white rounded-full mb-4">
-              Category
-            </span>
-            <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">
-              {category.name}
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {categoryDescription}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Blog", href: "/blog/" },
+          { label: category.name },
+        ]}
+        eyebrow="Category"
+        title={category.name}
+        description={categoryDescription}
+      />
 
       {/* Category Navigation */}
       <section className="py-6 bg-card border-b border-border">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { PageHero } from "@/components/shared/page-hero"
 
 export const metadata: Metadata = {
   title: "Medical Disclaimer | Pitonne",
@@ -9,17 +10,15 @@ export const metadata: Metadata = {
 export default function DisclaimerPage() {
   return (
     <div className="bg-[#faf9f7]">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h1 className="font-serif text-4xl md:text-5xl text-[#1a1a1a] mb-6">
-            Medical Disclaimer
-          </h1>
-          <p className="text-lg text-[#666] max-w-2xl mx-auto">
-            Important information about our medical services and treatments.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Legal", href: "/legal/" },
+          { label: "Medical Disclaimer" },
+        ]}
+        title="Medical Disclaimer"
+        description="Important information about our medical services and treatments."
+      />
 
       {/* Content Section */}
       <section className="py-16">

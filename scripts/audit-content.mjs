@@ -15,6 +15,7 @@ const layout = read("app/layout.tsx")
 const siteData = read("lib/data/site.ts")
 const serviceDetailPage = read("app/services/[service]/page.tsx")
 const serviceDetailTemplate = read("components/services/service-detail-template.tsx")
+const pageHero = read("components/shared/page-hero.tsx")
 const areaDetailPage = read("components/area-detail-page.tsx")
 const blogPostPage = read("app/blog/[post]/page.tsx")
 const blogPostTemplate = read("components/blog/blog-post-template.tsx")
@@ -68,7 +69,12 @@ for (const disallowed of ["placeholder", "logoipsum", "glowence"]) {
   }
 }
 
-if (!serviceDetailPage.includes("ServiceDetailTemplate") || !serviceDetailTemplate.includes("Breadcrumbs")) {
+const serviceDetailUsesSharedHero = serviceDetailTemplate.includes("PageHero")
+const serviceDetailLinksToServices =
+  serviceDetailTemplate.includes('label: "Services"') &&
+  serviceDetailTemplate.includes('href: "/services/"')
+
+if (!serviceDetailPage.includes("ServiceDetailTemplate") || !serviceDetailUsesSharedHero || !serviceDetailLinksToServices) {
   failures.push("Service detail hero must include breadcrumb navigation back to Services")
 }
 
@@ -76,10 +82,12 @@ if (!serviceDetailTemplate.includes("Home") || !serviceDetailTemplate.includes("
   failures.push("Service detail breadcrumbs must include Home and the current service label")
 }
 
-const heroSource = serviceDetailTemplate.slice(
-  serviceDetailTemplate.indexOf("<section"),
-  serviceDetailTemplate.indexOf('<section className="py-16')
-)
+const heroSource = serviceDetailUsesSharedHero
+  ? pageHero
+  : serviceDetailTemplate.slice(
+      serviceDetailTemplate.indexOf("<section"),
+      serviceDetailTemplate.indexOf('<section className="py-16')
+    )
 
 if (heroSource.includes("absolute inset-0") || heroSource.includes("object-cover")) {
   failures.push("Service detail hero must not use a background image or overlay")

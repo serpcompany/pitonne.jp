@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { PageHero } from "@/components/shared/page-hero"
 import { businessInfo } from "@/lib/data/site"
 
 export const metadata: Metadata = {
@@ -31,36 +32,14 @@ const team = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
-        {/* Decorative Elements */}
-        <div className="absolute left-0 bottom-0 w-32 h-32 opacity-50">
-          <svg viewBox="0 0 120 120" className="w-full h-full text-[#8bb3b0]">
-            <ellipse cx="30" cy="90" rx="50" ry="40" fill="currentColor" opacity="0.3" />
-            <path d="M40 100 Q55 70 50 50" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
-          </svg>
-        </div>
-        <div className="absolute right-0 top-10 w-24 h-32 opacity-30">
-          <svg viewBox="0 0 100 130" className="w-full h-full text-[#d4c4a8]">
-            <path d="M50 10 Q70 40 60 70 Q50 100 50 120" stroke="currentColor" strokeWidth="2" fill="none" />
-            <path d="M55 30 Q70 40 65 55" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            <path d="M45 60 Q30 75 40 90" stroke="currentColor" strokeWidth="1.5" fill="none" />
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <span>About</span>
-          </nav>
-          
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">About Pitonne</h1>
-          <p className="max-w-3xl text-muted-foreground">
-            Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care through in-home and hotel visits. We are designed for busy professionals, international visitors, and clients who value privacy, convenience, and clinically guided support. Our goal is to make wellness care feel more accessible, discreet, and tailored to real life in Tokyo.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "About" },
+        ]}
+        title="About Pitonne"
+        description="Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care through in-home and hotel visits. We are designed for busy professionals, international visitors, and clients who value privacy, convenience, and clinically guided support. Our goal is to make wellness care feel more accessible, discreet, and tailored to real life in Tokyo."
+      />
 
       {/* Why We Exist Section */}
       <section className="py-20 lg:py-28 bg-white">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { PageHero } from "@/components/shared/page-hero"
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | Pitonne",
@@ -8,15 +9,16 @@ export const metadata: Metadata = {
 export default function TermsConditionsPage() {
   return (
     <div className="bg-[#faf9f7]">
-      {/* Hero Section */}
-      <section className="relative py-16 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h1 className="font-serif text-4xl md:text-5xl text-[#1a1a1a] mb-4">
-            Terms & Conditions
-          </h1>
-          <p className="text-[#666]">Last updated: January 2024</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Legal", href: "/legal/" },
+          { label: "Terms & Conditions" },
+        ]}
+        title="Terms & Conditions"
+        meta="Last updated: January 2024"
+        size="compact"
+      />
 
       {/* Content Section */}
       <section className="py-16">

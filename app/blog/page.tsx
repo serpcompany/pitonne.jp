@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { PageHero } from "@/components/shared/page-hero"
 import { getPosts, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
 import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
 
@@ -39,29 +40,14 @@ export default async function BlogPage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-background overflow-hidden py-16 lg:py-20">
-        <div className="absolute right-0 top-10 w-24 h-32 opacity-30">
-          <svg viewBox="0 0 100 130" className="w-full h-full text-[#d4c4a8]">
-            <path d="M50 10 Q70 40 60 70 Q50 100 50 120" stroke="currentColor" strokeWidth="2" fill="none" />
-            <path d="M55 30 Q70 40 65 55" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            <path d="M45 60 Q30 75 40 90" stroke="currentColor" strokeWidth="1.5" fill="none" />
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <span className="text-foreground">Blog</span>
-          </nav>
-          
-          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">Blog</h1>
-          <p className="max-w-3xl text-muted-foreground text-lg">
-            Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Blog" },
+        ]}
+        title="Blog"
+        description="Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health."
+      />
 
       {/* Categories */}
       <section className="py-8 bg-card border-b border-border">

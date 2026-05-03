@@ -1,8 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { useState } from "react"
 import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { PageHero } from "@/components/shared/page-hero"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,21 +26,14 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
-        <div className="container mx-auto px-4 relative z-10">
-          <nav className="text-sm text-muted-foreground mb-8">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <span className="mx-2">&gt;</span>
-            <span>Contact</span>
-          </nav>
-          
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Contact Us</h1>
-          <p className="max-w-3xl text-muted-foreground">
-            Ready to book a consultation or have questions about our services? Get in touch with us and our team will respond promptly.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Contact" },
+        ]}
+        title="Contact Us"
+        description="Ready to book a consultation or have questions about our services? Get in touch with us and our team will respond promptly."
+      />
 
       {/* Contact Content */}
       <section className="py-16 lg:py-20 bg-white">
