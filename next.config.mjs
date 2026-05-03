@@ -4,14 +4,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
-      },
-    ],
-  },
   async redirects() {
     return [
       {
@@ -22,46 +14,6 @@ const nextConfig = {
       {
         source: "/services/medications",
         destination: "/services/medication/",
-        permanent: true,
-      },
-      {
-        source: "/privacy-policy/",
-        destination: "/legal/privacy-policy/",
-        permanent: true,
-      },
-      {
-        source: "/privacy-policy",
-        destination: "/legal/privacy-policy/",
-        permanent: true,
-      },
-      {
-        source: "/terms-of-use/",
-        destination: "/legal/terms-conditions/",
-        permanent: true,
-      },
-      {
-        source: "/terms-of-use",
-        destination: "/legal/terms-conditions/",
-        permanent: true,
-      },
-      {
-        source: "/legal/terms-and-conditions/",
-        destination: "/legal/terms-conditions/",
-        permanent: true,
-      },
-      {
-        source: "/legal/terms-and-conditions",
-        destination: "/legal/terms-conditions/",
-        permanent: true,
-      },
-      {
-        source: "/medical-disclaimer/",
-        destination: "/legal/disclaimer/",
-        permanent: true,
-      },
-      {
-        source: "/medical-disclaimer",
-        destination: "/legal/disclaimer/",
         permanent: true,
       },
     ]

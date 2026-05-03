@@ -1,11 +1,15 @@
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
+import { JsonLd } from "@/components/shared/json-ld"
 import { ServiceCardGrid } from "@/components/services/service-card-grid"
 import type { Service } from "@/lib/data/services"
+import { serviceJsonLd } from "@/lib/structured-data"
 
 export function ServiceParentTemplate({ service, childServices }: { service: Service; childServices: Service[] }) {
   return (
     <div className="bg-background">
+      <JsonLd data={serviceJsonLd(service)} />
+
       <PageHero
         breadcrumbs={[
           { label: "Home", href: "/" },

@@ -1,7 +1,26 @@
 import { render, screen } from "@testing-library/react"
+import fs from "node:fs"
+import path from "node:path"
 import { describe, expect, it } from "vitest"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+
+const migratedDraftSlugs = [
+  "exosome-iv-tokyo-mobile-in-clinic-booking",
+  "exosome-iv-therapy-tokyo-price-range",
+  "stem-cell-therapy-vs-exosome-iv-therapy",
+  "exosome-iv-therapy-risks-precautions",
+  "iv-therapy-for-athletes-training-recovery",
+  "iv-therapy-weight-management-pitonne",
+  "iv-therapy-for-hangover-in-tokyo",
+  "iv-therapy-for-dehydration-in-tokyo",
+  "iv-therapy-for-cold-flu-tokyo",
+  "exosome-iv-therapy-for-muscle-recovery",
+  "iv-therapy-for-fatigue-in-tokyo",
+  "iv-therapy-for-low-energy",
+  "skin-iv-exosome-iv-therapy-beauty",
+  "iv-therapy-for-detox-support",
+]
 
 describe("blog post parity", () => {
   it("loads static posts from markdown files with frontmatter", () => {
@@ -57,5 +76,50 @@ describe("blog post parity", () => {
     expect(screen.getAllByRole("link", { name: "Blog" }).some((link) => link.getAttribute("href") === "/blog")).toBe(true)
     expect(screen.getByRole("heading", { name: "Read Our Latest Posts" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Questions About This Topic?" })).not.toBeInTheDocument()
+  })
+
+  it("keeps migrated legacy blog bodies in sync with the supplied content folder", () => {
+    const sourceRoot = path.join(process.cwd(), "../pitonne.jp-nextjs-refactor-1/assets/content/posts")
+
+    for (const slug of ["iv-therapy-for-dehydration", "iv-therapy-for-fatigue", "iv-therapy-for-hangover"]) {
+      const legacySource = fs
+        .readFileSync(path.join(sourceRoot, `${slug}.md`), "utf8")
+        .replace(/^---[\s\S]*?---\s*/, "")
+        .trim()
+      const post = getBlogPostBySlug(slug)
+
+      expect(post?.content.trim()).toBe(legacySource)
+    }
+  })
+
+  it("publishes cleaned English-only draft posts with production slugs and metadata", () => {
+    const japaneseScript = /[\u3040-\u30ff\u3400-\u9fff]/
+
+    for (const slug of migratedDraftSlugs) {
+      const post = getBlogPostBySlug(slug)
+      expect(post, slug).toBeDefined()
+      expect(post?.sourcePath).toBe(`content/blog/${slug}.md`)
+      expect(post?.slug).toBe(slug)
+      expect(post?.slug).not.toMatch(/draft|iv-therapy-\d|pitonne-\d|-sup$/)
+      expect(post?.title).not.toMatch(japaneseScript)
+      expect(post?.excerpt).not.toMatch(japaneseScript)
+      expect(post?.content).not.toMatch(japaneseScript)
+      expect(post?.content).not.toContain("# タブ 2")
+      expect(post?.relatedServiceSlugs.length).toBeGreaterThan(0)
+      expect(post?.tags.length).toBeGreaterThan(0)
+      expect(post?.tags.every((tag) => !japaneseScript.test(tag))).toBe(true)
+    }
+  })
+
+  it("keeps all blog markdown filenames, language, and discovery metadata linted", () => {
+    const japaneseScript = /[\u3040-\u30ff\u3400-\u9fff]/
+
+    for (const post of getAllBlogPosts()) {
+      expect(post.sourcePath).toBe(`content/blog/${post.slug}.md`)
+      expect(post.content).not.toContain("# タブ 2")
+      expect(`${post.title}\n${post.excerpt}\n${post.content}`).not.toMatch(japaneseScript)
+      expect(post.relatedServiceSlugs.length).toBeGreaterThan(0)
+      expect(post.tags.length).toBeGreaterThan(0)
+    }
   })
 })

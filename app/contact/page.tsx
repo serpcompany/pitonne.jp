@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { canonicalUrl } from "@/lib/seo"
+import { businessInfo } from "@/lib/data/site"
 
 const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
 
@@ -101,13 +102,11 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Hours</h3>
                     <div className="text-muted-foreground text-sm space-y-1">
-                      <p>Monday: 10:00 - 19:00</p>
-                      <p>Tuesday: Closed</p>
-                      <p>Wednesday: Closed</p>
-                      <p>Thursday: 10:00 - 19:00</p>
-                      <p>Friday: 10:00 - 19:00</p>
-                      <p>Saturday: Closed</p>
-                      <p>Sunday: Closed</p>
+                      {businessInfo.hours.map((item) => (
+                        <p key={item.day}>
+                          {item.day}: {item.hours}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 </div>

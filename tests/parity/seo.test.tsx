@@ -1,4 +1,6 @@
 import React from "react"
+import fs from "node:fs"
+import path from "node:path"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
 import { getAllAreas, wards } from "@/lib/data/areas"
@@ -175,5 +177,18 @@ describe("SEO parity", () => {
       ),
     )
     expect(previewMarkup).not.toContain("GTM-TJ94H7LQ")
+  })
+
+  it("removes legacy legal route implementations and redirects", () => {
+    const root = process.cwd()
+    const nextConfig = fs.readFileSync(path.join(root, "next.config.mjs"), "utf8")
+
+    expect(fs.existsSync(path.join(root, "app/privacy-policy/page.tsx"))).toBe(false)
+    expect(fs.existsSync(path.join(root, "app/terms-of-use/page.tsx"))).toBe(false)
+    expect(fs.existsSync(path.join(root, "app/medical-disclaimer/page.tsx"))).toBe(false)
+    expect(nextConfig).not.toContain('source: "/privacy-policy/"')
+    expect(nextConfig).not.toContain('source: "/terms-of-use/"')
+    expect(nextConfig).not.toContain('source: "/legal/terms-and-conditions/"')
+    expect(nextConfig).not.toContain('source: "/medical-disclaimer/"')
   })
 })

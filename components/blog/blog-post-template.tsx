@@ -1,15 +1,17 @@
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { PortableText } from "@portabletext/react"
 import { PageHero } from "@/components/shared/page-hero"
+import { JsonLd } from "@/components/shared/json-ld"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
 import type { BlogPost } from "@/lib/data/blog-posts"
+import { blogPostingJsonLd } from "@/lib/structured-data"
 
 export interface BlogPostViewModel {
   slug: string
   title: string
   date: string
+  publishedAt?: string
   content: string
   excerpt: string
   featureImage?: string | null
@@ -17,8 +19,6 @@ export interface BlogPostViewModel {
   category: string
   categorySlug: string
   author?: { name: string; role?: string; image?: string | null } | null
-  isSanity?: boolean
-  sanityBody?: unknown[]
   relatedServiceSlugs?: string[]
   tags?: string[]
 }
@@ -42,15 +42,6 @@ function MarkdownContent({ content }: { content: string }) {
 }
 
 function BlogContent({ post }: { post: BlogPostViewModel }) {
-  if (post.isSanity && post.sanityBody) {
-    return (
-      <div className="blog-prose">
-        <PortableText value={post.sanityBody as never[]} />
-        <BlogDiscoverySection post={post} />
-      </div>
-    )
-  }
-
   const content = splitFinalTakeaway(post.content)
 
   return (
@@ -100,6 +91,22 @@ export function BlogPostTemplate({
 }) {
   return (
     <div className="bg-background">
+      {post.author && (
+        <JsonLd
+          data={blogPostingJsonLd({
+            slug: post.slug,
+            title: post.title,
+            excerpt: post.excerpt,
+            publishedAt: post.publishedAt ?? post.date,
+            featureImage: post.featureImage || undefined,
+            author: {
+              name: post.author.name,
+              role: post.author.role ?? "",
+            },
+          })}
+        />
+      )}
+
       <PageHero
         breadcrumbs={[
           { label: "Home", href: "/" },

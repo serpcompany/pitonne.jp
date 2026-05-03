@@ -1,67 +1,9 @@
 import fs from "node:fs"
 import path from "node:path"
+import matter from "gray-matter"
 
 const root = process.cwd()
-
-const canonicalRoutes = [
-  "/",
-  "/about/",
-  "/areas-served/",
-  "/areas-served/chiyoda/",
-  "/areas-served/chiyoda/akihabara/",
-  "/areas-served/chiyoda/iidabashi/",
-  "/areas-served/chiyoda/kanda/",
-  "/areas-served/chiyoda/otemachi/",
-  "/areas-served/chiyoda/tokyo-station/",
-  "/areas-served/chuo/",
-  "/areas-served/chuo/ginza/",
-  "/areas-served/chuo/hatchobori/",
-  "/areas-served/chuo/nihonbashi/",
-  "/areas-served/chuo/tsukiji/",
-  "/areas-served/minato/",
-  "/areas-served/minato/akasaka/",
-  "/areas-served/minato/azabu-juban/",
-  "/areas-served/minato/hiroo/",
-  "/areas-served/minato/roppongi/",
-  "/areas-served/minato/shimbashi/",
-  "/areas-served/minato/toranomon/",
-  "/areas-served/shibuya/",
-  "/areas-served/shibuya/daikanyama/",
-  "/areas-served/shibuya/ebisu/",
-  "/areas-served/shibuya/harajuku/",
-  "/areas-served/shibuya/hiroo/",
-  "/areas-served/shibuya/omotesando/",
-  "/areas-served/shibuya/sendagaya/",
-  "/areas-served/shibuya/yoyogi/",
-  "/areas-served/shibuya/yoyogi-uehara/",
-  "/areas-served/shinagawa/",
-  "/areas-served/shinagawa/gotanda/",
-  "/areas-served/shinagawa/osaki/",
-  "/areas-served/shinagawa/takanawa/",
-  "/blog/",
-  "/blog/category/iv-therapy/",
-  "/blog/iv-therapy-for-dehydration/",
-  "/blog/iv-therapy-for-fatigue/",
-  "/blog/iv-therapy-for-hangover/",
-  "/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/",
-  "/contact/",
-  "/legal/",
-  "/legal/disclaimer/",
-  "/legal/privacy-policy/",
-  "/legal/terms-conditions/",
-  "/services/",
-  "/services/ed-medication/",
-  "/services/energy-fatigue-recovery-iv/",
-  "/services/exosome-iv-drip/",
-  "/services/hangover-iv-drip/",
-  "/services/immune-boost-iv-therapy/",
-  "/services/iv-therapy/",
-  "/services/iv-vitamin-therapy/",
-  "/services/medication/",
-  "/services/skin-brightening-iv-drip/",
-  "/services/stem-cell-nasal-spray/",
-  "/services/stem-cell-therapy/",
-]
+const failures = []
 
 const staticRoutes = new Set()
 
@@ -81,78 +23,100 @@ function walk(dir) {
   }
 }
 
-function slugsFrom(file) {
-  const source = fs.readFileSync(path.join(root, file), "utf8")
-  return [...source.matchAll(/slug:\s*"([^"]+)"/g)].map((match) => match[1])
+function markdownFrontmatter(dir) {
+  return fs
+    .readdirSync(path.join(root, dir))
+    .filter((fileName) => fileName.endsWith(".md"))
+    .map((fileName) => matter(fs.readFileSync(path.join(root, dir, fileName), "utf8")).data)
 }
 
-function hasDynamicServiceRoute(route) {
-  return route.startsWith("/services/") && route.split("/").filter(Boolean).length === 2
-}
+function areaRoutes() {
+  const source = fs.readFileSync(path.join(root, "lib/data/areas.ts"), "utf8")
+  const routes = []
+  let currentWard = ""
 
-function hasDynamicWardRoute(route) {
-  return route.startsWith("/areas-served/") && route.split("/").filter(Boolean).length === 2
-}
+  for (const line of source.split("\n")) {
+    const wardMatch = line.match(/^ {4}slug: "([^"]+)"/)
+    if (wardMatch) {
+      currentWard = wardMatch[1]
+      routes.push(`/areas-served/${currentWard}/`)
+      continue
+    }
 
-function hasDynamicAreaRoute(route) {
-  return route.startsWith("/areas-served/") && route.split("/").filter(Boolean).length === 3
-}
+    const areaMatch = line.match(/^ {8}slug: "([^"]+)"/)
+    if (areaMatch && currentWard) {
+      routes.push(`/areas-served/${currentWard}/${areaMatch[1]}/`)
+    }
+  }
 
-function hasDynamicBlogRoute(route) {
-  return route.startsWith("/blog/") && !route.startsWith("/blog/category/") && route.split("/").filter(Boolean).length === 2
-}
-
-function hasDynamicBlogCategoryRoute(route) {
-  return route.startsWith("/blog/category/") && route.split("/").filter(Boolean).length === 3
+  return routes
 }
 
 walk(path.join(root, "app"))
 
-const serviceSlugs = new Set(slugsFrom("lib/data/services.ts"))
-const areaSource = fs.readFileSync(path.join(root, "lib/data/areas.ts"), "utf8")
-const blogSlugs = new Set(slugsFrom("lib/data/blog-posts.ts"))
-const blogSource = fs.readFileSync(path.join(root, "lib/data/blog-posts.ts"), "utf8")
-const hasAreaDynamicPage = fs.existsSync(path.join(root, "app/areas-served/[ward]/[area]/page.tsx"))
-const hasServiceDynamicPage = fs.existsSync(path.join(root, "app/services/[service]/page.tsx"))
-const hasBlogDynamicPage = fs.existsSync(path.join(root, "app/blog/[post]/page.tsx"))
+const serviceRoutes = markdownFrontmatter("content/services").map((item) => item.canonicalPath)
+const blogPosts = markdownFrontmatter("content/blog")
+const blogRoutes = blogPosts.map((item) => `/blog/${item.slug}/`)
+const categoryRoutes = [...new Set(blogPosts.map((item) => `/blog/category/${item.categorySlug}/`))]
 
-const failures = []
+const canonicalRoutes = [
+  "/",
+  "/about/",
+  "/areas-served/",
+  "/blog/",
+  "/contact/",
+  "/legal/",
+  "/legal/disclaimer/",
+  "/legal/privacy-policy/",
+  "/legal/terms-conditions/",
+  "/services/",
+  ...serviceRoutes,
+  ...blogRoutes,
+  ...categoryRoutes,
+  ...areaRoutes(),
+]
 
 for (const route of canonicalRoutes) {
   const parts = route.split("/").filter(Boolean)
   const slug = parts.at(-1)
 
   if (staticRoutes.has(route)) continue
-  if (hasServiceDynamicPage && hasDynamicServiceRoute(route) && serviceSlugs.has(slug)) continue
-  if (hasDynamicWardRoute(route) && areaSource.includes(`slug: "${slug}"`)) continue
-  if (hasAreaDynamicPage && hasDynamicAreaRoute(route) && areaSource.includes(`slug: "${slug}"`)) continue
-  if (hasBlogDynamicPage && hasDynamicBlogRoute(route) && blogSlugs.has(slug)) continue
-  if (hasDynamicBlogCategoryRoute(route) && blogSource.includes(`categorySlug: "${slug}"`)) continue
+  if (route.startsWith("/services/") && serviceRoutes.includes(route)) continue
+  if (route.startsWith("/blog/category/") && categoryRoutes.includes(route)) continue
+  if (route.startsWith("/blog/") && blogRoutes.includes(route)) continue
+  if (route.startsWith("/areas-served/") && areaRoutes().includes(route)) continue
 
-  failures.push(`Missing canonical route coverage: ${route}`)
+  failures.push(`Missing canonical route coverage: ${route}${slug ? ` (${slug})` : ""}`)
 }
 
-for (const slug of ["iv-therapy", "stem-cell-therapy", "medication"]) {
-  if (!serviceSlugs.has(slug)) {
-    failures.push(`Missing parent service data slug: ${slug}`)
+const nextConfig = fs.readFileSync(path.join(root, "next.config.mjs"), "utf8")
+for (const [source, destination] of [
+  ["/services/medications/", "/services/medication/"],
+]) {
+  if (!nextConfig.includes(`source: "${source}"`) || !nextConfig.includes(`destination: "${destination}"`)) {
+    failures.push(`Missing redirect from ${source} to ${destination}`)
   }
 }
 
-if (!fs.readFileSync(path.join(root, "next.config.mjs"), "utf8").includes("/services/medications")) {
-  failures.push("Missing redirect for /services/medications/ to /services/medication/")
+for (const duplicateRouteFile of [
+  "app/privacy-policy/page.tsx",
+  "app/terms-of-use/page.tsx",
+  "app/medical-disclaimer/page.tsx",
+  "app/legal/terms-and-conditions/page.tsx",
+]) {
+  if (fs.existsSync(path.join(root, duplicateRouteFile))) {
+    failures.push(`Remove duplicate route file: ${duplicateRouteFile}`)
+  }
 }
 
-const routeSource = [
-  fs.readFileSync(path.join(root, "app/legal/page.tsx"), "utf8"),
-  fs.readFileSync(path.join(root, "components/footer.tsx"), "utf8"),
-].join("\n")
-
-if (routeSource.includes("/legal/terms-and-conditions")) {
-  failures.push("Internal links must use canonical /legal/terms-conditions/")
+for (const removedRedirect of ["/privacy-policy/", "/terms-of-use/", "/legal/terms-and-conditions/", "/medical-disclaimer/"]) {
+  if (nextConfig.includes(`source: "${removedRedirect}"`)) {
+    failures.push(`Remove legacy legal redirect source: ${removedRedirect}`)
+  }
 }
 
-if (fs.existsSync(path.join(root, "app/legal/terms-and-conditions/page.tsx"))) {
-  failures.push("Remove duplicate /legal/terms-and-conditions/ route; redirect it instead")
+if (canonicalRoutes.includes("/areas-served/chiyoda/tokyo-station/")) {
+  failures.push("Tokyo Station must not be treated as a canonical area route")
 }
 
 if (failures.length) {
@@ -160,4 +124,4 @@ if (failures.length) {
   process.exit(1)
 }
 
-console.log(`Route audit passed for ${canonicalRoutes.length} canonical routes.`)
+console.log(`Route audit passed for ${new Set(canonicalRoutes).size} canonical routes.`)

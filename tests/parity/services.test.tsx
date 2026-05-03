@@ -68,4 +68,20 @@ describe("service page parity", () => {
     ])
     expect(screen.queryByRole("heading", { name: "Ready to Start Your Wellness Journey?" })).not.toBeInTheDocument()
   })
+
+  it("loads service page copy from markdown files migrated from the supplied content folder", () => {
+    const service = getService("exosome-iv-drip")
+    expect(service).toBeDefined()
+    expect(service?.sourcePath).toBe("content/services/exosome-iv-drip.md")
+    expect(service?.content).toContain("## Treatment Overview")
+    expect(service?.content).toContain("## Physician-Guided Wellness Care")
+
+    expect(service?.content).toContain("## How It Works")
+    expect(service?.content).toContain("This advanced treatment may help promote healthy aging")
+    expect(service?.content).not.toContain("localhost:10013")
+    expect(service?.content).not.toContain("wp-content/uploads")
+    expect(service?.content).not.toContain("controls_data")
+    expect(service?.fullDescription).toContain("Exosome IV therapy delivers powerful regenerative factors")
+    expect(service?.benefits).toContain("Supports recovery from injuries or physical strain")
+  })
 })

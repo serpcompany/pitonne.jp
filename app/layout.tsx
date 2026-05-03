@@ -4,6 +4,7 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { JsonLd } from '@/components/shared/json-ld'
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
@@ -16,6 +17,7 @@ import {
   deploymentRobots,
   isProductionDeployment,
 } from '@/lib/seo'
+import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
 import './globals.css'
 
 const inter = Inter({ 
@@ -107,6 +109,8 @@ export default function RootLayout({
             />
           </noscript>
         )}
+        <JsonLd data={businessJsonLd()} />
+        <JsonLd data={websiteJsonLd()} />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

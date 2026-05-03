@@ -12,5 +12,6 @@ describe("contact page", () => {
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /send message/i })).not.toBeInTheDocument()
     expect(screen.queryByText("Nishi-Azabu, Tokyo")).not.toBeInTheDocument()
+    expect(screen.getByText("Tuesday: 10:00 - 19:00")).toBeInTheDocument()
   })
 })

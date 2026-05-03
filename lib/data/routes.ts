@@ -13,7 +13,6 @@ export const canonicalRoutes = {
   legal: "/legal/",
   privacyPolicy: "/legal/privacy-policy/",
   termsConditions: "/legal/terms-conditions/",
-  legacyTermsConditions: "/legal/terms-and-conditions/",
   medicalDisclaimer: "/legal/disclaimer/",
 }
 
