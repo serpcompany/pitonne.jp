@@ -92,6 +92,32 @@ export function Footer() {
   return (
     <footer className="bg-[#2d2d2d] text-white">
       <div className="container mx-auto px-4 py-12 lg:py-16">
+        {/* Google Maps Embed */}
+        <div className="mb-10">
+          <div className="rounded-lg overflow-hidden border border-white/10">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7479754683745!2d139.72219!3d35.6565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xab0e10b103ba02d7%3A0x97a0030e23484885!2sPitonne%20Stem%20Cell%20%26%20IV%20Therapy!5e0!3m2!1sen!2sjp!4v1234567890"
+              width="100%"
+              height="200"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Pitonne Stem Cell & IV Therapy Location"
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+            />
+          </div>
+          <a 
+            href="https://maps.app.goo.gl/WjMLKSkNw7t2oc5T6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-3 text-sm text-[#4AA69D] hover:text-[#5bc4ba] transition-colors"
+          >
+            <MapPin className="h-4 w-4" />
+            <span>Get Directions</span>
+          </a>
+        </div>
+
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div>
