@@ -1,64 +1,51 @@
-import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
-import { getArea, getAllAreas } from "@/lib/data/areas"
 
-export async function generateStaticParams() {
-  const allAreas = getAllAreas()
-  return allAreas.map(({ ward, area }) => ({
-    ward: ward.slug,
-    area: area.slug,
-  }))
+interface AreaPageProps {
+  areaName: string
+  areaNameJa: string
+  wardName: string
+  wardSlug: string
+  description: string
+  highlights: string[]
+  landmarks: string[]
+  otherAreas: { name: string; slug: string }[]
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ ward: string; area: string }> }): Promise<Metadata> {
-  const { ward: wardSlug, area: areaSlug } = await params
-  const data = getArea(wardSlug, areaSlug)
-  if (!data) return { title: "Area Not Found | Pitonne" }
-  
-  const { ward, area } = data
-  return {
-    title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name} | Pitonne`,
-    description: `Premium IV therapy, stem cell treatments, and wellness services in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. ${area.description}`,
+const faqs = (areaName: string, wardName: string) => [
+  {
+    question: `Can I book a consultation if I am staying in ${areaName}, ${wardName}, Tokyo?`,
+    answer: `Yes. Patients staying in ${areaName}, ${wardName}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step.`
+  },
+  {
+    question: `What services are available for ${areaName} patients?`,
+    answer: "Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability."
+  },
+  {
+    question: `Do you offer hotel or home visits near ${areaName}, ${wardName}, Tokyo?`,
+    answer: "In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible."
+  },
+  {
+    question: "What should I include when I contact Pitonne?",
+    answer: "Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints."
+  },
+  {
+    question: `How convenient is ${areaName} for Pitonne patients?`,
+    answer: `${areaName} in ${wardName} is part of Pitonne's central Tokyo service area, allowing patients to coordinate consultation timing around home, hotel, office, or travel plans.`
   }
-}
+]
 
-function generateFaqs(areaName: string, wardName: string) {
-  return [
-    {
-      question: `Can I book a consultation if I am staying in ${areaName}, ${wardName}, Tokyo?`,
-      answer: `Yes. Patients staying in ${areaName}, ${wardName}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step.`
-    },
-    {
-      question: `What services are available for ${areaName} patients?`,
-      answer: "Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability."
-    },
-    {
-      question: `Do you offer hotel or home visits near ${areaName}, ${wardName}, Tokyo?`,
-      answer: "In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible."
-    },
-    {
-      question: "What should I include when I contact Pitonne?",
-      answer: "Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints."
-    },
-    {
-      question: `How convenient is ${areaName} for Pitonne patients?`,
-      answer: `${areaName} in ${wardName} is part of Pitonne's central Tokyo service area, allowing patients to coordinate consultation timing around home, hotel, office, or travel plans.`
-    }
-  ]
-}
-
-export default async function AreaDetailPage({ params }: { params: Promise<{ ward: string; area: string }> }) {
-  const { ward: wardSlug, area: areaSlug } = await params
-  const data = getArea(wardSlug, areaSlug)
+export function AreaDetailPage({
+  areaName,
+  areaNameJa,
+  wardName,
+  wardSlug,
+  description,
+  highlights,
+  landmarks,
+  otherAreas
+}: AreaPageProps) {
+  const areaFaqs = faqs(areaName, wardName)
   
-  if (!data) {
-    notFound()
-  }
-
-  const { ward, area } = data
-  const faqs = generateFaqs(area.name, ward.name)
-
   return (
     <div className="bg-background">
       {/* Hero Section */}
@@ -69,18 +56,18 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
             <span className="mx-2">&gt;</span>
             <Link href="/areas-served" className="hover:text-[#4AA69D]">Areas Served</Link>
             <span className="mx-2">&gt;</span>
-            <Link href={`/areas-served/${ward.slug}`} className="hover:text-[#4AA69D]">{ward.name}</Link>
+            <Link href={`/areas-served/${wardSlug}`} className="hover:text-[#4AA69D]">{wardName}</Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-foreground">{area.name}</span>
+            <span className="text-foreground">{areaName}</span>
           </nav>
           <p className="text-sm uppercase tracking-widest text-[#4AA69D] mb-4">
-            {area.nameJa} · {ward.name}, Tokyo
+            {areaNameJa} · {wardName}, Tokyo
           </p>
           <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-            Stem Cell & IV Therapy in {area.name}
+            Stem Cell & IV Therapy in {areaName}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {area.description}
+            {description}
           </p>
         </div>
       </section>
@@ -92,7 +79,7 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
             <div className="bg-card p-8 rounded-lg border border-border">
               <h2 className="font-serif text-2xl text-foreground mb-6">Location Highlights</h2>
               <ul className="space-y-3">
-                {area.highlights.map((highlight, index) => (
+                {highlights.map((highlight, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
                     <span className="text-muted-foreground">{highlight}</span>
@@ -103,7 +90,7 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
             <div className="bg-card p-8 rounded-lg border border-border">
               <h2 className="font-serif text-2xl text-foreground mb-6">Nearby Landmarks</h2>
               <ul className="space-y-3">
-                {area.landmarks.map((landmark, index) => (
+                {landmarks.map((landmark, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
                     <span className="text-muted-foreground">{landmark}</span>
@@ -119,10 +106,10 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
       <section className="py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="font-serif text-3xl text-foreground mb-4 text-center">
-            Care Available in {area.name}
+            Care Available in {areaName}
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            We bring premium wellness services directly to your hotel, residence, or office in {area.name}. 
+            We bring premium wellness services directly to your hotel, residence, or office in {areaName}. 
             Our licensed medical professionals provide discreet, professional care at your convenience.
           </p>
           
@@ -151,8 +138,8 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
                   <span>IV Vitamin Therapy</span>
                 </li>
               </ul>
-              <Link href="/services/iv-therapy" className="text-sm text-[#4AA69D] hover:underline">
-                Learn more &rarr;
+              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
+                View all services &rarr;
               </Link>
             </div>
             
@@ -176,8 +163,8 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
                   <span>Wellness Consultations</span>
                 </li>
               </ul>
-              <Link href="/services/stem-cell-therapy" className="text-sm text-[#4AA69D] hover:underline">
-                Learn more &rarr;
+              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
+                View all services &rarr;
               </Link>
             </div>
             
@@ -201,8 +188,8 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
                   <span>Follow-Up Support</span>
                 </li>
               </ul>
-              <Link href="/services/medication" className="text-sm text-[#4AA69D] hover:underline">
-                Learn more &rarr;
+              <Link href="/services" className="text-sm text-[#4AA69D] hover:underline">
+                View all services &rarr;
               </Link>
             </div>
           </div>
@@ -263,7 +250,7 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
-            {faqs.map((faq, index) => (
+            {areaFaqs.map((faq, index) => (
               <div key={index} className="bg-card p-6 rounded-lg border border-border">
                 <h3 className="font-semibold text-foreground mb-3">{faq.question}</h3>
                 <p className="text-muted-foreground">{faq.answer}</p>
@@ -277,10 +264,10 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="font-serif text-3xl text-foreground mb-6">
-            Ready to Book in {area.name}?
+            Ready to Book in {areaName}?
           </h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Use the consultation form to share your location in {area.name}, preferred timing, 
+            Use the consultation form to share your location in {areaName}, preferred timing, 
             and the type of care you want to discuss.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -301,26 +288,26 @@ export default async function AreaDetailPage({ params }: { params: Promise<{ war
       </section>
 
       {/* Other Areas */}
-      <section className="py-12 border-t border-border">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h3 className="font-semibold text-foreground mb-6 text-center">
-            Other Areas in {ward.name}
-          </h3>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {ward.areas
-              .filter(a => a.slug !== area.slug)
-              .map((otherArea) => (
-                <Link
-                  key={otherArea.slug}
-                  href={`/areas-served/${ward.slug}/${otherArea.slug}`}
+      {otherAreas.length > 0 && (
+        <section className="py-12 border-t border-border">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h3 className="font-semibold text-foreground mb-6 text-center">
+              Other Areas in {wardName}
+            </h3>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {otherAreas.map((area) => (
+                <Link 
+                  key={area.slug}
+                  href={`/areas-served/${wardSlug}/${area.slug}`} 
                   className="px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
                 >
-                  {otherArea.name}
+                  {area.name}
                 </Link>
               ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   )
 }
