@@ -7,7 +7,7 @@ export function BookingButton({ className = "" }: { className?: string }) {
       href={businessInfo.bookingUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center rounded-md bg-[#4AA69D] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8f87] ${className}`}
+      className={`inline-flex items-center justify-center rounded-md bg-[#2D766F] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a] ${className}`}
     >
       Book Consultation
     </Link>

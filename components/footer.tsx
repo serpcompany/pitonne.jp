@@ -159,7 +159,7 @@ export function Footer() {
               {businessInfo.hours.map((item) => (
                 <li key={item.day} className="flex justify-between text-sm">
                   <span className="text-white/70">{item.day}</span>
-                  <span className={item.hours === "Closed" ? "text-white/50" : "text-white/90"}>
+                  <span className={item.hours === "Closed" ? "text-white/70" : "text-white/90"}>
                     {item.hours}
                   </span>
                 </li>
@@ -195,7 +195,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/10">
           {/* Social Links Row */}
           <div className="mb-6">
-            <p className="text-xs text-white/50 uppercase tracking-wider mb-3">Follow Us</p>
+            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">Follow Us</p>
             <div className="flex flex-wrap items-center gap-3">
               {socialLinks.map((social) => (
                 <a
@@ -203,7 +203,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-[#4AA69D] transition-colors p-2 rounded-lg hover:bg-white/5"
+                  className="text-white/70 hover:text-[#4AA69D] transition-colors p-2 rounded-lg hover:bg-white/5"
                   aria-label={social.name}
                   title={social.name}
                 >
@@ -215,7 +215,7 @@ export function Footer() {
 
           {/* Podcast Links Row */}
           <div className="mb-6">
-            <p className="text-xs text-white/50 uppercase tracking-wider mb-3">Listen to Our Podcast</p>
+            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">Listen to Our Podcast</p>
             <div className="flex flex-wrap items-center gap-3">
               {podcastLinks.map((podcast) => (
                 <a
@@ -223,7 +223,7 @@ export function Footer() {
                   href={podcast.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-[#4AA69D] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center gap-2"
+                  className="text-white/70 hover:text-[#4AA69D] transition-colors p-2 rounded-lg hover:bg-white/5 flex items-center gap-2"
                   aria-label={podcast.name}
                   title={podcast.name}
                 >
@@ -236,10 +236,10 @@ export function Footer() {
 
           {/* Copyright */}
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-white/50">
+            <p className="text-sm text-white/70">
               &copy; {new Date().getFullYear()} Pitonne Stem Cell & IV Therapy. All rights reserved.
             </p>
-            <p className="text-xs text-white/40">
+            <p className="text-xs text-white/70">
               Nishi Azabu, Minato-ku, Tokyo, Japan
             </p>
           </div>

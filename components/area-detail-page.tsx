@@ -85,7 +85,7 @@ export function AreaDetailPage({
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     {group.items.map((item) => (
                       <li key={item} className="flex items-start gap-2">
-                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#4AA69D]" />
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#2D766F]" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -104,7 +104,7 @@ export function AreaDetailPage({
             <div className="grid gap-6 md:grid-cols-3">
               {["Send Request", "Clinical Review", "Care Planning"].map((step, index) => (
                 <div key={step} className="text-center">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] text-lg font-bold text-white">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#2D766F] text-lg font-bold text-white">
                     {index + 1}
                   </div>
                   <h3 className="mb-2 font-medium text-foreground">{step}</h3>
@@ -197,7 +197,7 @@ export function AreaDetailPage({
               href="/contact/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-md bg-[#4AA69D] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3d8a83]"
+              className="inline-block rounded-md bg-[#2D766F] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a]"
             >
               Contact Us
             </Link>
@@ -217,7 +217,7 @@ export function AreaDetailPage({
                 <Link
                   key={area.slug}
                   href={`/areas-served/${wardSlug}/${area.slug}/`}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-[#4AA69D] hover:text-[#4AA69D]"
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-[#2D766F] hover:text-[#2D766F]"
                 >
                   {area.name}
                 </Link>

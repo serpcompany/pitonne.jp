@@ -63,11 +63,11 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
               <Link
                 key={area.slug}
                 href={`/areas-served/${ward.slug}/${area.slug}`}
-                className="bg-card p-6 rounded-lg border border-border hover:shadow-md hover:border-[#4AA69D] transition-all group"
+                className="bg-card p-6 rounded-lg border border-border hover:shadow-md hover:border-[#2D766F] transition-all group"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 flex-shrink-0 bg-[#f5ebe0] rounded-full flex items-center justify-center group-hover:bg-[#4AA69D] transition-colors">
-                    <svg className="w-6 h-6 text-[#4AA69D] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 flex-shrink-0 bg-[#f5ebe0] rounded-full flex items-center justify-center group-hover:bg-[#2D766F] transition-colors">
+                    <svg className="w-6 h-6 text-[#2D766F] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -75,7 +75,7 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
                   <div>
                     <h3 className="font-medium text-foreground mb-1">{area.name}</h3>
                     <p className="text-sm text-muted-foreground mb-1">{area.nameJa}</p>
-                    <p className="text-sm text-[#4AA69D]">View services &rarr;</p>
+                    <p className="text-sm text-[#2D766F]">View services &rarr;</p>
                   </div>
                 </div>
               </Link>
@@ -122,27 +122,27 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
               <h3 className="font-semibold text-foreground mb-4">Services We Offer</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">IV therapy and wellness consultation</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Stem cell related treatment planning</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Online medication consultation</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">In-home or hotel visit coordination</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Private follow-up for international visitors</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Concierge scheduling from Nishiazabu</span>
                 </li>
               </ul>
@@ -151,23 +151,23 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
               <h3 className="font-semibold text-foreground mb-4">Ideal For</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Busy schedule around {ward.name}, Tokyo</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Hotel or residence coordination</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">English-friendly care planning before a visit</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Wellness support after travel or work fatigue</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                   <span className="text-muted-foreground">Private consultation before choosing a service</span>
                 </li>
               </ul>
@@ -191,7 +191,7 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
             href="/contact" 
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#4AA69D] text-white px-8 py-4 rounded-full hover:bg-[#3d8b83] transition-colors"
+            className="inline-block bg-[#2D766F] text-white px-8 py-4 rounded-full hover:bg-[#245f5a] transition-colors"
           >
             Contact Pitonne
           </Link>
@@ -201,7 +201,7 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
       {/* Back Link */}
       <section className="py-8 border-t border-border">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <Link href="/areas-served" className="text-[#4AA69D] hover:underline">
+          <Link href="/areas-served" className="text-[#2D766F] hover:underline">
             &larr; View all areas served
           </Link>
         </div>

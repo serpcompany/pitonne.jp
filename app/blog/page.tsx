@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { getPosts, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
@@ -65,7 +66,7 @@ export default async function BlogPage() {
             <span className="text-sm font-medium text-foreground">Categories:</span>
             <Link 
               href="/blog"
-              className="px-4 py-1.5 text-sm rounded-full bg-[#4AA69D] text-white"
+              className="px-4 py-1.5 text-sm rounded-full bg-[#2D766F] text-white"
             >
               All
             </Link>
@@ -73,7 +74,7 @@ export default async function BlogPage() {
               <Link 
                 key={cat.slug}
                 href={`/blog/category/${cat.slug}`}
-                className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
+                className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#2D766F] hover:text-[#2D766F] transition-colors"
               >
                 {cat.name}
               </Link>
@@ -91,12 +92,16 @@ export default async function BlogPage() {
               className="group block max-w-5xl mx-auto"
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="aspect-[4/3] rounded-lg overflow-hidden bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8]">
+                <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8]">
                   {featuredPost.featureImage ? (
-                    <img 
+                    <Image
                       src={featuredPost.featureImage} 
                       alt={featuredPost.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      priority
+                      fetchPriority="high"
+                      sizes="(min-width: 768px) 50vw, 100vw"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -114,7 +119,7 @@ export default async function BlogPage() {
                     Featured
                   </span>
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
-                    <span className="text-[#4AA69D]">{featuredPost.category}</span>
+                    <span className="text-[#2D766F]">{featuredPost.category}</span>
                     <span>&middot;</span>
                     <time>{featuredPost.date}</time>
                     {featuredPost.readingTime && (
@@ -124,13 +129,13 @@ export default async function BlogPage() {
                       </>
                     )}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#4AA69D] transition-colors">
+                  <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#2D766F] transition-colors">
                     {featuredPost.title}
                   </h2>
                   <p className="text-muted-foreground mb-6 line-clamp-3">
                     {featuredPost.excerpt}
                   </p>
-                  <span className="text-[#4AA69D] font-medium group-hover:underline">
+                  <span className="text-[#2D766F] font-medium group-hover:underline">
                     Read Article &rarr;
                   </span>
                 </div>
@@ -149,14 +154,16 @@ export default async function BlogPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
+                className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#2D766F] transition-all"
               >
                 {post.featureImage ? (
-                  <div className="aspect-video bg-[#f5ebe0] overflow-hidden">
-                    <img 
+                  <div className="relative aspect-video bg-[#f5ebe0] overflow-hidden">
+                    <Image
                       src={post.featureImage} 
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                   </div>
                 ) : (
@@ -168,7 +175,7 @@ export default async function BlogPage() {
                 )}
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
-                    <span className="text-[#4AA69D]">{post.category}</span>
+                    <span className="text-[#2D766F]">{post.category}</span>
                     <span>&middot;</span>
                     <time>{post.date}</time>
                     {post.readingTime && (
@@ -178,7 +185,7 @@ export default async function BlogPage() {
                       </>
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors line-clamp-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#2D766F] transition-colors line-clamp-2">
                     {post.title}
                   </h3>
                   <p className="text-muted-foreground text-sm line-clamp-3">
@@ -202,7 +209,7 @@ export default async function BlogPage() {
             href="/contact"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

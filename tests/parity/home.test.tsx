@@ -4,13 +4,23 @@ import HomePage from "@/app/page"
 import { businessInfo } from "@/lib/data/site"
 
 describe("home page", () => {
-  it("uses the green CTA style and opens the hero booking link in a new tab", () => {
+  it("uses an accessible green CTA style and opens the hero booking link in a new tab", () => {
     render(<HomePage />)
 
     const cta = screen.getByRole("link", { name: "Book Consultation" })
     expect(cta).toHaveAttribute("href", businessInfo.bookingUrl)
     expect(cta).toHaveAttribute("target", "_blank")
     expect(cta).toHaveAttribute("rel", "noopener noreferrer")
-    expect(cta).toHaveClass("bg-[#4AA69D]", "hover:bg-[#3d8a83]")
+    expect(cta).toHaveClass("bg-[#2D766F]", "hover:bg-[#245f5a]")
+  })
+
+  it("keeps the supporting homepage image out of the mobile LCP path", () => {
+    render(<HomePage />)
+
+    const cta = screen.getByRole("link", { name: "Book Consultation" })
+    expect(cta.closest("section")).toHaveClass("min-h-[calc(100svh-73px)]")
+
+    const lcpImage = screen.getByAltText("Tokyo Tower view near Pitonne in Nishi Azabu")
+    expect(lcpImage).not.toHaveAttribute("fetchpriority", "high")
   })
 })

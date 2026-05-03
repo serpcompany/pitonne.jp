@@ -70,12 +70,12 @@ function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}/`}
-              className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#4AA69D] hover:shadow-md"
+              className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#2D766F] hover:shadow-md"
             >
               <p className="mb-2 text-xs text-muted-foreground">
                 {new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
               </p>
-              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#4AA69D]">{post.title}</h3>
+              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#2D766F]">{post.title}</h3>
             </Link>
           ))}
         </div>
@@ -103,7 +103,7 @@ export function BlogPostTemplate({
         eyebrow={
           <Link
             href={`/blog/category/${post.categorySlug}/`}
-            className="inline-block rounded-full bg-[#4AA69D] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#3d8a83]"
+            className="inline-block rounded-full bg-[#2D766F] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#245f5a]"
           >
             {post.category}
           </Link>
@@ -126,7 +126,7 @@ export function BlogPostTemplate({
             {post.author.image ? (
               <img src={post.author.image} alt={post.author.name} className="h-12 w-12 rounded-full object-cover" />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] font-medium text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#2D766F] font-medium text-white">
                 {post.author.name.charAt(0)}
               </div>
             )}

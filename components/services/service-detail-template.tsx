@@ -43,7 +43,7 @@ export function ServiceDetailTemplate({
                 <ul className="space-y-3">
                   {service.keyPoints.map((point) => (
                     <li key={point} className="flex items-start gap-3">
-                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                       <span className="text-muted-foreground">{point}</span>
                     </li>
                   ))}
@@ -58,7 +58,7 @@ export function ServiceDetailTemplate({
                 <ul className="grid gap-4 md:grid-cols-2">
                   {service.benefits.map((benefit) => (
                     <li key={benefit} className="flex items-start gap-3">
-                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                       <span className="text-muted-foreground">{benefit}</span>
                     </li>
                   ))}
@@ -93,7 +93,7 @@ export function ServiceDetailTemplate({
                     "Contact the clinic if you have questions after treatment.",
                   ].map((note) => (
                     <li key={note} className="flex items-start gap-3">
-                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#2D766F]" />
                       <span className="text-muted-foreground">{note}</span>
                     </li>
                   ))}

@@ -36,7 +36,7 @@ export function ServiceParentTemplate({ service, childServices }: { service: Ser
         <div className="container mx-auto px-4">
           <div className="mb-8 flex items-center justify-between gap-6">
             <h2 className="font-serif text-3xl text-foreground md:text-4xl">Available Treatments</h2>
-            <Link href="/services/" className="text-sm text-[#4AA69D] hover:underline">
+            <Link href="/services/" className="text-sm text-[#2D766F] hover:underline">
               View all services
             </Link>
           </div>

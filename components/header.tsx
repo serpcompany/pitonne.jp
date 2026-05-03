@@ -51,7 +51,7 @@ export function Header() {
             >
               <Link 
                 href={item.href}
-                className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#4AA69D] transition-colors"
+                className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#2D766F] transition-colors"
               >
                 {item.name}
                 {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
@@ -66,7 +66,7 @@ export function Header() {
                       <div key={category.name}>
                         <Link 
                           href={category.href}
-                          className="text-sm font-semibold text-foreground hover:text-[#4AA69D] transition-colors"
+                          className="text-sm font-semibold text-foreground hover:text-[#2D766F] transition-colors"
                         >
                           {category.name}
                         </Link>
@@ -75,7 +75,7 @@ export function Header() {
                             <li key={service.name}>
                               <Link
                                 href={service.href}
-                                className="text-sm text-muted-foreground hover:text-[#4AA69D] transition-colors"
+                                className="text-sm text-muted-foreground hover:text-[#2D766F] transition-colors"
                               >
                                 {service.name}
                               </Link>
@@ -88,7 +88,7 @@ export function Header() {
                   <div className="mt-6 pt-4 border-t border-border">
                       <Link 
                         href="/services"
-                        className="text-sm font-medium text-[#4AA69D] hover:underline"
+                        className="text-sm font-medium text-[#2D766F] hover:underline"
                       >
                         View All Services &rarr;
                       </Link>
@@ -106,7 +106,7 @@ export function Header() {
                       <div key={ward.name}>
                         <Link 
                           href={ward.href}
-                          className="text-sm font-semibold text-foreground hover:text-[#4AA69D] transition-colors"
+                          className="text-sm font-semibold text-foreground hover:text-[#2D766F] transition-colors"
                         >
                           {ward.name}
                           <span className="block text-xs text-muted-foreground font-normal">{ward.nameJa}</span>
@@ -116,7 +116,7 @@ export function Header() {
                             <li key={area.name}>
                               <Link
                                 href={area.href}
-                                className="text-xs text-muted-foreground hover:text-[#4AA69D] transition-colors"
+                                className="text-xs text-muted-foreground hover:text-[#2D766F] transition-colors"
                               >
                                 {area.name}
                               </Link>
@@ -129,7 +129,7 @@ export function Header() {
                   <div className="mt-6 pt-4 border-t border-border">
                       <Link 
                         href="/areas-served"
-                        className="text-sm font-medium text-[#4AA69D] hover:underline"
+                        className="text-sm font-medium text-[#2D766F] hover:underline"
                       >
                         View All Areas &rarr;
                       </Link>
@@ -151,7 +151,7 @@ export function Header() {
             href={canonicalRoutes.contact}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#4AA69D] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+            className="bg-[#2D766F] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>
@@ -273,7 +273,7 @@ export function Header() {
                 href="/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-[#4AA69D] text-white text-center px-5 py-2.5 rounded-md text-sm font-medium"
+                className="block w-full bg-[#2D766F] text-white text-center px-5 py-2.5 rounded-md text-sm font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact Us

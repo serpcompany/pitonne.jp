@@ -56,7 +56,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4">
                 Commitment
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
@@ -156,7 +156,7 @@ export default function AboutPage() {
                   />
                 </div>
                 <h3 className="text-lg font-semibold text-center mb-1">{member.name}</h3>
-                <p className="text-sm text-[#4AA69D] text-center mb-4">{member.role}</p>
+                <p className="text-sm text-[#2D766F] text-center mb-4">{member.role}</p>
                 <p className="text-sm text-muted-foreground">{member.bio}</p>
               </div>
             ))}

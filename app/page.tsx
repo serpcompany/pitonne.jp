@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Check } from "lucide-react"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { businessInfo } from "@/lib/data/site"
@@ -52,22 +53,28 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden">
+      <section className="relative flex min-h-[calc(100svh-73px)] items-center overflow-hidden bg-[#faf9f7]">
         {/* Decorative Leaf Elements */}
         <div className="absolute left-0 bottom-0 w-32 h-48 opacity-60">
-          <img 
+          <Image
             src="/images/Leaf-3.png" 
             alt="" 
             className="w-full h-full object-contain"
             aria-hidden="true"
+            width={128}
+            height={192}
+            loading="lazy"
           />
         </div>
         <div className="absolute right-0 top-20 w-24 h-40 opacity-50">
-          <img 
+          <Image
             src="/images/Leaf-2-e1744282707104.png" 
             alt="" 
             className="w-full h-full object-contain"
             aria-hidden="true"
+            width={96}
+            height={160}
+            loading="lazy"
           />
         </div>
 
@@ -86,7 +93,7 @@ export default function HomePage() {
             href={businessInfo.bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Book Consultation
           </Link>
@@ -99,11 +106,13 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Clinic Image */}
             <div className="relative">
-              <div className="aspect-[4/3] rounded-lg overflow-hidden">
-                <img 
+              <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                <Image
                   src="/images/content/sheet/home.jpg"
                   alt="Tokyo Tower view near Pitonne in Nishi Azabu"
                   className="w-full h-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               </div>
               {/* Decorative leaf */}
@@ -118,7 +127,7 @@ export default function HomePage() {
 
             {/* Content */}
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
                 Who We Are
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
@@ -130,15 +139,15 @@ export default function HomePage() {
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <Check className="h-5 w-5 text-[#2D766F]" />
                   <span>In-home and hotel visit care</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <Check className="h-5 w-5 text-[#2D766F]" />
                   <span>Registered nurse-led support</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#4AA69D]" />
+                  <Check className="h-5 w-5 text-[#2D766F]" />
                   <span>Central Tokyo concierge service</span>
                 </li>
               </ul>
@@ -175,14 +184,16 @@ export default function HomePage() {
                 href={service.href}
                 className="group bg-white rounded-lg p-6 border border-border hover:shadow-lg transition-all duration-300"
               >
-                <div className="h-32 rounded-md mb-4 overflow-hidden">
-                  <img 
+                <div className="relative h-32 rounded-md mb-4 overflow-hidden">
+                  <Image
                     src={service.image} 
                     alt={service.title}
                     className="w-full h-full object-cover"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                   />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
+                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#2D766F] transition-colors">
                   {service.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -208,7 +219,7 @@ export default function HomePage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4">
               Blog
             </p>
             <h2 className="text-3xl md:text-4xl font-serif">
@@ -227,7 +238,7 @@ export default function HomePage() {
                   <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
                     {post.date}
                   </span>
-                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#4AA69D] transition-colors">
+                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#2D766F] transition-colors">
                     {post.title}
                   </h3>
                 </div>

@@ -122,7 +122,7 @@ export default function DisclaimerPage() {
       {/* Back Link */}
       <section className="py-8 border-t border-[#e5e5e5]">
         <div className="container mx-auto px-4 max-w-4xl">
-          <Link href="/legal" className="text-[#4AA69D] hover:underline">
+          <Link href="/legal" className="text-[#2D766F] hover:underline">
             &larr; Back to Legal
           </Link>
         </div>
