@@ -78,17 +78,17 @@ describe("blog post parity", () => {
     expect(screen.queryByRole("heading", { name: "Questions About This Topic?" })).not.toBeInTheDocument()
   })
 
-  it("keeps migrated legacy blog bodies in sync with the supplied content folder", () => {
-    const sourceRoot = path.join(process.cwd(), "../pitonne.jp-nextjs-refactor-1/assets/content/posts")
+  it("keeps migrated legacy blog bodies in sync with tracked markdown files", () => {
+    const sourceRoot = path.join(process.cwd(), "content/blog")
 
     for (const slug of ["iv-therapy-for-dehydration", "iv-therapy-for-fatigue", "iv-therapy-for-hangover"]) {
-      const legacySource = fs
+      const markdownBody = fs
         .readFileSync(path.join(sourceRoot, `${slug}.md`), "utf8")
         .replace(/^---[\s\S]*?---\s*/, "")
         .trim()
       const post = getBlogPostBySlug(slug)
 
-      expect(post?.content.trim()).toBe(legacySource)
+      expect(post?.content.trim()).toBe(markdownBody)
     }
   })
 
