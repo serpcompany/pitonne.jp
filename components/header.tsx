@@ -136,7 +136,8 @@ export function Header() {
 
               {/* Services Mega Menu */}
               {item.hasDropdown === "services" && activeDropdown === "services" && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[600px] bg-white rounded-lg shadow-xl border border-border p-6">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[600px]">
+                  <div className="bg-white rounded-lg shadow-xl border border-border p-6">
                   <div className="grid grid-cols-3 gap-6">
                     {servicesMenu.categories.map((category) => (
                       <div key={category.name}>
@@ -162,19 +163,21 @@ export function Header() {
                     ))}
                   </div>
                   <div className="mt-6 pt-4 border-t border-border">
-                    <Link 
-                      href="/services"
-                      className="text-sm font-medium text-[#4AA69D] hover:underline"
-                    >
-                      View All Services &rarr;
-                    </Link>
+                      <Link 
+                        href="/services"
+                        className="text-sm font-medium text-[#4AA69D] hover:underline"
+                      >
+                        View All Services &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Areas Mega Menu */}
               {item.hasDropdown === "areas" && activeDropdown === "areas" && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[700px] bg-white rounded-lg shadow-xl border border-border p-6">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[700px]">
+                  <div className="bg-white rounded-lg shadow-xl border border-border p-6">
                   <div className="grid grid-cols-5 gap-4">
                     {areasMenu.wards.map((ward) => (
                       <div key={ward.name}>
@@ -201,12 +204,13 @@ export function Header() {
                     ))}
                   </div>
                   <div className="mt-6 pt-4 border-t border-border">
-                    <Link 
-                      href="/areas-served"
-                      className="text-sm font-medium text-[#4AA69D] hover:underline"
-                    >
-                      View All Areas &rarr;
-                    </Link>
+                      <Link 
+                        href="/areas-served"
+                        className="text-sm font-medium text-[#4AA69D] hover:underline"
+                      >
+                        View All Areas &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
