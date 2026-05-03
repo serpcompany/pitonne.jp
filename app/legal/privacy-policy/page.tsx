@@ -1,9 +1,18 @@
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Pitonne",
+  title: "Privacy Policy",
   description: "Privacy Policy for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+  alternates: {
+    canonical: canonicalUrl("/legal/privacy-policy/"),
+  },
+  openGraph: {
+    title: "Privacy Policy",
+    description: "Privacy Policy for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+    url: canonicalUrl("/legal/privacy-policy/"),
+  },
 }
 
 export default function PrivacyPolicyPage() {

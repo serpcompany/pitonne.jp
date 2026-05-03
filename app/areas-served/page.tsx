@@ -3,10 +3,19 @@ import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { wards } from "@/lib/data/areas"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Areas Served | Pitonne Stem Cell & IV Therapy Tokyo",
+  title: "Areas Served",
   description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+  alternates: {
+    canonical: canonicalUrl("/areas-served/"),
+  },
+  openGraph: {
+    title: "Areas Served",
+    description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+    url: canonicalUrl("/areas-served/"),
+  },
 }
 
 export default function AreasServedPage() {

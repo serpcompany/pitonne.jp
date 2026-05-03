@@ -2,10 +2,19 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { businessInfo } from "@/lib/data/site"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About Pitonne | Stem Cell & IV Therapy in Tokyo",
+  title: "About Pitonne",
   description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+  alternates: {
+    canonical: canonicalUrl("/about/"),
+  },
+  openGraph: {
+    title: "About Pitonne",
+    description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+    url: canonicalUrl("/about/"),
+  },
 }
 
 const team = [

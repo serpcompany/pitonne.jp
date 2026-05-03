@@ -3,10 +3,19 @@ import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { getPosts, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
 import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Blog | Pitonne Stem Cell & IV Therapy Tokyo",
+  title: "Blog",
   description: "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
+  alternates: {
+    canonical: canonicalUrl("/blog/"),
+  },
+  openGraph: {
+    title: "Blog",
+    description: "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
+    url: canonicalUrl("/blog/"),
+  },
 }
 
 export default async function BlogPage() {

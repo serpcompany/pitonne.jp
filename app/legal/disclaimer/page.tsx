@@ -1,10 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Medical Disclaimer | Pitonne",
+  title: "Medical Disclaimer",
   description: "Medical disclaimer and important health information for Pitonne IV therapy and wellness services.",
+  alternates: {
+    canonical: canonicalUrl("/legal/disclaimer/"),
+  },
+  openGraph: {
+    title: "Medical Disclaimer",
+    description: "Medical disclaimer and important health information for Pitonne IV therapy and wellness services.",
+    url: canonicalUrl("/legal/disclaimer/"),
+  },
 }
 
 export default function DisclaimerPage() {

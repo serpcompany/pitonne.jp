@@ -1,10 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Legal | Pitonne",
+  title: "Legal",
   description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+  alternates: {
+    canonical: canonicalUrl("/legal/"),
+  },
+  openGraph: {
+    title: "Legal",
+    description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+    url: canonicalUrl("/legal/"),
+  },
 }
 
 const legalPages = [

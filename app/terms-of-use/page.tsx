@@ -1,9 +1,17 @@
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Terms of Use | Pitonne Stem Cell & IV Therapy",
+  title: "Terms of Use",
   description: "Read Pitonne's terms of use governing your access to and use of our website and services.",
+  alternates: {
+    canonical: canonicalUrl("/legal/terms-conditions/"),
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
 }
 
 export default function TermsOfUsePage() {

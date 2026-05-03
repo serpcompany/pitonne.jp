@@ -1,9 +1,18 @@
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Pitonne",
+  title: "Terms & Conditions",
   description: "Terms and Conditions for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+  alternates: {
+    canonical: canonicalUrl("/legal/terms-conditions/"),
+  },
+  openGraph: {
+    title: "Terms & Conditions",
+    description: "Terms and Conditions for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+    url: canonicalUrl("/legal/terms-conditions/"),
+  },
 }
 
 export default function TermsConditionsPage() {

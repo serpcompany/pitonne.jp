@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { getPostBySlug as getSanityPost, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
 import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog-post-template"
 import { blogPosts, getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { absoluteUrl, canonicalUrl } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ post: string }>
@@ -21,9 +22,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (isSanityConfigured()) {
     const sanityPost = await getSanityPost(postSlug)
     if (sanityPost) {
+      const image = sanityPost.mainImage ? urlFor(sanityPost.mainImage).width(1200).height(630).url() : undefined
       return {
-        title: `${sanityPost.title} | Pitonne Blog`,
+        title: sanityPost.title,
         description: sanityPost.excerpt,
+        alternates: {
+          canonical: canonicalUrl(`/blog/${postSlug}/`),
+        },
+        openGraph: {
+          title: sanityPost.title,
+          description: sanityPost.excerpt,
+          url: canonicalUrl(`/blog/${postSlug}/`),
+          type: "article",
+          images: image ? [image] : undefined,
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: sanityPost.title,
+          description: sanityPost.excerpt,
+          images: image ? [image] : undefined,
+        },
       }
     }
   }
@@ -32,8 +50,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const staticPost = getBlogPostBySlug(postSlug)
   if (staticPost) {
     return {
-      title: `${staticPost.title} | Pitonne Blog`,
+      title: staticPost.title,
       description: staticPost.excerpt,
+      alternates: {
+        canonical: canonicalUrl(`/blog/${staticPost.slug}/`),
+      },
+      openGraph: {
+        title: staticPost.title,
+        description: staticPost.excerpt,
+        url: canonicalUrl(`/blog/${staticPost.slug}/`),
+        type: "article",
+        publishedTime: staticPost.publishedAt,
+        images: staticPost.featureImage ? [absoluteUrl(staticPost.featureImage)] : undefined,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: staticPost.title,
+        description: staticPost.excerpt,
+        images: staticPost.featureImage ? [absoluteUrl(staticPost.featureImage)] : undefined,
+      },
     }
   }
   

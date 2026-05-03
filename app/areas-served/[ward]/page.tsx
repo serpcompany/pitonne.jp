@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
 import { getWard, wards } from "@/lib/data/areas"
+import { canonicalUrl } from "@/lib/seo"
 
 export async function generateStaticParams() {
   return wards.map((ward) => ({ ward: ward.slug }))
@@ -14,8 +15,16 @@ export async function generateMetadata({ params }: { params: Promise<{ ward: str
   if (!ward) return { title: "Area Not Found | Pitonne" }
   
   return {
-    title: `IV Therapy & Wellness in ${ward.name}, Tokyo | Pitonne`,
+    title: `IV Therapy & Wellness in ${ward.name}, Tokyo`,
     description: `Premium IV therapy and stem cell services in ${ward.name} Ward (${ward.nameJa}), Tokyo. ${ward.description}`,
+    alternates: {
+      canonical: canonicalUrl(`/areas-served/${ward.slug}/`),
+    },
+    openGraph: {
+      title: `IV Therapy & Wellness in ${ward.name}, Tokyo`,
+      description: `Premium IV therapy and stem cell services in ${ward.name} Ward (${ward.nameJa}), Tokyo. ${ward.description}`,
+      url: canonicalUrl(`/areas-served/${ward.slug}/`),
+    },
   }
 }
 

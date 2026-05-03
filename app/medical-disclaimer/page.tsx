@@ -1,9 +1,17 @@
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Medical Disclaimer | Pitonne Stem Cell & IV Therapy",
+  title: "Medical Disclaimer",
   description: "Important medical disclaimer regarding Pitonne's wellness services and information provided on our website.",
+  alternates: {
+    canonical: canonicalUrl("/legal/disclaimer/"),
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
 }
 
 export default function MedicalDisclaimerPage() {

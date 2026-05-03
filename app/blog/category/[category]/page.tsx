@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { canonicalUrl } from "@/lib/seo"
 
 export async function generateStaticParams() {
   return getAllCategories().map((category) => ({ category: category.slug }))
@@ -15,8 +16,16 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   if (!category) return { title: "Category Not Found | Pitonne" }
   
   return {
-    title: `${category.name} Articles | Pitonne Blog`,
+    title: `${category.name} Articles`,
     description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+    alternates: {
+      canonical: canonicalUrl(`/blog/category/${category.slug}/`),
+    },
+    openGraph: {
+      title: `${category.name} Articles`,
+      description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+      url: canonicalUrl(`/blog/category/${category.slug}/`),
+    },
   }
 }
 
