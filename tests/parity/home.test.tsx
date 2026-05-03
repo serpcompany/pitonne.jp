@@ -11,7 +11,7 @@ describe("home page", () => {
     expect(cta).toHaveAttribute("href", businessInfo.bookingUrl)
     expect(cta).toHaveAttribute("target", "_blank")
     expect(cta).toHaveAttribute("rel", "noopener noreferrer")
-    expect(cta).toHaveClass("bg-[#2D766F]", "hover:bg-[#245f5a]")
+    expect(cta).toHaveClass("bg-[#7A8F87]", "hover:bg-[#245f5a]")
   })
 
   it("keeps the supporting homepage image out of the mobile LCP path", () => {

@@ -21,7 +21,7 @@ export function RelatedPitonneServices({
           <Link
             key={service.slug}
             href={service.canonicalPath}
-            className="rounded-lg border border-border bg-background p-4 text-sm font-medium text-foreground transition-colors hover:border-[#2D766F] hover:text-[#2D766F]"
+            className="rounded-lg border border-border bg-background p-4 text-sm font-medium text-foreground transition-colors hover:border-[#7A8F87] hover:text-[#7A8F87]"
           >
             {service.name}
           </Link>
