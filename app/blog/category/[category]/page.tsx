@@ -1,52 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-
-const categoryData: Record<string, { name: string; description: string }> = {
-  "iv-therapy": {
-    name: "IV Therapy",
-    description: "Articles about IV therapy treatments, benefits, and wellness information.",
-  },
-}
-
-const blogPosts = [
-  {
-    slug: "what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained",
-    title: "What is an Exosome IV Drip? Differences from Stem Cell Conditioned Media, Cost and Risks Explained",
-    excerpt: "Learn about exosome IV drip therapy, how it differs from stem cell treatments, and what to expect.",
-    date: "2024-01-15",
-    category: "iv-therapy",
-  },
-  {
-    slug: "iv-therapy-for-fatigue",
-    title: "IV Therapy for Fatigue: How It Works and What to Expect",
-    excerpt: "Discover how IV therapy can help combat chronic fatigue and restore your energy levels.",
-    date: "2024-01-10",
-    category: "iv-therapy",
-  },
-  {
-    slug: "iv-therapy-for-dehydration",
-    title: "IV Therapy for Dehydration: Fast, Effective Relief",
-    excerpt: "Learn about the benefits of IV therapy for treating dehydration and how it compares to oral hydration.",
-    date: "2024-01-05",
-    category: "iv-therapy",
-  },
-  {
-    slug: "iv-therapy-for-hangover",
-    title: "IV Therapy for Hangover: Quick Recovery When You Need It",
-    excerpt: "Everything you need to know about using IV therapy to recover from a hangover quickly.",
-    date: "2024-01-01",
-    category: "iv-therapy",
-  },
-]
+import { categories, getPostsByCategory, getCategoryBySlug } from "@/lib/data/blog-posts"
 
 export async function generateStaticParams() {
-  return Object.keys(categoryData).map((category) => ({ category }))
+  return categories.map((category) => ({ category: category.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: categorySlug } = await params
-  const category = categoryData[categorySlug]
+  const category = getCategoryBySlug(categorySlug)
   if (!category) return { title: "Category Not Found | Pitonne" }
   
   return {
@@ -57,60 +20,137 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 
 export default async function BlogCategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category: categorySlug } = await params
-  const category = categoryData[categorySlug]
+  const category = getCategoryBySlug(categorySlug)
   
   if (!category) {
     notFound()
   }
 
-  const categoryPosts = blogPosts.filter(post => post.category === categorySlug)
+  const categoryPosts = getPostsByCategory(categorySlug)
 
   return (
-    <div className="bg-[#faf9f7]">
+    <div className="bg-background">
       {/* Hero Section */}
-      <section className="relative py-20 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <p className="text-sm uppercase tracking-widest text-[#4AA69D] mb-4">Blog Category</p>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#1a1a1a] mb-6">
-            {category.name}
-          </h1>
-          <p className="text-lg text-[#666] max-w-2xl mx-auto">
-            {category.description}
-          </p>
+      <section className="relative py-16 md:py-20 bg-[#f5ebe0]">
+        <div className="container mx-auto px-4">
+          <nav className="text-sm text-muted-foreground mb-8">
+            <Link href="/" className="hover:text-foreground">Home</Link>
+            <span className="mx-2">&gt;</span>
+            <Link href="/blog" className="hover:text-foreground">Blog</Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-foreground">{category.name}</span>
+          </nav>
+          
+          <div className="max-w-3xl">
+            <span className="inline-block px-3 py-1 text-xs font-medium bg-[#4AA69D] text-white rounded-full mb-4">
+              Category
+            </span>
+            <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">
+              {category.name}
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              {category.description}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Navigation */}
+      <section className="py-6 bg-card border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link 
+              href="/blog"
+              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
+            >
+              All
+            </Link>
+            {categories.map(cat => (
+              <Link 
+                key={cat.slug}
+                href={`/blog/category/${cat.slug}`}
+                className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
+                  cat.slug === categorySlug 
+                    ? "bg-[#4AA69D] text-white" 
+                    : "border border-border hover:border-[#4AA69D] hover:text-[#4AA69D]"
+                }`}
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Blog Posts */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="space-y-8">
-            {categoryPosts.map((post) => (
-              <article key={post.slug} className="bg-white rounded-lg border border-[#e5e5e5] p-8 hover:shadow-md transition-shadow">
-                <Link href={`/blog/${post.slug}`}>
-                  <p className="text-sm text-[#4AA69D] mb-2">{post.date}</p>
-                  <h2 className="font-serif text-2xl text-[#1a1a1a] mb-3 hover:text-[#4AA69D] transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="text-[#666] mb-4">{post.excerpt}</p>
-                  <span className="text-[#4AA69D] font-medium">Read more &rarr;</span>
+        <div className="container mx-auto px-4">
+          {categoryPosts.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
+              {categoryPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                      <time>
+                        {new Date(post.publishedAt).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </time>
+                      <span>&middot;</span>
+                      <span>{post.readingTime} min read</span>
+                    </div>
+                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-muted-foreground text-sm line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                  </div>
                 </Link>
-              </article>
-            ))}
-          </div>
-
-          {categoryPosts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-[#666]">No articles found in this category.</p>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4">
+                <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
+              </div>
+              <p className="text-muted-foreground mb-6">No articles found in this category yet.</p>
+              <Link 
+                href="/blog"
+                className="text-[#4AA69D] hover:underline"
+              >
+                View all articles
+              </Link>
             </div>
           )}
         </div>
       </section>
 
-      {/* Back Link */}
-      <section className="py-8 border-t border-[#e5e5e5]">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Link href="/blog" className="text-[#4AA69D] hover:underline">
-            &larr; Back to all articles
+      {/* CTA Section */}
+      <section className="py-12 md:py-16 bg-[#f5ebe0]">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl font-serif text-foreground mb-4">
+            Have Questions?
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+            Our team is ready to help you learn more about {category.name.toLowerCase()} and how it might benefit you.
+          </p>
+          <Link 
+            href="/contact"
+            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+          >
+            Contact Us
           </Link>
         </div>
       </section>
