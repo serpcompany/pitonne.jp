@@ -18,6 +18,18 @@ export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
         description="Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo."
       />
 
+      <section className="bg-card pb-10">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-lg border border-border">
+            <img
+              src="/images/content/sheet/services/services.jpg"
+              alt="Pitonne online consultation and wellness service planning"
+              className="h-auto w-full"
+            />
+          </div>
+        </div>
+      </section>
+
       {sections.map((section, index) => (
         <section
           key={section.slug}

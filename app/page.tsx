@@ -8,13 +8,13 @@ const services = [
     title: "IV Therapy",
     description: "Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.",
     href: "/services/iv-therapy",
-    image: "/images/office_iv_patient_chairs-scaled.jpg",
+    image: "/images/content/sheet/services/iv-therapy.jpg",
   },
   {
     title: "Stem Cell Therapy",
     description: "Regenerative wellness support focused on practical delivery options and individualized care planning.",
     href: "/services/stem-cell-therapy",
-    image: "/images/content/services/akira_office_lifestyle_3-scaled.jpg",
+    image: "/images/content/sheet/services/stem-cell-therapy.jpg",
   },
   {
     title: "Medications",
@@ -99,7 +99,7 @@ export default function HomePage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img 
-                  src="/images/content/pages/home-tokyo-tower.jpg" 
+                  src="/images/content/sheet/home.jpg"
                   alt="Tokyo Tower view near Pitonne in Nishi Azabu"
                   className="w-full h-full object-cover"
                 />

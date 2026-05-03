@@ -99,7 +99,7 @@ export const blogPosts: BlogPost[] = [
       role: "Wellness Experts"
     },
     readingTime: 8,
-    featureImage: "/images/content/services/blog-bg2.png",
+    featureImage: "/images/content/sheet/blog/iv-therapy-for-hangover.jpg",
     featured: true
   },
   {
@@ -181,7 +181,7 @@ export const blogPosts: BlogPost[] = [
       role: "Wellness Experts"
     },
     readingTime: 7,
-    featureImage: "/images/content/services/blog-bg2.png"
+    featureImage: "/images/content/sheet/blog/iv-therapy-for-fatigue.jpg"
   },
   {
     slug: "iv-therapy-for-dehydration",
@@ -262,7 +262,7 @@ export const blogPosts: BlogPost[] = [
       role: "Wellness Experts"
     },
     readingTime: 8,
-    featureImage: "/images/content/services/blog-bg2.png"
+    featureImage: "/images/content/sheet/blog/iv-therapy-for-dehydration.jpg"
   },
   {
     slug: "what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained",

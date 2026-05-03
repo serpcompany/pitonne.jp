@@ -49,6 +49,18 @@ export default async function BlogPage() {
         description="Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health."
       />
 
+      <section className="bg-card pb-10">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-lg border border-border">
+            <img
+              src="/images/content/sheet/blog/blog.jpg"
+              alt="Pitonne wellness care and treatment insights in Tokyo"
+              className="h-auto w-full"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Categories */}
       <section className="py-8 bg-card border-b border-border">
         <div className="container mx-auto px-4">

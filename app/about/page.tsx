@@ -62,7 +62,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img 
-                  src="https://drive.google.com/thumbnail?id=1iNUpWz29X27U-amnHPwT7OGH6rQU5dOn&sz=w1600" 
+                  src="/images/content/sheet/about-clinic.jpg"
                   alt="Pitonne clinic reception area"
                   className="w-full h-full object-cover"
                 />
