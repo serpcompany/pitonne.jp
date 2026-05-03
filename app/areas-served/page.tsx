@@ -1,76 +1,18 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
+import { wards } from "@/lib/data/areas"
 
 export const metadata: Metadata = {
-  title: "Areas Served | Pitonne Stem Cell & IV Therapy",
-  description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas.",
+  title: "Areas Served | Pitonne Stem Cell & IV Therapy Tokyo",
+  description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
 }
-
-const wards = [
-  {
-    name: "Minato",
-    slug: "minato",
-    areas: [
-      { name: "Roppongi", slug: "roppongi" },
-      { name: "Azabu Juban", slug: "azabu-juban" },
-      { name: "Hiroo", slug: "hiroo" },
-      { name: "Akasaka", slug: "akasaka" },
-      { name: "Toranomon", slug: "toranomon" },
-      { name: "Shimbashi", slug: "shimbashi" },
-    ]
-  },
-  {
-    name: "Shibuya",
-    slug: "shibuya",
-    areas: [
-      { name: "Ebisu", slug: "ebisu" },
-      { name: "Daikanyama", slug: "daikanyama" },
-      { name: "Hiroo", slug: "hiroo" },
-      { name: "Omotesando", slug: "omotesando" },
-      { name: "Harajuku", slug: "harajuku" },
-      { name: "Yoyogi", slug: "yoyogi" },
-      { name: "Yoyogi Uehara", slug: "yoyogi-uehara" },
-      { name: "Sendagaya", slug: "sendagaya" },
-    ]
-  },
-  {
-    name: "Chuo",
-    slug: "chuo",
-    areas: [
-      { name: "Ginza", slug: "ginza" },
-      { name: "Nihonbashi", slug: "nihonbashi" },
-      { name: "Tsukiji", slug: "tsukiji" },
-      { name: "Hatchobori", slug: "hatchobori" },
-    ]
-  },
-  {
-    name: "Chiyoda",
-    slug: "chiyoda",
-    areas: [
-      { name: "Tokyo Station", slug: "tokyo-station" },
-      { name: "Otemachi", slug: "otemachi" },
-      { name: "Kanda", slug: "kanda" },
-      { name: "Akihabara", slug: "akihabara" },
-      { name: "Iidabashi", slug: "iidabashi" },
-    ]
-  },
-  {
-    name: "Shinagawa",
-    slug: "shinagawa",
-    areas: [
-      { name: "Gotanda", slug: "gotanda" },
-      { name: "Osaki", slug: "osaki" },
-      { name: "Takanawa", slug: "takanawa" },
-    ]
-  },
-]
 
 export default function AreasServedPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
+      <section className="relative bg-background overflow-hidden py-16 lg:py-20">
         <div className="absolute left-0 bottom-0 w-32 h-32 opacity-50">
           <svg viewBox="0 0 120 120" className="w-full h-full text-[#8bb3b0]">
             <ellipse cx="30" cy="90" rx="50" ry="40" fill="currentColor" opacity="0.3" />
@@ -81,24 +23,27 @@ export default function AreasServedPage() {
           <nav className="text-sm text-muted-foreground mb-8">
             <Link href="/" className="hover:text-foreground">Home</Link>
             <span className="mx-2">&gt;</span>
-            <span>Areas Served</span>
+            <span className="text-foreground">Areas Served</span>
           </nav>
           
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Areas Served</h1>
-          <p className="max-w-3xl text-muted-foreground">
+          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">Areas Served</h1>
+          <p className="max-w-3xl text-muted-foreground text-lg">
             Pitonne provides concierge wellness services throughout central Tokyo. Our registered nurses travel to your home or hotel to deliver premium IV therapy, stem cell treatments, and wellness consultations.
           </p>
         </div>
       </section>
 
       {/* Wards Grid */}
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-16 lg:py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="space-y-12">
             {wards.map((ward) => (
               <div key={ward.slug}>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-serif">{ward.name} Ward</h2>
+                  <div>
+                    <h2 className="text-2xl font-serif text-foreground">{ward.name} Ward</h2>
+                    <p className="text-sm text-muted-foreground">{ward.nameJa}</p>
+                  </div>
                   <Link 
                     href={`/areas-served/${ward.slug}`}
                     className="text-sm text-[#4AA69D] hover:underline"
@@ -111,11 +56,12 @@ export default function AreasServedPage() {
                     <Link
                       key={area.slug}
                       href={`/areas-served/${ward.slug}/${area.slug}`}
-                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-[#faf9f7] hover:bg-[#f5ebe0] hover:border-[#d4c4a8] transition-all"
+                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#4AA69D] transition-all"
                     >
                       <MapPin className="h-5 w-5 text-[#4AA69D] shrink-0" />
                       <div>
-                        <p className="font-medium group-hover:text-[#4AA69D] transition-colors">{area.name}</p>
+                        <p className="font-medium text-foreground group-hover:text-[#4AA69D] transition-colors">{area.name}</p>
+                        <p className="text-sm text-muted-foreground">{area.nameJa}</p>
                       </div>
                     </Link>
                   ))}
@@ -127,28 +73,28 @@ export default function AreasServedPage() {
       </section>
 
       {/* Service Areas Info */}
-      <section className="py-16 lg:py-20 bg-[#faf9f7]">
+      <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-serif mb-6">Mobile Wellness Services</h2>
+            <h2 className="text-3xl font-serif text-foreground mb-6">Mobile Wellness Services</h2>
             <p className="text-muted-foreground mb-8">
               Our team travels to locations throughout Tokyo to provide in-home and hotel-based wellness services. We primarily serve central Tokyo areas within a reasonable distance from our Nishi-Azabu clinic.
             </p>
             <div className="grid md:grid-cols-3 gap-6 text-left">
-              <div className="bg-white rounded-lg p-6 border border-border">
-                <h3 className="font-semibold mb-2">Home Visits</h3>
+              <div className="bg-card rounded-lg p-6 border border-border">
+                <h3 className="font-semibold text-foreground mb-2">Home Visits</h3>
                 <p className="text-sm text-muted-foreground">
                   Receive IV therapy and wellness services in the comfort of your own home.
                 </p>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-border">
-                <h3 className="font-semibold mb-2">Hotel Service</h3>
+              <div className="bg-card rounded-lg p-6 border border-border">
+                <h3 className="font-semibold text-foreground mb-2">Hotel Service</h3>
                 <p className="text-sm text-muted-foreground">
                   Perfect for travelers and business visitors staying in Tokyo hotels.
                 </p>
               </div>
-              <div className="bg-white rounded-lg p-6 border border-border">
-                <h3 className="font-semibold mb-2">Office Visits</h3>
+              <div className="bg-card rounded-lg p-6 border border-border">
+                <h3 className="font-semibold text-foreground mb-2">Office Visits</h3>
                 <p className="text-sm text-muted-foreground">
                   Corporate wellness services available at your workplace.
                 </p>
@@ -161,7 +107,7 @@ export default function AreasServedPage() {
       {/* CTA Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif mb-6">
+          <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-6">
             Not Sure If We Serve Your Area?
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">

@@ -1,12 +1,14 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { getPosts, isGhostConfigured, formatGhostDate } from "@/lib/ghost"
 
 export const metadata: Metadata = {
-  title: "Blog | Pitonne Stem Cell & IV Therapy",
+  title: "Blog | Pitonne Stem Cell & IV Therapy Tokyo",
   description: "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
 }
 
-const posts = [
+// Static fallback posts when Ghost is not configured
+const staticPosts = [
   {
     slug: "exosome-iv-drip",
     title: "What Is An Exosome IV Drip? Differences From Stem Cell Conditioned Media, Cost, And Risks Explained",
@@ -45,11 +47,31 @@ const posts = [
   },
 ]
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  // Try to fetch from Ghost, fallback to static posts
+  const ghostConfigured = isGhostConfigured()
+  const ghostPosts = ghostConfigured ? await getPosts(20) : []
+  
+  // Use Ghost posts if available, otherwise use static posts
+  const posts = ghostPosts.length > 0 
+    ? ghostPosts.map(post => ({
+        slug: post.slug,
+        title: post.title,
+        date: formatGhostDate(post.published_at),
+        excerpt: post.excerpt || "",
+        readingTime: post.reading_time,
+        featureImage: post.feature_image,
+      }))
+    : staticPosts.map(post => ({
+        ...post,
+        readingTime: undefined,
+        featureImage: undefined,
+      }))
+
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
+      <section className="relative bg-background overflow-hidden py-16 lg:py-20">
         <div className="absolute right-0 top-10 w-24 h-32 opacity-30">
           <svg viewBox="0 0 100 130" className="w-full h-full text-[#d4c4a8]">
             <path d="M50 10 Q70 40 60 70 Q50 100 50 120" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -62,41 +84,59 @@ export default function BlogPage() {
           <nav className="text-sm text-muted-foreground mb-8">
             <Link href="/" className="hover:text-foreground">Home</Link>
             <span className="mx-2">&gt;</span>
-            <span>Blog</span>
+            <span className="text-foreground">Blog</span>
           </nav>
           
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Blog</h1>
-          <p className="max-w-3xl text-muted-foreground">
+          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">Blog</h1>
+          <p className="max-w-3xl text-muted-foreground text-lg">
             Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health.
           </p>
         </div>
       </section>
 
-      {/* Blog Posts */}
-      <section className="py-16 lg:py-20 bg-white">
+      {/* Blog Posts Grid */}
+      <section className="py-16 lg:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            {posts.map((post, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {posts.map((post) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group block"
+                className="group block bg-background rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
               >
-                <article className={`py-8 ${index !== posts.length - 1 ? 'border-b border-border' : ''}`}>
-                  <div className="flex flex-col md:flex-row md:items-start gap-4">
-                    <time className="text-sm text-muted-foreground whitespace-nowrap md:w-32 shrink-0">
-                      {post.date}
-                    </time>
-                    <div>
-                      <h2 className="text-xl font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
-                        {post.title}
-                      </h2>
-                      <p className="text-muted-foreground">
-                        {post.excerpt}
-                      </p>
+                {post.featureImage && (
+                  <div className="aspect-video bg-[#f5ebe0] overflow-hidden">
+                    <img 
+                      src={post.featureImage} 
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+                {!post.featureImage && (
+                  <div className="aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
                     </div>
                   </div>
-                </article>
+                )}
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                    <time>{post.date}</time>
+                    {post.readingTime && (
+                      <>
+                        <span>&middot;</span>
+                        <span>{post.readingTime} min read</span>
+                      </>
+                    )}
+                  </div>
+                  <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors line-clamp-2">
+                    {post.title}
+                  </h2>
+                  <p className="text-muted-foreground text-sm line-clamp-3">
+                    {post.excerpt}
+                  </p>
+                </div>
               </Link>
             ))}
           </div>
@@ -106,7 +146,7 @@ export default function BlogPage() {
       {/* Newsletter Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-serif mb-6">Stay Informed</h2>
+          <h2 className="text-3xl font-serif text-foreground mb-6">Stay Informed</h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             Have questions about our services? Contact us to learn more about IV therapy, stem cell treatments, and wellness support in Tokyo.
           </p>

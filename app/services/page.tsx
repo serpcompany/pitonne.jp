@@ -1,65 +1,22 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { services, getServicesByCategory } from "@/lib/data/services"
+import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Our Services | Pitonne Stem Cell & IV Therapy",
+  title: "Our Services | Pitonne Stem Cell & IV Therapy Tokyo",
   description: "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
 }
 
-const ivTherapyServices = [
-  {
-    title: "Exosome IV Drip",
-    description: "Regenerative IV support using stem cell supernatant-derived factors for recovery and vitality.",
-    href: "/services/iv-therapy",
-  },
-  {
-    title: "Hangover IV Drip",
-    description: "Rapid hydration and electrolyte support to help ease common post-drinking symptoms.",
-    href: "/services/iv-therapy",
-  },
-  {
-    title: "Energy & Fatigue Recovery IV",
-    description: "Hydration and nutrients designed to support energy, focus, and everyday recovery.",
-    href: "/services/iv-therapy",
-  },
-  {
-    title: "Skin Brightening IV Drip",
-    description: "Antioxidant-rich IV support for skin wellness, recovery, and brighter-looking skin.",
-    href: "/services/iv-therapy",
-  },
-  {
-    title: "Immune Boost IV Therapy",
-    description: "Vitamin and hydration support designed to help maintain immune resilience and recovery.",
-    href: "/services/iv-therapy",
-  },
-  {
-    title: "IV Vitamin Therapy",
-    description: "Essential vitamins and hydration delivered directly for efficient absorption and wellness support.",
-    href: "/services/iv-therapy",
-  },
-]
-
-const stemCellServices = [
-  {
-    title: "Stem Cell Nasal Spray",
-    description: "A convenient regenerative option designed to support cognitive wellness and daily recovery.",
-    href: "/services/stem-cell-therapy",
-  },
-]
-
-const medicationServices = [
-  {
-    title: "ED Medication",
-    description: "Discreet prescription treatment options tailored to individual needs and physician review.",
-    href: "/services/medications",
-  },
-]
-
 export default function ServicesPage() {
+  const ivServices = getServicesByCategory("iv-therapy")
+  const stemCellServices = getServicesByCategory("stem-cell")
+  const medicationServices = getServicesByCategory("medication")
+
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-[#faf9f7] overflow-hidden py-16 lg:py-20">
+      <section className="relative bg-background overflow-hidden py-16 lg:py-20">
         {/* Decorative Elements */}
         <div className="absolute left-0 bottom-0 w-32 h-32 opacity-50">
           <svg viewBox="0 0 120 120" className="w-full h-full text-[#8bb3b0]">
@@ -77,39 +34,50 @@ export default function ServicesPage() {
           <nav className="text-sm text-muted-foreground mb-8">
             <Link href="/" className="hover:text-foreground">Home</Link>
             <span className="mx-2">&gt;</span>
-            <span>Services</span>
+            <span className="text-foreground">Services</span>
           </nav>
           
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Our Services</h1>
-          <p className="max-w-3xl text-muted-foreground">
+          <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-6">Our Services</h1>
+          <p className="max-w-3xl text-muted-foreground text-lg">
             Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.
           </p>
         </div>
       </section>
 
       {/* IV Therapy Section */}
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-16 lg:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-serif mb-8">IV Therapy</h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-foreground">IV Therapy</h2>
+            <Link href="/services/iv-therapy" className="text-[#4AA69D] hover:underline flex items-center gap-1">
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ivTherapyServices.map((service) => (
+            {ivServices.map((service) => (
               <Link
-                key={service.title}
-                href={service.href}
-                className="group block"
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group block bg-background rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
-                  </div>
+                <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
+                  <div className="w-6 h-6 rounded-full bg-[#d4c4a8] group-hover:bg-white transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.title}
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                  {service.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {service.description}
+                <p className="text-sm text-muted-foreground mb-4">
+                  {service.shortDescription}
                 </p>
+                <ul className="space-y-1">
+                  {service.keyPoints.slice(0, 3).map((point, index) => (
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </Link>
             ))}
           </div>
@@ -117,28 +85,66 @@ export default function ServicesPage() {
       </section>
 
       {/* Stem Cell Therapy Section */}
-      <section className="py-16 lg:py-20 bg-[#faf9f7]">
+      <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-serif mb-8">Stem Cell Therapy</h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-foreground">Stem Cell Therapy</h2>
+            <Link href="/services/stem-cell-therapy" className="text-[#4AA69D] hover:underline flex items-center gap-1">
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {stemCellServices.map((service) => (
               <Link
-                key={service.title}
-                href={service.href}
-                className="group block"
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group block bg-card rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#e8d4c8] to-[#d4c4a8] rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <div className="w-8 h-8 rounded-full bg-[#8bb3b0]" />
-                  </div>
+                <div className="w-12 h-12 rounded-full bg-[#e8d4c8] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
+                  <div className="w-6 h-6 rounded-full bg-[#8bb3b0] group-hover:bg-white transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.title}
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                  {service.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {service.description}
+                <p className="text-sm text-muted-foreground mb-4">
+                  {service.shortDescription}
                 </p>
+                <ul className="space-y-1">
+                  {service.keyPoints.slice(0, 3).map((point, index) => (
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Link>
+            ))}
+
+            {/* Exosome IV Drip (also stem cell related) */}
+            {services.filter(s => s.slug === 'exosome-iv-drip').map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group block bg-card rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#e8d4c8] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
+                  <div className="w-6 h-6 rounded-full bg-[#8bb3b0] group-hover:bg-white transition-colors" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                  {service.name}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {service.shortDescription}
+                </p>
+                <ul className="space-y-1">
+                  {service.keyPoints.slice(0, 3).map((point, index) => (
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </Link>
             ))}
           </div>
@@ -146,28 +152,39 @@ export default function ServicesPage() {
       </section>
 
       {/* Medications Section */}
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-16 lg:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-serif mb-8">Medications</h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-foreground">Medications</h2>
+            <Link href="/services/medication" className="text-[#4AA69D] hover:underline flex items-center gap-1">
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {medicationServices.map((service) => (
               <Link
-                key={service.title}
-                href={service.href}
-                className="group block"
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group block bg-background rounded-lg border border-border p-6 hover:border-[#4AA69D] hover:shadow-md transition-all"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
-                  </div>
+                <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4 group-hover:bg-[#4AA69D] transition-colors">
+                  <div className="w-6 h-6 rounded-full bg-[#d4c4a8] group-hover:bg-white transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#4AA69D] transition-colors">
-                  {service.title}
+                <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors">
+                  {service.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {service.description}
+                <p className="text-sm text-muted-foreground mb-4">
+                  {service.shortDescription}
                 </p>
+                <ul className="space-y-1">
+                  {service.keyPoints.slice(0, 3).map((point, index) => (
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4AA69D]" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </Link>
             ))}
           </div>
@@ -177,7 +194,7 @@ export default function ServicesPage() {
       {/* CTA Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif mb-6">
+          <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-6">
             Ready to Start Your Wellness Journey?
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
