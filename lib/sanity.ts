@@ -1,6 +1,6 @@
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { SanityImageSource } from '@sanity/image-url'
 
 // Sanity client configuration
 // Set these environment variables in your Vercel project settings:
@@ -8,19 +8,36 @@ import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 // NEXT_PUBLIC_SANITY_DATASET - Your Sanity dataset (usually "production")
 // SANITY_API_TOKEN - (optional) For authenticated requests
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
+const sanityConfig = {
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: process.env.NODE_ENV === 'production',
   token: process.env.SANITY_API_TOKEN,
-})
+}
 
-// Image URL builder
-const builder = imageUrlBuilder(client)
+let client: ReturnType<typeof createClient> | null = null
+let builder: ReturnType<typeof imageUrlBuilder> | null = null
+
+function getClient() {
+  if (!isSanityConfigured()) return null
+  client ??= createClient(sanityConfig)
+  return client
+}
+
+function getImageBuilder() {
+  const sanityClient = getClient()
+  if (!sanityClient) return null
+  builder ??= imageUrlBuilder(sanityClient)
+  return builder
+}
 
 export function urlFor(source: SanityImageSource) {
-  return builder.image(source)
+  const imageBuilder = getImageBuilder()
+  if (!imageBuilder) {
+    throw new Error('Sanity is not configured')
+  }
+  return imageBuilder.image(source)
 }
 
 // Check if Sanity is configured
@@ -46,6 +63,7 @@ export interface SanityPost {
   categories?: Array<{
     _ref: string
     title?: string
+    slug?: { current: string }
   }>
   author?: {
     name: string
@@ -105,9 +123,10 @@ export const postsByCategoryQuery = `*[_type == "post" && $categorySlug in categ
 
 // Fetch functions
 export async function getPosts(): Promise<SanityPost[]> {
-  if (!isSanityConfigured()) return []
+  const sanityClient = getClient()
+  if (!sanityClient) return []
   try {
-    return await client.fetch(postsQuery)
+    return await sanityClient.fetch(postsQuery)
   } catch (error) {
     console.error('Error fetching posts from Sanity:', error)
     return []
@@ -115,9 +134,10 @@ export async function getPosts(): Promise<SanityPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<SanityPost | null> {
-  if (!isSanityConfigured()) return null
+  const sanityClient = getClient()
+  if (!sanityClient) return null
   try {
-    return await client.fetch(postBySlugQuery, { slug })
+    return await sanityClient.fetch(postBySlugQuery, { slug })
   } catch (error) {
     console.error('Error fetching post from Sanity:', error)
     return null
@@ -125,9 +145,10 @@ export async function getPostBySlug(slug: string): Promise<SanityPost | null> {
 }
 
 export async function getPostsByCategory(categorySlug: string): Promise<SanityPost[]> {
-  if (!isSanityConfigured()) return []
+  const sanityClient = getClient()
+  if (!sanityClient) return []
   try {
-    return await client.fetch(postsByCategoryQuery, { categorySlug })
+    return await sanityClient.fetch(postsByCategoryQuery, { categorySlug })
   } catch (error) {
     console.error('Error fetching posts by category from Sanity:', error)
     return []

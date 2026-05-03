@@ -14,7 +14,7 @@ const legalPages = [
   },
   {
     title: "Terms of Use",
-    href: "/legal/terms-and-conditions/",
+    href: "/legal/terms-conditions/",
     description: "Terms of service for using Pitonne wellness services.",
   },
   {

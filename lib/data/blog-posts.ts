@@ -13,6 +13,7 @@ export interface BlogPost {
     role: string
   }
   readingTime: number
+  featureImage?: string
   featured?: boolean
   relatedServiceSlugs?: string[]
   tags?: string[]
@@ -98,6 +99,7 @@ export const blogPosts: BlogPost[] = [
       role: "Wellness Experts"
     },
     readingTime: 8,
+    featureImage: "/images/content/services/blog-bg2.png",
     featured: true
   },
   {
@@ -178,7 +180,8 @@ export const blogPosts: BlogPost[] = [
       name: "Pitonne Medical Team",
       role: "Wellness Experts"
     },
-    readingTime: 7
+    readingTime: 7,
+    featureImage: "/images/content/services/blog-bg2.png"
   },
   {
     slug: "iv-therapy-for-dehydration",
@@ -258,7 +261,8 @@ export const blogPosts: BlogPost[] = [
       name: "Pitonne Medical Team",
       role: "Wellness Experts"
     },
-    readingTime: 8
+    readingTime: 8,
+    featureImage: "/images/content/services/blog-bg2.png"
   },
   {
     slug: "what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained",
@@ -444,6 +448,7 @@ export const blogPosts: BlogPost[] = [
       role: "Wellness Experts"
     },
     readingTime: 12,
+    featureImage: "/images/content/services/office_equipment-scaled.jpg",
     featured: true
   }
 ]

@@ -28,6 +28,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
     notFound()
   }
 
+  const categoryDescription = `Explore our ${category.name.toLowerCase()} articles and guides from the Pitonne team.`
   const categoryPosts = getBlogPostsByCategory(categorySlug)
 
   return (
@@ -51,7 +52,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
               {category.name}
             </h1>
             <p className="text-lg text-muted-foreground">
-              {category.description}
+              {categoryDescription}
             </p>
           </div>
         </div>
@@ -95,10 +96,18 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                   href={`/blog/${post.slug}`}
                   className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-white/50 flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
-                    </div>
+                  <div className="aspect-video overflow-hidden bg-[#f5ebe0]">
+                    {post.featureImage ? (
+                      <img
+                        src={post.featureImage}
+                        alt={post.title}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <div className="h-16 w-16 rounded-full bg-white/50" />
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">

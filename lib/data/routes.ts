@@ -12,8 +12,8 @@ export const canonicalRoutes = {
   contact: "/contact/",
   legal: "/legal/",
   privacyPolicy: "/legal/privacy-policy/",
-  termsConditions: "/legal/terms-and-conditions/",
-  legacyTermsConditions: "/legal/terms-conditions/",
+  termsConditions: "/legal/terms-conditions/",
+  legacyTermsConditions: "/legal/terms-and-conditions/",
   medicalDisclaimer: "/legal/disclaimer/",
 }
 

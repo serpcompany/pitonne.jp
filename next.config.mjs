@@ -31,12 +31,22 @@ const nextConfig = {
       },
       {
         source: "/terms-of-use/",
-        destination: "/legal/terms-and-conditions/",
+        destination: "/legal/terms-conditions/",
         permanent: true,
       },
       {
         source: "/terms-of-use",
-        destination: "/legal/terms-and-conditions/",
+        destination: "/legal/terms-conditions/",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms-and-conditions/",
+        destination: "/legal/terms-conditions/",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms-and-conditions",
+        destination: "/legal/terms-conditions/",
         permanent: true,
       },
       {

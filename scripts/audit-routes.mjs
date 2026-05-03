@@ -48,7 +48,6 @@ const canonicalRoutes = [
   "/legal/",
   "/legal/disclaimer/",
   "/legal/privacy-policy/",
-  "/legal/terms-and-conditions/",
   "/legal/terms-conditions/",
   "/services/",
   "/services/ed-medication/",
@@ -141,6 +140,19 @@ for (const slug of ["iv-therapy", "stem-cell-therapy", "medication"]) {
 
 if (!fs.readFileSync(path.join(root, "next.config.mjs"), "utf8").includes("/services/medications")) {
   failures.push("Missing redirect for /services/medications/ to /services/medication/")
+}
+
+const routeSource = [
+  fs.readFileSync(path.join(root, "app/legal/page.tsx"), "utf8"),
+  fs.readFileSync(path.join(root, "components/footer.tsx"), "utf8"),
+].join("\n")
+
+if (routeSource.includes("/legal/terms-and-conditions")) {
+  failures.push("Internal links must use canonical /legal/terms-conditions/")
+}
+
+if (fs.existsSync(path.join(root, "app/legal/terms-and-conditions/page.tsx"))) {
+  failures.push("Remove duplicate /legal/terms-and-conditions/ route; redirect it instead")
 }
 
 if (failures.length) {

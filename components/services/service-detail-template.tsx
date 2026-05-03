@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { ServiceSidebar } from "@/components/services/service-sidebar"
 import type { BlogPost } from "@/lib/data/blog-posts"

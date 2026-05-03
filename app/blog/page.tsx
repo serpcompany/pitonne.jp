@@ -30,7 +30,7 @@ export default async function BlogPage() {
         date: new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         excerpt: post.excerpt,
         readingTime: post.readingTime,
-        featureImage: undefined,
+        featureImage: post.featureImage,
         category: post.category,
       }))
 

@@ -14,13 +14,13 @@ const services = [
     title: "Stem Cell Therapy",
     description: "Regenerative wellness support focused on practical delivery options and individualized care planning.",
     href: "/services/stem-cell-therapy",
-    image: "/images/office_exam_room-scaled.jpg",
+    image: "/images/content/services/akira_office_lifestyle_3-scaled.jpg",
   },
   {
     title: "Medications",
     description: "Prescription-based support delivered with discretion and physician review where appropriate.",
     href: canonicalRoutes.medication,
-    image: "/images/aic_office_reception_2-scaled.jpg",
+    image: "/images/office_exam_room-scaled.jpg",
   },
   {
     title: "Wellness Consultations",
@@ -99,8 +99,8 @@ export default function HomePage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img 
-                  src="/images/office_iv_patient_chairs-scaled.jpg" 
-                  alt="Pitonne IV therapy patient area"
+                  src="/images/content/pages/home-tokyo-tower.jpg" 
+                  alt="Tokyo Tower view near Pitonne in Nishi Azabu"
                   className="w-full h-full object-cover"
                 />
               </div>

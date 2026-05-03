@@ -83,7 +83,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img 
-                  src="/images/aic_office_reception_2-scaled.jpg" 
+                  src="https://drive.google.com/thumbnail?id=1iNUpWz29X27U-amnHPwT7OGH6rQU5dOn&sz=w1600" 
                   alt="Pitonne clinic reception area"
                   className="w-full h-full object-cover"
                 />
@@ -104,22 +104,34 @@ export default function AboutPage() {
       {/* How We Support You Section */}
       <section className="py-20 lg:py-28 bg-[#f5ebe0]">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4 px-3 py-1.5 bg-white/50 rounded-full inline-block">
-              How We Support You
-            </p>
-            <h2 className="text-3xl md:text-4xl font-serif mb-6">
-              Visit-Based Care Designed Around <span className="italic">Real Life.</span>
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.
-            </p>
-            <Link 
-              href={businessInfo.bookingUrl}
-              className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
-            >
-              Book Consultation
-            </Link>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <div className="aspect-[4/3] rounded-lg overflow-hidden">
+                <img
+                  src="/images/content/pages/about-visit-care.jpg"
+                  alt="Pitonne private consultation room"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4 px-3 py-1.5 bg-white/50 rounded-full inline-block">
+                How We Support You
+              </p>
+              <h2 className="text-3xl md:text-4xl font-serif mb-6">
+                Visit-Based Care Designed Around <span className="italic">Real Life.</span>
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.
+              </p>
+              <Link 
+                href={businessInfo.bookingUrl}
+                className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
+              >
+                Book Consultation
+              </Link>
+            </div>
           </div>
         </div>
       </section>

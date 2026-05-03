@@ -79,6 +79,7 @@ export default async function BlogPostPage({ params }: Props) {
         date: new Date(staticPost.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         content: staticPost.content,
         excerpt: staticPost.excerpt,
+        featureImage: staticPost.featureImage,
         readingTime: staticPost.readingTime,
         category: staticPost.category,
         categorySlug: staticPost.categorySlug,

@@ -110,7 +110,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
     const posts = await ghost.posts.browse({
       limit: "all",
       fields: ["slug"],
-    })
+    }) as Array<{ slug: string }>
     
     return posts.map((post) => post.slug)
   } catch (error) {

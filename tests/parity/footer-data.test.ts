@@ -7,6 +7,6 @@ describe("footer and CTA data parity", () => {
     expect(businessInfo.hours).toContainEqual({ day: "Wednesday", hours: "Closed" })
     expect(businessInfo.hours).toContainEqual({ day: "Saturday", hours: "Closed" })
     expect(businessInfo.bookingUrl).toBe("https://ssv.onemorehand.jp/hic_pitonne/")
-    expect(canonicalRoutes.termsConditions).toBe("/legal/terms-and-conditions/")
+    expect(canonicalRoutes.termsConditions).toBe("/legal/terms-conditions/")
   })
 })

@@ -1,35 +1,10 @@
-# pitonne.jp-new-from-v0
+# README
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+## Pitonne Google Sheet
 
-## Built with v0
-
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
-
-[Continue working on v0 →](https://v0.app/chat/projects/prj_cJihyDxZEe1N3FFPrCVLME2lrOjI)
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
-
-<a href="https://v0.app/chat/api/kiro/clone/devinschumacher/pitonne.jp-new-from-v0" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+- business info: https://docs.google.com/spreadsheets/d/1Eleu4irittacEOz_4z3omwceXgzZAoP8xSTe4kv8HR8/edit?gid=536022593#gid=536022593
+- service info: https://docs.google.com/spreadsheets/d/1Eleu4irittacEOz_4z3omwceXgzZAoP8xSTe4kv8HR8/edit?gid=559859161#gid=559859161
+- faq content: https://docs.google.com/spreadsheets/d/1Eleu4irittacEOz_4z3omwceXgzZAoP8xSTe4kv8HR8/edit?gid=65618073#gid=65618073
+- sitemap with links to images and content: https://docs.google.com/spreadsheets/d/1Eleu4irittacEOz_4z3omwceXgzZAoP8xSTe4kv8HR8/edit?gid=658035943#gid=658035943
+- another repo with some content and images: /Users/devin/dev/repos/pitonne.jp/assets
+- another repo where i was collecting some content for them: /Users/devin/dev/repos/pitonne.jp-nextjs-refactor-1
