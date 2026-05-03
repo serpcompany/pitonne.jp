@@ -41,12 +41,12 @@ const blogPosts = [
 ]
 
 export async function generateStaticParams() {
-  return Object.keys(categoryData).map((slug) => ({ slug }))
+  return Object.keys(categoryData).map((category) => ({ category }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const category = categoryData[slug]
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category: categorySlug } = await params
+  const category = categoryData[categorySlug]
   if (!category) return { title: "Category Not Found | Pitonne" }
   
   return {
@@ -55,15 +55,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-export default async function BlogCategoryPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const category = categoryData[slug]
+export default async function BlogCategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categorySlug } = await params
+  const category = categoryData[categorySlug]
   
   if (!category) {
     notFound()
   }
 
-  const categoryPosts = blogPosts.filter(post => post.category === slug)
+  const categoryPosts = blogPosts.filter(post => post.category === categorySlug)
 
   return (
     <div className="bg-[#faf9f7]">

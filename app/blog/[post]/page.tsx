@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { getPost, getAllPostSlugs, formatGhostDate, isGhostConfigured } from "@/lib/ghost"
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ post: string }>
 }
 
 // Static blog posts data (fallback when Ghost is not configured)
@@ -281,15 +281,15 @@ export async function generateStaticParams() {
   const staticSlugs = Object.keys(staticPosts)
   const allSlugs = [...new Set([...ghostSlugs, ...staticSlugs])]
   
-  return allSlugs.map((slug) => ({ slug }))
+  return allSlugs.map((post) => ({ post }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { post: postSlug } = await params
   
   // Try Ghost first
   if (isGhostConfigured()) {
-    const ghostPost = await getPost(slug)
+    const ghostPost = await getPost(postSlug)
     if (ghostPost) {
       return {
         title: `${ghostPost.title} | Pitonne Blog`,
@@ -299,7 +299,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   
   // Fallback to static
-  const staticPost = staticPosts[slug]
+  const staticPost = staticPosts[postSlug]
   if (staticPost) {
     return {
       title: `${staticPost.title} | Pitonne Blog`,
@@ -311,7 +311,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params
+  const { post: postSlug } = await params
   
   // Try Ghost first
   let post: {
@@ -325,7 +325,7 @@ export default async function BlogPostPage({ params }: Props) {
   } | null = null
   
   if (isGhostConfigured()) {
-    const ghostPost = await getPost(slug)
+    const ghostPost = await getPost(postSlug)
     if (ghostPost) {
       post = {
         title: ghostPost.title,
@@ -343,8 +343,8 @@ export default async function BlogPostPage({ params }: Props) {
   }
   
   // Fallback to static
-  if (!post && staticPosts[slug]) {
-    post = staticPosts[slug]
+  if (!post && staticPosts[postSlug]) {
+    post = staticPosts[postSlug]
   }
   
   if (!post) {

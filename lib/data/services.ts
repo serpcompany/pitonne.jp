@@ -1,3 +1,5 @@
+// Services data for dynamic routes
+
 export interface FAQ {
   question: string
   answer: string

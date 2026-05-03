@@ -4,18 +4,18 @@ import { notFound } from "next/navigation"
 import { getService, services } from "@/lib/data/services"
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ service: string }>
 }
 
 export async function generateStaticParams() {
-  return services.map((service) => ({
-    slug: service.slug,
+  return services.map((s) => ({
+    service: s.slug,
   }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const service = getService(slug)
+  const { service: serviceSlug } = await params
+  const service = getService(serviceSlug)
   
   if (!service) {
     return { title: "Service Not Found" }
@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const { slug } = await params
-  const service = getService(slug)
+  const { service: serviceSlug } = await params
+  const service = getService(serviceSlug)
 
   if (!service) {
     notFound()
