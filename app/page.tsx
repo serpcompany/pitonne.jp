@@ -1,40 +1,79 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 
 export default function DesignDocumentation() {
   return (
     <main className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <h1 className="text-2xl font-bold">Pitonne Website Design Documentation</h1>
-          <p className="text-muted-foreground">For Figma Migration & Next.js Rebuild</p>
+      <header className="border-b border-border bg-[#2d2d2d] text-white">
+        <div className="container mx-auto flex h-20 items-center justify-between px-4">
+          <div>
+            <h1 className="text-2xl font-bold">Pitonne Design Documentation</h1>
+            <p className="text-sm text-white/70">Website Migration Guide: WordPress to Next.js</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <a 
+              href="https://pitonne.jp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="rounded-md border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition-colors"
+            >
+              View Live Site
+            </a>
+          </div>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-12">
         {/* Introduction */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Design System Overview</h2>
-          <p className="mb-4 text-lg text-muted-foreground">
+          <h2 className="mb-6 text-3xl font-bold font-serif">Design System Overview</h2>
+          <p className="mb-6 text-lg text-muted-foreground">
             This documentation captures the complete design system from pitonne.jp for migration to Figma and rebuilding in Next.js.
           </p>
+          
+          {/* Quick Stats */}
+          <div className="grid gap-4 md:grid-cols-4 mb-8">
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <p className="text-3xl font-bold text-[#4AA69D]">8</p>
+              <p className="text-sm text-muted-foreground">Pages Captured</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <p className="text-3xl font-bold text-[#4AA69D]">8</p>
+              <p className="text-sm text-muted-foreground">Brand Colors</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <p className="text-3xl font-bold text-[#4AA69D]">2</p>
+              <p className="text-sm text-muted-foreground">Font Families</p>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-4 text-center">
+              <p className="text-3xl font-bold text-[#4AA69D]">28+</p>
+              <p className="text-sm text-muted-foreground">Tokyo Areas</p>
+            </div>
+          </div>
+
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="mb-4 text-xl font-semibold">Brand Summary</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li><strong>Business:</strong> Pitonne Stem Cell & IV Therapy</li>
-              <li><strong>Location:</strong> Nishi Azabu, Tokyo</li>
-              <li><strong>Target Audience:</strong> Busy professionals, travelers, health-conscious clients</li>
-              <li><strong>Brand Tone:</strong> Premium, clinical yet warm, discreet, professional</li>
-            </ul>
+            <div className="grid md:grid-cols-2 gap-6">
+              <ul className="space-y-2 text-muted-foreground">
+                <li><strong className="text-foreground">Business:</strong> Pitonne Stem Cell & IV Therapy</li>
+                <li><strong className="text-foreground">Location:</strong> Nishi Azabu, Tokyo, Japan</li>
+                <li><strong className="text-foreground">Phone:</strong> 070-2194-0199</li>
+                <li><strong className="text-foreground">Address:</strong> 106-0031 Tokyo, Minato City, Nishiazabu, 3 Chome-17-22 1F</li>
+              </ul>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><strong className="text-foreground">Target Audience:</strong> Busy professionals, travelers, health-conscious clients</li>
+                <li><strong className="text-foreground">Brand Tone:</strong> Premium, clinical yet warm, discreet, professional</li>
+                <li><strong className="text-foreground">Services:</strong> IV Therapy, Stem Cell Therapy, Medications, Wellness Consultations</li>
+              </ul>
+            </div>
           </div>
         </section>
 
         {/* Color Palette */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Color Palette</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Color Palette</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <ColorSwatch name="Peach/Cream" hex="#F5E6DA" usage="Hero backgrounds, section accents" />
             <ColorSwatch name="Soft Peach" hex="#E8D4C8" usage="Card backgrounds, hover states" />
@@ -49,7 +88,7 @@ export default function DesignDocumentation() {
 
         {/* Typography */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Typography</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Typography</h2>
           <div className="space-y-6">
             <div className="rounded-lg border border-border bg-card p-6">
               <h3 className="mb-4 text-xl font-semibold">Font Families</h3>
@@ -82,7 +121,7 @@ export default function DesignDocumentation() {
 
         {/* Components */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">UI Components</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">UI Components</h2>
           
           {/* Navigation */}
           <div className="mb-8 rounded-lg border border-border bg-card p-6">
@@ -162,7 +201,7 @@ export default function DesignDocumentation() {
 
         {/* Page Screenshots */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Page Screenshots</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Page Screenshots</h2>
           <p className="mb-6 text-muted-foreground">Full-page screenshots captured from the live site for reference:</p>
           
           <div className="grid gap-8">
@@ -170,49 +209,87 @@ export default function DesignDocumentation() {
               title="Homepage" 
               image="/screenshots/01-homepage.png" 
               description="Hero section with title and CTA, Who We Are section, Services overview grid, Blog posts preview, Footer"
+              url="/"
             />
             <PagePreview 
               title="About Page" 
               image="/screenshots/02-about.png" 
               description="About header, Why We Exist section with clinic photo, How We Support You section, Team member cards"
+              url="/about"
             />
             <PagePreview 
               title="Services Page" 
               image="/screenshots/03-services.png" 
               description="Services overview, IV Therapy cards with images, Stem Cell Therapy section, Medications section"
+              url="/services"
             />
             <PagePreview 
               title="Areas Served" 
               image="/screenshots/04-areas-served.png" 
               description="Grid of Tokyo areas/neighborhoods served with location pins"
+              url="/areas-served"
             />
             <PagePreview 
               title="Blog Page" 
               image="/screenshots/05-blog.png" 
               description="Blog listing with article titles, dates, and simple list layout"
+              url="/blog"
             />
             <PagePreview 
-              title="Contact Page" 
-              image="/screenshots/06-contact.png" 
-              description="External contact form (hosted on different domain), simple form with name, email, phone, message"
+              title="IV Therapy Service" 
+              image="/screenshots/07-iv-therapy.png" 
+              description="IV Therapy service detail page with treatment cards: Energy & Fatigue Recovery, Exosome IV Drip, Hangover IV, Immune Boost, IV Vitamin, Skin Brightening"
+              url="/services/iv-therapy"
+            />
+            <PagePreview 
+              title="Stem Cell Therapy" 
+              image="/screenshots/08-stem-cell-therapy.png" 
+              description="Stem Cell Therapy service page featuring Stem Cell Nasal Spray treatment"
+              url="/services/stem-cell-therapy"
+            />
+            <PagePreview 
+              title="Area Detail Page (Roppongi)" 
+              image="/screenshots/12-roppongi.png" 
+              description="Individual area page with services available, FAQs, and local access information"
+              url="/areas-served/minato/roppongi"
             />
           </div>
         </section>
 
         {/* Site Structure */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Site Structure</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Site Structure</h2>
           <div className="rounded-lg border border-border bg-card p-6">
-            <pre className="overflow-x-auto text-sm">
-{`/
+            <pre className="overflow-x-auto text-sm font-mono bg-muted/50 p-4 rounded-lg">
+{`pitonne.jp/
 ├── / (Homepage)
+│
 ├── /about (About Pitonne)
-├── /services (All Services)
-│   └── Service cards link to /services (no individual pages)
-├── /areas-served (Tokyo neighborhoods grid)
+│
+├── /services (All Services Overview)
+│   ├── /services/iv-therapy (IV Therapy category)
+│   │   ├── Exosome IV Drip
+│   │   ├── Hangover IV Drip
+│   │   ├── Energy & Fatigue Recovery IV
+│   │   ├── Skin Brightening IV Drip
+│   │   ├── Immune Boost IV Therapy
+│   │   └── IV Vitamin Therapy
+│   ├── /services/stem-cell-therapy (Stem Cell category)
+│   │   └── Stem Cell Nasal Spray
+│   └── /services/medications (Medications category)
+│       └── ED Medication
+│
+├── /areas-served (Tokyo neighborhoods grid - 28+ areas)
+│   └── /areas-served/minato/[area] (Individual area pages)
+│       ├── /roppongi, /azabu-juban, /hiroo, /akasaka
+│       ├── /shibuya, /ebisu, /ginza, /shinagawa
+│       └── ... and many more
+│
 ├── /blog (Blog listing)
-│   └── Blog posts (individual post pages)
-├── /contact (External form - ssv.onemorehand.jp)
+│   └── Individual blog posts (article pages)
+│
+├── /contact (External form → ssv.onemorehand.jp)
+│
 ├── /privacy-policy
 ├── /terms-of-use
 └── /medical-disclaimer`}
@@ -222,7 +299,7 @@ export default function DesignDocumentation() {
 
         {/* Footer Structure */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Footer Structure</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Footer Structure</h2>
           <div className="rounded-lg bg-[#8B7355] p-8 text-white">
             <div className="grid gap-8 md:grid-cols-4">
               <div>
@@ -289,7 +366,7 @@ export default function DesignDocumentation() {
 
         {/* Figma Export Notes */}
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold">Figma Design File Notes</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Figma Design File Notes</h2>
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="mb-4 text-xl font-semibold">Recommended Figma Structure</h3>
             <ul className="space-y-3 text-muted-foreground">
@@ -306,7 +383,7 @@ export default function DesignDocumentation() {
 
         {/* Next Steps */}
         <section>
-          <h2 className="mb-6 text-3xl font-bold">Next Steps for Migration</h2>
+          <h2 className="mb-6 text-3xl font-bold font-serif">Next Steps for Migration</h2>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-lg border border-border bg-card p-6">
               <h3 className="mb-4 text-xl font-semibold">For Figma</h3>
@@ -360,10 +437,17 @@ function TypeSpec({ name, size, weight, example, tracking }: { name: string; siz
   )
 }
 
-function PagePreview({ title, image, description }: { title: string; image: string; description: string }) {
+function PagePreview({ title, image, description, url }: { title: string; image: string; description: string; url?: string }) {
   return (
     <div className="rounded-lg border border-border bg-card p-6">
-      <h3 className="mb-4 text-xl font-semibold">{title}</h3>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold">{title}</h3>
+        {url && (
+          <code className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">
+            {url}
+          </code>
+        )}
+      </div>
       <div className="mb-4 overflow-hidden rounded-lg border border-border">
         <Image 
           src={image} 
@@ -371,7 +455,7 @@ function PagePreview({ title, image, description }: { title: string; image: stri
           width={1200} 
           height={800} 
           className="w-full object-cover object-top"
-          style={{ maxHeight: '400px' }}
+          style={{ maxHeight: '500px' }}
         />
       </div>
       <p className="text-sm text-muted-foreground">{description}</p>
