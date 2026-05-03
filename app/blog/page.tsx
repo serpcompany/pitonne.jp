@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { getPosts, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
-import { blogPosts, categories } from "@/lib/data/blog-posts"
+import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
 
 export const metadata: Metadata = {
   title: "Blog | Pitonne Stem Cell & IV Therapy Tokyo",
@@ -74,7 +74,7 @@ export default async function BlogPage() {
             >
               All
             </Link>
-            {categories.map(cat => (
+            {getAllCategories().map(cat => (
               <Link 
                 key={cat.slug}
                 href={`/blog/category/${cat.slug}`}
