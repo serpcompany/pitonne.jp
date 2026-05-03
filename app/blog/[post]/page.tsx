@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPostBySlug as getSanityPost, isSanityConfigured, formatSanityDate, urlFor } from "@/lib/sanity"
 import { PortableText } from "@portabletext/react"
-import { blogPosts, getBlogPostBySlug, getPostsByCategory } from "@/lib/data/blog-posts"
+import { blogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 
 interface Props {
   params: Promise<{ post: string }>
@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   // Get related posts from same category
-  const relatedPosts = getPostsByCategory(post.categorySlug)
+  const relatedPosts = getBlogPostsByCategory(post.categorySlug)
     .filter(p => p.slug !== postSlug)
     .slice(0, 3)
 
