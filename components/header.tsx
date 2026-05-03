@@ -20,6 +20,7 @@ const navigation = [
   { name: "Services", href: canonicalRoutes.services, hasDropdown: "services" },
   { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
   { name: "Blog", href: canonicalRoutes.blog },
+  { name: "FAQs", href: canonicalRoutes.faqs },
   { name: "Contact", href: canonicalRoutes.contact },
 ]
 

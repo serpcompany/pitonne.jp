@@ -6,52 +6,49 @@ category: iv-therapy
 parentSlug: iv-therapy
 canonicalPath: /services/skin-brightening-iv-drip/
 shortDescription: >-
-  Skin brightening IV therapy delivers antioxidants and skin-supporting
-  nutrients directly into the bloodstream to help promote clearer,
-  healthier-looking skin.
+  A skin wellness IV therapy designed to deliver hydration, antioxidants, and
+  skin-supporting nutrients for brighter-looking skin and recovery support
+  before and after sun exposure.
 fullDescription: >-
-  Skin brightening IV therapy delivers antioxidants and skin-supporting
-  nutrients directly into the bloodstream to help promote clearer,
-  healthier-looking skin. This treatment may support skin repair, improve skin
-  tone, and protect against environmental stressors such as sun exposure. Many
-  patients use skin brightening IV drips to support radiant skin and overall
-  skin wellness.
+  Skin Brightening IV Drip is designed to deliver hydration, antioxidants, and
+  skin-supporting nutrients directly into the bloodstream for efficient
+  absorption and condition support. This treatment is often chosen by clients
+  who want to support skin clarity, hydration, and overall skin wellness,
+  especially during periods of sun exposure, travel, fatigue, or seasonal skin
+  stress.
 image: /images/content/sheet/services/skin-brightening-iv-drip.jpg
 imageSourcePath: /images/content/sheet/services/skin-brightening-iv-drip.jpg
 benefits:
   - Supports skin recovery before and after sun exposure
-  - Helps promote brighter looking skin
-  - Provides antioxidant support
-  - Supports overall skin wellness
-  - Helps maintain healthy looking skin
+  - Helps promote brighter and healthier-looking skin
+  - Provides antioxidant support for daily skin wellness
+  - Supports hydration and skin condition balance
+  - Helps maintain overall skin wellness and appearance
 keyPoints:
   - Supports skin recovery before and after sun exposure
-  - Helps promote brighter looking skin
-  - Provides antioxidant support
+  - Helps promote brighter and healthier-looking skin
+  - Provides antioxidant support for daily skin wellness
 faqs:
-  - question: What is a skin brightening IV drip?
+  - question: What is a Skin Brightening IV Drip?
     answer: >-
-      Skin brightening IV therapy is described on the page as an antioxidant and
-      nutrient IV treatment intended to support clearer, healthier-looking skin.
-      Pitonne presents it as part of an overall skin-wellness approach rather
-      than a standalone miracle fix.
-  - question: What may a skin brightening IV drip support?
+      Skin Brightening IV Drip is a hydration and antioxidant-based IV treatment
+      designed to support brighter-looking skin, skin recovery, and overall skin
+      wellness as part of a broader skincare and wellness routine.
+  - question: What may this treatment support?
     answer: >-
-      The current page says it may support skin repair, skin tone, antioxidant
-      protection, and overall skin wellness. It is framed as supportive care for
-      a brighter, healthier-looking result.
-  - question: >-
-      Is a skin brightening IV drip a replacement for skincare or sun
-      protection?
+      This treatment may help support skin recovery before and after sun
+      exposure, skin hydration, antioxidant balance, and an overall brighter and
+      healthier-looking appearance.
+  - question: Is this a replacement for skincare or sun protection?
     answer: >-
-      No. The safest positioning is that it can be one part of a broader
-      routine. Daily skincare, sun protection, and provider guidance still
-      matter if your goal is long-term skin health.
-  - question: How often do patients usually consider skin brightening IV therapy?
+      No. This treatment is best positioned as part of a broader skin wellness
+      routine. Daily skincare, sun protection, and provider guidance remain
+      important for long-term skin health.
+  - question: How often do clients usually consider this treatment?
     answer: >-
-      That varies based on the person's goals and provider recommendations.
-      Pitonne's page flow is consultation first, then a personalized plan based
-      on your needs, timing, and expected results.
+      Treatment frequency depends on your skin goals, schedule, and provider
+      recommendations. Some clients choose it before travel or after sun
+      exposure, while others incorporate it into a regular wellness routine.
 relatedServices:
   - iv-therapy
   - immune-boost-iv-therapy
@@ -59,47 +56,42 @@ relatedServices:
 ---
 ## Treatment Overview
 
-Skin brightening IV therapy delivers antioxidants and skin-supporting nutrients directly into the bloodstream to help promote clearer, healthier-looking skin. This treatment may support skin repair, improve skin tone, and protect against environmental stressors such as sun exposure. Many patients use skin brightening IV drips to support radiant skin and overall skin wellness.
+Skin Brightening IV Drip is designed to deliver hydration, antioxidants, and skin-supporting nutrients directly into the bloodstream for efficient absorption and condition support. This treatment is often chosen by clients who want to support skin clarity, hydration, and overall skin wellness, especially during periods of sun exposure, travel, fatigue, or seasonal skin stress.
 
-- Supports skin recovery before and after sun exposure
-- Helps promote brighter looking skin
-- Provides antioxidant support
+It may help support skin recovery before and after sun exposure, promote a brighter and healthier-looking appearance, and provide antioxidant support as part of a broader skin wellness routine. Many clients choose this treatment before vacations, after outdoor activities, or during periods when their skin feels dull, tired, or stressed.
 
-Each treatment plan is adapted to the patient’s goals, symptoms, and overall wellness priorities.
+At Pitonne, selected treatments may be provided after an online medical consultation with a partner physician, followed by a personalized IV appointment at home, in a hotel, at the office, or at our partner clinic in Nishi Azabu.
 
 ## Key Benefits
 
 - Supports skin recovery before and after sun exposure
-- Helps promote brighter looking skin
-- Provides antioxidant support
-- Supports overall skin wellness
-- Helps maintain healthy looking skin
+- Helps promote brighter and healthier-looking skin
+- Provides antioxidant support for daily skin wellness
+- Supports hydration and skin condition balance
+- Helps maintain overall skin wellness and appearance
 
 ## How It Works
 
-## 1. Consultation
+### 1. Consultation
 
-- Discuss symptoms, goals, and health history.
+We review your skin concerns, goals, and health history to determine whether this treatment is appropriate for you.
 
-- Review whether the treatment is appropriate and safe for you.
+### 2. Personalized Plan
 
-## 2. Personalized Plan
+Your treatment plan is tailored based on your skin goals, lifestyle, and overall wellness priorities. Timing, expectations, and any questions are reviewed before treatment begins.
 
-- Your provider recommends the right treatment approach based on your needs.
+### 3. Treatment and Follow-Up
 
-- Questions, timing, and expectations are reviewed before treatment begins.
-
-## 3. Treatment and Follow-Up
-
-- Treatment is delivered with comfort, safety, and practical recovery in mind.
-
-- Ongoing guidance helps support results and next-step planning.
+Treatment is provided with comfort, safety, and practical skin wellness support in mind. Ongoing guidance may be provided depending on your treatment plan and goals.
 
 ## Helpful Notes
 
-- Follow your provider's guidance before and after treatment.
-- Stay hydrated and give your body time to recover as advised.
-- Ask about timing, frequency, and expected results for your plan.
-- Contact the clinic if you have questions after treatment.
+- Please follow any guidance provided before and after treatment.
+- Daily skincare and sun protection remain important for long-term skin wellness.
+- Treatment frequency may vary depending on your skin goals, schedule, and provider guidance.
+- If you have any questions after treatment, please contact us.
+- This treatment is intended as supportive wellness care and is not a substitute for medical diagnosis or dermatologic treatment.
 
 ## Physician-Guided Wellness Care
+
+Your consultation helps determine whether this supportive skin wellness treatment fits your goals, health history, and timing.

@@ -17,24 +17,14 @@ export function ServiceParentTemplate({ service, childServices }: { service: Ser
           { label: service.name },
         ]}
         title={service.name}
-        description={service.shortDescription}
-      />
-
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
-            <div>
-              <h2 className="mb-6 font-serif text-2xl font-bold text-foreground md:text-3xl">Overview</h2>
-              <p className="text-lg leading-relaxed text-muted-foreground">{service.fullDescription}</p>
-            </div>
-            {service.image && (
-              <div className="overflow-hidden rounded-lg border border-border">
-                <img src={service.image} alt={service.name} className="h-full w-full object-cover" />
-              </div>
-            )}
+        description={service.fullDescription}
+      >
+        {service.image && (
+          <div className="overflow-hidden rounded-lg border border-border">
+            <img src={service.image} alt={service.name} className="max-h-[420px] w-full object-cover" />
           </div>
-        </div>
-      </section>
+        )}
+      </PageHero>
 
       <section className="bg-card py-16 md:py-20">
         <div className="container mx-auto px-4">

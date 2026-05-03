@@ -9,6 +9,7 @@ export const canonicalRoutes = {
   medication: "/services/medication/",
   areasServed: "/areas-served/",
   blog: "/blog/",
+  faqs: "/faqs/",
   contact: "/contact/",
   legal: "/legal/",
   privacyPolicy: "/legal/privacy-policy/",

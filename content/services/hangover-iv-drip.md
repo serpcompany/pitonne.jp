@@ -46,7 +46,7 @@ faqs:
       Pitonne reviews timing and expectations before treatment begins.
   - question: Should I still drink water after a hangover IV?
     answer: >-
-      Yes. The service page already advises patients to stay hydrated and follow
+      Yes. The service page advises patients to stay hydrated and follow
       provider guidance after treatment. A hangover IV can be part of recovery
       support, but rest, hydration, and follow-up instructions still matter.
 relatedServices:
@@ -62,7 +62,7 @@ Hangover IV therapy delivers rapid hydration, vitamins, and electrolytes directl
 - Helps reduce nausea and headaches
 - Helps relieve fatigue and weakness
 
-Each treatment plan is adapted to the patient’s goals, symptoms, and overall wellness priorities.
+Each treatment plan is adapted to the patient's goals, symptoms, and overall wellness priorities.
 
 ## Key Benefits
 
@@ -74,22 +74,19 @@ Each treatment plan is adapted to the patient’s goals, symptoms, and overall w
 
 ## How It Works
 
-## 1. Consultation
+### 1. Consultation
 
 - Discuss symptoms, goals, and health history.
-
 - Review whether the treatment is appropriate and safe for you.
 
-## 2. Personalized Plan
+### 2. Personalized Plan
 
 - Your provider recommends the right treatment approach based on your needs.
-
 - Questions, timing, and expectations are reviewed before treatment begins.
 
-## 3. Treatment and Follow-Up
+### 3. Treatment and Follow-Up
 
 - Treatment is delivered with comfort, safety, and practical recovery in mind.
-
 - Ongoing guidance helps support results and next-step planning.
 
 ## Helpful Notes
@@ -100,3 +97,5 @@ Each treatment plan is adapted to the patient’s goals, symptoms, and overall w
 - Contact the clinic if you have questions after treatment.
 
 ## Physician-Guided Wellness Care
+
+This service is intended as recovery support. If symptoms are severe or unusual, seek medical evaluation rather than relying on IV therapy alone.

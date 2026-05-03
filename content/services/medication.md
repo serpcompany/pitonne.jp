@@ -5,40 +5,41 @@ kind: parent
 category: medication
 canonicalPath: /services/medication/
 shortDescription: >-
-  Physician-guided medication support designed around your health history,
-  goals, and comfort.
+  Private online consultations with a partner physician for eligible
+  prescription medication services.
 fullDescription: >-
-  Our medication services focus on safe, discreet, physician-guided care for
-  men's wellness concerns. Treatment starts with a consultation to understand
-  symptoms, medical history, and goals so the right option can be recommended.
-  The focus is on clear guidance, appropriate prescribing, and practical
-  follow-up.
+  Our medication services are provided through private online consultations with
+  a partner physician. After your consultation, eligible prescriptions can be
+  arranged for clinic pickup or local delivery, including bike courier service
+  in select central Tokyo areas.
 image: /images/office_exam_room-scaled.jpg
 imageSourcePath: /images/office_exam_room-scaled.jpg
 benefits:
-  - Physician-guided treatment planning
+  - Private online consultations with a partner physician
   - Discreet support for personal health concerns
-  - Personalized recommendations based on your goals and history
-  - 'Clear expectations around use, timing, and follow-up'
-  - Convenient prescription-based care when appropriate
+  - Eligible prescriptions can be arranged for clinic pickup
+  - Local delivery may be available in select central Tokyo areas
+  - Physician-guided treatment planning when appropriate
 keyPoints:
-  - Physician-guided treatment planning
-  - Discreet support for personal health concerns
-  - Personalized recommendations based on your goals and history
+  - Private online consultations with a partner physician
+  - Eligible prescriptions can be arranged for clinic pickup
+  - Local delivery may be available in select central Tokyo areas
 faqs:
-  - question: What types of concerns can medication services help address?
+  - question: How do medication services work at Pitonne?
     answer: >-
-      Medication services may support men's wellness concerns such as erectile
-      dysfunction and other issues where physician-guided prescribing may be
-      appropriate.
+      Medication services begin with a private online consultation with a
+      partner physician. If medication is appropriate and prescribed, eligible
+      prescriptions can be arranged for clinic pickup or local delivery.
+  - question: Is delivery available?
+    answer: >-
+      Local delivery, including bike courier service, may be available in select
+      central Tokyo areas depending on the prescription, location, and selected
+      service option.
   - question: Do I need a consultation first?
     answer: >-
-      Yes. A consultation is important to make sure treatment is safe,
-      appropriate, and tailored to your needs.
-  - question: Will I receive guidance on how to use the medication?
-    answer: >-
-      Yes. Your provider explains how the treatment works, how to use it
-      properly, what to expect, and any safety considerations.
+      Yes. Physician review is required to determine whether prescription-based
+      care is appropriate for your symptoms, health history, and current
+      medications.
 relatedServices:
   - ed-medication
   - iv-therapy
@@ -46,35 +47,35 @@ relatedServices:
 ---
 ## Treatment Overview
 
-Our medication services focus on safe, discreet, physician-guided care for men’s wellness concerns. Treatment starts with a consultation to understand symptoms, medical history, and goals so the right option can be recommended. The focus is on clear guidance, appropriate prescribing, and practical follow-up.
+Our medication services are provided through private online consultations with a partner physician. After your consultation, eligible prescriptions can be arranged for clinic pickup or local delivery, including bike courier service in select central Tokyo areas.
 
-Medication-based care can be a good fit when a patient wants a non-surgical treatment option supported by medical evaluation and ongoing guidance. Each plan is individualized based on symptoms, overall health, and whether the treatment is appropriate for the patient.
+Medication-based care can be a good fit when a patient wants a discreet treatment option supported by medical evaluation and practical follow-up. Each plan is individualized based on symptoms, overall health, current medications, and whether the treatment is appropriate for the patient.
 
 ## Key Benefits
 
-- Physician-guided treatment planning
+- Private online consultations with a partner physician
 - Discreet support for personal health concerns
-- Personalized recommendations based on your goals and history
-- Clear expectations around use, timing, and follow-up
-- Convenient prescription-based care when appropriate
+- Eligible prescriptions can be arranged for clinic pickup
+- Local delivery may be available in select central Tokyo areas
+- Physician-guided treatment planning when appropriate
 
 ## How It Works
 
-## 1. Consultation
+### 1. Online Consultation
 
-- We review symptoms, health history, current medications, and treatment goals to determine whether medication-based care is a good fit.
+We review symptoms, goals, health history, and current medications through a private online consultation with a partner physician.
 
-## 2. Personalized Plan
+### 2. Personalized Plan
 
-- If treatment is appropriate, your provider recommends the best option and explains how it works, what to expect, and any important safety considerations.
+If treatment is appropriate, the physician recommends the suitable prescription option and explains use, timing, precautions, and expectations.
 
-## 3. Treatment and Follow-Up
+### 3. Pickup or Delivery
 
-- Ongoing guidance helps you stay informed, monitor results, and make adjustments if needed.
+If prescribed, eligible medication can be arranged for clinic pickup or local delivery, including bike courier service in select central Tokyo areas.
 
 ## Helpful Notes
 
-- Always use medications exactly as directed by your provider.
-- Share your full health history and current medications during your consultation.
-- Ask about timing, expected results, and possible side effects before starting treatment.
-- Reach out if you have questions or concerns after beginning treatment.
+- Medication services require physician assessment and prescription approval.
+- Share your full health history and current medications during consultation.
+- Delivery availability depends on your location and selected service option.
+- Always follow provider instructions for timing, dosage, and use.

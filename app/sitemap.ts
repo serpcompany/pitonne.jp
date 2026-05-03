@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     canonicalRoutes.services,
     canonicalRoutes.contact,
     canonicalRoutes.blog,
+    canonicalRoutes.faqs,
     canonicalRoutes.areasServed,
     canonicalRoutes.legal,
     canonicalRoutes.privacyPolicy,

@@ -6,54 +6,49 @@ category: iv-therapy
 parentSlug: iv-therapy
 canonicalPath: /services/iv-vitamin-therapy/
 shortDescription: >-
-  IV vitamin therapy delivers essential vitamins, minerals, and hydration
-  directly into the bloodstream for maximum absorption and effectiveness.
+  A versatile IV therapy designed to deliver hydration, essential vitamins, and
+  nutrients for daily wellness, recovery, and vitality support.
 fullDescription: >-
-  IV vitamin therapy delivers essential vitamins, minerals, and hydration
-  directly into the bloodstream for maximum absorption and effectiveness. This
-  treatment may help improve energy levels, support immune function, and promote
-  overall wellness. IV vitamin therapy is commonly used to support recovery,
-  boost vitality, and help maintain optimal health.
+  IV Vitamin Therapy is designed to deliver hydration, essential vitamins,
+  minerals, and supportive nutrients directly into the bloodstream for efficient
+  absorption and condition support. This treatment is often chosen by clients
+  who want practical wellness support for hydration, fatigue, recovery, and
+  daily condition maintenance.
 image: /images/content/sheet/services/iv-vitamin-therapy.jpg
 imageSourcePath: /images/content/sheet/services/iv-vitamin-therapy.jpg
 benefits:
-  - Helps improve energy levels and reduce fatigue
-  - Supports immune system health
-  - Provides essential vitamins and nutrients for overall wellness
-  - Promotes faster hydration and nutrient absorption
-  - 'Helps support recovery from stress, travel, or illness'
-  - May improve mental clarity and focus
-  - Supports healthy metabolism and cellular function
-  - Helps maintain optimal vitamin and nutrient levels
-  - Promotes overall vitality and well-being
+  - Supports hydration and daily recovery
+  - Helps support energy levels and vitality
+  - Supports immune function and general wellness
+  - Provides vitamins and nutrients for condition support
+  - May help support mental clarity and overall balance
 keyPoints:
-  - Helps improve energy levels and reduce fatigue
-  - Supports immune system health
-  - Provides essential vitamins and nutrients for overall wellness
+  - Supports hydration and daily recovery
+  - Helps support energy levels and vitality
+  - Supports immune function and general wellness
 faqs:
-  - question: What is IV vitamin therapy?
+  - question: What is IV Vitamin Therapy?
     answer: >-
-      IV vitamin therapy delivers vitamins, minerals, and hydration directly
-      into the bloodstream for fast absorption. Pitonne presents it as a
-      physician-guided wellness treatment for energy, recovery, immune support,
-      and overall vitality.
-  - question: What can IV vitamin therapy support?
+      IV Vitamin Therapy is a hydration and nutrient-based IV treatment designed
+      to deliver vitamins, minerals, and supportive nutrients directly into the
+      bloodstream for efficient absorption and overall wellness support.
+  - question: What can this treatment support?
     answer: >-
-      The page positions IV vitamin therapy as support for energy levels,
-      hydration, recovery, immune function, mental clarity, and overall
-      wellness. Your provider can match the treatment to your goals after
-      reviewing your needs.
-  - question: How is IV vitamin therapy different from a standard hydration drip?
+      This treatment may help support hydration, recovery, energy levels, immune
+      function, and overall vitality. Your provider may tailor the treatment
+      based on your goals and current condition.
+  - question: How is this different from a standard hydration IV?
     answer: >-
-      A standard hydration-focused IV is mainly about fluids and electrolytes,
-      while IV vitamin therapy is positioned around added vitamins and nutrients
-      for broader wellness support. The best option depends on whether your main
-      goal is hydration, recovery, energy, or a more customized blend.
-  - question: How often should I get IV vitamin therapy?
+      A hydration-focused IV is generally centered on fluid and electrolyte
+      support, while IV Vitamin Therapy may include additional vitamins and
+      nutrients for broader wellness and recovery support. The most suitable
+      option depends on your goals and provider guidance.
+  - question: How often can I receive this treatment?
     answer: >-
-      Frequency depends on your goals, daily routine, and provider guidance.
-      Pitonne's current service flow is consultation first, then a personalized
-      plan that covers timing, expectations, and follow-up.
+      Treatment frequency depends on your goals, daily routine, and overall
+      wellness plan. Some clients choose it occasionally, while others may
+      incorporate it into a regular wellness routine based on provider
+      recommendations.
 relatedServices:
   - iv-therapy
   - energy-fatigue-recovery-iv
@@ -61,51 +56,42 @@ relatedServices:
 ---
 ## Treatment Overview
 
-IV vitamin therapy delivers essential vitamins, minerals, and hydration directly into the bloodstream for maximum absorption and effectiveness. This treatment may help improve energy levels, support immune function, and promote overall wellness. IV vitamin therapy is commonly used to support recovery, boost vitality, and help maintain optimal health.
+IV Vitamin Therapy is designed to deliver hydration, essential vitamins, minerals, and supportive nutrients directly into the bloodstream for efficient absorption and condition support. This treatment is often chosen by clients who want practical wellness support for hydration, fatigue, recovery, and daily condition maintenance.
 
-- Helps improve energy levels and reduce fatigue
-- Supports immune system health
-- Provides essential vitamins and nutrients for overall wellness
+It may help support energy levels, hydration balance, immune function, and overall vitality, making it a flexible option for busy professionals, travelers, and anyone looking to maintain day-to-day wellness and performance.
 
-Each treatment plan is adapted to the patient’s goals, symptoms, and overall wellness priorities.
+At Pitonne, selected treatments may be provided after an online medical consultation with a partner physician, followed by a personalized IV appointment at home, in a hotel, at the office, or at our partner clinic in Nishi Azabu.
 
 ## Key Benefits
 
-- Helps improve energy levels and reduce fatigue
-- Supports immune system health
-- Provides essential vitamins and nutrients for overall wellness
-- Promotes faster hydration and nutrient absorption
-- Helps support recovery from stress, travel, or illness
-- May improve mental clarity and focus
-- Supports healthy metabolism and cellular function
-- Helps maintain optimal vitamin and nutrient levels
-- Promotes overall vitality and well-being
+- Supports hydration and daily recovery
+- Helps support energy levels and vitality
+- Supports immune function and general wellness
+- Provides vitamins and nutrients for condition support
+- May help support mental clarity and overall balance
 
 ## How It Works
 
-## 1. Consultation
+### 1. Consultation
 
-- Discuss symptoms, goals, and health history.
+We review your symptoms, goals, and health history to determine whether this treatment is appropriate for you.
 
-- Review whether the treatment is appropriate and safe for you.
+### 2. Personalized Plan
 
-## 2. Personalized Plan
+Your treatment plan is tailored based on your condition, schedule, and wellness priorities. Timing, expectations, and any questions are reviewed before treatment begins.
 
-- Your provider recommends the right treatment approach based on your needs.
+### 3. Treatment and Follow-Up
 
-- Questions, timing, and expectations are reviewed before treatment begins.
-
-## 3. Treatment and Follow-Up
-
-- Treatment is delivered with comfort, safety, and practical recovery in mind.
-
-- Ongoing guidance helps support results and next-step planning.
+Treatment is provided with comfort, safety, and practical wellness support in mind. Ongoing guidance may be provided depending on your treatment plan and goals.
 
 ## Helpful Notes
 
-- Follow your provider's guidance before and after treatment.
-- Stay hydrated and give your body time to recover as advised.
-- Ask about timing, frequency, and expected results for your plan.
-- Contact the clinic if you have questions after treatment.
+- Please follow any guidance provided before and after treatment.
+- Staying hydrated and allowing time for recovery may help support your results.
+- Treatment frequency may vary depending on your condition and wellness goals.
+- If you have any questions after treatment, please contact us.
+- This treatment is intended as supportive wellness care and is not a substitute for regular medical care or treatment.
 
 ## Physician-Guided Wellness Care
+
+Your provider can help determine whether IV Vitamin Therapy, a hydration-focused IV, or another option best fits your goals.

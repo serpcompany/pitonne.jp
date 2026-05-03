@@ -41,6 +41,7 @@ const quickLinks = [
   { name: "About", href: canonicalRoutes.about },
   { name: "Services", href: canonicalRoutes.services },
   { name: "Blog", href: canonicalRoutes.blog },
+  { name: "FAQs", href: canonicalRoutes.faqs },
   { name: "Contact", href: canonicalRoutes.contact },
   { name: "Privacy Policy", href: canonicalRoutes.privacyPolicy },
   { name: "Terms of Use", href: canonicalRoutes.termsConditions },

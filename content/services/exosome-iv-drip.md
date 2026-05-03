@@ -7,7 +7,7 @@ parentSlug: iv-therapy
 canonicalPath: /services/exosome-iv-drip/
 shortDescription: >-
   Exosome IV therapy delivers powerful regenerative factors derived from stem
-  cell supernatant to support cellular repair, recovery, and overall wellness.
+  cell supernatants to support cellular repair, recovery, and overall wellness.
 fullDescription: >-
   Exosome IV therapy delivers powerful regenerative factors derived from stem
   cell supernatants to support cellular repair, recovery, and overall wellness.
@@ -59,13 +59,13 @@ relatedServices:
 ---
 ## Treatment Overview
 
-Exosome IV therapy delivers powerful regenerative factors derived from stem cell supernatant to support cellular repair, recovery, and overall wellness. This advanced treatment may help promote healthy aging, improve energy levels, and support recovery from physical stress or injury. Exosome therapy is commonly used to enhance vitality, optimize performance, and support the body’s natural healing processes.
+Exosome IV therapy delivers powerful regenerative factors derived from stem cell supernatants to support cellular repair, recovery, and overall wellness. This advanced treatment may help promote healthy aging, improve energy levels, and support recovery from physical stress or injury. Exosome therapy is commonly used to enhance vitality, optimize performance, and support the body's natural healing processes.
 
 - Supports healthy aging
 - Helps reduce fatigue
 - Promotes overall wellness
 
-Each treatment plan is adapted to the patient’s goals, symptoms, and overall wellness priorities.
+Each treatment plan is adapted to the patient's goals, symptoms, and overall wellness priorities.
 
 ## Key Benefits
 
@@ -77,22 +77,19 @@ Each treatment plan is adapted to the patient’s goals, symptoms, and overall w
 
 ## How It Works
 
-## 1. Consultation
+### 1. Consultation
 
 - Discuss symptoms, goals, and health history.
-
 - Review whether the treatment is appropriate and safe for you.
 
-## 2. Personalized Plan
+### 2. Personalized Plan
 
 - Your provider recommends the right treatment approach based on your needs.
-
 - Questions, timing, and expectations are reviewed before treatment begins.
 
-## 3. Treatment and Follow-Up
+### 3. Treatment and Follow-Up
 
 - Treatment is delivered with comfort, safety, and practical recovery in mind.
-
 - Ongoing guidance helps support results and next-step planning.
 
 ## Helpful Notes
@@ -103,3 +100,5 @@ Each treatment plan is adapted to the patient’s goals, symptoms, and overall w
 - Contact the clinic if you have questions after treatment.
 
 ## Physician-Guided Wellness Care
+
+This treatment should be reviewed with a provider first so the plan can be matched to your goals, health background, and expectations.

@@ -6,41 +6,43 @@ category: iv-therapy
 canonicalPath: /services/iv-therapy/
 shortDescription: >-
   IV therapy delivers hydration, vitamins, and essential nutrients directly into
-  the bloodstream for fast and effective absorption.
+  the bloodstream for efficient absorption and condition support.
 fullDescription: >-
-  IV therapy delivers hydration, vitamins, and essential nutrients directly into
-  the bloodstream for fast and effective absorption. Our IV treatments are
-  designed to support energy, recovery, immune health, and overall wellness.
-  Whether you are looking to boost energy levels, recover from fatigue, improve
-  hydration, or strengthen your immune system, our customized IV therapy options
-  provide a convenient way to help your body perform at its best.
+  IV therapy is designed to deliver hydration, vitamins, and essential nutrients
+  directly into the bloodstream for efficient absorption and condition support.
+  At Pitonne, selected treatments may be provided after an online medical
+  consultation with a partner physician, followed by a personalized IV
+  appointment at home, in a hotel, at the office, or at our partner clinic in
+  Nishi Azabu.
 image: /images/content/sheet/services/iv-therapy.jpg
 imageSourcePath: /images/content/sheet/services/iv-therapy.jpg
 benefits:
   - Delivers hydration and nutrients directly into the bloodstream
-  - 'Supports energy, recovery, and overall wellness'
-  - Can help improve hydration and daily performance
-  - Offers customizable treatment options based on wellness goals
+  - Supports efficient absorption and condition support
+  - Can be personalized after online medical consultation
+  - Offers appointment options at home, hotels, offices, or the partner clinic
 keyPoints:
   - Delivers hydration and nutrients directly into the bloodstream
-  - 'Supports energy, recovery, and overall wellness'
-  - Can help improve hydration and daily performance
+  - Supports efficient absorption and condition support
+  - Can be personalized after online medical consultation
 faqs:
   - question: What is IV therapy?
     answer: >-
       IV therapy delivers fluids, vitamins, and nutrients directly into the
-      bloodstream. Pitonne uses it as a physician-guided wellness option for
-      hydration, energy, recovery, immune support, and related goals.
+      bloodstream. Pitonne positions selected IV treatments as physician-guided
+      wellness options for hydration, recovery, energy, immune support, and
+      related goals.
   - question: Which IV therapy options are available?
     answer: >-
       Pitonne's IV therapy category includes exosome IV drip, hangover IV drip,
-      immune boost IV therapy, IV vitamin therapy, energy and fatigue recovery
-      IV, and skin brightening IV drip.
+      energy and fatigue recovery IV, immune boost IV therapy, skin brightening
+      IV drip, and IV vitamin therapy.
   - question: How is the right IV treatment selected?
     answer: >-
-      The care flow begins with a consultation. Your provider reviews symptoms,
-      goals, health history, timing, and safety considerations before
-      recommending a treatment plan.
+      The care flow begins with an online medical consultation with a partner
+      physician. Your symptoms, goals, health history, timing, and safety
+      considerations are reviewed before a personalized IV appointment is
+      arranged.
 relatedServices:
   - exosome-iv-drip
   - hangover-iv-drip
@@ -51,46 +53,32 @@ relatedServices:
 ---
 ## Treatment Overview
 
-IV therapy delivers hydration, vitamins, and essential nutrients directly into the bloodstream for fast and effective absorption. Our IV treatments are designed to support energy, recovery, immune health, and overall wellness. Whether you are looking to boost energy levels, recover from fatigue, improve hydration, or strengthen your immune system, our customized IV therapy options provide a convenient way to help your body perform at its best.
-
-- Delivers hydration and nutrients directly into the bloodstream
-- Supports energy, recovery, and overall wellness
-- Can help improve hydration and daily performance
-
-Each treatment plan is adapted to the patient’s goals, symptoms, and overall wellness priorities.
+IV therapy is designed to deliver hydration, vitamins, and essential nutrients directly into the bloodstream for efficient absorption and condition support. At Pitonne, selected treatments may be provided after an online medical consultation with a partner physician, followed by a personalized IV appointment at home, in a hotel, at the office, or at our partner clinic in Nishi Azabu.
 
 ## Key Benefits
 
 - Delivers hydration and nutrients directly into the bloodstream
-- Supports energy, recovery, and overall wellness
-- Can help improve hydration and daily performance
-- Offers customizable treatment options based on wellness goals
+- Supports efficient absorption and condition support
+- Can be personalized after online medical consultation
+- Offers appointment options at home, hotels, offices, or the partner clinic
 
 ## How It Works
 
-## 1. Consultation
+### 1. Online Medical Consultation
 
-- Discuss symptoms, goals, and health history.
+Your symptoms, goals, health history, and timing are reviewed with a partner physician to determine whether an IV treatment is appropriate.
 
-- Review whether the treatment is appropriate and safe for you.
+### 2. Personalized IV Plan
 
-## 2. Personalized Plan
+If appropriate, the treatment option and appointment details are selected around your condition, schedule, and wellness priorities.
 
-- Your provider recommends the right treatment approach based on your needs.
+### 3. Appointment and Follow-Up
 
-- Questions, timing, and expectations are reviewed before treatment begins.
-
-## 3. Treatment and Follow-Up
-
-- Treatment is delivered with comfort, safety, and practical recovery in mind.
-
-- Ongoing guidance helps support results and next-step planning.
+Your IV appointment may take place at home, in a hotel, at the office, or at the partner clinic in Nishi Azabu, with guidance provided before and after treatment.
 
 ## Helpful Notes
 
-- Follow your provider's guidance before and after treatment.
-- Stay hydrated and give your body time to recover as advised.
-- Ask about timing, frequency, and expected results for your plan.
+- Follow all guidance provided before and after treatment.
+- Appointment options depend on your location, schedule, and selected treatment.
+- Treatment suitability is determined through consultation.
 - Contact the clinic if you have questions after treatment.
-
-## Physician-Guided Wellness Care
