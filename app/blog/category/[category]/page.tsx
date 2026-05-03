@@ -1,32 +1,34 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { categories, getPostsByCategory, getCategoryBySlug } from "@/lib/data/blog-posts"
+import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 
 export async function generateStaticParams() {
-  return categories.map((category) => ({ category: category.slug }))
+  return getAllCategories().map((category) => ({ category: category.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: categorySlug } = await params
-  const category = getCategoryBySlug(categorySlug)
+  const categories = getAllCategories()
+  const category = categories.find(c => c.slug === categorySlug)
   if (!category) return { title: "Category Not Found | Pitonne" }
   
   return {
     title: `${category.name} Articles | Pitonne Blog`,
-    description: category.description,
+    description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
   }
 }
 
 export default async function BlogCategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category: categorySlug } = await params
-  const category = getCategoryBySlug(categorySlug)
+  const categories = getAllCategories()
+  const category = categories.find(c => c.slug === categorySlug)
   
   if (!category) {
     notFound()
   }
 
-  const categoryPosts = getPostsByCategory(categorySlug)
+  const categoryPosts = getBlogPostsByCategory(categorySlug)
 
   return (
     <div className="bg-background">
@@ -65,7 +67,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
             >
               All
             </Link>
-            {categories.map(cat => (
+            {getAllCategories().map(cat => (
               <Link 
                 key={cat.slug}
                 href={`/blog/category/${cat.slug}`}
