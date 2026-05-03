@@ -69,6 +69,24 @@ for (const disallowed of ["placeholder", "logoipsum", "glowence"]) {
   }
 }
 
+function walkContent(dir) {
+  if (!fs.existsSync(path.join(root, dir))) return []
+  return fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((entry) => {
+    const rel = path.join(dir, entry.name)
+    if (entry.isDirectory()) return walkContent(rel)
+    return entry.isFile() ? [rel] : []
+  })
+}
+
+for (const file of walkContent("content")) {
+  const source = read(file)
+  for (const disallowed of ["localhost:10013", "wp-content/uploads", "controls_data", "SubmitResponseMarkup", "This draft should be finalized"]) {
+    if (source.includes(disallowed)) {
+      failures.push(`Content file ${file} contains disallowed migrated artifact: ${disallowed}`)
+    }
+  }
+}
+
 const serviceDetailUsesSharedHero = serviceDetailTemplate.includes("PageHero")
 const serviceDetailLinksToServices =
   serviceDetailTemplate.includes('label: "Services"') &&

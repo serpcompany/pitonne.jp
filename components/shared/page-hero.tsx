@@ -36,7 +36,7 @@ export function PageHero({
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
-          {eyebrow && <div className="mb-4 text-sm uppercase tracking-widest text-[#4AA69D]">{eyebrow}</div>}
+          {eyebrow && <div className="mb-4 text-sm uppercase tracking-widest text-[#2D766F]">{eyebrow}</div>}
           {meta && <div className="mb-4 text-sm text-muted-foreground">{meta}</div>}
           <h1 className="mb-6 font-serif text-4xl text-foreground md:text-5xl">{title}</h1>
           {description && <div className="max-w-3xl text-lg text-muted-foreground">{description}</div>}

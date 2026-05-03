@@ -1,10 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Legal | Pitonne",
+  title: "Legal",
   description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+  alternates: {
+    canonical: canonicalUrl("/legal/"),
+  },
+  openGraph: {
+    title: "Legal",
+    description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+    url: canonicalUrl("/legal/"),
+  },
 }
 
 const legalPages = [
@@ -45,15 +54,15 @@ export default function LegalPage() {
               <Link
                 key={page.href}
                 href={page.href}
-                className="bg-white p-8 rounded-lg border border-[#e5e5e5] hover:shadow-md hover:border-[#4AA69D] transition-all group"
+                className="bg-white p-8 rounded-lg border border-[#e5e5e5] hover:shadow-md hover:border-[#2D766F] transition-all group"
               >
-                <h2 className="font-serif text-xl text-[#1a1a1a] mb-3 group-hover:text-[#4AA69D] transition-colors">
+                <h2 className="font-serif text-xl text-[#1a1a1a] mb-3 group-hover:text-[#2D766F] transition-colors">
                   {page.title}
                 </h2>
                 <p className="text-[#666] text-sm mb-4">
                   {page.description}
                 </p>
-                <span className="text-[#4AA69D] text-sm">
+                <span className="text-[#2D766F] text-sm">
                   Read more &rarr;
                 </span>
               </Link>
@@ -73,7 +82,9 @@ export default function LegalPage() {
           </p>
           <Link 
             href="/contact" 
-            className="inline-block bg-[#4AA69D] text-white px-8 py-4 rounded-full hover:bg-[#3d8b83] transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#2D766F] text-white px-8 py-4 rounded-full hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

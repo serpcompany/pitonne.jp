@@ -2,10 +2,19 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { businessInfo } from "@/lib/data/site"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About Pitonne | Stem Cell & IV Therapy in Tokyo",
+  title: "About Pitonne",
   description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+  alternates: {
+    canonical: canonicalUrl("/about/"),
+  },
+  openGraph: {
+    title: "About Pitonne",
+    description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+    url: canonicalUrl("/about/"),
+  },
 }
 
 const team = [
@@ -47,7 +56,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#4AA69D] mb-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4">
                 Commitment
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
@@ -106,6 +115,8 @@ export default function AboutPage() {
               </p>
               <Link 
                 href={businessInfo.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
               >
                 Book Consultation
@@ -145,7 +156,7 @@ export default function AboutPage() {
                   />
                 </div>
                 <h3 className="text-lg font-semibold text-center mb-1">{member.name}</h3>
-                <p className="text-sm text-[#4AA69D] text-center mb-4">{member.role}</p>
+                <p className="text-sm text-[#2D766F] text-center mb-4">{member.role}</p>
                 <p className="text-sm text-muted-foreground">{member.bio}</p>
               </div>
             ))}

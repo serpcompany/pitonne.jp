@@ -281,19 +281,6 @@ export const wards: Ward[] = [
     description: "Chiyoda ward is Tokyo's political and business center, home to the Imperial Palace, government ministries, and major corporate headquarters. Our professional IV therapy services cater to the busy executives and officials working in this important district.",
     areas: [
       {
-        slug: "tokyo-station",
-        name: "Tokyo Station",
-        nameJa: "東京駅",
-        description: "Tokyo Station is Japan's central transportation hub, surrounded by major hotels and office buildings. Travelers and business professionals passing through frequently use our convenient IV therapy services.",
-        highlights: [
-          "25-minute drive from clinic",
-          "Major transit hub",
-          "Hotel visits to station hotels",
-          "Traveler wellness services"
-        ],
-        landmarks: ["Tokyo Station Marunouchi Building", "KITTE", "Imperial Palace East Gardens"]
-      },
-      {
         slug: "kanda",
         name: "Kanda",
         nameJa: "神田",

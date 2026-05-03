@@ -1,29 +1,25 @@
-"use client"
-
-import { useState } from "react"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import type { Metadata } from "next"
+import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
+import { canonicalUrl } from "@/lib/seo"
+import { businessInfo } from "@/lib/data/site"
+
+const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
+
+export const metadata: Metadata = {
+  title: "Contact Pitonne",
+  description: "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
+  alternates: {
+    canonical: canonicalUrl("/contact/"),
+  },
+  openGraph: {
+    title: "Contact Pitonne",
+    description: "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
+    url: canonicalUrl("/contact/"),
+  },
+}
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "",
-    message: "",
-  })
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // In production, this would submit to an API
-    setSubmitted(true)
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
   return (
     <>
       <PageHero
@@ -39,116 +35,22 @@ export default function ContactPage() {
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
             <div>
               <h2 className="text-2xl font-serif mb-6">Send Us a Message</h2>
-              
-              {submitted ? (
-                <div className="bg-[#f5ebe0] rounded-lg p-8 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#4AA69D] flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-                  <p className="text-muted-foreground">
-                    We&apos;ve received your message and will get back to you within 24 hours.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#4AA69D] focus:border-transparent"
-                      placeholder="Your name"
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#4AA69D] focus:border-transparent"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#4AA69D] focus:border-transparent"
-                        placeholder="080-XXXX-XXXX"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="service" className="block text-sm font-medium mb-2">
-                      Service Interest
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      value={formData.service}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#4AA69D] focus:border-transparent"
-                    >
-                      <option value="">Select a service</option>
-                      <option value="iv-therapy">IV Therapy</option>
-                      <option value="stem-cell">Stem Cell Therapy</option>
-                      <option value="medications">Medications</option>
-                      <option value="consultation">General Consultation</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      Message <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#4AA69D] focus:border-transparent resize-none"
-                      placeholder="Tell us how we can help..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
-                  >
-                    Send Message
-                  </button>
-                </form>
-              )}
+              <div className="rounded-lg border border-border bg-card p-8">
+                <p className="mb-6 text-muted-foreground">
+                  Use Pitonne&apos;s secure inquiry form to request a consultation or ask questions about services.
+                </p>
+                <a
+                  href={inquiryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#2D766F] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a] sm:w-auto"
+                >
+                  Open Inquiry Form
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
             </div>
 
             {/* Contact Info */}
@@ -158,11 +60,11 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Phone className="h-5 w-5 text-[#4AA69D]" />
+                    <Phone className="h-5 w-5 text-[#2D766F]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:070-2194-0199" className="text-muted-foreground hover:text-[#4AA69D] transition-colors">
+                    <a href="tel:070-2194-0199" className="text-muted-foreground hover:text-[#2D766F] transition-colors">
                       070-2194-0199
                     </a>
                   </div>
@@ -170,19 +72,19 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Mail className="h-5 w-5 text-[#4AA69D]" />
+                    <Mail className="h-5 w-5 text-[#2D766F]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:contact@pitonne.jp" className="text-muted-foreground hover:text-[#4AA69D] transition-colors">
-                      contact@pitonne.jp
+                    <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#2D766F] transition-colors">
+                      pitonne.am@gmail.com
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <MapPin className="h-5 w-5 text-[#4AA69D]" />
+                    <MapPin className="h-5 w-5 text-[#2D766F]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Location</h3>
@@ -195,30 +97,21 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Clock className="h-5 w-5 text-[#4AA69D]" />
+                    <Clock className="h-5 w-5 text-[#2D766F]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Hours</h3>
                     <div className="text-muted-foreground text-sm space-y-1">
-                      <p>Monday: 10:00 - 19:00</p>
-                      <p>Tuesday: Closed</p>
-                      <p>Wednesday: Closed</p>
-                      <p>Thursday: 10:00 - 19:00</p>
-                      <p>Friday: 10:00 - 19:00</p>
-                      <p>Saturday: Closed</p>
-                      <p>Sunday: Closed</p>
+                      {businessInfo.hours.map((item) => (
+                        <p key={item.day}>
+                          {item.day}: {item.hours}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Map placeholder */}
-              <div className="mt-8 aspect-video bg-gradient-to-br from-[#f5ebe0] to-[#e8d4c8] rounded-lg flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <MapPin className="h-8 w-8 mx-auto mb-2 text-[#4AA69D]" />
-                  <p className="text-sm">Nishi-Azabu, Tokyo</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

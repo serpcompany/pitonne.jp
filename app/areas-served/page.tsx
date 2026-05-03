@@ -3,10 +3,19 @@ import type { Metadata } from "next"
 import { MapPin } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { wards } from "@/lib/data/areas"
+import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Areas Served | Pitonne Stem Cell & IV Therapy Tokyo",
+  title: "Areas Served",
   description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+  alternates: {
+    canonical: canonicalUrl("/areas-served/"),
+  },
+  openGraph: {
+    title: "Areas Served",
+    description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+    url: canonicalUrl("/areas-served/"),
+  },
 }
 
 export default function AreasServedPage() {
@@ -34,7 +43,7 @@ export default function AreasServedPage() {
                   </div>
                   <Link 
                     href={`/areas-served/${ward.slug}`}
-                    className="text-sm text-[#4AA69D] hover:underline"
+                    className="text-sm text-[#2D766F] hover:underline"
                   >
                     View all in {ward.name} &rarr;
                   </Link>
@@ -44,11 +53,11 @@ export default function AreasServedPage() {
                     <Link
                       key={area.slug}
                       href={`/areas-served/${ward.slug}/${area.slug}`}
-                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#4AA69D] transition-all"
+                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#2D766F] transition-all"
                     >
-                      <MapPin className="h-5 w-5 text-[#4AA69D] shrink-0" />
+                      <MapPin className="h-5 w-5 text-[#2D766F] shrink-0" />
                       <div>
-                        <p className="font-medium text-foreground group-hover:text-[#4AA69D] transition-colors">{area.name}</p>
+                        <p className="font-medium text-foreground group-hover:text-[#2D766F] transition-colors">{area.name}</p>
                         <p className="text-sm text-muted-foreground">{area.nameJa}</p>
                       </div>
                     </Link>
@@ -103,7 +112,9 @@ export default function AreasServedPage() {
           </p>
           <Link 
             href="/contact"
-            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

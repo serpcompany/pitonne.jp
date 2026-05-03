@@ -1,13 +1,17 @@
 import Link from "next/link"
-import { PortableText } from "@portabletext/react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import { PageHero } from "@/components/shared/page-hero"
+import { JsonLd } from "@/components/shared/json-ld"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
 import type { BlogPost } from "@/lib/data/blog-posts"
+import { blogPostingJsonLd } from "@/lib/structured-data"
 
 export interface BlogPostViewModel {
   slug: string
   title: string
   date: string
+  publishedAt?: string
   content: string
   excerpt: string
   featureImage?: string | null
@@ -15,73 +19,36 @@ export interface BlogPostViewModel {
   category: string
   categorySlug: string
   author?: { name: string; role?: string; image?: string | null } | null
-  isSanity?: boolean
-  sanityBody?: unknown[]
   relatedServiceSlugs?: string[]
   tags?: string[]
 }
 
 function splitFinalTakeaway(content: string) {
-  const marker = /<h2>\s*Final Takeaway\s*<\/h2>/i
-  const parts = content.split(marker)
+  const marker = /^##\s+Final Takeaway\s*$/im
+  const match = content.match(marker)
 
-  if (parts.length < 2) {
+  if (!match || match.index === undefined) {
     return { before: content, final: "" }
   }
 
   return {
-    before: parts[0],
-    final: `<h2>Final Takeaway</h2>${parts.slice(1).join("<h2>Final Takeaway</h2>")}`,
+    before: content.slice(0, match.index).trim(),
+    final: content.slice(match.index).trim(),
   }
 }
 
-function BlogContent({ post }: { post: BlogPostViewModel }) {
-  if (post.isSanity && post.sanityBody) {
-    return (
-      <div className="blog-prose">
-        <PortableText value={post.sanityBody as never[]} />
-        <BlogDiscoverySection post={post} />
-      </div>
-    )
-  }
+function MarkdownContent({ content }: { content: string }) {
+  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+}
 
+function BlogContent({ post }: { post: BlogPostViewModel }) {
   const content = splitFinalTakeaway(post.content)
 
   return (
     <div className="blog-prose">
-      <div dangerouslySetInnerHTML={{ __html: content.before }} />
+      <MarkdownContent content={content.before} />
       <BlogDiscoverySection post={post} />
-      {content.final ? <div dangerouslySetInnerHTML={{ __html: content.final }} /> : null}
-    </div>
-  )
-}
-
-function ShareRow({ post }: { post: BlogPostViewModel }) {
-  const postUrl = `/blog/${post.slug}/`
-
-  return (
-    <div className="mt-10 border-t border-border pt-6">
-      <p className="mb-3 text-sm font-semibold text-foreground">Share This</p>
-      <div className="flex flex-wrap gap-3">
-        <Link href={`https://twitter.com/intent/tweet?url=${postUrl}`} className="text-sm text-[#4AA69D] hover:underline">
-          X
-        </Link>
-        <Link href={`https://www.facebook.com/sharer/sharer.php?u=${postUrl}`} className="text-sm text-[#4AA69D] hover:underline">
-          Facebook
-        </Link>
-        <Link href="/blog/" className="text-sm text-[#4AA69D] hover:underline">
-          Blog
-        </Link>
-      </div>
-      {post.tags && post.tags.length > 0 && (
-        <div className="mt-5 flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
+      {content.final ? <MarkdownContent content={content.final} /> : null}
     </div>
   )
 }
@@ -100,12 +67,12 @@ function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}/`}
-              className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#4AA69D] hover:shadow-md"
+              className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#2D766F] hover:shadow-md"
             >
               <p className="mb-2 text-xs text-muted-foreground">
                 {new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
               </p>
-              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#4AA69D]">{post.title}</h3>
+              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#2D766F]">{post.title}</h3>
             </Link>
           ))}
         </div>
@@ -124,6 +91,22 @@ export function BlogPostTemplate({
 }) {
   return (
     <div className="bg-background">
+      {post.author && (
+        <JsonLd
+          data={blogPostingJsonLd({
+            slug: post.slug,
+            title: post.title,
+            excerpt: post.excerpt,
+            publishedAt: post.publishedAt ?? post.date,
+            featureImage: post.featureImage || undefined,
+            author: {
+              name: post.author.name,
+              role: post.author.role ?? "",
+            },
+          })}
+        />
+      )}
+
       <PageHero
         breadcrumbs={[
           { label: "Home", href: "/" },
@@ -133,7 +116,7 @@ export function BlogPostTemplate({
         eyebrow={
           <Link
             href={`/blog/category/${post.categorySlug}/`}
-            className="inline-block rounded-full bg-[#4AA69D] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#3d8a83]"
+            className="inline-block rounded-full bg-[#2D766F] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#245f5a]"
           >
             {post.category}
           </Link>
@@ -156,7 +139,7 @@ export function BlogPostTemplate({
             {post.author.image ? (
               <img src={post.author.image} alt={post.author.name} className="h-12 w-12 rounded-full object-cover" />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4AA69D] font-medium text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#2D766F] font-medium text-white">
                 {post.author.name.charAt(0)}
               </div>
             )}
@@ -171,8 +154,8 @@ export function BlogPostTemplate({
       {post.featureImage && (
         <section className="bg-card">
           <div className="container mx-auto -mt-8 px-4">
-            <div className="mx-auto max-w-4xl">
-              <img src={post.featureImage} alt={post.title} className="w-full rounded-lg shadow-lg" />
+            <div className="mx-auto max-w-3xl">
+              <img src={post.featureImage} alt={post.title} className="max-h-[420px] w-full rounded-lg object-cover shadow-lg" />
             </div>
           </div>
         </section>
@@ -182,7 +165,6 @@ export function BlogPostTemplate({
         <div className="container mx-auto px-4">
           <article className="mx-auto max-w-3xl">
             <BlogContent post={post} />
-            <ShareRow post={post} />
           </article>
         </div>
       </section>

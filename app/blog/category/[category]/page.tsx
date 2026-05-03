@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { canonicalUrl } from "@/lib/seo"
 
 export async function generateStaticParams() {
   return getAllCategories().map((category) => ({ category: category.slug }))
@@ -15,8 +16,16 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   if (!category) return { title: "Category Not Found | Pitonne" }
   
   return {
-    title: `${category.name} Articles | Pitonne Blog`,
+    title: `${category.name} Articles`,
     description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+    alternates: {
+      canonical: canonicalUrl(`/blog/category/${category.slug}/`),
+    },
+    openGraph: {
+      title: `${category.name} Articles`,
+      description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+      url: canonicalUrl(`/blog/category/${category.slug}/`),
+    },
   }
 }
 
@@ -51,7 +60,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
           <div className="flex flex-wrap items-center gap-3">
             <Link 
               href="/blog"
-              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#4AA69D] hover:text-[#4AA69D] transition-colors"
+              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#2D766F] hover:text-[#2D766F] transition-colors"
             >
               All
             </Link>
@@ -61,8 +70,8 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                 href={`/blog/category/${cat.slug}`}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
                   cat.slug === categorySlug 
-                    ? "bg-[#4AA69D] text-white" 
-                    : "border border-border hover:border-[#4AA69D] hover:text-[#4AA69D]"
+                    ? "bg-[#2D766F] text-white"
+                    : "border border-border hover:border-[#2D766F] hover:text-[#2D766F]"
                 }`}
               >
                 {cat.name}
@@ -81,7 +90,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#4AA69D] transition-all"
+                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#2D766F] transition-all"
                 >
                   <div className="aspect-video overflow-hidden bg-[#f5ebe0]">
                     {post.featureImage ? (
@@ -108,7 +117,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                       <span>&middot;</span>
                       <span>{post.readingTime} min read</span>
                     </div>
-                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#4AA69D] transition-colors line-clamp-2">
+                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#2D766F] transition-colors line-clamp-2">
                       {post.title}
                     </h2>
                     <p className="text-muted-foreground text-sm line-clamp-3">
@@ -126,7 +135,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
               <p className="text-muted-foreground mb-6">No articles found in this category yet.</p>
               <Link 
                 href="/blog"
-                className="text-[#4AA69D] hover:underline"
+                className="text-[#2D766F] hover:underline"
               >
                 View all articles
               </Link>
@@ -146,7 +155,9 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
           </p>
           <Link 
             href="/contact"
-            className="inline-block bg-[#4AA69D] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#3d8a83] transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

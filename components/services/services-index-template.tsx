@@ -39,7 +39,7 @@ export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
           <div className="container mx-auto px-4">
             <div className="mb-8 flex items-center justify-between gap-6">
               <h2 className="font-serif text-3xl text-foreground md:text-4xl">{section.title}</h2>
-              <Link href={section.href} className="flex items-center gap-1 text-[#4AA69D] hover:underline">
+              <Link href={section.href} className="flex items-center gap-1 text-[#2D766F] hover:underline">
                 View all <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

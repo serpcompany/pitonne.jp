@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { AreaDetailPage } from "@/components/area-detail-page"
 import { getAllAreas, getArea } from "@/lib/data/areas"
+import { canonicalUrl } from "@/lib/seo"
 
 export async function generateStaticParams() {
   return getAllAreas().map(({ ward, area }) => ({
@@ -25,8 +26,16 @@ export async function generateMetadata({
   const { ward, area } = result
 
   return {
-    title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name} | Pitonne`,
+    title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name}`,
     description: `Premium IV therapy, stem cell treatments, and wellness services in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo.`,
+    alternates: {
+      canonical: canonicalUrl(`/areas-served/${ward.slug}/${area.slug}/`),
+    },
+    openGraph: {
+      title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name}`,
+      description: `Premium IV therapy, stem cell treatments, and wellness services in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo.`,
+      url: canonicalUrl(`/areas-served/${ward.slug}/${area.slug}/`),
+    },
   }
 }
 
