@@ -8,6 +8,7 @@ import {
   getService,
   getServiceCategorySections,
   getServicesFromSlugs,
+  services,
 } from "@/lib/data/services"
 import { getBlogPostsForService } from "@/lib/data/blog-posts"
 import { businessInfo } from "@/lib/data/site"
@@ -70,6 +71,17 @@ describe("service page parity", () => {
     expect(within(stemCellSection).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
       "Stem Cell Nasal Spray",
     ])
+
+    const medicationSection = screen.getByTestId("service-section-medication")
+    expect(within(medicationSection).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "ED Medication",
+      "AGA Medication",
+    ])
+
+    const bloodTestsSection = screen.getByTestId("service-section-blood-tests")
+    expect(within(bloodTestsSection).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "Blood Tests",
+    ])
     expect(screen.queryByRole("heading", { name: "Ready to Start Your Wellness Journey?" })).not.toBeInTheDocument()
   })
 
@@ -99,6 +111,18 @@ describe("service page parity", () => {
     expect(getService("skin-brightening-iv-drip")?.content).toContain("before vacations, after outdoor activities")
     expect(getService("medication")?.fullDescription).toContain("clinic pickup or local delivery")
     expect(getService("ed-medication")?.content).toContain("re-examination fees may be waived")
+    expect(getService("androgenetic-alopecia-medicine")?.content).toContain("oral minoxidil 5 mg")
+    expect(getService("androgenetic-alopecia-medicine")?.faqs).toContainEqual(
+      expect.objectContaining({
+        question: "How long does it take to see results?",
+      }),
+    )
+    expect(getService("blood-tests")?.content).toContain("Results are typically available in about one week")
+    expect(getService("blood-tests")?.faqs).toContainEqual(
+      expect.objectContaining({
+        question: "What happens if something abnormal is found?",
+      }),
+    )
     expect(getService("stem-cell-nasal-spray")?.content).toContain("Bike courier fees apply separately")
     expect(getService("stem-cell-therapy")?.content).toContain("autologous adipose-derived stem cell therapy")
     expect(getService("stem-cell-therapy")?.faqs).toContainEqual(
@@ -106,5 +130,18 @@ describe("service page parity", () => {
         question: "How long does the process take?",
       }),
     )
+  })
+
+  it("keeps leaf service sidebars focused on specific related services", () => {
+    const parentSlugs = new Set(services.filter((service) => service.kind === "parent").map((service) => service.slug))
+
+    for (const service of services.filter((candidate) => candidate.kind === "leaf")) {
+      expect(service.relatedServices.filter((slug) => parentSlugs.has(slug))).toEqual([])
+    }
+
+    expect(getService("blood-tests")?.relatedServices).not.toContain("iv-therapy")
+    expect(getService("blood-tests")?.relatedServices).toEqual(["iv-vitamin-therapy", "energy-fatigue-recovery-iv"])
+    expect(getService("androgenetic-alopecia-medicine")?.relatedServices).toEqual(["ed-medication"])
+    expect(getService("ed-medication")?.relatedServices).toEqual(["androgenetic-alopecia-medicine"])
   })
 })

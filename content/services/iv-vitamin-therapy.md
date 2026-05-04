@@ -50,7 +50,6 @@ faqs:
       incorporate it into a regular wellness routine based on provider
       recommendations.
 relatedServices:
-  - iv-therapy
   - energy-fatigue-recovery-iv
   - immune-boost-iv-therapy
 ---

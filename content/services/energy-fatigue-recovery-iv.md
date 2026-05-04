@@ -47,9 +47,9 @@ faqs:
       plan. Some clients receive it occasionally, while others may choose regular
       support depending on their routine and provider guidance.
 relatedServices:
-  - iv-therapy
   - immune-boost-iv-therapy
   - iv-vitamin-therapy
+  - hangover-iv-drip
 ---
 ## Treatment Overview
 

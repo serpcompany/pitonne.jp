@@ -49,7 +49,6 @@ faqs:
       experiencing significant symptoms or illness, please consult a physician
       directly.
 relatedServices:
-  - iv-therapy
   - energy-fatigue-recovery-iv
   - iv-vitamin-therapy
 ---

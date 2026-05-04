@@ -7,6 +7,7 @@ export const canonicalRoutes = {
   ivTherapy: "/services/iv-therapy/",
   stemCellTherapy: "/services/stem-cell-therapy/",
   medication: "/services/medication/",
+  bloodTests: "/services/blood-tests/",
   areasServed: "/areas-served/",
   blog: "/blog/",
   faqs: "/faqs/",
@@ -38,7 +39,15 @@ export const serviceNavigation = [
   {
     name: "Medications",
     href: canonicalRoutes.medication,
-    items: [{ name: "ED Medication", href: "/services/ed-medication/" }],
+    items: [
+      { name: "ED Medication", href: "/services/ed-medication/" },
+      { name: "AGA Medication", href: "/services/androgenetic-alopecia-medicine/" },
+    ],
+  },
+  {
+    name: "Blood Tests",
+    href: canonicalRoutes.bloodTests,
+    items: [{ name: "Blood Tests", href: "/services/blood-tests/" }],
   },
 ]
 

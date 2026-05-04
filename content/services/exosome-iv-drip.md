@@ -53,8 +53,7 @@ faqs:
       history, and expectations before recommending whether an exosome IV drip
       makes sense for you.
 relatedServices:
-  - iv-therapy
-  - hangover-iv-drip
+  - stem-cell-nasal-spray
   - energy-fatigue-recovery-iv
 ---
 ## Treatment Overview
