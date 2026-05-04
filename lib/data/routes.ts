@@ -41,7 +41,7 @@ export const serviceNavigation = [
     href: canonicalRoutes.medication,
     items: [
       { name: "ED Medication", href: "/services/ed-medication/" },
-      { name: "AGA Medication", href: "/services/androgenetic-alopecia/" },
+      { name: "AGA Medication", href: "/services/androgenetic-alopecia-medicine/" },
     ],
   },
   {

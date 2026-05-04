@@ -85,7 +85,7 @@ export const serviceCategorySections: ServiceCategorySection[] = [
     slug: "medication",
     title: "Medications",
     href: "/services/medication/",
-    serviceSlugs: ["ed-medication", "androgenetic-alopecia"],
+    serviceSlugs: ["ed-medication", "androgenetic-alopecia-medicine"],
   },
   {
     slug: "blood-tests",

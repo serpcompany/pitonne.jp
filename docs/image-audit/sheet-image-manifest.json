@@ -140,7 +140,7 @@
     },
     {
       "sheetName": "AGA medication",
-      "route": "/services/androgenetic-alopecia/",
+      "route": "/services/androgenetic-alopecia-medicine/",
       "driveId": "1Fi7S5RELa6x0qiBoYpIvRChItC3IElRt",
       "localPath": "/images/content/sheet/services/androgenetic-alopecia.jpg",
       "status": "used",

@@ -111,8 +111,8 @@ describe("service page parity", () => {
     expect(getService("skin-brightening-iv-drip")?.content).toContain("before vacations, after outdoor activities")
     expect(getService("medication")?.fullDescription).toContain("clinic pickup or local delivery")
     expect(getService("ed-medication")?.content).toContain("re-examination fees may be waived")
-    expect(getService("androgenetic-alopecia")?.content).toContain("oral minoxidil 5 mg")
-    expect(getService("androgenetic-alopecia")?.faqs).toContainEqual(
+    expect(getService("androgenetic-alopecia-medicine")?.content).toContain("oral minoxidil 5 mg")
+    expect(getService("androgenetic-alopecia-medicine")?.faqs).toContainEqual(
       expect.objectContaining({
         question: "How long does it take to see results?",
       }),
@@ -141,7 +141,7 @@ describe("service page parity", () => {
 
     expect(getService("blood-tests")?.relatedServices).not.toContain("iv-therapy")
     expect(getService("blood-tests")?.relatedServices).toEqual(["iv-vitamin-therapy", "energy-fatigue-recovery-iv"])
-    expect(getService("androgenetic-alopecia")?.relatedServices).toEqual(["ed-medication"])
-    expect(getService("ed-medication")?.relatedServices).toEqual(["androgenetic-alopecia"])
+    expect(getService("androgenetic-alopecia-medicine")?.relatedServices).toEqual(["ed-medication"])
+    expect(getService("ed-medication")?.relatedServices).toEqual(["androgenetic-alopecia-medicine"])
   })
 })

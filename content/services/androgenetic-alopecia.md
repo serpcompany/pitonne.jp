@@ -1,10 +1,10 @@
 ---
 title: AGA Medication
-slug: androgenetic-alopecia
+slug: androgenetic-alopecia-medicine
 kind: leaf
 category: medication
 parentSlug: medication
-canonicalPath: /services/androgenetic-alopecia/
+canonicalPath: /services/androgenetic-alopecia-medicine/
 shortDescription: >-
   A physician guided AGA treatment set combining oral minoxidil 5 mg and
   dutasteride (Zagallo), provided through a discreet online consultation for

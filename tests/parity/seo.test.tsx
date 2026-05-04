@@ -136,9 +136,9 @@ describe("SEO parity", () => {
       alternates: { canonical: `${SITE_URL}/services/iv-therapy/` },
     })
 
-    await expect(serviceMetadata({ params: Promise.resolve({ service: "androgenetic-alopecia" }) })).resolves.toMatchObject({
+    await expect(serviceMetadata({ params: Promise.resolve({ service: "androgenetic-alopecia-medicine" }) })).resolves.toMatchObject({
       title: "AGA Medication",
-      alternates: { canonical: `${SITE_URL}/services/androgenetic-alopecia/` },
+      alternates: { canonical: `${SITE_URL}/services/androgenetic-alopecia-medicine/` },
     })
 
     await expect(serviceMetadata({ params: Promise.resolve({ service: "blood-tests" }) })).resolves.toMatchObject({

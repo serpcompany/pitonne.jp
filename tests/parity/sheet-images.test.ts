@@ -99,7 +99,7 @@ describe("sheet image integration", () => {
   })
 
   it("promotes newly mapped AGA and Blood Tests images into service assets", () => {
-    expect(getService("androgenetic-alopecia")?.image).toBe(
+    expect(getService("androgenetic-alopecia-medicine")?.image).toBe(
       "/images/content/sheet/services/androgenetic-alopecia.jpg",
     )
     expect(getService("blood-tests")?.image).toBe("/images/content/sheet/services/blood-tests.jpg")
