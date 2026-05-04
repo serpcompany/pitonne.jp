@@ -48,7 +48,6 @@ faqs:
       history, symptoms, current medications, and the physician's assessment
       during your consultation.
 relatedServices:
-  - stem-cell-therapy
   - exosome-iv-drip
 ---
 ## Treatment Overview

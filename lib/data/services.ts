@@ -5,7 +5,7 @@ import { z } from "zod"
 
 const serviceContentDirectory = path.join(process.cwd(), "content", "services")
 
-const serviceCategorySchema = z.enum(["iv-therapy", "stem-cell", "medication"])
+const serviceCategorySchema = z.enum(["iv-therapy", "stem-cell", "medication", "blood-tests"])
 const serviceKindSchema = z.enum(["parent", "leaf"])
 
 const faqSchema = z.object({
@@ -85,7 +85,13 @@ export const serviceCategorySections: ServiceCategorySection[] = [
     slug: "medication",
     title: "Medications",
     href: "/services/medication/",
-    serviceSlugs: ["ed-medication"],
+    serviceSlugs: ["ed-medication", "androgenetic-alopecia"],
+  },
+  {
+    slug: "blood-tests",
+    title: "Blood Tests",
+    href: "/services/blood-tests/",
+    serviceSlugs: ["blood-tests"],
   },
 ]
 

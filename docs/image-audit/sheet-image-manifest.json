@@ -117,9 +117,10 @@
     },
     {
       "sheetName": "blood Testing",
+      "route": "/services/blood-tests/",
       "driveId": "1Y5AVOlDyJuORLnZvPssEHkiiDf72j7zN",
-      "localPath": "/images/content/sheet/unmapped/blood-testing.jpg",
-      "status": "unmapped",
+      "localPath": "/images/content/sheet/services/blood-tests.jpg",
+      "status": "used",
       "driveFilename": "Blood Draw_2_H.jpg"
     },
     {
@@ -139,9 +140,10 @@
     },
     {
       "sheetName": "AGA medication",
+      "route": "/services/androgenetic-alopecia/",
       "driveId": "1Fi7S5RELa6x0qiBoYpIvRChItC3IElRt",
-      "localPath": "/images/content/sheet/unmapped/aga-medication.jpg",
-      "status": "unmapped",
+      "localPath": "/images/content/sheet/services/androgenetic-alopecia.jpg",
+      "status": "used",
       "driveFilename": "AGA Oral Medication_H.jpg"
     },
     {

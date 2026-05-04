@@ -39,7 +39,7 @@ describe("sheet image integration", () => {
     const usedEntries = manifest.entries.filter((entry) => entry.status === "used")
     const blockedEntries = manifest.entries.filter((entry) => entry.status === "blocked-external-license")
 
-    expect(usedEntries.length).toBe(17)
+    expect(usedEntries.length).toBe(19)
     expect(blockedEntries.map((entry) => entry.sheetName)).toEqual(["Medications"])
 
     for (const entry of usedEntries) {
@@ -96,6 +96,15 @@ describe("sheet image integration", () => {
     expect(postsBySlug.get("iv-therapy-for-hangover")?.featureImage).toBe(
       "/images/content/sheet/blog/iv-therapy-for-hangover.jpg",
     )
+  })
+
+  it("promotes newly mapped AGA and Blood Tests images into service assets", () => {
+    expect(getService("androgenetic-alopecia")?.image).toBe(
+      "/images/content/sheet/services/androgenetic-alopecia.jpg",
+    )
+    expect(getService("blood-tests")?.image).toBe("/images/content/sheet/services/blood-tests.jpg")
+    expect(publicAssetExists("/images/content/sheet/services/androgenetic-alopecia.jpg")).toBe(true)
+    expect(publicAssetExists("/images/content/sheet/services/blood-tests.jpg")).toBe(true)
   })
 
   it("does not hotlink Google Drive images from production source", () => {

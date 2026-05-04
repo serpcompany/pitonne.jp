@@ -60,9 +60,9 @@ export function Header() {
 
               {/* Services Mega Menu */}
               {item.hasDropdown === "services" && activeDropdown === "services" && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[600px]">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[760px]">
                   <div className="bg-white rounded-lg shadow-xl border border-border p-6">
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-4 gap-6">
                     {servicesMenu.categories.map((category) => (
                       <div key={category.name}>
                         <Link 

@@ -49,7 +49,7 @@ faqs:
       lifestyle, and treatment preferences. Your consultation is used to
       recommend a safe and personalized plan.
 relatedServices:
-  - medication
+  - androgenetic-alopecia
 ---
 ## Treatment Overview
 
