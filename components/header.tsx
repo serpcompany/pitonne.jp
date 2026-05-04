@@ -14,13 +14,19 @@ const areasMenu = {
   wards: areaNavigation,
 }
 
+const aboutMenu = {
+  items: [
+    { name: "About", href: canonicalRoutes.about },
+    { name: "FAQs", href: canonicalRoutes.faqs },
+  ],
+}
+
 const navigation = [
   { name: "Home", href: canonicalRoutes.home },
-  { name: "About", href: canonicalRoutes.about },
+  { name: "About", href: canonicalRoutes.about, hasDropdown: "about" },
   { name: "Services", href: canonicalRoutes.services, hasDropdown: "services" },
   { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
   { name: "Blog", href: canonicalRoutes.blog },
-  { name: "FAQs", href: canonicalRoutes.faqs },
   { name: "Contact", href: canonicalRoutes.contact },
 ]
 
@@ -57,6 +63,26 @@ export function Header() {
                 {item.name}
                 {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
               </Link>
+
+              {/* About Menu */}
+              {item.hasDropdown === "about" && activeDropdown === "about" && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-48">
+                  <div className="rounded-lg border border-border bg-white p-3 shadow-xl">
+                    <ul className="space-y-1">
+                      {aboutMenu.items.map((link) => (
+                        <li key={link.name}>
+                          <Link
+                            href={link.href}
+                            className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-[#7A8F87]"
+                          >
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
 
               {/* Services Mega Menu */}
               {item.hasDropdown === "services" && activeDropdown === "services" && (
@@ -194,6 +220,22 @@ export function Header() {
                         }`} 
                       />
                     </button>
+
+                    {/* Mobile About Dropdown */}
+                    {item.hasDropdown === "about" && mobileExpandedSection === "about" && (
+                      <div className="pl-4 pb-2 space-y-1">
+                        {aboutMenu.items.map((link) => (
+                          <Link
+                            key={link.name}
+                            href={link.href}
+                            className="block py-1 text-sm text-muted-foreground"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {link.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                     
                     {/* Mobile Services Dropdown */}
                     {item.hasDropdown === "services" && mobileExpandedSection === "services" && (
