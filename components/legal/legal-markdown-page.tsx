@@ -36,7 +36,7 @@ export function LegalMarkdownPage({
 
       <section className="border-t border-border py-8">
         <div className="container mx-auto max-w-4xl px-4">
-          <Link href="/legal/" className="text-[#2D766F] hover:underline">
+          <Link href="/legal/" className="text-[#7A8F87] hover:underline">
             &larr; Back to Legal
           </Link>
         </div>

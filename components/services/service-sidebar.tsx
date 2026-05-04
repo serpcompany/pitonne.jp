@@ -26,7 +26,7 @@ export function ServiceSidebar({
           <ul className="space-y-3">
             {relatedServices.map((service) => (
               <li key={service.slug}>
-                <Link href={service.canonicalPath} className="text-sm text-muted-foreground hover:text-[#2D766F]">
+                <Link href={service.canonicalPath} className="text-sm text-muted-foreground hover:text-[#7A8F87]">
                   {service.name}
                 </Link>
               </li>
@@ -41,7 +41,7 @@ export function ServiceSidebar({
           <ul className="space-y-4">
             {relatedPosts.map((post) => (
               <li key={post.slug}>
-                <Link href={`/blog/${post.slug}/`} className="block text-sm font-medium text-foreground hover:text-[#2D766F]">
+                <Link href={`/blog/${post.slug}/`} className="block text-sm font-medium text-foreground hover:text-[#7A8F87]">
                   {post.title}
                 </Link>
                 <p className="mt-1 text-xs text-muted-foreground">{post.readingTime} min read</p>

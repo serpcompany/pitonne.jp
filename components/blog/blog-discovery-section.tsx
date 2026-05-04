@@ -18,7 +18,7 @@ export function BlogDiscoverySection({
           href="/contact/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex rounded-md bg-[#2D766F] px-6 py-3 text-sm font-medium text-white hover:bg-[#245f5a]"
+          className="inline-flex rounded-md bg-[#7A8F87] px-6 py-3 text-sm font-medium text-white hover:bg-[#245f5a]"
         >
           Contact Us
         </Link>

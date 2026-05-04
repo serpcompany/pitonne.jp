@@ -18,16 +18,16 @@ const services = [
     image: "/images/content/sheet/services/stem-cell-therapy.jpg",
   },
   {
-    title: "Medications",
+    title: "Medication",
     description: "Prescription-based support delivered with discretion and physician review where appropriate.",
     href: canonicalRoutes.medication,
-    image: "/images/office_exam_room-scaled.jpg",
+    image: "/images/medication.jpeg",
   },
   {
     title: "Wellness Consultations",
     description: "Discreet access to medication options supported by careful review and straightforward next steps.",
     href: "/services",
-    image: "/images/aic_office_reception_2-scaled.jpg",
+    image: "/images/wellness-consultation.jpg",
   },
 ]
 
@@ -120,7 +120,7 @@ export default function HomePage() {
 
             {/* Content */}
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
                 Who We Are
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
@@ -132,15 +132,15 @@ export default function HomePage() {
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#2D766F]" />
+                  <Check className="h-5 w-5 text-[#7A8F87]" />
                   <span>In-home and hotel visit care</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#2D766F]" />
+                  <Check className="h-5 w-5 text-[#7A8F87]" />
                   <span>Registered nurse-led support</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 text-[#2D766F]" />
+                  <Check className="h-5 w-5 text-[#7A8F87]" />
                   <span>Central Tokyo concierge service</span>
                 </li>
               </ul>
@@ -186,7 +186,7 @@ export default function HomePage() {
                     sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                   />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#2D766F] transition-colors">
+                <h3 className="text-lg font-semibold mb-2 group-hover:text-[#7A8F87] transition-colors">
                   {service.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -212,7 +212,7 @@ export default function HomePage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#2D766F] mb-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4">
               Blog
             </p>
             <h2 className="text-3xl md:text-4xl font-serif">
@@ -231,7 +231,7 @@ export default function HomePage() {
                   <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
                     {post.date}
                   </span>
-                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#2D766F] transition-colors">
+                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#7A8F87] transition-colors">
                     {post.title}
                   </h3>
                 </div>

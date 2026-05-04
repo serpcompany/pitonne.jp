@@ -43,7 +43,7 @@ export default function AreasServedPage() {
                   </div>
                   <Link 
                     href={`/areas-served/${ward.slug}`}
-                    className="text-sm text-[#2D766F] hover:underline"
+                    className="text-sm text-[#7A8F87] hover:underline"
                   >
                     View all in {ward.name} &rarr;
                   </Link>
@@ -53,11 +53,11 @@ export default function AreasServedPage() {
                     <Link
                       key={area.slug}
                       href={`/areas-served/${ward.slug}/${area.slug}`}
-                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#2D766F] transition-all"
+                      className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#7A8F87] transition-all"
                     >
-                      <MapPin className="h-5 w-5 text-[#2D766F] shrink-0" />
+                      <MapPin className="h-5 w-5 text-[#7A8F87] shrink-0" />
                       <div>
-                        <p className="font-medium text-foreground group-hover:text-[#2D766F] transition-colors">{area.name}</p>
+                        <p className="font-medium text-foreground group-hover:text-[#7A8F87] transition-colors">{area.name}</p>
                         <p className="text-sm text-muted-foreground">{area.nameJa}</p>
                       </div>
                     </Link>
@@ -114,7 +114,7 @@ export default function AreasServedPage() {
             href="/contact"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
+            className="inline-block bg-[#7A8F87] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

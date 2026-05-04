@@ -138,7 +138,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h4>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -155,7 +155,7 @@ export function Footer() {
 
           {/* Open Hours */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Open Hours</h4>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Open Hours</h3>
             <ul className="space-y-1.5">
               {businessInfo.hours.map((item) => (
                 <li key={item.day} className="flex justify-between text-sm">
@@ -170,7 +170,7 @@ export function Footer() {
 
           {/* Areas Served */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-4">Areas Served</h4>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Areas Served</h3>
             <Link 
               href="/areas-served"
               className="text-sm text-[#4AA69D] hover:text-[#5bc4ba] transition-colors mb-3 inline-block"

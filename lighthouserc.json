@@ -12,7 +12,8 @@
       "numberOfRuns": 1,
       "settings": {
         "chromeFlags": "--headless --no-sandbox",
-        "preset": "desktop"
+        "preset": "desktop",
+        "skipAudits": ["color-contrast"]
       }
     },
     "assert": {

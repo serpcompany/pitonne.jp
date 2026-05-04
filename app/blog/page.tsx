@@ -50,7 +50,7 @@ export default async function BlogPage() {
             <span className="text-sm font-medium text-foreground">Categories:</span>
             <Link 
               href="/blog"
-              className="px-4 py-1.5 text-sm rounded-full bg-[#2D766F] text-white"
+              className="px-4 py-1.5 text-sm rounded-full bg-[#7A8F87] text-white"
             >
               All
             </Link>
@@ -58,7 +58,7 @@ export default async function BlogPage() {
               <Link 
                 key={cat.slug}
                 href={`/blog/category/${cat.slug}`}
-                className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#2D766F] hover:text-[#2D766F] transition-colors"
+                className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#7A8F87] hover:text-[#7A8F87] transition-colors"
               >
                 {cat.name}
               </Link>
@@ -103,7 +103,7 @@ export default async function BlogPage() {
                     Featured
                   </span>
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
-                    <span className="text-[#2D766F]">{featuredPost.category}</span>
+                    <span className="text-[#7A8F87]">{featuredPost.category}</span>
                     <span>&middot;</span>
                     <time>{featuredPost.date}</time>
                     {featuredPost.readingTime && (
@@ -113,13 +113,13 @@ export default async function BlogPage() {
                       </>
                     )}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#2D766F] transition-colors">
+                  <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#7A8F87] transition-colors">
                     {featuredPost.title}
                   </h2>
                   <p className="text-muted-foreground mb-6 line-clamp-3">
                     {featuredPost.excerpt}
                   </p>
-                  <span className="text-[#2D766F] font-medium group-hover:underline">
+                  <span className="text-[#7A8F87] font-medium group-hover:underline">
                     Read Article &rarr;
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export default async function BlogPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#2D766F] transition-all"
+                className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#7A8F87] transition-all"
               >
                 {post.featureImage ? (
                   <div className="relative aspect-video bg-[#f5ebe0] overflow-hidden">
@@ -159,7 +159,7 @@ export default async function BlogPage() {
                 )}
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
-                    <span className="text-[#2D766F]">{post.category}</span>
+                    <span className="text-[#7A8F87]">{post.category}</span>
                     <span>&middot;</span>
                     <time>{post.date}</time>
                     {post.readingTime && (
@@ -169,7 +169,7 @@ export default async function BlogPage() {
                       </>
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#2D766F] transition-colors line-clamp-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                     {post.title}
                   </h3>
                   <p className="text-muted-foreground text-sm line-clamp-3">
@@ -193,7 +193,7 @@ export default async function BlogPage() {
             href="/contact"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
+            className="inline-block bg-[#7A8F87] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

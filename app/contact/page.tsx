@@ -45,7 +45,7 @@ export default function ContactPage() {
                   href={inquiryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#2D766F] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a] sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#7A8F87] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a] sm:w-auto"
                 >
                   Open Inquiry Form
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -60,11 +60,11 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Phone className="h-5 w-5 text-[#2D766F]" />
+                    <Phone className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:070-2194-0199" className="text-muted-foreground hover:text-[#2D766F] transition-colors">
+                    <a href="tel:070-2194-0199" className="text-muted-foreground hover:text-[#7A8F87] transition-colors">
                       070-2194-0199
                     </a>
                   </div>
@@ -72,11 +72,11 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Mail className="h-5 w-5 text-[#2D766F]" />
+                    <Mail className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#2D766F] transition-colors">
+                    <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#7A8F87] transition-colors">
                       pitonne.am@gmail.com
                     </a>
                   </div>
@@ -84,7 +84,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <MapPin className="h-5 w-5 text-[#2D766F]" />
+                    <MapPin className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Location</h3>
@@ -97,7 +97,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Clock className="h-5 w-5 text-[#2D766F]" />
+                    <Clock className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Hours</h3>

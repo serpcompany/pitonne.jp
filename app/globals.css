@@ -195,13 +195,13 @@
   }
 
   .blog-prose a {
-    color: #2D766F;
+    color: #7A8F87;
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }
 
   .blog-prose blockquote {
-    border-left: 3px solid #2D766F;
+    border-left: 3px solid #7A8F87;
     margin: 2rem 0;
     padding-left: 1.25rem;
     color: var(--foreground);

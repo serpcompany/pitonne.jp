@@ -60,7 +60,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
           <div className="flex flex-wrap items-center gap-3">
             <Link 
               href="/blog"
-              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#2D766F] hover:text-[#2D766F] transition-colors"
+              className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#7A8F87] hover:text-[#7A8F87] transition-colors"
             >
               All
             </Link>
@@ -70,8 +70,8 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                 href={`/blog/category/${cat.slug}`}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
                   cat.slug === categorySlug 
-                    ? "bg-[#2D766F] text-white"
-                    : "border border-border hover:border-[#2D766F] hover:text-[#2D766F]"
+                    ? "bg-[#7A8F87] text-white"
+                    : "border border-border hover:border-[#7A8F87] hover:text-[#7A8F87]"
                 }`}
               >
                 {cat.name}
@@ -90,7 +90,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#2D766F] transition-all"
+                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#7A8F87] transition-all"
                 >
                   <div className="aspect-video overflow-hidden bg-[#f5ebe0]">
                     {post.featureImage ? (
@@ -117,7 +117,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
                       <span>&middot;</span>
                       <span>{post.readingTime} min read</span>
                     </div>
-                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#2D766F] transition-colors line-clamp-2">
+                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                       {post.title}
                     </h2>
                     <p className="text-muted-foreground text-sm line-clamp-3">
@@ -135,7 +135,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
               <p className="text-muted-foreground mb-6">No articles found in this category yet.</p>
               <Link 
                 href="/blog"
-                className="text-[#2D766F] hover:underline"
+                className="text-[#7A8F87] hover:underline"
               >
                 View all articles
               </Link>
@@ -157,7 +157,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
             href="/contact"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#2D766F] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
+            className="inline-block bg-[#7A8F87] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
           >
             Contact Us
           </Link>

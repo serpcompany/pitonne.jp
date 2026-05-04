@@ -15,6 +15,6 @@ describe("blog index page", () => {
 
     const featuredImage = screen.getByAltText(getAllBlogPosts()[0].title)
     expect(featuredImage).toHaveAttribute("fetchpriority", "high")
-    expect(screen.getByRole("link", { name: "All" })).toHaveClass("bg-[#2D766F]")
+    expect(screen.getByRole("link", { name: "All" })).toHaveClass("bg-[#7A8F87]")
   })
 })
