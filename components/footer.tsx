@@ -43,9 +43,7 @@ const quickLinks = [
   { name: "Blog", href: canonicalRoutes.blog },
   { name: "FAQs", href: canonicalRoutes.faqs },
   { name: "Contact", href: canonicalRoutes.contact },
-  { name: "Privacy Policy", href: canonicalRoutes.privacyPolicy },
-  { name: "Terms of Use", href: canonicalRoutes.termsConditions },
-  { name: "Medical Disclaimer", href: canonicalRoutes.medicalDisclaimer },
+  { name: "Legal", href: canonicalRoutes.legal },
 ]
 
 const areasServed = [

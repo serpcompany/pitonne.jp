@@ -50,7 +50,6 @@ faqs:
       recommendations. Some clients choose it before travel or after sun
       exposure, while others incorporate it into a regular wellness routine.
 relatedServices:
-  - iv-therapy
   - immune-boost-iv-therapy
   - iv-vitamin-therapy
 ---

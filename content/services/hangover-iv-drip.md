@@ -50,7 +50,6 @@ faqs:
       provider guidance after treatment. A hangover IV can be part of recovery
       support, but rest, hydration, and follow-up instructions still matter.
 relatedServices:
-  - iv-therapy
   - energy-fatigue-recovery-iv
   - iv-vitamin-therapy
 ---
