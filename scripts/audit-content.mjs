@@ -26,20 +26,18 @@ const expectedBusinessInfo = [
   "pitonne.am@gmail.com",
   "106-0031 Tokyo, Minato City, Nishiazabu",
   "3 Chome−17−22 モダンフォルム西麻布 1階",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-  "10:00 - 19:00",
   "https://ssv.onemorehand.jp/hic_pitonne/",
 ]
 
 for (const value of expectedBusinessInfo) {
   if (!footer.includes(value) && !layout.includes(value) && !siteData.includes(value)) {
     failures.push(`Missing Sheet business info in footer/layout: ${value}`)
+  }
+}
+
+for (const value of ["businessHours", "formatBusinessHours", "hours: businessHours.map"]) {
+  if (!siteData.includes(value)) {
+    failures.push(`Business hours must be derived from the shared source in lib/data/site.ts: missing ${value}`)
   }
 }
 
