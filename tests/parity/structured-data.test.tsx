@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { ServiceDetailTemplate } from "@/components/services/service-detail-template"
 import { getBlogPostBySlug, getBlogPostsByCategory, getAllBlogPosts } from "@/lib/data/blog-posts"
+import { businessHours, isOpenBusinessHours } from "@/lib/data/site"
 import { getService, getServicesFromSlugs } from "@/lib/data/services"
 
 vi.mock("next/font/google", () => ({
@@ -42,6 +43,22 @@ describe("structured data parity", () => {
           url: "https://pitonne.jp/",
         }),
       ]),
+    )
+
+    const businessSchema = schemas.find((schema) => schema["@id"] === "https://pitonne.jp/#business")
+    expect(businessSchema).toBeDefined()
+    expect(businessSchema.openingHoursSpecification).toEqual(
+      businessHours.filter(isOpenBusinessHours).map((item) => ({
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: item.day,
+        opens: item.opens,
+        closes: item.closes,
+      })),
+    )
+    expect(businessSchema.openingHoursSpecification).not.toContainEqual(
+      expect.objectContaining({
+        dayOfWeek: "Sunday",
+      }),
     )
   })
 

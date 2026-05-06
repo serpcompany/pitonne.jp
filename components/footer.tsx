@@ -156,7 +156,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Open Hours</h3>
             <ul className="space-y-1.5">
               {businessInfo.hours.map((item) => (
-                <li key={item.day} className="flex justify-between text-sm">
+                <li key={item.day} className="grid grid-cols-[5.75rem_auto] gap-x-3 text-sm">
                   <span className="text-white/70">{item.day}</span>
                   <span className={item.hours === "Closed" ? "text-white/70" : "text-white/90"}>
                     {item.hours}
