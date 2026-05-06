@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import ContactPage from "@/app/contact/page"
+import { businessInfo } from "@/lib/data/site"
 
 const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
 
@@ -12,6 +13,9 @@ describe("contact page", () => {
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /send message/i })).not.toBeInTheDocument()
     expect(screen.queryByText("Nishi-Azabu, Tokyo")).not.toBeInTheDocument()
-    expect(screen.getByText("Tuesday: 10:00 - 19:00")).toBeInTheDocument()
+
+    const saturdayHours = businessInfo.hours.find((item) => item.day === "Saturday")
+    expect(saturdayHours).toBeDefined()
+    expect(screen.getByText(`${saturdayHours!.day}: ${saturdayHours!.hours}`)).toBeInTheDocument()
   })
 })

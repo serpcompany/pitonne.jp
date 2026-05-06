@@ -1,4 +1,4 @@
-import { businessInfo } from "@/lib/data/site"
+import { businessHours, businessInfo, isOpenBusinessHours } from "@/lib/data/site"
 import type { BlogPost } from "@/lib/data/blog-posts"
 import type { Service } from "@/lib/data/services"
 import { absoluteUrl, canonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
@@ -24,11 +24,11 @@ export function businessJsonLd() {
       postalCode: "106-0031",
       addressCountry: "JP",
     },
-    openingHoursSpecification: businessInfo.hours.map((item) => ({
+    openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map((item) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: item.day,
-      opens: item.hours === "Closed" ? "00:00" : item.hours.split(" - ")[0],
-      closes: item.hours === "Closed" ? "00:00" : item.hours.split(" - ")[1],
+      opens: item.opens,
+      closes: item.closes,
     })),
   }
 }
