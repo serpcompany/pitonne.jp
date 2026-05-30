@@ -15,6 +15,7 @@ describe("header navigation parity", () => {
 
     expect(headerSource).toContain('{ name: "About", href: canonicalRoutes.about, hasDropdown: "about" }')
     expect(primaryNavigation).not.toContain('{ name: "FAQs", href: canonicalRoutes.faqs }')
+    expect(headerSource).toContain('{ name: "Videos", href: canonicalRoutes.videos }')
     expect(headerSource).toContain('{ name: "FAQs", href: canonicalRoutes.faqs }')
     expect(headerSource).toContain('item.hasDropdown === "about"')
     expect(headerSource).toContain('mobileExpandedSection === "about"')

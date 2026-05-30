@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
 import { getAllAreas, wards } from "@/lib/data/areas"
 import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
+import { pitonneVideos } from "@/lib/data/videos"
 import { services } from "@/lib/data/services"
 
 const SITE_URL = "https://pitonne.jp"
@@ -43,6 +44,7 @@ describe("SEO parity", () => {
     expect(urls).toContain(`${SITE_URL}/services/`)
     expect(urls).toContain(`${SITE_URL}/contact/`)
     expect(urls).toContain(`${SITE_URL}/blog/`)
+    expect(urls).toContain(`${SITE_URL}/videos/`)
     expect(urls).toContain(`${SITE_URL}/legal/`)
     expect(urls).toContain(`${SITE_URL}/legal/privacy-policy/`)
     expect(urls).toContain(`${SITE_URL}/legal/terms-conditions/`)
@@ -58,6 +60,10 @@ describe("SEO parity", () => {
 
     for (const category of getAllCategories()) {
       expect(urls).toContain(`${SITE_URL}/blog/category/${category.slug}/`)
+    }
+
+    for (const video of pitonneVideos) {
+      expect(urls).toContain(`${SITE_URL}${video.watchPath}`)
     }
 
     for (const ward of wards) {
@@ -86,7 +92,7 @@ describe("SEO parity", () => {
         userAgent: "*",
         allow: "/",
       },
-      sitemap: `${SITE_URL}/sitemap.xml`,
+      sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`],
     })
 
     const preview = withVercelEnv("preview", () => robots())
@@ -95,7 +101,7 @@ describe("SEO parity", () => {
         userAgent: "*",
         disallow: "/",
       },
-      sitemap: `${SITE_URL}/sitemap.xml`,
+      sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`],
     })
   })
 
