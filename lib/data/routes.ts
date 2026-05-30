@@ -10,6 +10,7 @@ export const canonicalRoutes = {
   bloodTests: "/services/blood-tests/",
   areasServed: "/areas-served/",
   blog: "/blog/",
+  videos: "/videos/",
   faqs: "/faqs/",
   contact: "/contact/",
   legal: "/legal/",

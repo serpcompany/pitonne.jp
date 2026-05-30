@@ -1,31 +1,26 @@
 ---
 slug: exosome-iv-therapy-risks-precautions
-title: >-
-  What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to
-  Review Before Treatment
-excerpt: >-
-  When considering Exosome IV therapy, many patients naturally focus on what the
-  treatment is and how it works. Just as important, however, is understanding
-  how to think about safety, what precautions should be reviewed in advance, and
-  wha...
-publishedAt: '2026-05-03'
+title: 'What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment'
+excerpt: 'When considering Exosome IV therapy, many patients naturally focus on what the treatment is and how it works. Just as important, however, is understanding how to think about safety, what precautions should be...'
+publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 16
+readingTime: 6
 featured: false
+featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
 relatedServiceSlugs:
-  - exosome-iv-drip
-  - iv-therapy
+  - 'exosome-iv-drip'
+  - 'iv-therapy'
 tags:
-  - exosome iv
-  - safety
-  - risks
-  - medical screening
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+  - 'iv therapy'
+  - 'allergies'
+  - 'safety'
+  - 'tokyo'
 ---
+
 # What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment
 
 When considering Exosome IV therapy, many patients naturally focus on what the treatment is and how it works. Just as important, however, is understanding how to think about safety, what precautions should be reviewed in advance, and what questions are worth asking before proceeding.
@@ -34,7 +29,7 @@ At Pitonne | Stem Cell & IV Therapy, we believe this kind of treatment should be
 
 ## An Important Starting Point
 
-In its notice dated **July 31, 2024**, Japan's Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or stem cell conditioned media-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
+In its notice dated **July 31, 2024**, Japan’s Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or stem cell conditioned media-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
 
 This does not mean that every treatment should automatically be viewed with alarm. It does mean that patients should be especially careful to understand **what is being used, how it is managed, and what medical explanation is provided** before treatment.
 
@@ -75,7 +70,7 @@ Patients should expect review of points such as:
 * Current physical condition  
 * Fever or signs of infection
 
-A treatment should not be approached as something given automatically to everyone in the same way. A responsible clinic should be able to adjust the plan, postpone treatment, or decline treatment when necessary based on the patient's condition.
+A treatment should not be approached as something given automatically to everyone in the same way. A responsible clinic should be able to adjust the plan, postpone treatment, or decline treatment when necessary based on the patient’s condition.
 
 ## Response Can Vary From Person to Person
 
@@ -95,14 +90,14 @@ This kind of medical structure may not be the most visible part of a treatment d
 
 Exosome IV therapy and stem cell conditioned media IV are generally offered in Japan as **private medical care**.
 
-Under Japan's medical advertising guidance, when unapproved products or treatments are used in private care, clinics are expected to explain points such as:
+Under Japan’s medical advertising guidance, when unapproved products or treatments are used in private care, clinics are expected to explain points such as:
 
 * That the treatment is unapproved in Japan  
 * How the material is obtained  
 * Whether approved alternatives exist in Japan  
 * That not all serious risks may be fully established if information remains limited
 
-Patients should also understand that Japan's adverse drug relief system is designed around **approved pharmaceutical products**. Because exosome-related products are not approved pharmaceuticals in this context, it is important to confirm in advance how the clinic explains responsibility, emergency response, and follow-up support.
+Patients should also understand that Japan’s adverse drug relief system is designed around **approved pharmaceutical products**. Because exosome-related products are not approved pharmaceuticals in this context, it is important to confirm in advance how the clinic explains responsibility, emergency response, and follow-up support.
 
 ## What to Review Before Booking
 
@@ -138,6 +133,6 @@ It is important to confirm that the clinic explains the treatment clearly, inclu
 
 ## Summary
 
-When considering Exosome IV therapy, it is important to look beyond the appeal of the treatment itself and also understand the broader safety picture. That includes the general risks of IV treatment, the careful handling of human-derived materials, the importance of medical screening, and the clinic's readiness to respond if urgent care is needed.
+When considering Exosome IV therapy, it is important to look beyond the appeal of the treatment itself and also understand the broader safety picture. That includes the general risks of IV treatment, the careful handling of human-derived materials, the importance of medical screening, and the clinic’s readiness to respond if urgent care is needed.
 
 At Pitonne | Stem Cell & IV Therapy, we believe patients should be able to make these decisions with clarity and confidence. That is why we place emphasis on careful explanation, thoughtful screening, and medically guided care in both in-clinic and mobile settings. If you would like to discuss whether treatment may be appropriate for you, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)

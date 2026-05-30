@@ -28,6 +28,7 @@ describe("footer and CTA data parity", () => {
   it("links to the legal index from the footer instead of individual legal pages", () => {
     const footerSource = fs.readFileSync(path.join(process.cwd(), "components/footer.tsx"), "utf8")
 
+    expect(footerSource).toContain('{ name: "Videos", href: canonicalRoutes.videos }')
     expect(footerSource).toContain('{ name: "Legal", href: canonicalRoutes.legal }')
     expect(footerSource).not.toContain('{ name: "Privacy Policy", href: canonicalRoutes.privacyPolicy }')
     expect(footerSource).not.toContain('{ name: "Terms of Use", href: canonicalRoutes.termsConditions }')
@@ -38,5 +39,14 @@ describe("footer and CTA data parity", () => {
     render(React.createElement(Footer))
 
     expect(screen.queryByRole("link", { name: businessInfo.phone })).not.toBeInTheDocument()
+  })
+
+  it("links Instagram to the pitonne_nurse profile", () => {
+    render(React.createElement(Footer))
+
+    expect(screen.getByLabelText("Instagram")).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/pitonne_nurse",
+    )
   })
 })
