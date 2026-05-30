@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest"
+import { render, screen } from "@testing-library/react"
+import React from "react"
+import { Footer } from "@/components/footer"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { businessHours, businessInfo, formatBusinessHours } from "@/lib/data/site"
 import fs from "node:fs"
@@ -29,5 +32,11 @@ describe("footer and CTA data parity", () => {
     expect(footerSource).not.toContain('{ name: "Privacy Policy", href: canonicalRoutes.privacyPolicy }')
     expect(footerSource).not.toContain('{ name: "Terms of Use", href: canonicalRoutes.termsConditions }')
     expect(footerSource).not.toContain('{ name: "Medical Disclaimer", href: canonicalRoutes.medicalDisclaimer }')
+  })
+
+  it("does not render a phone number in the footer", () => {
+    render(React.createElement(Footer))
+
+    expect(screen.queryByRole("link", { name: businessInfo.phone })).not.toBeInTheDocument()
   })
 })
