@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { getAllAreas, wards } from "@/lib/data/areas"
 import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
+import { pitonneVideos } from "@/lib/data/videos"
 import { services } from "@/lib/data/services"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { canonicalUrl } from "@/lib/seo"
@@ -14,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     canonicalRoutes.blog,
     canonicalRoutes.faqs,
     canonicalRoutes.areasServed,
+    canonicalRoutes.videos,
     canonicalRoutes.legal,
     canonicalRoutes.privacyPolicy,
     canonicalRoutes.termsConditions,
@@ -24,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticPaths,
     ...services.map((service) => service.canonicalPath),
     ...blogPosts.map((post) => `/blog/${post.slug}/`),
+    ...pitonneVideos.map((video) => video.watchPath),
     ...getAllCategories().map((category) => `/blog/category/${category.slug}/`),
     ...wards.map((ward) => `/areas-served/${ward.slug}/`),
     ...getAllAreas().map(({ ward, area }) => `/areas-served/${ward.slug}/${area.slug}/`),

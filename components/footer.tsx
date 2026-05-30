@@ -41,6 +41,7 @@ const quickLinks = [
   { name: "About", href: canonicalRoutes.about },
   { name: "Services", href: canonicalRoutes.services },
   { name: "Blog", href: canonicalRoutes.blog },
+  { name: "Videos", href: canonicalRoutes.videos },
   { name: "FAQs", href: canonicalRoutes.faqs },
   { name: "Contact", href: canonicalRoutes.contact },
   { name: "Legal", href: canonicalRoutes.legal },
@@ -61,7 +62,7 @@ const areasServed = [
 const socialLinks = [
   { name: "Google Maps", href: "https://maps.app.goo.gl/WjMLKSkNw7t2oc5T6", icon: MapPin },
   { name: "YouTube", href: "https://www.youtube.com/@PitonneStemCellIVTherapy", icon: Youtube },
-  { name: "Instagram", href: "https://www.instagram.com/pitonne.am", icon: Instagram },
+  { name: "Instagram", href: "https://www.instagram.com/pitonne_nurse", icon: Instagram },
   { name: "Facebook", href: "https://www.facebook.com/PitonneStemCellIVTherapy/", icon: Facebook },
   { name: "Threads", href: "https://www.threads.com/@pitonne.am", icon: ThreadsIcon },
   { name: "LinkedIn", href: "https://www.linkedin.com/company/pitonnestemcellivtherapy/", icon: Linkedin },
