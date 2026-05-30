@@ -6,6 +6,11 @@ import { businessInfo } from "@/lib/data/site"
 
 const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
 
+const phoneLinks = [
+  { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
+  { label: "U.S.", number: "+1 786 814 0323", href: "tel:+17868140323" },
+]
+
 export const metadata: Metadata = {
   title: "Contact Pitonne",
   description: "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
@@ -64,9 +69,17 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:070-2194-0199" className="text-muted-foreground hover:text-[#7A8F87] transition-colors">
-                      070-2194-0199
-                    </a>
+                    <div className="space-y-1">
+                      {phoneLinks.map((phone) => (
+                        <a
+                          key={phone.label}
+                          href={phone.href}
+                          className="block text-muted-foreground hover:text-[#7A8F87] transition-colors"
+                        >
+                          <span className="font-medium text-foreground">{phone.label}:</span> {phone.number}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
 

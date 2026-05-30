@@ -21,6 +21,11 @@ const aboutMenu = {
   ],
 }
 
+const phoneLinks = [
+  { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
+  { label: "U.S.", number: "+1 786 814 0323", href: "tel:+17868140323" },
+]
+
 const navigation = [
   { name: "Home", href: canonicalRoutes.home },
   { name: "About", href: canonicalRoutes.about, hasDropdown: "about" },
@@ -170,10 +175,40 @@ export function Header() {
 
         {/* Phone & CTA */}
         <div className="hidden lg:flex items-center gap-6">
-          <a href={`tel:${businessInfo.phone}`} className="flex items-center gap-2 text-sm font-medium">
-            <Phone className="h-4 w-4" />
-            {businessInfo.phone}
-          </a>
+          <div
+            className="relative"
+            onMouseEnter={() => setActiveDropdown("phone")}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <button
+              type="button"
+              className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
+            >
+              <Phone className="h-4 w-4" />
+              Phone
+              <ChevronDown className="h-4 w-4" />
+            </button>
+
+            {activeDropdown === "phone" && (
+              <div className="absolute top-full right-0 pt-4 w-56">
+                <div className="rounded-lg border border-border bg-white p-3 shadow-xl">
+                  <ul className="space-y-1">
+                    {phoneLinks.map((phone) => (
+                      <li key={phone.label}>
+                        <a
+                          href={phone.href}
+                          className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-[#7A8F87]"
+                        >
+                          <span className="font-medium text-foreground">{phone.label}</span>
+                          <span className="block">{phone.number}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
           <Link 
             href={canonicalRoutes.contact}
             target="_blank"
@@ -308,10 +343,14 @@ export function Header() {
             ))}
             
             <div className="pt-4 border-t border-border">
-              <a href="tel:070-2194-0199" className="flex items-center gap-2 text-sm font-medium mb-3">
-                <Phone className="h-4 w-4" />
-                070-2194-0199
-              </a>
+              <div className="mb-3 space-y-2">
+                {phoneLinks.map((phone) => (
+                  <a key={phone.label} href={phone.href} className="flex items-center gap-2 text-sm font-medium">
+                    <Phone className="h-4 w-4" />
+                    <span>{phone.label}: {phone.number}</span>
+                  </a>
+                ))}
+              </div>
               <Link 
                 href="/contact"
                 target="_blank"

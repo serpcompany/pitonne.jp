@@ -18,4 +18,17 @@ describe("contact page", () => {
     expect(saturdayHours).toBeDefined()
     expect(screen.getByText(`${saturdayHours!.day}: ${saturdayHours!.hours}`)).toBeInTheDocument()
   })
+
+  it("renders Japan and U.S. phone numbers as callable links", () => {
+    render(<ContactPage />)
+
+    expect(screen.getByRole("link", { name: "Japan: 070-2194-0199" })).toHaveAttribute(
+      "href",
+      "tel:070-2194-0199",
+    )
+    expect(screen.getByRole("link", { name: "U.S.: +1 786 814 0323" })).toHaveAttribute(
+      "href",
+      "tel:+17868140323",
+    )
+  })
 })

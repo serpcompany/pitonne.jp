@@ -121,11 +121,6 @@ export function Footer() {
             <address className="text-sm text-white/70 not-italic space-y-1">
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
-              <p className="pt-2">
-                <a href={`tel:${businessInfo.phone}`} className="hover:text-white transition-colors">
-                  {businessInfo.phone}
-                </a>
-              </p>
               <p>
                 <a href={`mailto:${businessInfo.email}`} className="hover:text-white transition-colors">
                   {businessInfo.email}
