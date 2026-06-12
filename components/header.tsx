@@ -29,7 +29,6 @@ const navigation = [
   { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
   { name: "Blog", href: canonicalRoutes.blog },
   { name: "Videos", href: canonicalRoutes.videos },
-  { name: "Contact", href: canonicalRoutes.contact },
 ]
 
 export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCategory[] }) {
