@@ -6,11 +6,11 @@ const root = process.cwd()
 
 describe("brand color", () => {
   it("keeps the Pitonne green unchanged", () => {
-    const header = readFileSync(join(root, "components/header.tsx"), "utf8")
-    const blogIndex = readFileSync(join(root, "app/blog/page.tsx"), "utf8")
+    const contactButton = readFileSync(join(root, "components/shared/contact-button.tsx"), "utf8")
+    const bookingButton = readFileSync(join(root, "components/shared/booking-button.tsx"), "utf8")
 
-    expect(header).toContain("bg-[#7A8F87]")
-    expect(blogIndex).toContain("bg-[#7A8F87]")
+    expect(contactButton).toContain("bg-[#7A8F87]")
+    expect(bookingButton).toContain("bg-[#7A8F87]")
   })
 
   it("does not fail Lighthouse on the brand color contrast audit", () => {

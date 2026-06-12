@@ -72,7 +72,6 @@ faqs:
       results and advise on any recommended follow-up, which may include
       repeat testing or referral for further evaluation.
 relatedServices:
-  - blood-tests
   - hormone-blood-testing
   - nutrition-blood-testing
   - iv-vitamin-therapy

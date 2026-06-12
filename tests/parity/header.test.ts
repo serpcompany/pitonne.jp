@@ -4,6 +4,16 @@ import { fireEvent, render, screen } from "@testing-library/react"
 import React from "react"
 import { describe, expect, it } from "vitest"
 import { Header } from "@/components/header"
+import { getServiceCategorySections } from "@/lib/data/services"
+
+const serviceNavigation = getServiceCategorySections().map((section) => ({
+  name: section.title,
+  href: section.href,
+  items: section.services.map((service) => ({
+    name: service.name,
+    href: service.canonicalPath,
+  })),
+}))
 
 describe("header navigation parity", () => {
   it("keeps FAQs under the About dropdown instead of primary navigation", () => {
@@ -36,7 +46,7 @@ describe("header navigation parity", () => {
   })
 
   it("keeps mobile dropdown sections expandable with phone links in the menu", () => {
-    render(React.createElement(Header))
+    render(React.createElement(Header, { serviceNavigation }))
 
     fireEvent.click(screen.getByRole("button", { name: "Toggle menu" }))
 

@@ -64,7 +64,6 @@ faqs:
       testing offers more flexibility in test selection and a higher level of
       privacy and convenience.
 relatedServices:
-  - blood-tests
   - hormone-blood-testing
   - tumor-marker-blood-testing
   - iv-vitamin-therapy
