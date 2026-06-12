@@ -42,10 +42,10 @@ Feeling low on energy can sound vague, but it is something many people recognize
 Contributing factors may include:
 
 * Poor sleep or reduced sleep quality  
-* Dehydration  
+* [Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Irregular eating or nutritional imbalance  
 * Ongoing stress  
-* Alcohol intake  
+* [Alcohol intake](/blog/iv-therapy-for-hangover-in-tokyo/)  
 * Travel and time zone disruption  
 * Increased training load  
 * A generally irregular routine
@@ -102,7 +102,7 @@ That may include patients who want to think about:
 * Beauty and wellness together  
 * Day-to-day performance during demanding periods
 
-For patients who want to think more broadly about full-body balance and recovery support, we may also discuss **Exosome IV therapy** as part of the conversation. At Pitonne, this is positioned not as a promise of instant energy, but as one option within a more intentional approach to supporting the body.
+For patients who want to think more broadly about full-body balance and recovery support, we may also discuss **[Exosome IV therapy](/blog/stem-cell-therapy-vs-exosome-iv-therapy/)** as part of the conversation. At Pitonne, this is positioned not as a promise of instant energy, but as one option within a more intentional approach to supporting the body.
 
 ## Sometimes Low Energy Needs More Than Supportive IV Care
 
@@ -170,4 +170,4 @@ When you feel low on energy, IV therapy is best understood as **supportive care 
 
 At Pitonne, we approach low energy and physical depletion with this broader perspective in mind. Whether through hydration IVs, vitamin-based IV support, or conversations that also include Exosome IV therapy, the goal is not to overpromise, but to help patients think more carefully about how to support their body well.
 
-If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

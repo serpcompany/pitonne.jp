@@ -30,7 +30,7 @@ At Pitonne, the better framing is that IV therapy for hangover may help support 
 
 ## What People Usually Mean by "IV Therapy for Hangover"
 
-Most people searching this phrase are dealing with a mix of dehydration, headache, nausea, fatigue, and that washed-out feeling that can follow a night of drinking. They are usually not asking for a complex medical intervention. They are asking whether hydration support may help them recover more comfortably.
+Most people searching this phrase are dealing with a mix of [dehydration](/blog/iv-therapy-for-dehydration/), headache, nausea, [fatigue](/blog/iv-therapy-for-fatigue/), and that washed-out feeling that can follow a night of drinking. They are usually not asking for a complex medical intervention. They are asking whether hydration support may help them recover more comfortably.
 
 That is a fair question, but the answer depends on what is actually happening. A mild to moderate hangover is very different from repeated vomiting, severe confusion, trouble staying awake, or breathing problems. The first may fit a wellness support conversation. The second needs urgent care, not a wellness appointment.
 

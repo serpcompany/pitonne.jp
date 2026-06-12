@@ -101,7 +101,7 @@ Patients often ask about IV care because they feel:
 * Concerned with both beauty and wellness  
 * In need of support for daily performance and recovery
 
-For these patients, Exosome IV therapy and vitamin-based IV support may be part of a broader conversation about how to feel better physically and function more comfortably, not simply how to chase a lower number on the scale.
+For these patients, [Exosome IV therapy](/blog/stem-cell-therapy-vs-exosome-iv-therapy/) and vitamin-based IV support may be part of a broader conversation about how to feel better physically and function more comfortably, not simply how to chase a lower number on the scale.
 
 The point is not to use IV therapy as a shortcut to weight loss. The point is to consider it as one possible tool in supporting the body more thoughtfully.
 
@@ -157,7 +157,7 @@ At Pitonne, we do not believe in presenting IV therapy as a glamorous shortcut f
 
 Weight management begins with daily habits. Water, vitamins, wellness-oriented IV support, and medical guidance may all have a place, but none of them replace the need to understand food, routine, and the reasons weight changes in the first place.
 
-That is why Pitonne approaches this topic with care. If you are looking for a calm, private, medically guided conversation in Tokyo about IV therapy, condition support, and realistic wellness care, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)  
+That is why Pitonne approaches this topic with care. If you are looking for a calm, private, medically guided conversation in Tokyo about IV therapy, condition support, and realistic wellness care, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)  
 If you would also like to learn more about food, nutrition, and sustainable body care, we encourage you to explore [Ouchi Nurse no Oshaberi Karte](https://open.spotify.com/show/7c75dDPlIQ2qL5TKEoWb7P?si=9kRgvJtvSDamHjQrfgJRnA).
 
 **References**

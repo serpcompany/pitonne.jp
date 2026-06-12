@@ -54,10 +54,10 @@ At Pitonne, some patients ask about Exosome IV therapy not because they are look
 
 This may include people who:
 
-* Train frequently and feel slow to recover  
+* [Train frequently](/blog/iv-therapy-for-athletes-training-recovery/) and feel slow to recover  
 * Want to maintain day-to-day performance and condition  
 * Travel often and experience disruption in routine  
-* Struggle with hydration or nutritional consistency  
+* Struggle with [hydration](/blog/iv-therapy-for-dehydration-in-tokyo/) or nutritional consistency  
 * Feel not only sore, but generally physically depleted  
 * Want to think about recovery in a broader, whole-body way
 
@@ -154,4 +154,4 @@ When thinking about muscle recovery, Pitonne may recommend not only hydration IV
 
 That said, IV therapy is not the foundation of recovery on its own. Recovery still depends first on sleep, food, hydration, rest, and training balance. For patients with high training loads, ongoing fatigue, or a strong interest in maintaining daily performance, the more important question is not only how to recover a muscle, but how to support the body as a whole.
 
-If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

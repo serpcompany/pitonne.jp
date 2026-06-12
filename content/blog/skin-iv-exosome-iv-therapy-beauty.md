@@ -48,7 +48,7 @@ Factors such as the following often affect how someone looks and feels:
 * Stress  
 * Alcohol intake  
 * Travel and time zone disruption  
-* Physical fatigue  
+* [Physical fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/)  
 * An irregular routine
 
 For patients who are often busy, under-slept, traveling frequently, or struggling to stay consistent with food and hydration, beauty support often makes more sense when it includes attention to the body's internal condition as well.
@@ -61,7 +61,7 @@ For example:
 
 * Not drinking enough water consistently  
 * A schedule that makes proper meals difficult  
-* Repeated business dinners or social drinking  
+* Repeated business dinners or [social drinking](/blog/iv-therapy-for-hangover-in-tokyo/)  
 * Travel fatigue and disrupted routine  
 * Ongoing physical depletion  
 * A desire to feel more balanced before an important occasion
@@ -158,4 +158,4 @@ At Pitonne, beauty-focused IV therapy is not treated as an instant cosmetic shor
 
 For patients who want hydration plus vitamins and glutathione, **Skin IV** is often a natural fit. For patients thinking more broadly about anti-aging and whole-body condition, **Exosome IV therapy** may be especially appealing.
 
-If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

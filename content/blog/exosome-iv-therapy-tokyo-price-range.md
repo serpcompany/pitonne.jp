@@ -44,7 +44,7 @@ Price differences may reflect factors such as:
 * Differences in culture process and quality management  
 * Frozen storage versus freeze-dried preparation  
 * Whether consultation, examination, or administration fees are included  
-* Whether the service is clinic-based only or also available by mobile visit
+* Whether the service is clinic-based only or also available by [mobile visit](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
 
 For that reason, the important question is not only "How much does it cost?" but also "What exactly is that price for?"
 

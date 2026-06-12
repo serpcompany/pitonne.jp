@@ -33,7 +33,7 @@ In this article, we explain the basic concept of Exosome IV therapy, its relatio
 
 An Exosome IV Drip is generally presented as a private treatment in which a formulation containing substances related to materials obtained during the stem cell culture process is administered through an IV.
 
-Exosomes are often described as very small extracellular vesicles released by cells. At the same time, in actual medical settings and marketing materials, the word "exosome" is sometimes used in a way that overlaps with "stem cell conditioned media," which can make the terminology confusing.
+Exosomes are often described as very small extracellular vesicles released by cells. At the same time, in actual medical settings and marketing materials, the word "exosome" is sometimes used in a way that overlaps with "[stem cell conditioned media](/blog/stem-cell-therapy-vs-exosome-iv-therapy/)," which can make the terminology confusing.
 
 The important point is not to rely on the name alone, but to confirm what is actually being used, how the treatment is managed, and how it is explained medically before making a booking.
 
@@ -137,7 +137,7 @@ When comparing prices, it is important to check not only the number shown, but a
 
 ## Main Risks and Side Effects
 
-When considering private medical care, it is important to review possible risks and side effects, not only the expected appeal of the treatment.
+When considering private medical care, it is important to review possible [risks and side effects](/blog/exosome-iv-therapy-risks-precautions/), not only the expected appeal of the treatment.
 
 As with IV-based treatment in general, possible issues that may be explained include:
 

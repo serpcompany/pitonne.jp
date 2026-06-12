@@ -41,7 +41,7 @@ For people who train frequently, hydration and nutritional support are basic fou
 Patients sometimes ask about IV support when they are experiencing things such as:
 
 * Heavy training volume and lingering fatigue  
-* Difficulty staying fully hydrated  
+* [Difficulty staying fully hydrated](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Irregular eating patterns  
 * Travel or schedule disruption  
 * A need to support day-to-day performance and condition  
@@ -105,7 +105,7 @@ For athletes and serious trainees, high training volume can make condition manag
 
 At the same time, for anyone entering official competition, IV therapy requires special caution because anti-doping rules may apply to the IV method itself. That is why competitive athletes should always confirm the rules of their sport and event in advance, rather than assuming treatment timing is automatically acceptable.
 
-At Pitonne | Stem Cell & IV Therapy, we take these questions seriously and aim to guide patients with clarity and discretion. If you are looking for private, medically guided IV care in Tokyo for daily condition support, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+At Pitonne | Stem Cell & IV Therapy, we take these questions seriously and aim to guide patients with clarity and discretion. If you are looking for private, medically guided IV care in Tokyo for daily condition support, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
 
 **References**
 
