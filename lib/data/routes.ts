@@ -19,38 +19,15 @@ export const canonicalRoutes = {
   medicalDisclaimer: "/legal/disclaimer/",
 }
 
-export const serviceNavigation = [
-  {
-    name: "IV Therapy",
-    href: canonicalRoutes.ivTherapy,
-    items: [
-      { name: "Exosome IV Drip", href: "/services/exosome-iv-drip/" },
-      { name: "Hangover IV Drip", href: "/services/hangover-iv-drip/" },
-      { name: "Energy & Fatigue Recovery", href: "/services/energy-fatigue-recovery-iv/" },
-      { name: "Skin Brightening IV", href: "/services/skin-brightening-iv-drip/" },
-      { name: "Immune Boost IV", href: "/services/immune-boost-iv-therapy/" },
-      { name: "IV Vitamin Therapy", href: "/services/iv-vitamin-therapy/" },
-    ],
-  },
-  {
-    name: "Stem Cell Therapy",
-    href: canonicalRoutes.stemCellTherapy,
-    items: [{ name: "Stem Cell Nasal Spray", href: "/services/stem-cell-nasal-spray/" }],
-  },
-  {
-    name: "Medications",
-    href: canonicalRoutes.medication,
-    items: [
-      { name: "ED Medication", href: "/services/ed-medication/" },
-      { name: "AGA Medication", href: "/services/androgenetic-alopecia-medicine/" },
-    ],
-  },
-  {
-    name: "Blood Tests",
-    href: canonicalRoutes.bloodTests,
-    items: [{ name: "Blood Tests", href: "/services/blood-tests/" }],
-  },
-]
+// Type for service navigation used in header
+export type ServiceNavCategory = {
+  name: string
+  href: string
+  items: { name: string; href: string }[]
+}
+
+// serviceNavigation is generated server-side and passed to Header as a prop
+// This empty default is never used at runtime — the real data comes from layout.tsx
 
 export const areaNavigation = wards.map((ward) => ({
   name: ward.name,

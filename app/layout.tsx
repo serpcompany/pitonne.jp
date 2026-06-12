@@ -18,6 +18,7 @@ import {
   isProductionDeployment,
 } from '@/lib/seo'
 import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { getServiceCategorySections } from '@/lib/data/services'
 import './globals.css'
 
 const inter = Inter({ 
@@ -111,7 +112,14 @@ export default function RootLayout({
         )}
         <JsonLd data={businessJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
-        <Header />
+        <Header serviceNavigation={getServiceCategorySections().map((section) => ({
+          name: section.title,
+          href: section.href,
+          items: section.services.map((service) => ({
+            name: service.name,
+            href: service.canonicalPath,
+          })),
+        }))} />
         <main className="min-h-screen">{children}</main>
         <Footer />
         {process.env.NODE_ENV === 'production' && <Analytics />}

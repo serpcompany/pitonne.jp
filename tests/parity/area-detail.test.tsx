@@ -37,16 +37,13 @@ describe("area detail parity", () => {
     renderHirooAreaDetail()
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Stem Cell & IV Therapy in Hiroo, Minato, Tokyo" }),
+      screen.getByRole("heading", { level: 1, name: "IV Therapy, Stem Cells, Medications & Blood Testing in Hiroo, Minato, Tokyo" }),
     ).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Care Available" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "How To Get Started" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Local Access" })).toBeInTheDocument()
     expect(screen.getByTitle("Hiroo, Minato, Tokyo map")).toHaveAttribute("src", expect.stringContaining("output=embed"))
-    expect(screen.getByRole("heading", { name: "Contact Pitonne" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("href", "/contact")
-    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("target", "_blank")
-    expect(screen.getByRole("link", { name: "View Services" })).toHaveAttribute("href", "/services")
+    expect(screen.getByRole("link", { name: "Contact Pitonne" })).toHaveAttribute("href", "/contact")
     expect(screen.queryByRole("link", { name: /Call:/ })).not.toBeInTheDocument()
   })
 
@@ -75,7 +72,9 @@ describe("area detail parity", () => {
       ["Stem Cell Nasal Spray", "/services/stem-cell-nasal-spray"],
       ["ED Medication", "/services/ed-medication"],
       ["AGA Medication", "/services/androgenetic-alopecia-medicine"],
-      ["Blood Tests", "/services/blood-tests"],
+      ["Hormone Blood Testing", "/services/hormone-blood-testing"],
+      ["Nutrition Blood Testing", "/services/nutrition-blood-testing"],
+      ["Tumor Marker Blood Testing", "/services/tumor-marker-blood-testing"],
     ] as const
 
     for (const [name, href] of expectedServices) {

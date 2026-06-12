@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
+import { ContactButton } from "@/components/shared/contact-button"
 import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -80,14 +81,7 @@ export default function LegalPage() {
           <p className="text-[#666] mb-6">
             If you have any questions about our legal documents or policies, please contact us.
           </p>
-          <Link 
-            href="/contact" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#7A8F87] text-white px-8 py-4 rounded-full hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Us
-          </Link>
+          <ContactButton />
         </div>
       </section>
     </div>

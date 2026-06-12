@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { RelatedPitonneServices } from "@/components/blog/related-pitonne-services"
+import { ContactButton } from "@/components/shared/contact-button"
 
 export function BlogDiscoverySection({
   post,
@@ -14,14 +14,7 @@ export function BlogDiscoverySection({
         <p className="mb-5 text-muted-foreground">
           Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.
         </p>
-        <Link
-          href="/contact/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex rounded-md bg-[#7A8F87] px-6 py-3 text-sm font-medium text-white hover:bg-[#245f5a]"
-        >
-          Contact Us
-        </Link>
+        <ContactButton />
       </section>
     </>
   )

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
+import { ContactButton } from "@/components/shared/contact-button"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { canonicalUrl } from "@/lib/seo"
 
@@ -153,14 +154,7 @@ export default async function BlogCategoryPage({ params }: { params: Promise<{ c
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
             Our team is ready to help you learn more about {category.name.toLowerCase()} and how it might benefit you.
           </p>
-          <Link 
-            href="/contact"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#7A8F87] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Us
-          </Link>
+          <ContactButton />
         </div>
       </section>
     </div>

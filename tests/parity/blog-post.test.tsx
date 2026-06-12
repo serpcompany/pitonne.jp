@@ -4,6 +4,7 @@ import path from "node:path"
 import { describe, expect, it } from "vitest"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getServicesFromSlugs } from "@/lib/data/services"
 
 const migratedDraftSlugs = [
   "exosome-iv-tokyo-mobile-in-clinic-booking",
@@ -59,6 +60,7 @@ describe("blog post parity", () => {
           tags: post!.tags,
         }}
         relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter((candidate) => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
         latestPosts={getAllBlogPosts().filter((candidate) => candidate.slug !== post!.slug)}
       />,
     )
@@ -68,7 +70,7 @@ describe("blog post parity", () => {
     expect(renderedText.indexOf("Related Pitonne Services")).toBeGreaterThan(0)
     expect(renderedText.indexOf("Related Pitonne Services")).toBeLessThan(renderedText.indexOf("Final Takeaway"))
     expect(screen.getByRole("heading", { name: "Contact Pitonne" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("target", "_blank")
+    expect(screen.getByRole("link", { name: "Contact Us" })).toHaveAttribute("href", "/contact")
     expect(screen.queryByText("Share This")).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "X" })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Facebook" })).not.toBeInTheDocument()

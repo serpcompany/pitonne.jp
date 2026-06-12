@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
-import { getServicesFromSlugs, serviceCategorySections } from "@/lib/data/services"
+import { CareAvailableSection } from "@/components/areas/care-available-section"
+import { HowToGetStartedSection } from "@/components/areas/how-to-get-started-section"
+import { LatestPostsSection } from "@/components/shared/latest-posts-section"
 
 interface AreaPageProps {
   areaName: string
@@ -32,15 +34,6 @@ const faqs = (areaName: string, wardName: string) => [
   },
 ]
 
-const careAvailable = serviceCategorySections.map((section) => ({
-  title: section.title,
-  href: section.href,
-  items: getServicesFromSlugs(section.serviceSlugs).map((service) => ({
-    title: service.name,
-    href: service.canonicalPath,
-  })),
-}))
-
 export function AreaDetailPage({
   areaName,
   areaNameJa,
@@ -65,61 +58,12 @@ export function AreaDetailPage({
           { label: areaName },
         ]}
         eyebrow={`${areaNameJa} · ${wardName}, Tokyo`}
-        title={`Stem Cell & IV Therapy in ${areaName}, ${wardName}, Tokyo`}
+        title={`IV Therapy, Stem Cells, Medications & Blood Testing in ${areaName}, ${wardName}, Tokyo`}
         description={description}
       />
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <h2 className="mb-8 text-center font-serif text-3xl text-foreground">Care Available</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {careAvailable.map((group) => (
-                <div key={group.title} className="rounded-lg border border-border bg-card p-6">
-                  <h3 className="mb-4 font-semibold text-foreground">
-                    <Link href={group.href} className="transition-colors hover:text-[#7A8F87] hover:underline">
-                      {group.title}
-                    </Link>
-                  </h3>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    {group.items.map((item) => (
-                      <li key={item.title} className="flex items-start gap-2">
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7A8F87]" />
-                        <Link href={item.href} className="transition-colors hover:text-[#7A8F87] hover:underline">
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-card py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-4xl">
-            <h2 className="mb-8 text-center font-serif text-3xl text-foreground">How To Get Started</h2>
-            <div className="grid gap-6 md:grid-cols-3">
-              {["Send Request", "Clinical Review", "Care Planning"].map((step, index) => (
-                <div key={step} className="text-center">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#7A8F87] text-lg font-bold text-white">
-                    {index + 1}
-                  </div>
-                  <h3 className="mb-2 font-medium text-foreground">{step}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {index === 0 && "Share your location, timing, and the service you want to discuss."}
-                    {index === 1 && "The team reviews your goals, health history, and clinical suitability."}
-                    {index === 2 && "Pitonne confirms the appropriate next step for clinic or visit-based care."}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <CareAvailableSection />
+      <HowToGetStartedSection />
 
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -187,27 +131,7 @@ export function AreaDetailPage({
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="mb-6 font-serif text-3xl text-foreground">Contact Pitonne</h2>
-          <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
-            Contact Pitonne to ask about consultation options for {areaName}, {wardName}, Tokyo, or review all services before reaching out.
-          </p>
-          <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <Link
-              href="/contact/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-md bg-[#7A8F87] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a]"
-            >
-              Contact Us
-            </Link>
-            <Link href="/services/" className="inline-block rounded-md border border-foreground px-8 py-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground hover:text-background">
-              View Services
-            </Link>
-          </div>
-        </div>
-      </section>
+      <LatestPostsSection />
 
       {otherAreas.length > 0 && (
         <section className="border-t border-border py-12">

@@ -3,13 +3,11 @@ import { describe, expect, it } from "vitest"
 import ContactPage from "@/app/contact/page"
 import { businessInfo } from "@/lib/data/site"
 
-const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
-
 describe("contact page", () => {
-  it("links to the external inquiry form instead of rendering a local form", () => {
+  it("links to the external booking form instead of rendering a local form", () => {
     render(<ContactPage />)
 
-    expect(screen.getByRole("link", { name: "Open Inquiry Form" })).toHaveAttribute("href", inquiryUrl)
+    expect(screen.getByRole("link", { name: "Book Consultation" })).toHaveAttribute("href", businessInfo.bookingUrl)
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /send message/i })).not.toBeInTheDocument()
     expect(screen.queryByText("Nishi-Azabu, Tokyo")).not.toBeInTheDocument()

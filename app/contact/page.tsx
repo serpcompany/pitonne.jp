@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react"
+import { Phone, Mail, MapPin, Clock } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
+import { BookingButton } from "@/components/shared/booking-button"
 import { canonicalUrl } from "@/lib/seo"
 import { businessInfo } from "@/lib/data/site"
-
-const inquiryUrl = "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
 
 const phoneLinks = [
   { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
@@ -46,15 +45,7 @@ export default function ContactPage() {
                 <p className="mb-6 text-muted-foreground">
                   Use Pitonne&apos;s secure inquiry form to request a consultation or ask questions about services.
                 </p>
-                <a
-                  href={inquiryUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#7A8F87] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a] sm:w-auto"
-                >
-                  Open Inquiry Form
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                </a>
+                <BookingButton className="w-full sm:w-auto" />
               </div>
             </div>
 

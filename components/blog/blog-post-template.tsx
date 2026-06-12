@@ -4,7 +4,9 @@ import remarkGfm from "remark-gfm"
 import { PageHero } from "@/components/shared/page-hero"
 import { JsonLd } from "@/components/shared/json-ld"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
+import { BlogSidebar } from "@/components/blog/blog-sidebar"
 import type { BlogPost } from "@/lib/data/blog-posts"
+import type { Service } from "@/lib/data/services"
 import { blogPostingJsonLd } from "@/lib/structured-data"
 
 export interface BlogPostViewModel {
@@ -83,10 +85,13 @@ function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
 
 export function BlogPostTemplate({
   post,
+  relatedPosts,
+  relatedServices,
   latestPosts,
 }: {
   post: BlogPostViewModel
   relatedPosts: BlogPost[]
+  relatedServices: Service[]
   latestPosts: BlogPost[]
 }) {
   return (
@@ -154,8 +159,10 @@ export function BlogPostTemplate({
       {post.featureImage && (
         <section className="bg-card">
           <div className="container mx-auto -mt-8 px-4">
-            <div className="mx-auto max-w-3xl">
-              <img src={post.featureImage} alt={post.title} className="max-h-[420px] w-full rounded-lg object-cover shadow-lg" />
+            <div className="mx-auto max-w-4xl lg:max-w-none lg:px-0">
+              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
+                <img src={post.featureImage} alt={post.title} className="max-h-[420px] w-full rounded-lg object-cover shadow-lg" />
+              </div>
             </div>
           </div>
         </section>
@@ -163,9 +170,13 @@ export function BlogPostTemplate({
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <article className="mx-auto max-w-3xl">
-            <BlogContent post={post} />
-          </article>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <article className="min-w-0">
+              <BlogContent post={post} />
+            </article>
+
+            <BlogSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} />
+          </div>
         </div>
       </section>
 

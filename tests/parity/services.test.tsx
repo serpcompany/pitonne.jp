@@ -80,7 +80,9 @@ describe("service page parity", () => {
 
     const bloodTestsSection = screen.getByTestId("service-section-blood-tests")
     expect(within(bloodTestsSection).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
-      "Blood Tests",
+      "Hormone Blood Testing",
+      "Nutrition Blood Testing",
+      "Tumor Marker Blood Testing",
     ])
     expect(screen.queryByRole("heading", { name: "Ready to Start Your Wellness Journey?" })).not.toBeInTheDocument()
   })
