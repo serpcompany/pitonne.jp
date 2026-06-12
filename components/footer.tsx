@@ -123,8 +123,13 @@ export function Footer() {
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
               <p>
-                <a href={`mailto:${businessInfo.email}`} className="hover:text-white transition-colors">
-                  {businessInfo.email}
+                <a href="tel:070-2194-0199" className="hover:text-white transition-colors">
+                  JP: {businessInfo.phone}
+                </a>
+              </p>
+              <p>
+                <a href="tel:+17868140323" className="hover:text-white transition-colors">
+                  US: +1 786 814 0323
                 </a>
               </p>
             </address>
