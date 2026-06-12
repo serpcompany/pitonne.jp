@@ -45,7 +45,17 @@ export default function ContactPage() {
                 <p className="mb-6 text-muted-foreground">
                   Use Pitonne&apos;s secure inquiry form to request a consultation or ask questions about services.
                 </p>
-                <BookingButton className="w-full sm:w-auto" />
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <BookingButton className="w-full sm:w-auto" />
+                  <a
+                    href="https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-md border border-[#7A8F87] px-8 py-3 text-sm font-medium text-[#7A8F87] transition-colors hover:bg-[#7A8F87] hover:text-white w-full sm:w-auto"
+                  >
+                    Send Message
+                  </a>
+                </div>
               </div>
             </div>
 
