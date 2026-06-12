@@ -1,7 +1,7 @@
 ---
 title: Blood Tests
 slug: blood-tests
-kind: leaf
+kind: parent
 category: blood-tests
 canonicalPath: /services/blood-tests/
 shortDescription: >-

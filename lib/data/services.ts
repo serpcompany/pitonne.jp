@@ -91,7 +91,7 @@ export const serviceCategorySections: ServiceCategorySection[] = [
     slug: "blood-tests",
     title: "Blood Tests",
     href: "/services/blood-tests/",
-    serviceSlugs: ["blood-tests"],
+    serviceSlugs: ["hormone-blood-testing"],
   },
 ]
 

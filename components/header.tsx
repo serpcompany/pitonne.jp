@@ -3,12 +3,8 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
-import { areaNavigation, canonicalRoutes, serviceNavigation } from "@/lib/data/routes"
+import { areaNavigation, canonicalRoutes, type ServiceNavCategory } from "@/lib/data/routes"
 import { businessInfo } from "@/lib/data/site"
-
-const servicesMenu = {
-  categories: serviceNavigation,
-}
 
 const areasMenu = {
   wards: areaNavigation,
@@ -36,7 +32,8 @@ const navigation = [
   { name: "Contact", href: canonicalRoutes.contact },
 ]
 
-export function Header() {
+export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCategory[] }) {
+  const servicesMenu = { categories: serviceNavigation }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
