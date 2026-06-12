@@ -12,6 +12,7 @@ author:
   role: Wellness Experts
 readingTime: 10
 featured: false
+featureImage: /images/content/sheet/blog/iv-therapy-for-nausea.jpg
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - hangover-iv-drip

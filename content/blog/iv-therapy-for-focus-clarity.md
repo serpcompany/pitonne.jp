@@ -12,6 +12,7 @@ author:
   role: Wellness Experts
 readingTime: 12
 featured: false
+featureImage: /images/content/sheet/blog/iv-therapy-for-focus-clarity.jpg
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv

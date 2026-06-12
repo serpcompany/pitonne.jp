@@ -12,6 +12,7 @@ author:
   role: Wellness Experts
 readingTime: 12
 featured: false
+featureImage: /images/content/sheet/blog/iv-therapy-for-stress.jpg
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - exosome-iv-drip
