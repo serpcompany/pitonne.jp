@@ -6,14 +6,14 @@ import { wards } from "@/lib/data/areas"
 import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Areas Served",
-  description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+  title: "IV Therapy, Stem Cells & Blood Tests | Areas Served in Tokyo",
+  description: "IV therapy, stem cell treatments, medications, and blood testing throughout Tokyo. Mobile and in-clinic care in Roppongi, Azabu, Shibuya, Ginza, and more.",
   alternates: {
     canonical: canonicalUrl("/areas-served/"),
   },
   openGraph: {
-    title: "Areas Served",
-    description: "Pitonne provides concierge wellness services throughout Tokyo including Roppongi, Azabu, Shibuya, Ginza, and surrounding areas. Mobile IV therapy and stem cell treatments.",
+    title: "IV Therapy, Stem Cells & Blood Tests | Areas Served in Tokyo",
+    description: "IV therapy, stem cell treatments, medications, and blood testing throughout Tokyo. Mobile and in-clinic care in Roppongi, Azabu, Shibuya, Ginza, and more.",
     url: canonicalUrl("/areas-served/"),
   },
 }
@@ -26,8 +26,8 @@ export default function AreasServedPage() {
           { label: "Home", href: "/" },
           { label: "Areas Served" },
         ]}
-        title="Areas Served"
-        description="Pitonne provides concierge wellness services throughout central Tokyo. Our registered nurses travel to your home or hotel to deliver premium IV therapy, stem cell treatments, and wellness consultations."
+        title="IV Therapy, Stem Cells, Medications & Blood Testing — Areas Served in Tokyo"
+        description="Pitonne provides IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Our team travels to your home or hotel for private, concierge wellness care."
       />
 
       {/* Wards Grid */}
