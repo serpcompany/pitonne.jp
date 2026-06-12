@@ -38,7 +38,7 @@ In this article, we explain how Pitonne's mobile IV service works, how it differ
 
 At Pitonne, patients may choose between visiting the clinic or arranging a mobile IV appointment within our service area. This flexibility is especially helpful for travelers staying in Tokyo, patients who prefer private care in their hotel or residence, and those with demanding schedules who want to reduce travel time.
 
-For patients who prefer to visit the clinic, **IV menu pricing is available with a JPY 5,000 discount**. The choice between mobile and in-clinic care depends on your preferences, location, schedule, and how you would like to receive treatment.
+For patients who prefer to visit the clinic, **[IV menu pricing](/blog/exosome-iv-therapy-tokyo-price-range/) is available with a JPY 5,000 discount**. The choice between mobile and in-clinic care depends on your preferences, location, schedule, and how you would like to receive treatment.
 
 ## How Mobile IV Therapy Works
 

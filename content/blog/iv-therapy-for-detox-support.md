@@ -48,7 +48,7 @@ In other words, we think of detox less as a sudden event and more as a process o
 
 ## Hydration Is One of the Most Important Basics
 
-Many people do not realize how often they move through daily life underhydrated. Busy work schedules, travel, business dinners, alcohol intake, heat exposure, and fatigue can all quietly contribute to low fluid intake and overall depletion.
+Many people do not realize how often they move through daily life underhydrated. Busy work schedules, travel, business dinners, [alcohol intake](/blog/iv-therapy-for-hangover-in-tokyo/), heat exposure, and fatigue can all quietly contribute to low fluid intake and overall depletion.
 
 At Pitonne, hydration is one of the first things we think about when patients ask about detox-related support. Good hydration is part of the body’s normal balance, and it often affects how light, clear, and physically restored a person feels.
 
@@ -103,7 +103,7 @@ Pitonne’s detox-oriented consultations may be especially suitable for people w
 
 * Have frequent business dinners or alcohol intake  
 * Travel often and experience disruption in routine  
-* Struggle with hydration and nutrient intake  
+* Struggle with [hydration](/blog/iv-therapy-for-dehydration-in-tokyo/) and nutrient intake  
 * Feel physically heavy or depleted  
 * Care about both beauty and wellness  
 * Want guidance not only on IV therapy, but also on nutrition and food habits  

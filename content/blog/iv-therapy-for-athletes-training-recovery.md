@@ -41,7 +41,7 @@ For people who train frequently, hydration and nutritional support are basic fou
 Patients sometimes ask about IV support when they are experiencing things such as:
 
 * Heavy training volume and lingering fatigue  
-* Difficulty staying fully hydrated  
+* [Difficulty staying fully hydrated](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Irregular eating patterns  
 * Travel or schedule disruption  
 * A need to support day-to-day performance and condition  

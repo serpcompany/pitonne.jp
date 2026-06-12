@@ -54,10 +54,10 @@ At Pitonne, some patients ask about Exosome IV therapy not because they are look
 
 This may include people who:
 
-* Train frequently and feel slow to recover  
+* [Train frequently](/blog/iv-therapy-for-athletes-training-recovery/) and feel slow to recover  
 * Want to maintain day-to-day performance and condition  
 * Travel often and experience disruption in routine  
-* Struggle with hydration or nutritional consistency  
+* Struggle with [hydration](/blog/iv-therapy-for-dehydration-in-tokyo/) or nutritional consistency  
 * Feel not only sore, but generally physically depleted  
 * Want to think about recovery in a broader, whole-body way
 

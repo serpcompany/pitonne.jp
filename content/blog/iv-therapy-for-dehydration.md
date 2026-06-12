@@ -30,7 +30,7 @@ At Pitonne, the safer way to talk about IV therapy for dehydration is simple: it
 
 ## What People Usually Mean by "IV Therapy for Dehydration"
 
-Most people are not using that phrase to describe a formal diagnosis. They are usually talking about a cluster of symptoms that often show up after travel, heat exposure, intense activity, long workdays, poor fluid intake, or a short bout of stomach upset. Common complaints include thirst, dry mouth, low energy, headache, darker urine, lightheadedness, and that general feeling of being behind physically.
+Most people are not using that phrase to describe a formal diagnosis. They are usually talking about a cluster of symptoms that often show up after travel, heat exposure, intense activity, long workdays, poor fluid intake, or a short bout of stomach upset. Common complaints include thirst, dry mouth, [low energy](/blog/iv-therapy-for-low-energy/), headache, darker urine, lightheadedness, and that general feeling of being behind physically.
 
 Dehydration itself simply means the body does not have enough fluid to function comfortably. In many mild cases, drinking water and using oral rehydration can be enough. The main question is not whether hydration matters. It does. The real question is whether a person needs clinician-guided IV support or whether oral fluids and rest are the better first step.
 

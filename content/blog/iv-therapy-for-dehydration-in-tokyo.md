@@ -103,8 +103,8 @@ At Pitonne, we do not approach dehydration support as simply "fluids for everyon
 Patients sometimes ask about dehydration-related IV care in situations such as:
 
 * Feeling unwell after heat exposure or long travel in Tokyo  
-* Fatigue after social drinking or formal dinners  
-* Recovery support after training  
+* Fatigue after [social drinking](/blog/iv-therapy-for-hangover-in-tokyo/) or formal dinners  
+* [Recovery support after training](/blog/iv-therapy-for-athletes-training-recovery/)  
 * A sense of being physically depleted during a demanding work period  
 * Wanting to recover quietly in a hotel, residence, or other private setting
 

@@ -48,7 +48,7 @@ Factors such as the following often affect how someone looks and feels:
 * Stress  
 * Alcohol intake  
 * Travel and time zone disruption  
-* Physical fatigue  
+* [Physical fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/)  
 * An irregular routine
 
 For patients who are often busy, under-slept, traveling frequently, or struggling to stay consistent with food and hydration, beauty support often makes more sense when it includes attention to the body's internal condition as well.
@@ -61,7 +61,7 @@ For example:
 
 * Not drinking enough water consistently  
 * A schedule that makes proper meals difficult  
-* Repeated business dinners or social drinking  
+* Repeated business dinners or [social drinking](/blog/iv-therapy-for-hangover-in-tokyo/)  
 * Travel fatigue and disrupted routine  
 * Ongoing physical depletion  
 * A desire to feel more balanced before an important occasion

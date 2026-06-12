@@ -39,7 +39,7 @@ A hangover is a group of symptoms that can occur after drinking too much alcohol
 * Dizziness  
 * Sensitivity to light or sound
 
-Alcohol can contribute to hangover symptoms in several ways, including mild dehydration, irritation of the stomach, inflammation, and poor-quality sleep. Because of this, the morning after drinking can feel physically and mentally draining even when there is no medical emergency.
+Alcohol can contribute to hangover symptoms in several ways, including [mild dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/), irritation of the stomach, inflammation, and poor-quality sleep. Because of this, the morning after drinking can feel physically and mentally draining even when there is no medical emergency.
 
 ## Can IV Therapy Help a Hangover?
 
@@ -130,7 +130,7 @@ In many cases, yes, if your location is within our service area. Please contact 
 
 ### Who may want to consider this type of service?
 
-Adults experiencing dehydration, fatigue, or discomfort after alcohol intake sometimes ask about IV support, especially when privacy and convenience matter.
+Adults experiencing dehydration, [fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/), or discomfort after alcohol intake sometimes ask about IV support, especially when privacy and convenience matter.
 
 ### When should I seek urgent medical care instead?
 

@@ -29,7 +29,7 @@ At Pitonne | Stem Cell & IV Therapy, we believe this kind of treatment should be
 
 ## An Important Starting Point
 
-In its notice dated **July 31, 2024**, Japan’s Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or stem cell conditioned media-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
+In its notice dated **July 31, 2024**, Japan’s Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or [stem cell conditioned media](/blog/stem-cell-therapy-vs-exosome-iv-therapy/)-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
 
 This does not mean that every treatment should automatically be viewed with alarm. It does mean that patients should be especially careful to understand **what is being used, how it is managed, and what medical explanation is provided** before treatment.
 

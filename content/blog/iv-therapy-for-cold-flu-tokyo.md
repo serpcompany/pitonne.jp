@@ -43,7 +43,7 @@ When cold- or flu-like symptoms are present, IV therapy may be thought of as **s
 Patients sometimes ask about IV support in situations such as:
 
 * Sore throat or fatigue making hydration difficult  
-* Fever or sweating leading to increased fluid loss  
+* Fever or sweating leading to [increased fluid loss](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Reduced food intake and a general sense of depletion  
 * Feeling run down during the recovery phase  
 * Wanting to recover comfortably in a private setting while staying in Tokyo

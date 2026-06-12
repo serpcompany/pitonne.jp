@@ -49,7 +49,7 @@ Patients may ask about this kind of support when they are experiencing things su
 * Travel-related exhaustion or time zone disruption  
 * Poor hydration or irregular food intake  
 * High work demands and accumulated fatigue  
-* Heavy training volume and a need for recovery support  
+* [Heavy training volume and a need for recovery support](/blog/iv-therapy-for-athletes-training-recovery/)  
 * Interest in both beauty and wellness  
 * A desire to recover privately while staying in Tokyo
 
@@ -116,7 +116,7 @@ That may include questions such as:
 * Has training or work load become excessive?  
 * Does this appear to be temporary condition decline, or something that needs medical evaluation?
 
-Within that broader context, some patients ask about Exosome IV therapy or vitamin-based IV support as part of a more thoughtful conversation about whole-body condition management.
+Within that broader context, some patients ask about [Exosome IV therapy](/blog/exosome-iv-therapy-for-muscle-recovery/) or vitamin-based IV support as part of a more thoughtful conversation about whole-body condition management.
 
 ## Pitonne Thinks in Terms of Overall Condition, Not Just One Symptom
 

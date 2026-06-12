@@ -120,7 +120,7 @@ This includes:
 * Reviewing medical history, current medications, allergies, and present condition in advance  
 * Guiding treatment based on appropriate medical review when needed
 
-We receive inquiries from international travelers visiting Tokyo, foreign residents living in Japan, and busy executives and professionals who value privacy, convenience, and clear medical guidance. In addition to in-clinic care, we also offer mobile IV service within our coverage area.
+We receive inquiries from international travelers visiting Tokyo, foreign residents living in Japan, and busy executives and professionals who value privacy, convenience, and clear medical guidance. In addition to in-clinic care, we also offer [mobile IV service](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/) within our coverage area.
 
 ## What to Review When Comparing Options
 
@@ -144,7 +144,7 @@ The source alone is not enough. The broader management process matters as well.
 
 ### 5\. Are cost, risks, and screening clearly explained?
 
-With private medical care, patients should review not only the fee, but also the precautions, risks, and the clinic's screening process.
+With private medical care, patients should review not only the fee, but also the [precautions, risks, and the clinic's screening process](/blog/exosome-iv-therapy-risks-precautions/).
 
 ## Who May Benefit From a Guided Consultation?
 

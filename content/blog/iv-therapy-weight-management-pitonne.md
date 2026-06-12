@@ -101,7 +101,7 @@ Patients often ask about IV care because they feel:
 * Concerned with both beauty and wellness  
 * In need of support for daily performance and recovery
 
-For these patients, Exosome IV therapy and vitamin-based IV support may be part of a broader conversation about how to feel better physically and function more comfortably, not simply how to chase a lower number on the scale.
+For these patients, [Exosome IV therapy](/blog/stem-cell-therapy-vs-exosome-iv-therapy/) and vitamin-based IV support may be part of a broader conversation about how to feel better physically and function more comfortably, not simply how to chase a lower number on the scale.
 
 The point is not to use IV therapy as a shortcut to weight loss. The point is to consider it as one possible tool in supporting the body more thoughtfully.
 
