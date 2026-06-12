@@ -63,6 +63,8 @@ faqs:
       privacy and convenience.
 relatedServices:
   - blood-tests
+  - nutrition-blood-testing
+  - tumor-marker-blood-testing
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv
 ---

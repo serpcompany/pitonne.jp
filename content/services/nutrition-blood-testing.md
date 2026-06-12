@@ -1,55 +1,52 @@
 ---
-title: Nutrition & Tumor Marker Blood Testing
+title: Nutrition Blood Testing
 slug: nutrition-blood-testing
 kind: leaf
 category: blood-tests
 parentSlug: blood-tests
 canonicalPath: /services/nutrition-blood-testing/
 shortDescription: >-
-  Our most detailed blood test, combining standard markers, hormone panels,
-  nutrition evaluation, and tumor markers for a comprehensive private health
-  check.
+  A detailed blood test that adds nutrition evaluation to our standard and
+  hormone panels, checking iron, ferritin, vitamin B12, folate, vitamin D, and
+  zinc.
 fullDescription: >-
-  Nutrition & Tumor Marker Blood Testing at Pitonne is our most comprehensive
-  blood test. It includes everything in the Hormone Blood Test, plus nutrition
-  evaluation and tumor markers. It may be a good option if you want a more
-  complete health check, are concerned about vitamin or iron deficiency, or want
-  a broader yearly blood test as part of your wellness routine.
+  Nutrition Blood Testing at Pitonne adds a full nutrition evaluation to our
+  standard and hormone blood test panels. It checks iron stores, key vitamins,
+  and minerals that are often missed in routine testing. This may be a good
+  option if you are concerned about vitamin or iron deficiency, experience
+  fatigue or low energy, or want a more detailed yearly blood test.
 image: /images/content/sheet/services/nutrition-blood-testing.jpg
 imageSourcePath: /images/content/sheet/services/nutrition-blood-testing.jpg
 benefits:
   - Includes all standard and hormone blood test markers
   - Nutrition evaluation including ferritin, vitamin B12, folate, vitamin D, and zinc
-  - Tumor markers for early screening (CEA, CA19-9, PSA or CA125)
-  - Ideal as a comprehensive yearly blood test
+  - Detects hidden iron deficiency through ferritin and TIBC
+  - Checks vitamin D status, often low in people spending limited time outdoors
   - Can be added to your IV therapy appointment for convenience
   - Often completed with a single needle insertion when combined with IV therapy
   - Results typically available in about one week
   - Results delivered by a doctor via email or LINE
 keyPoints:
-  - Most comprehensive blood test available at Pitonne
-  - Includes hormone panels plus nutrition and tumor marker screening
+  - Adds nutrition evaluation to standard and hormone blood test panels
+  - Checks iron, ferritin, vitamin B12, folate, vitamin D, and zinc
   - Can be combined with IV therapy in a single appointment
 faqs:
-  - question: What is included in the Nutrition & Tumor Marker Blood Test?
+  - question: What is included in the Nutrition Blood Test?
     answer: >-
       This test includes everything in our Hormone Blood Test (standard markers
-      plus thyroid and sex hormones), plus nutrition evaluation (serum iron,
-      ferritin, TIBC, vitamin B12, folate, 25-OH vitamin D, zinc) and tumor
-      markers. Male patients receive CEA, CA19-9, and PSA. Female patients
-      receive CEA, CA19-9, and CA125.
+      plus thyroid and sex hormones), plus nutrition evaluation: serum iron,
+      ferritin, TIBC, vitamin B12, folate, 25-OH vitamin D, and zinc.
   - question: Who should consider this test?
     answer: >-
-      This test may be a good option if you want a more complete health check,
-      are concerned about vitamin or iron deficiency, want to check tumor
-      markers for early screening, or prefer a broader yearly blood test as
-      part of your wellness routine.
+      This test may be a good option if you are concerned about vitamin or iron
+      deficiency, experience fatigue or low energy, want a more detailed yearly
+      blood test, or are curious about your nutritional status beyond standard
+      blood work.
   - question: What is the difference between this and the Hormone Blood Test?
     answer: >-
       The Hormone Blood Test includes standard markers plus thyroid and sex
-      hormone panels. This test adds nutrition evaluation (iron, ferritin,
-      vitamins B12, D, folate, zinc) and tumor markers (CEA, CA19-9, and
-      PSA for men or CA125 for women).
+      hormone panels. The Nutrition Blood Test adds iron studies (serum iron,
+      ferritin, TIBC), vitamin B12, folate, vitamin D, and zinc.
   - question: Can I add this to my IV therapy appointment?
     answer: >-
       Yes. Like all blood testing at Pitonne, this test can be added to your
@@ -69,13 +66,14 @@ faqs:
 relatedServices:
   - blood-tests
   - hormone-blood-testing
+  - tumor-marker-blood-testing
   - iv-vitamin-therapy
 ---
 ## Treatment Overview
 
-Nutrition & Tumor Marker Blood Testing at Pitonne is our most comprehensive blood test. It includes everything in the Hormone Blood Test, plus nutrition evaluation and tumor markers. This is designed for people who want the most detailed picture of their health in a single blood draw.
+Nutrition Blood Testing at Pitonne adds a full nutrition evaluation to our standard and hormone blood test panels. It checks iron stores, key vitamins, and minerals that are often missed in routine testing.
 
-It may be a good option if you want a more complete health check, are concerned about vitamin or iron deficiency, want to screen tumor markers, or prefer a broader yearly blood test as part of your wellness routine.
+This may be a good option if you are concerned about vitamin or iron deficiency, experience fatigue or low energy, or want a more detailed yearly blood test as part of your wellness routine.
 
 Like all blood testing at Pitonne, this test can be added to your IV therapy appointment for convenience. Blood collection is usually performed before the IV, and in many cases both can be completed with a single needle insertion.
 
@@ -105,17 +103,11 @@ Like all blood testing at Pitonne, this test can be added to your IV therapy app
 - **25-OH Vitamin D** — checks vitamin D status
 - **Zinc** — important for immune function and recovery
 
-### Tumor Markers
-
-- **Male patients** — CEA, CA19-9, PSA
-- **Female patients** — CEA, CA19-9, CA125
-
 ## Who May Benefit
 
-- People who want the most comprehensive blood test available
-- Those concerned about vitamin or iron deficiency
-- Anyone who wants tumor marker screening as part of a yearly health check
+- People concerned about vitamin or iron deficiency
 - Patients experiencing fatigue, low energy, or poor recovery that may relate to nutritional deficiency
+- Anyone who wants a more detailed yearly blood test beyond standard panels
 - Travelers or professionals who want a thorough wellness check in a single appointment
 - People who prefer private testing with more flexibility than standard insurance-based options
 
@@ -135,7 +127,7 @@ Results are typically available in about one week and are reviewed by a doctor. 
 
 ## Helpful Notes
 
-- This is our most comprehensive blood test, combining standard, hormone, nutrition, and tumor marker panels.
+- This test adds nutrition evaluation to our standard and hormone blood test panels.
 - Can be added to your IV therapy appointment for convenience.
 - Mobile blood testing is available for clients receiving IV therapy.
 - If you would like blood testing only, please contact us in advance.
