@@ -180,4 +180,4 @@ Stem cell therapy, stem cell conditioned media IV, and Exosome IV therapy may ap
 
 The most important thing is not to choose based on the name alone. Source material, culture method, storage approach, quality management, pricing, and medical screening should all be reviewed carefully.
 
-At Pitonne | Stem Cell & IV Therapy, we take time to explain these differences clearly so patients can make informed decisions with confidence. If you would like to discuss in-clinic or mobile IV options in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+At Pitonne | Stem Cell & IV Therapy, we take time to explain these differences clearly so patients can make informed decisions with confidence. If you would like to discuss in-clinic or mobile IV options in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

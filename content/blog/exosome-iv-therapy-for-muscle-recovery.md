@@ -154,4 +154,4 @@ When thinking about muscle recovery, Pitonne may recommend not only hydration IV
 
 That said, IV therapy is not the foundation of recovery on its own. Recovery still depends first on sleep, food, hydration, rest, and training balance. For patients with high training loads, ongoing fatigue, or a strong interest in maintaining daily performance, the more important question is not only how to recover a muscle, but how to support the body as a whole.
 
-If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

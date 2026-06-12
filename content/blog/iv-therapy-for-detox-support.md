@@ -133,4 +133,4 @@ At Pitonne, detox is not treated as a dramatic cleanse or a quick fix. We think 
 
 For some patients, hydration and vitamin-based IV support are the most natural place to start. For others who want a broader anti-aging and whole-body support approach, Exosome IV therapy may also be appealing. And because IV therapy alone is never the full story, Pitonne also values nutrition guidance and practical, sustainable lifestyle support.
 
-If you would like to discuss detox, hydration, wellness, and whole-body condition management in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to discuss detox, hydration, wellness, and whole-body condition management in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

@@ -1,6 +1,6 @@
 ---
 slug: iv-therapy-for-fatigue-in-tokyo
-title: 'Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care in Tokyo'
+title: 'Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care'
 excerpt: '“I thought I rested, but I still feel exhausted.” “I’m in Tokyo with a full schedule and my body feels heavy.” “I’ve been so busy that fatigue has started to feel normal.”'
 publishedAt: '2026-05-31'
 category: IV Therapy
@@ -18,10 +18,9 @@ tags:
   - 'iv therapy'
   - 'stress'
   - 'fatigue'
-  - 'tokyo'
 ---
 
-# Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care in Tokyo
+# Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care
 
 “I thought I rested, but I still feel exhausted.”  
 “I’m in Tokyo with a full schedule and my body feels heavy.”  
@@ -169,7 +168,7 @@ Fatigue that lasts for weeks, does not improve with rest, or significantly affec
 
 IV therapy for fatigue is best understood as **supportive care for hydration, nutrition, recovery, and overall condition**, not as a cure for fatigue itself. Because fatigue can have many different causes, it is important to think not only about immediate support, but also about sleep, stress, hydration, nutrition, activity load, and when medical evaluation may be necessary.
 
-At Pitonne | Stem Cell & IV Therapy, we approach fatigue with discretion, perspective, and attention to the whole picture. If you are in Tokyo and would like to discuss IV therapy in a calm, private, medically guided setting, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+At Pitonne | Stem Cell & IV Therapy, we approach fatigue with discretion, perspective, and attention to the whole picture. If you are in Tokyo and would like to discuss IV therapy in a calm, private, medically guided setting, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
 
 **References**
 

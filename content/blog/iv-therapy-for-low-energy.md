@@ -170,4 +170,4 @@ When you feel low on energy, IV therapy is best understood as **supportive care 
 
 At Pitonne, we approach low energy and physical depletion with this broader perspective in mind. Whether through hydration IVs, vitamin-based IV support, or conversations that also include Exosome IV therapy, the goal is not to overpromise, but to help patients think more carefully about how to support their body well.
 
-If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

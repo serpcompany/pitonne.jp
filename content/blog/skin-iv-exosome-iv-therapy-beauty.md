@@ -158,4 +158,4 @@ At Pitonne, beauty-focused IV therapy is not treated as an instant cosmetic shor
 
 For patients who want hydration plus vitamins and glutathione, **Skin IV** is often a natural fit. For patients thinking more broadly about anti-aging and whole-body condition, **Exosome IV therapy** may be especially appealing.
 
-If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

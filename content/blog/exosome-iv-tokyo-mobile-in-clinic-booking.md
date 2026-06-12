@@ -150,4 +150,4 @@ Cancellations and changes should be made at least 24 hours in advance. Same-day 
 
 When considering an Exosome IV in Tokyo, it is helpful to look beyond the treatment itself and also understand where the treatment can be received, how booking works, and what kind of medical review is involved.
 
-At Pitonne | Stem Cell & IV Therapy, we offer both in-clinic and mobile IV care so that patients can choose the setting that best fits their condition, location, and schedule. If you are looking for discreet, medically guided IV care in Tokyo, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+At Pitonne | Stem Cell & IV Therapy, we offer both in-clinic and mobile IV care so that patients can choose the setting that best fits their condition, location, and schedule. If you are looking for discreet, medically guided IV care in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
