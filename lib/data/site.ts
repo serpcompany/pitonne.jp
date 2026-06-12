@@ -46,7 +46,7 @@ export const businessInfo = {
   phone: "070-2194-0199",
   email: "pitonne.am@gmail.com",
   siteUrl: "https://pitonne.jp",
-  bookingUrl: "https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en",
+  bookingUrl: "https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=en",
   hours: businessHours.map((item) => ({ day: item.day, hours: formatBusinessHours(item) })),
   description:
     "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in home or hotel visit care.",
