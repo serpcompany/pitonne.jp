@@ -22,7 +22,7 @@ tags:
 
 # IV Therapy for Hangover: A Private Option for Hydration and Recovery Support
 
-After a long night of drinking, many people wake up with thirst, headache, nausea, fatigue, and a general sense of feeling unwell. For travelers in Tokyo, busy professionals, and guests with full schedules, the question is often not only how to rest, but how to recover comfortably and appropriately.
+After a long night of drinking, many people wake up with thirst, headache, [nausea](/blog/iv-therapy-for-nausea/), fatigue, and a general sense of feeling unwell. For travelers in Tokyo, busy professionals, and guests with full schedules, the question is often not only how to rest, but how to recover comfortably and appropriately.
 
 At Pitonne | Stem Cell & IV Therapy, we believe hangover support should be approached with the same clarity as any other medical service: discreetly, carefully, and with appropriate medical judgment. In this article, we explain what hangover IV therapy may help support, what it should not be expected to do, and what to review before booking.
 

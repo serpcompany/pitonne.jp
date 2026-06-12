@@ -34,7 +34,7 @@ At Pitonne | Stem Cell & IV Therapy, we approach fatigue with that broader persp
 
 ## Fatigue Is Common, but It Does Not Always Mean the Same Thing
 
-Fatigue is one of the most common symptoms people experience. It may follow lack of sleep, mental stress, overwork, travel, time zone disruption, alcohol intake, irregular meals, or heavy training.
+Fatigue is one of the most common symptoms people experience. It may follow lack of sleep, mental [stress](/blog/iv-therapy-for-stress/), overwork, travel, time zone disruption, alcohol intake, irregular meals, or heavy training.
 
 But if fatigue is lasting longer than expected, not improving with rest, or feels unusually strong or different from your normal pattern, it may not be enough to assume that lifestyle alone is the explanation.
 
@@ -46,7 +46,7 @@ When people ask about IV therapy for fatigue, it is usually best understood as *
 
 Patients may ask about this kind of support when they are experiencing things such as:
 
-* Travel-related exhaustion or time zone disruption  
+* Travel-related exhaustion or [time zone disruption](/blog/iv-therapy-for-jet-lag/)  
 * Poor hydration or irregular food intake  
 * High work demands and accumulated fatigue  
 * [Heavy training volume and a need for recovery support](/blog/iv-therapy-for-athletes-training-recovery/)  

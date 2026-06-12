@@ -45,7 +45,7 @@ Factors such as the following often affect how someone looks and feels:
 * Hydration status  
 * Sleep quality  
 * Nutritional balance  
-* Stress  
+* [Stress](/blog/iv-therapy-for-stress/)  
 * Alcohol intake  
 * Travel and time zone disruption  
 * [Physical fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/)  
