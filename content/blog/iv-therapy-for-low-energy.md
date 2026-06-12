@@ -44,9 +44,9 @@ Contributing factors may include:
 * Poor sleep or reduced sleep quality  
 * [Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Irregular eating or nutritional imbalance  
-* Ongoing stress  
+* Ongoing [stress](/blog/iv-therapy-for-stress/)  
 * [Alcohol intake](/blog/iv-therapy-for-hangover-in-tokyo/)  
-* Travel and time zone disruption  
+* Travel and [time zone disruption](/blog/iv-therapy-for-jet-lag/)  
 * Increased training load  
 * A generally irregular routine
 

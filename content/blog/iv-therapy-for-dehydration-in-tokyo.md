@@ -67,7 +67,7 @@ IV therapy may be thought of as **one possible form of hydration support**.
 Patients sometimes ask about IV support when they feel that:
 
 * Drinking fluids does not seem to be enough  
-* Nausea makes oral hydration difficult  
+* [Nausea](/blog/iv-therapy-for-nausea/) makes oral hydration difficult  
 * Fatigue and weakness feel more significant than usual  
 * Heat or travel has clearly disrupted their condition  
 * They want structured hydration support after intense activity  

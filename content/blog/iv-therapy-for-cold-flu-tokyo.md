@@ -45,7 +45,7 @@ Patients sometimes ask about IV support in situations such as:
 * Sore throat or fatigue making hydration difficult  
 * Fever or sweating leading to [increased fluid loss](/blog/iv-therapy-for-dehydration-in-tokyo/)  
 * Reduced food intake and a general sense of depletion  
-* Feeling run down during the recovery phase  
+* Feeling run down during the recovery phase, with [immune health](/blog/iv-therapy-for-immune-health/) feeling compromised  
 * Wanting to recover comfortably in a private setting while staying in Tokyo
 
 In these kinds of situations, IV therapy may be discussed as supportive care. But it is important to keep expectations realistic: **IV therapy is not what treats the virus itself.**

@@ -42,7 +42,7 @@ At Pitonne, that means paying attention to foundations such as:
 * Liver-related metabolic support as part of general wellness  
 * Sleep and recovery  
 * Alcohol intake and eating patterns  
-* Day-to-day fatigue and schedule disruption
+* Day-to-day [fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/) and schedule disruption
 
 In other words, we think of detox less as a sudden event and more as a process of helping the body feel more supported, more balanced, and easier to restore.
 

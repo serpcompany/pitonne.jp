@@ -63,7 +63,7 @@ In practice, it is often more useful to look at questions such as:
 * Are protein, fat, and carbohydrates reasonably balanced?  
 * Is stress affecting your appetite?  
 * Are you skipping meals and then overeating later?  
-* Is fatigue or dehydration making your routine harder to maintain?
+* Is [fatigue](/blog/iv-therapy-for-fatigue-in-tokyo/) or dehydration making your routine harder to maintain?
 
 At Pitonne, we believe that before anyone looks for a quick answer, it helps to step back and understand these basics properly.
 
