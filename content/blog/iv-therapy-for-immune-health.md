@@ -12,6 +12,7 @@ author:
   role: Wellness Experts
 readingTime: 12
 featured: false
+featureImage: /images/content/sheet/blog/iv-therapy-for-immune-health.jpg
 relatedServiceSlugs:
   - immune-boost-iv-therapy
   - iv-vitamin-therapy
