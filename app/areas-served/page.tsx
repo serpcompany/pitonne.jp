@@ -7,14 +7,14 @@ import { wards } from "@/lib/data/areas"
 import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "IV Therapy, Stem Cells & Blood Tests | Areas Served in Tokyo",
-  description: "IV therapy, stem cell treatments, medications, and blood testing throughout Tokyo. Mobile and in-clinic care in Roppongi, Azabu, Shibuya, Ginza, and more.",
+  title: "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
+  description: "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
   alternates: {
     canonical: canonicalUrl("/areas-served/"),
   },
   openGraph: {
-    title: "IV Therapy, Stem Cells & Blood Tests | Areas Served in Tokyo",
-    description: "IV therapy, stem cell treatments, medications, and blood testing throughout Tokyo. Mobile and in-clinic care in Roppongi, Azabu, Shibuya, Ginza, and more.",
+    title: "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
+    description: "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
     url: canonicalUrl("/areas-served/"),
   },
 }
