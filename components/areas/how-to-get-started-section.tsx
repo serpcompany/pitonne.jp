@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { ContactButton } from "@/components/shared/contact-button"
 
 export function HowToGetStartedSection({ locationLabel }: { locationLabel?: string }) {
   return (
@@ -22,14 +22,7 @@ export function HowToGetStartedSection({ locationLabel }: { locationLabel?: stri
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Link
-              href="/contact/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-md bg-[#7A8F87] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#245f5a]"
-            >
-              Contact Pitonne
-            </Link>
+            <ContactButton>Contact Pitonne</ContactButton>
           </div>
         </div>
       </div>

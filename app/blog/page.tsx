@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
+import { ContactButton } from "@/components/shared/contact-button"
 import { getAllBlogPosts, getAllCategories } from "@/lib/data/blog-posts"
 import { canonicalUrl } from "@/lib/seo"
 
@@ -189,14 +190,7 @@ export default async function BlogPage() {
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             Have questions about our services? Contact us to learn more about IV therapy, stem cell treatments, and wellness support in Tokyo.
           </p>
-          <Link 
-            href="/contact"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#7A8F87] text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Us
-          </Link>
+          <ContactButton />
         </div>
       </section>
     </>

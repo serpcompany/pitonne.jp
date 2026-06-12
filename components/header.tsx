@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
 import { areaNavigation, canonicalRoutes, type ServiceNavCategory } from "@/lib/data/routes"
 import { businessInfo } from "@/lib/data/site"
+import { ContactButton } from "@/components/shared/contact-button"
 
 const areasMenu = {
   wards: areaNavigation,
@@ -206,14 +207,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
               </div>
             )}
           </div>
-          <Link 
-            href={canonicalRoutes.contact}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#7A8F87] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Us
-          </Link>
+          <ContactButton className="px-5 py-2.5" />
         </div>
 
         {/* Mobile menu button */}
@@ -348,15 +342,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                   </a>
                 ))}
               </div>
-              <Link 
-                href="/contact"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full bg-[#7A8F87] text-white text-center px-5 py-2.5 rounded-md text-sm font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
+              <ContactButton className="w-full px-5 py-2.5" />
             </div>
           </div>
         </div>
