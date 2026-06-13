@@ -3,16 +3,11 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { BookingButton } from "@/components/shared/booking-button"
 import { localizedHreflangAlternates } from "@/lib/seo"
-import { businessInfo } from "@/lib/data/site"
+import { getBusinessInfo } from "@/lib/data/site"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
-
-const phoneLinks = [
-  { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
-  { label: "U.S.", number: "+1 786 814 0323", href: "tel:+17868140323" },
-]
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -28,11 +23,11 @@ export async function generateMetadata({
 
   return {
     title: dict.contact.contactUs,
-    description: "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
+    description: dict.contact.metaDescription,
     alternates: localizedHreflangAlternates("/contact/", locale as Locale),
     openGraph: {
       title: dict.contact.contactUs,
-      description: "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
+      description: dict.contact.metaDescription,
       url: localizedHreflangAlternates("/contact/", locale as Locale).canonical,
     },
   }
@@ -45,6 +40,12 @@ interface Props {
 export default async function ContactPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
+  const info = getBusinessInfo(locale as Locale)
+
+  const phoneLinks = [
+    { label: dict.contact.japan, number: info.phone, href: "tel:070-2194-0199" },
+    { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
+  ]
 
   return (
     <>
@@ -54,7 +55,7 @@ export default async function ContactPage({ params }: Props) {
           { label: dict.nav.contact },
         ]}
         title={dict.contact.contactUs}
-        description="Ready to book a consultation or have questions about our services? Get in touch with us and our team will respond promptly."
+        description={dict.contact.heroDescription}
       />
 
       {/* Contact Content */}
@@ -65,7 +66,7 @@ export default async function ContactPage({ params }: Props) {
               <h2 className="text-2xl font-serif mb-6">{dict.common.sendMessage}</h2>
               <div className="rounded-lg border border-border bg-card p-8">
                 <p className="mb-6 text-muted-foreground">
-                  Use Pitonne&apos;s secure inquiry form to request a consultation or ask questions about services.
+                  {dict.contact.inquiryFormDescription}
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <BookingButton className="w-full sm:w-auto" />
@@ -111,7 +112,7 @@ export default async function ContactPage({ params }: Props) {
                     <Mail className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
+                    <h3 className="font-semibold mb-1">{dict.contact.email}</h3>
                     <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#7A8F87] transition-colors">
                       pitonne.am@gmail.com
                     </a>
@@ -123,10 +124,9 @@ export default async function ContactPage({ params }: Props) {
                     <MapPin className="h-5 w-5 text-[#7A8F87]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">Location</h3>
+                    <h3 className="font-semibold mb-1">{dict.contact.location}</h3>
                     <address className="text-muted-foreground not-italic">
-                      106-0031 Tokyo, Minato City,<br />
-                      Nishiazabu, 3 Chome-17-22 1F
+                      {dict.contact.address}
                     </address>
                   </div>
                 </div>
@@ -138,9 +138,9 @@ export default async function ContactPage({ params }: Props) {
                   <div>
                     <h3 className="font-semibold mb-1">{dict.footer.openHours}</h3>
                     <div className="text-muted-foreground text-sm space-y-1">
-                      {businessInfo.hours.map((item) => (
+                      {info.hours.map((item) => (
                         <p key={item.day}>
-                          {item.day}: {item.hours}
+                          {dict.days[item.day as keyof typeof dict.days] ?? item.day}: {item.hours}
                         </p>
                       ))}
                     </div>

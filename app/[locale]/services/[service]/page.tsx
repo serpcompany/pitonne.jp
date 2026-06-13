@@ -60,7 +60,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     : undefined
 
   if (service.kind === "parent") {
-    return <ServiceParentTemplate service={service} childServices={getChildServices(service.slug, typedLocale)} />
+    return <ServiceParentTemplate service={service} childServices={getChildServices(service.slug, typedLocale)} locale={typedLocale} />
   }
 
   return (
@@ -69,6 +69,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       parentService={parentService}
       relatedServices={getServicesFromSlugs(service.relatedServices, typedLocale)}
       relatedPosts={getBlogPostsForService(service.slug, 3, typedLocale)}
+      locale={typedLocale}
     />
   )
 }

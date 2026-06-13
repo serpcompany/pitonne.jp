@@ -93,6 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
       relatedPosts={relatedPosts}
       relatedServices={relatedServices}
       latestPosts={getAllBlogPosts(typedLocale).filter((candidate) => candidate.slug !== postSlug)}
+      locale={typedLocale}
     />
   )
 }

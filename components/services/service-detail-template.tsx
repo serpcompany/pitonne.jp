@@ -4,6 +4,9 @@ import { ServiceSidebar } from "@/components/services/service-sidebar"
 import type { BlogPost } from "@/lib/data/blog-posts"
 import type { Service } from "@/lib/data/services"
 import { serviceJsonLd } from "@/lib/structured-data"
+import type { Locale } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
+import { localizedRoute } from "@/lib/data/routes"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
@@ -12,21 +15,24 @@ export function ServiceDetailTemplate({
   parentService,
   relatedServices,
   relatedPosts,
+  locale = "en" as Locale,
 }: {
   service: Service
   parentService?: Service
   relatedServices: Service[]
   relatedPosts: BlogPost[]
+  locale?: Locale
 }) {
+  const dict = getDictionary(locale)
   return (
     <div className="bg-background">
-      <JsonLd data={serviceJsonLd(service)} />
+      <JsonLd data={serviceJsonLd(service, locale)} />
 
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Services", href: "/services/" },
-          ...(parentService ? [{ label: parentService.name, href: parentService.canonicalPath }] : []),
+          { label: dict.nav.home, href: localizedRoute("/", locale) },
+          { label: dict.nav.services, href: localizedRoute("/services/", locale) },
+          ...(parentService ? [{ label: parentService.name, href: localizedRoute(parentService.canonicalPath, locale) }] : []),
           { label: service.name },
         ]}
         title={service.name}
@@ -48,7 +54,7 @@ export function ServiceDetailTemplate({
               </section>
 
               <section>
-                <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">Frequently Asked Questions</h2>
+                <h2 className="mb-8 font-serif text-2xl font-bold text-foreground md:text-3xl">{dict.services.frequentlyAskedQuestions}</h2>
                 <div className="space-y-6">
                   {service.faqs.map((faq) => (
                     <div key={faq.question} className="border-b border-border pb-6 last:border-0">
@@ -60,7 +66,7 @@ export function ServiceDetailTemplate({
               </section>
             </main>
 
-            <ServiceSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} />
+            <ServiceSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} locale={locale} />
           </div>
         </div>
       </section>

@@ -4,6 +4,7 @@ import { getServiceCategorySections } from "@/lib/data/services"
 import { localizedHreflangAlternates, localizedCanonicalUrl } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -15,14 +16,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
+  const dict = getDictionary(locale as Locale)
 
   return {
-    title: "Services",
-    description: "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
+    title: dict.services.ourServices,
+    description: dict.services.metaDescription,
     alternates: localizedHreflangAlternates("/services/", locale as Locale),
     openGraph: {
-      title: "Services",
-      description: "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
+      title: dict.services.ourServices,
+      description: dict.services.metaDescription,
       url: localizedCanonicalUrl("/services/", locale as Locale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
     },
@@ -32,5 +34,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params
 
-  return <ServicesIndexTemplate sections={getServiceCategorySections(locale as Locale)} />
+  return <ServicesIndexTemplate sections={getServiceCategorySections(locale as Locale)} locale={locale as Locale} />
 }

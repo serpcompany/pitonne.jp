@@ -3,19 +3,23 @@ import { ArrowRight } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { ServiceCardGrid } from "@/components/services/service-card-grid"
 import type { Service, ServiceCategorySection } from "@/lib/data/services"
+import type { Locale } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
+import { localizedRoute } from "@/lib/data/routes"
 
 type Section = ServiceCategorySection & { services: Service[] }
 
-export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
+export function ServicesIndexTemplate({ sections, locale = "en" as Locale }: { sections: Section[]; locale?: Locale }) {
+  const dict = getDictionary(locale)
   return (
     <div className="bg-background">
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Services" },
+          { label: dict.nav.home, href: localizedRoute("/", locale) },
+          { label: dict.nav.services },
         ]}
-        title="Our Services"
-        description="Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo."
+        title={dict.services.ourServices}
+        description={dict.services.heroDescription}
       />
 
       <section className="bg-card pb-10">
@@ -40,7 +44,7 @@ export function ServicesIndexTemplate({ sections }: { sections: Section[] }) {
             <div className="mb-8 flex items-center justify-between gap-6">
               <h2 className="font-serif text-3xl text-foreground md:text-4xl">{section.title}</h2>
               <Link href={section.href} className="flex items-center gap-1 text-[#7A8F87] hover:underline">
-                View all <ArrowRight className="h-4 w-4" />
+                {dict.services.viewAll} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <ServiceCardGrid services={section.services} cardClassName={index % 2 === 0 ? "bg-background" : "bg-card"} />

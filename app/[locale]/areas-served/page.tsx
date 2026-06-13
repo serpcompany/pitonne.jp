@@ -8,6 +8,7 @@ import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -19,14 +20,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
+  const dict = getDictionary(locale as Locale)
 
   return {
-    title: "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
-    description: "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
+    title: dict.areas.metaTitle,
+    description: dict.areas.metaDescription,
     alternates: localizedHreflangAlternates("/areas-served/", locale as Locale),
     openGraph: {
-      title: "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
-      description: "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
+      title: dict.areas.metaTitle,
+      description: dict.areas.metaDescription,
       url: localizedCanonicalUrl("/areas-served/", locale as Locale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
     },
@@ -36,16 +38,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AreasServedPage({ params }: Props) {
   const { locale } = await params
   const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
 
   return (
     <>
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: localizedRoute("/", typedLocale) },
-          { label: "Areas Served" },
+          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
+          { label: dict.nav.areasServed },
         ]}
-        title="IV Therapy, Stem Cells, Medications & Blood Testing — Areas Served in Tokyo"
-        description="Pitonne provides IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Our team travels to your home or hotel for private, concierge wellness care."
+        title={dict.areas.heroTitle}
+        description={dict.areas.heroDescription}
       />
 
       {/* Wards Grid */}
@@ -56,14 +59,14 @@ export default async function AreasServedPage({ params }: Props) {
               <div key={ward.slug}>
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-2xl font-serif text-foreground">{ward.name} Ward</h2>
-                    <p className="text-sm text-muted-foreground">{ward.nameJa}</p>
+                    <h2 className="text-2xl font-serif text-foreground">{typedLocale === "ja" ? ward.nameJa : `${ward.name} ${dict.areas.ward}`}</h2>
+                    {typedLocale !== "ja" && <p className="text-sm text-muted-foreground">{ward.nameJa}</p>}
                   </div>
                   <Link
                     href={localizedRoute(`/areas-served/${ward.slug}/`, typedLocale)}
                     className="text-sm text-[#7A8F87] hover:underline"
                   >
-                    View all in {ward.name} &rarr;
+                    {dict.areas.viewAllIn} {typedLocale === "ja" ? ward.nameJa : ward.name} &rarr;
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -91,27 +94,27 @@ export default async function AreasServedPage({ params }: Props) {
       <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-serif text-foreground mb-6">Mobile Wellness Services</h2>
+            <h2 className="text-3xl font-serif text-foreground mb-6">{dict.areas.mobileWellnessServices}</h2>
             <p className="text-muted-foreground mb-8">
-              Our team travels to locations throughout Tokyo to provide in-home and hotel-based wellness services. We primarily serve central Tokyo areas within a reasonable distance from our Nishi-Azabu clinic.
+              {dict.areas.mobileWellnessDescription}
             </p>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div className="bg-card rounded-lg p-6 border border-border">
-                <h3 className="font-semibold text-foreground mb-2">Home Visits</h3>
+                <h3 className="font-semibold text-foreground mb-2">{dict.areas.homeVisits}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Receive IV therapy and wellness services in the comfort of your own home.
+                  {dict.areas.homeVisitsDescription}
                 </p>
               </div>
               <div className="bg-card rounded-lg p-6 border border-border">
-                <h3 className="font-semibold text-foreground mb-2">Hotel Service</h3>
+                <h3 className="font-semibold text-foreground mb-2">{dict.areas.hotelService}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Perfect for travelers and business visitors staying in Tokyo hotels.
+                  {dict.areas.hotelServiceDescription}
                 </p>
               </div>
               <div className="bg-card rounded-lg p-6 border border-border">
-                <h3 className="font-semibold text-foreground mb-2">Office Visits</h3>
+                <h3 className="font-semibold text-foreground mb-2">{dict.areas.officeVisits}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Corporate wellness services available at your workplace.
+                  {dict.areas.officeVisitsDescription}
                 </p>
               </div>
             </div>
@@ -123,10 +126,10 @@ export default async function AreasServedPage({ params }: Props) {
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-6">
-            Not Sure If We Serve Your Area?
+            {dict.areas.notSureArea}
           </h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
-            Contact us to confirm service availability in your location. We may be able to accommodate areas not listed above.
+            {dict.areas.notSureAreaDescription}
           </p>
           <ContactButton />
         </div>

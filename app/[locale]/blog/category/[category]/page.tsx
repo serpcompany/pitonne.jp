@@ -7,6 +7,7 @@ import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
 
 interface Props {
@@ -22,16 +23,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, category: categorySlug } = await params
   const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
   if (!category) return { title: "Category Not Found | Pitonne" }
 
   return {
-    title: `${category.name} Articles`,
+    title: `${category.name} ${dict.blog.articles}`,
     description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
     alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale),
     openGraph: {
-      title: `${category.name} Articles`,
+      title: `${category.name} ${dict.blog.articles}`,
       description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
       url: localizedCanonicalUrl(`/blog/category/${category.slug}/`, typedLocale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
@@ -43,6 +45,7 @@ export default async function BlogCategoryPage({ params }: Props) {
   const { locale, category: categorySlug } = await params
   const typedLocale = locale as Locale
   const dateLocale = locale === "ja" ? "ja-JP" : "en-US"
+  const dict = getDictionary(typedLocale)
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
 
@@ -57,11 +60,11 @@ export default async function BlogCategoryPage({ params }: Props) {
     <div className="bg-background">
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: localizedRoute("/", typedLocale) },
-          { label: "Blog", href: localizedRoute("/blog/", typedLocale) },
+          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
+          { label: dict.blog.blog, href: localizedRoute("/blog/", typedLocale) },
           { label: category.name },
         ]}
-        eyebrow="Category"
+        eyebrow={dict.blog.category}
         title={category.name}
         description={categoryDescription}
       />
@@ -74,7 +77,7 @@ export default async function BlogCategoryPage({ params }: Props) {
               href={localizedRoute("/blog/", typedLocale)}
               className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#7A8F87] hover:text-[#7A8F87] transition-colors"
             >
-              All
+              {dict.blog.all}
             </Link>
             {getAllCategories(typedLocale).map(cat => (
               <Link
@@ -127,7 +130,7 @@ export default async function BlogCategoryPage({ params }: Props) {
                         })}
                       </time>
                       <span>&middot;</span>
-                      <span>{post.readingTime} min read</span>
+                      <span>{post.readingTime} {dict.common.minRead}</span>
                     </div>
                     <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                       {post.title}
@@ -144,12 +147,12 @@ export default async function BlogCategoryPage({ params }: Props) {
               <div className="w-16 h-16 mx-auto rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4">
                 <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
               </div>
-              <p className="text-muted-foreground mb-6">No articles found in this category yet.</p>
+              <p className="text-muted-foreground mb-6">{dict.blog.noArticlesFound}</p>
               <Link
                 href={localizedRoute("/blog/", typedLocale)}
                 className="text-[#7A8F87] hover:underline"
               >
-                View all articles
+                {dict.blog.viewAllArticles}
               </Link>
             </div>
           )}
@@ -160,7 +163,7 @@ export default async function BlogCategoryPage({ params }: Props) {
       <section className="py-12 md:py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl font-serif text-foreground mb-4">
-            Have Questions?
+            {dict.blog.haveQuestions}
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
             Our team is ready to help you learn more about {category.name.toLowerCase()} and how it might benefit you.

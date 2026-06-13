@@ -7,27 +7,6 @@ import { locales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
 
-const team = [
-  {
-    name: "Kanako Shimizu",
-    role: "Registered Nurse & Public Health Nurse",
-    image: "/images/kana-scaled.jpg",
-    bio: "Kanako is involved in the operation of a regenerative medicine clinic, with a focus on health optimization and preventive care. As a registered nurse and public health nurse, she supports treatments using stem cell conditioned media and provides wellness support including corporate programs, weight management, and fasting guidance. She believes in helping people care for their health before illness develops, while balancing preventive care with conventional medicine.",
-  },
-  {
-    name: "Saori Tsubaki",
-    role: "Registered Nurse & Public Health Nurse",
-    image: "/images/saori-scaled.jpg",
-    bio: "Saori is involved in health support within the field of regenerative medicine, drawing on her knowledge and experience as a registered nurse and public health nurse. She values supporting each individual's daily well-being through treatment assistance using stem cell conditioned media, as well as preventive care, body maintenance, weight management, and corporate wellness programs.",
-  },
-  {
-    name: "Akira Mikami",
-    role: "Physician",
-    image: "/images/akira_about_3x4-1-scaled.jpg",
-    bio: "Since my years as a resident physician, I have practiced medicine with the words \"Patient First\" held close to my heart. Providing the kind of medical care that I would want to receive myself has always been the foundation of why I chose to become a physician. I believe that as long as I remain true to this principle, it will guide me in making the right decisions for my patients.",
-  },
-]
-
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
@@ -42,11 +21,11 @@ export async function generateMetadata({
 
   return {
     title: dict.about.aboutPitonne,
-    description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+    description: dict.about.metaDescription,
     alternates: localizedHreflangAlternates("/about/", locale as Locale),
     openGraph: {
       title: dict.about.aboutPitonne,
-      description: "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+      description: dict.about.metaDescription,
       url: localizedHreflangAlternates("/about/", locale as Locale).canonical,
     },
   }
@@ -60,6 +39,27 @@ export default async function AboutPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
+  const team = [
+    {
+      name: dict.about.teamKanakoName,
+      role: dict.about.teamKanakoRole,
+      image: "/images/kana-scaled.jpg",
+      bio: dict.about.teamKanakoBio,
+    },
+    {
+      name: dict.about.teamSaoriName,
+      role: dict.about.teamSaoriRole,
+      image: "/images/saori-scaled.jpg",
+      bio: dict.about.teamSaoriBio,
+    },
+    {
+      name: dict.about.teamAkiraName,
+      role: dict.about.teamAkiraRole,
+      image: "/images/akira_about_3x4-1-scaled.jpg",
+      bio: dict.about.teamAkiraBio,
+    },
+  ]
+
   return (
     <>
       <PageHero
@@ -68,7 +68,7 @@ export default async function AboutPage({ params }: Props) {
           { label: dict.nav.about },
         ]}
         title={dict.about.aboutPitonne}
-        description="Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care through in-home and hotel visits. We are designed for busy professionals, international visitors, and clients who value privacy, convenience, and clinically guided support. Our goal is to make wellness care feel more accessible, discreet, and tailored to real life in Tokyo."
+        description={dict.about.heroDescription}
       />
 
       {/* Why We Exist Section */}
@@ -84,7 +84,7 @@ export default async function AboutPage({ params }: Props) {
                 {dict.about.whyWeExist}
               </h2>
               <p className="text-muted-foreground">
-                Our mission is to deliver discreet, high quality wellness support with clinical attentiveness, clear communication, and personalized care. We created Pitonne to offer a more thoughtful way to access IV therapy, stem cell related wellness support, and visit based services in Tokyo. By combining convenience with professional support, we aim to help each client feel cared for, respected, and supported in a way that fits their individual needs.
+                {dict.about.whyWeExistContent}
               </p>
             </div>
 
@@ -129,10 +129,10 @@ export default async function AboutPage({ params }: Props) {
                 {dict.about.howWeSupport}
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
-                Visit-Based Care Designed Around <span className="italic">Real Life.</span>
+                {dict.about.visitBasedCareTitle} <span className="italic">{dict.about.realLife}</span>
               </h2>
               <p className="text-muted-foreground mb-8">
-                Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.
+                {dict.about.visitBasedCareContent}
               </p>
               <BookingButton />
             </div>
@@ -145,13 +145,13 @@ export default async function AboutPage({ params }: Props) {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">
-              Our Team
+              {dict.about.ourTeam}
             </p>
             <h2 className="text-3xl md:text-4xl font-serif mb-4">
               {dict.about.meetTheTeam}
             </h2>
             <p className="max-w-2xl mx-auto text-muted-foreground">
-              Our team brings together registered nurses, public health experience, and physician leadership to support each client with compassion and clarity.
+              {dict.about.teamDescription}
             </p>
           </div>
 
