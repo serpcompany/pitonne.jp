@@ -1,25 +1,32 @@
-import { businessHours, businessInfo, isOpenBusinessHours } from "@/lib/data/site"
+import { businessHours, businessInfo, getBusinessInfo, isOpenBusinessHours } from "@/lib/data/site"
 import type { BlogPost } from "@/lib/data/blog-posts"
 import type { Service } from "@/lib/data/services"
 import type { PitonneVideo } from "@/lib/data/videos"
-import { absoluteUrl, canonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
+import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
+import type { Locale } from "@/lib/i18n/config"
 
 const businessId = `${SITE_URL}/#business`
 const websiteId = `${SITE_URL}/#website`
 
-export function businessJsonLd() {
+export function businessJsonLd(locale: Locale = "en") {
+  const info = getBusinessInfo(locale)
   return {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
     "@id": businessId,
-    name: businessInfo.name,
-    url: canonicalUrl("/"),
-    telephone: businessInfo.phone,
-    email: businessInfo.email,
-    description: businessInfo.description,
+    name: info.name,
+    url: localizedCanonicalUrl("/", locale),
+    telephone: info.phone,
+    email: info.email,
+    description: info.description,
+    inLanguage: locale === "ja" ? "ja" : "en",
+    availableLanguage: [
+      { "@type": "Language", name: "English", alternateName: "en" },
+      { "@type": "Language", name: "Japanese", alternateName: "ja" },
+    ],
     address: {
       "@type": "PostalAddress",
-      streetAddress: `${businessInfo.addressLine1}, ${businessInfo.addressLine2}`,
+      streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
       addressLocality: "Minato City",
       addressRegion: "Tokyo",
       postalCode: "106-0031",
@@ -34,27 +41,33 @@ export function businessJsonLd() {
   }
 }
 
-export function websiteJsonLd() {
+export function websiteJsonLd(locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": websiteId,
     name: SITE_NAME,
-    url: canonicalUrl("/"),
+    url: localizedCanonicalUrl("/", locale),
     publisher: { "@id": businessId },
+    inLanguage: locale === "ja" ? "ja" : "en",
+    availableLanguage: [
+      { "@type": "Language", name: "English", alternateName: "en" },
+      { "@type": "Language", name: "Japanese", alternateName: "ja" },
+    ],
   }
 }
 
-export function serviceJsonLd(service: Service) {
+export function serviceJsonLd(service: Service, locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${canonicalUrl(service.canonicalPath)}#service`,
+    "@id": `${localizedCanonicalUrl(service.canonicalPath, locale)}#service`,
     name: service.name,
     description: service.shortDescription,
-    url: canonicalUrl(service.canonicalPath),
+    url: localizedCanonicalUrl(service.canonicalPath, locale),
     image: service.image ? absoluteUrl(service.image) : undefined,
     provider: { "@id": businessId },
+    inLanguage: locale === "ja" ? "ja" : "en",
     areaServed: {
       "@type": "City",
       name: "Tokyo",
@@ -63,23 +76,34 @@ export function serviceJsonLd(service: Service) {
   }
 }
 
-export function blogPostingJsonLd(post: Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt" | "author" | "featureImage">) {
+export function blogPostingJsonLd(
+  post: Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt" | "author" | "featureImage">,
+  locale: Locale = "en",
+) {
+  const enUrl = canonicalUrl(`/blog/${post.slug}/`)
+  const jaUrl = `${SITE_URL}/ja/blog/${post.slug}/`
+
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": `${canonicalUrl(`/blog/${post.slug}/`)}#blog-posting`,
+    "@id": `${localizedCanonicalUrl(`/blog/${post.slug}/`, locale)}#blog-posting`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     image: post.featureImage ? absoluteUrl(post.featureImage) : undefined,
+    inLanguage: locale === "ja" ? "ja" : "en",
+    // Link original and translation via Schema.org translationOfWork/workTranslation
+    ...(locale === "ja"
+      ? { translationOfWork: { "@type": "BlogPosting", "@id": `${enUrl}#blog-posting` } }
+      : { workTranslation: { "@type": "BlogPosting", "@id": `${jaUrl}#blog-posting` } }),
     author: {
       "@type": "Person",
       name: post.author.name,
       jobTitle: post.author.role,
     },
     publisher: { "@id": businessId },
-    mainEntityOfPage: canonicalUrl(`/blog/${post.slug}/`),
+    mainEntityOfPage: localizedCanonicalUrl(`/blog/${post.slug}/`, locale),
   }
 }
 

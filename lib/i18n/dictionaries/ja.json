@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "about": "Pitonneについて",
+    "services": "サービス",
+    "areasServed": "対応エリア",
+    "blog": "ブログ",
+    "videos": "動画",
+    "faqs": "よくある質問",
+    "contact": "お問い合わせ",
+    "legal": "法的情報",
+    "phone": "電話",
+    "viewAllServices": "すべてのサービスを見る",
+    "viewAllAreas": "すべてのエリアを見る"
+  },
+  "common": {
+    "bookConsultation": "ご予約・ご相談",
+    "contactUs": "お問い合わせ",
+    "readMore": "続きを読む",
+    "viewAll": "すべて見る",
+    "minRead": "分で読めます",
+    "getDirections": "アクセス",
+    "sendMessage": "メッセージを送る",
+    "learnMore": "詳しく見る",
+    "backTo": "戻る："
+  },
+  "home": {
+    "heroEyebrow": "東京のコンシェルジュ・ウェルネス",
+    "heroTitle": "プレミアム幹細胞・点滴療法",
+    "heroDescription": "Pitonneは、東京・西麻布を拠点とするコンシェルジュ型ウェルネスサービスです。プレミアム点滴療法、幹細胞関連のウェルネスサポート、ご自宅やホテルへの出張ケアを専門としています。",
+    "whoWeAre": "私たちについて",
+    "ourServices": "サービス紹介",
+    "exploreServices": "すべてのサービスを見る",
+    "latestPosts": "最新の記事",
+    "viewAllPosts": "すべての記事を見る",
+    "areasWeServe": "対応エリア",
+    "viewAllAreas": "すべてのエリアを見る"
+  },
+  "footer": {
+    "quickLinks": "クイックリンク",
+    "openHours": "営業時間",
+    "areasServed": "対応エリア",
+    "followUs": "フォローする",
+    "listenPodcast": "ポッドキャストを聴く",
+    "closed": "休業",
+    "websiteBy": "ウェブサイト・SEO："
+  },
+  "about": {
+    "aboutPitonne": "Pitonneについて",
+    "commitment": "私たちの約束",
+    "whyWeExist": "Pitonneが存在する理由",
+    "howWeSupport": "サポートの方法",
+    "meetTheTeam": "チーム紹介"
+  },
+  "services": {
+    "ourServices": "サービス一覧",
+    "viewService": "サービスを見る",
+    "benefits": "メリット",
+    "keyPoints": "ポイント",
+    "relatedServices": "関連サービス",
+    "relatedPosts": "関連記事",
+    "frequentlyAskedQuestions": "よくある質問"
+  },
+  "areas": {
+    "areasServed": "対応エリア",
+    "neighborhoods": "周辺エリア",
+    "servicesAvailable": "利用可能なサービス",
+    "nearbyAreas": "近隣エリア"
+  },
+  "blog": {
+    "blog": "ブログ",
+    "category": "カテゴリー",
+    "allCategories": "すべてのカテゴリー",
+    "relatedPosts": "関連記事",
+    "haveQuestions": "ご質問はありますか？",
+    "publishedOn": "公開日：",
+    "by": "著者："
+  },
+  "contact": {
+    "contactUs": "お問い合わせ",
+    "getInTouch": "ご連絡ください"
+  },
+  "faqs": {
+    "frequentlyAskedQuestions": "よくある質問"
+  },
+  "languageSwitcher": {
+    "en": "English",
+    "ja": "日本語",
+    "switchTo": "言語を切り替える"
+  },
+  "days": {
+    "Monday": "月曜日",
+    "Tuesday": "火曜日",
+    "Wednesday": "水曜日",
+    "Thursday": "木曜日",
+    "Friday": "金曜日",
+    "Saturday": "土曜日",
+    "Sunday": "日曜日"
+  }
+}

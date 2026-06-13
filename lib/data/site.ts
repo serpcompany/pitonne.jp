@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/config"
+
 export type BusinessDay =
   | "Monday"
   | "Tuesday"
@@ -38,6 +40,20 @@ export function formatBusinessHours(entry: BusinessHoursEntry) {
   return isOpenBusinessHours(entry) ? `${entry.opens} - ${entry.closes}` : "Closed"
 }
 
+const dayNamesJa: Record<BusinessDay, string> = {
+  Monday: "月曜日",
+  Tuesday: "火曜日",
+  Wednesday: "水曜日",
+  Thursday: "木曜日",
+  Friday: "金曜日",
+  Saturday: "土曜日",
+  Sunday: "日曜日",
+}
+
+function formatBusinessHoursJa(entry: BusinessHoursEntry) {
+  return isOpenBusinessHours(entry) ? `${entry.opens} - ${entry.closes}` : "休診"
+}
+
 export const businessInfo = {
   name: "Pitonne",
   seoName: "Pitonne | Stem Cell & IV Therapy",
@@ -50,4 +66,16 @@ export const businessInfo = {
   hours: businessHours.map((item) => ({ day: item.day, hours: formatBusinessHours(item) })),
   description:
     "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in home or hotel visit care.",
+}
+
+const businessInfoJa = {
+  ...businessInfo,
+  bookingUrl: "https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=ja",
+  hours: businessHours.map((item) => ({ day: dayNamesJa[item.day], hours: formatBusinessHoursJa(item) })),
+  description:
+    "Pitonneは、東京・西麻布を拠点とするコンシェルジュ型ウェルネスサービスです。プレミアム点滴療法、幹細胞関連のウェルネスサポート、ご自宅やホテルへの出張ケアを専門としています。",
+}
+
+export function getBusinessInfo(locale: Locale = "en") {
+  return locale === "ja" ? businessInfoJa : businessInfo
 }
