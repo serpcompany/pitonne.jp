@@ -2,8 +2,14 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
+import type { Locale } from "@/lib/i18n/config"
 
-const blogContentDirectory = path.join(process.cwd(), "content", "blog")
+function blogContentDirectory(locale: Locale): string {
+  if (locale === "ja") {
+    return path.join(process.cwd(), "content", "blog", "ja")
+  }
+  return path.join(process.cwd(), "content", "blog")
+}
 
 const blogPostFrontmatterSchema = z.object({
   slug: z.string().min(1),
@@ -43,19 +49,23 @@ export interface BlogPost {
   sourcePath: string
 }
 
-function loadBlogPosts(): BlogPost[] {
-  if (!fs.existsSync(blogContentDirectory)) {
+function loadBlogPosts(locale: Locale): BlogPost[] {
+  const directory = blogContentDirectory(locale)
+
+  if (!fs.existsSync(directory)) {
     return []
   }
 
   return fs
-    .readdirSync(blogContentDirectory)
+    .readdirSync(directory)
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => {
-      const absolutePath = path.join(blogContentDirectory, fileName)
+      const absolutePath = path.join(directory, fileName)
       const raw = fs.readFileSync(absolutePath, "utf8")
       const parsed = matter(raw)
       const frontmatter = blogPostFrontmatterSchema.parse(parsed.data)
+
+      const contentSubdir = locale === "ja" ? "blog/ja" : "blog"
 
       return {
         ...frontmatter,
@@ -64,34 +74,40 @@ function loadBlogPosts(): BlogPost[] {
         relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
         tags: frontmatter.tags ?? [],
         content: parsed.content.trim(),
-        sourcePath: `content/blog/${fileName}`,
+        sourcePath: `content/${contentSubdir}/${fileName}`,
       }
     })
 }
 
-export const blogPosts: BlogPost[] = loadBlogPosts()
+const blogPostsByLocale = { en: loadBlogPosts("en"), ja: loadBlogPosts("ja") }
 
-export function getAllBlogPosts(): BlogPost[] {
-  return [...blogPosts].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+export const blogPosts: BlogPost[] = blogPostsByLocale.en
+
+function getPostsForLocale(locale: Locale): BlogPost[] {
+  return blogPostsByLocale[locale] ?? blogPostsByLocale.en
 }
 
-export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug)
+export function getAllBlogPosts(locale: Locale = "en"): BlogPost[] {
+  return [...getPostsForLocale(locale)].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 }
 
-export function getBlogPostsByCategory(categorySlug: string): BlogPost[] {
-  return getAllBlogPosts().filter((post) => post.categorySlug === categorySlug)
+export function getBlogPostBySlug(slug: string, locale: Locale = "en"): BlogPost | undefined {
+  return getPostsForLocale(locale).find((post) => post.slug === slug)
 }
 
-export function getFeaturedPosts(): BlogPost[] {
-  return getAllBlogPosts().filter((post) => post.featured)
+export function getBlogPostsByCategory(categorySlug: string, locale: Locale = "en"): BlogPost[] {
+  return getAllBlogPosts(locale).filter((post) => post.categorySlug === categorySlug)
 }
 
-export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPost[] {
-  const currentPost = getBlogPostBySlug(currentSlug)
+export function getFeaturedPosts(locale: Locale = "en"): BlogPost[] {
+  return getAllBlogPosts(locale).filter((post) => post.featured)
+}
+
+export function getRelatedPosts(currentSlug: string, limit: number = 3, locale: Locale = "en"): BlogPost[] {
+  const currentPost = getBlogPostBySlug(currentSlug, locale)
   if (!currentPost) return []
 
-  return getBlogPostsByCategory(currentPost.categorySlug).filter((post) => post.slug !== currentSlug).slice(0, limit)
+  return getBlogPostsByCategory(currentPost.categorySlug, locale).filter((post) => post.slug !== currentSlug).slice(0, limit)
 }
 
 export function getRelatedServiceSlugsForPost(post: Pick<BlogPost, "relatedServiceSlugs" | "categorySlug">): string[] {
@@ -102,18 +118,19 @@ export function getRelatedServiceSlugsForPost(post: Pick<BlogPost, "relatedServi
   return post.categorySlug === "iv-therapy" ? ["iv-therapy"] : []
 }
 
-export function getBlogPostsForService(serviceSlug: string, limit: number = 3): BlogPost[] {
-  const matchingPosts = getAllBlogPosts()
+export function getBlogPostsForService(serviceSlug: string, limit: number = 3, locale: Locale = "en"): BlogPost[] {
+  const matchingPosts = getAllBlogPosts(locale)
     .filter((post) => getRelatedServiceSlugsForPost(post).includes(serviceSlug))
     .slice(0, limit)
 
-  return matchingPosts.length > 0 ? matchingPosts : getAllBlogPosts().slice(0, limit)
+  return matchingPosts.length > 0 ? matchingPosts : getAllBlogPosts(locale).slice(0, limit)
 }
 
-export function getAllCategories(): { name: string; slug: string; count: number }[] {
+export function getAllCategories(locale: Locale = "en"): { name: string; slug: string; count: number }[] {
+  const posts = getPostsForLocale(locale)
   const categoryMap = new Map<string, { name: string; slug: string; count: number }>()
 
-  for (const post of blogPosts) {
+  for (const post of posts) {
     const existing = categoryMap.get(post.categorySlug)
     if (existing) {
       existing.count++

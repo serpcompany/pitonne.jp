@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "areasServed": "Areas Served",
+    "blog": "Blog",
+    "videos": "Videos",
+    "faqs": "FAQs",
+    "contact": "Contact",
+    "legal": "Legal",
+    "phone": "Phone",
+    "viewAllServices": "View All Services",
+    "viewAllAreas": "View All Areas"
+  },
+  "common": {
+    "bookConsultation": "Book Consultation",
+    "contactUs": "Contact Us",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "minRead": "min read",
+    "getDirections": "Get Directions",
+    "sendMessage": "Send Message",
+    "learnMore": "Learn More",
+    "backTo": "Back to"
+  },
+  "home": {
+    "heroEyebrow": "Concierge Wellness in Tokyo",
+    "heroTitle": "Premium Stem Cell & IV Therapy",
+    "heroDescription": "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.",
+    "whoWeAre": "Who We Are",
+    "ourServices": "Our Services",
+    "exploreServices": "Explore All Our Services",
+    "latestPosts": "Latest Posts",
+    "viewAllPosts": "View All Posts",
+    "areasWeServe": "Areas We Serve",
+    "viewAllAreas": "View All Areas"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "openHours": "Open Hours",
+    "areasServed": "Areas Served",
+    "followUs": "Follow Us",
+    "listenPodcast": "Listen to Our Podcast",
+    "closed": "Closed",
+    "websiteBy": "Website & SEO by"
+  },
+  "about": {
+    "aboutPitonne": "About Pitonne",
+    "commitment": "Our Commitment",
+    "whyWeExist": "Why We Exist",
+    "howWeSupport": "How We Support You",
+    "meetTheTeam": "Meet The Team"
+  },
+  "services": {
+    "ourServices": "Our Services",
+    "viewService": "View Service",
+    "benefits": "Benefits",
+    "keyPoints": "Key Points",
+    "relatedServices": "Related Services",
+    "relatedPosts": "Related Posts",
+    "frequentlyAskedQuestions": "Frequently Asked Questions"
+  },
+  "areas": {
+    "areasServed": "Areas Served",
+    "neighborhoods": "Neighborhoods",
+    "servicesAvailable": "Services Available",
+    "nearbyAreas": "Nearby Areas"
+  },
+  "blog": {
+    "blog": "Blog",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "relatedPosts": "Related Posts",
+    "haveQuestions": "Have Questions?",
+    "publishedOn": "Published on",
+    "by": "by"
+  },
+  "contact": {
+    "contactUs": "Contact Us",
+    "getInTouch": "Get in Touch"
+  },
+  "faqs": {
+    "frequentlyAskedQuestions": "Frequently Asked Questions"
+  },
+  "languageSwitcher": {
+    "en": "English",
+    "ja": "日本語",
+    "switchTo": "Switch language"
+  },
+  "days": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  }
+}

@@ -2,8 +2,14 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
+import type { Locale } from "@/lib/i18n/config"
 
-const serviceContentDirectory = path.join(process.cwd(), "content", "services")
+function serviceContentDirectory(locale: Locale): string {
+  if (locale === "ja") {
+    return path.join(process.cwd(), "content", "services", "ja")
+  }
+  return path.join(process.cwd(), "content", "services")
+}
 
 const serviceCategorySchema = z.enum(["iv-therapy", "stem-cell", "medication", "blood-tests"])
 const serviceKindSchema = z.enum(["parent", "leaf"])
@@ -95,6 +101,13 @@ export const serviceCategorySections: ServiceCategorySection[] = [
   },
 ]
 
+const serviceCategoryTitlesJa: Record<string, string> = {
+  "IV Therapy": "点滴療法",
+  "Stem Cell Therapy": "幹細胞療法",
+  "Medications": "処方薬",
+  "Blood Tests": "血液検査",
+}
+
 const serviceOrder = [
   "iv-therapy",
   "stem-cell-therapy",
@@ -102,18 +115,22 @@ const serviceOrder = [
   ...serviceCategorySections.flatMap((section) => section.serviceSlugs),
 ]
 
-function loadServices(): Service[] {
-  if (!fs.existsSync(serviceContentDirectory)) {
+function loadServices(locale: Locale): Service[] {
+  const directory = serviceContentDirectory(locale)
+
+  if (!fs.existsSync(directory)) {
     return []
   }
 
   return fs
-    .readdirSync(serviceContentDirectory)
+    .readdirSync(directory)
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => {
-      const absolutePath = path.join(serviceContentDirectory, fileName)
+      const absolutePath = path.join(directory, fileName)
       const parsed = matter(fs.readFileSync(absolutePath, "utf8"))
       const frontmatter = serviceFrontmatterSchema.parse(parsed.data)
+
+      const contentSubdir = locale === "ja" ? "services/ja" : "services"
 
       return {
         slug: frontmatter.slug,
@@ -122,7 +139,7 @@ function loadServices(): Service[] {
         kind: frontmatter.kind,
         parentSlug: frontmatter.parentSlug,
         canonicalPath: frontmatter.canonicalPath,
-        sourcePath: `content/services/${fileName}`,
+        sourcePath: `content/${contentSubdir}/${fileName}`,
         imageSourcePath: frontmatter.imageSourcePath,
         shortDescription: frontmatter.shortDescription,
         fullDescription: frontmatter.fullDescription,
@@ -137,35 +154,48 @@ function loadServices(): Service[] {
     .sort((a, b) => serviceOrder.indexOf(a.slug) - serviceOrder.indexOf(b.slug))
 }
 
-export const services: Service[] = loadServices()
+const servicesByLocale = { en: loadServices("en"), ja: loadServices("ja") }
 
-export function getService(slug: string): Service | undefined {
-  return services.find((service) => service.slug === slug)
+export const services: Service[] = servicesByLocale.en
+
+function getServicesForLocale(locale: Locale): Service[] {
+  return servicesByLocale[locale] ?? servicesByLocale.en
 }
 
-export function getServicesFromSlugs(slugs: string[]): Service[] {
-  return slugs.map((slug) => getService(slug)).filter((service): service is Service => Boolean(service))
+export function getService(slug: string, locale: Locale = "en"): Service | undefined {
+  return getServicesForLocale(locale).find((service) => service.slug === slug)
 }
 
-export function getServicesByCategory(category: Service["category"]): Service[] {
-  return services.filter((service) => service.category === category && service.kind === "leaf")
+export function getServicesFromSlugs(slugs: string[], locale: Locale = "en"): Service[] {
+  return slugs.map((slug) => getService(slug, locale)).filter((service): service is Service => Boolean(service))
 }
 
-export function getParentServices(): Service[] {
-  return services.filter((service) => service.kind === "parent")
+export function getServicesByCategory(category: Service["category"], locale: Locale = "en"): Service[] {
+  return getServicesForLocale(locale).filter((service) => service.category === category && service.kind === "leaf")
 }
 
-export function getChildServices(parentSlug: string): Service[] {
-  return services.filter((service) => service.parentSlug === parentSlug)
+export function getParentServices(locale: Locale = "en"): Service[] {
+  return getServicesForLocale(locale).filter((service) => service.kind === "parent")
 }
 
-export function getServiceCategorySections(): Array<ServiceCategorySection & { services: Service[] }> {
-  return serviceCategorySections.map((section) => ({
-    ...section,
-    services: getServicesFromSlugs(section.serviceSlugs),
-  }))
+export function getChildServices(parentSlug: string, locale: Locale = "en"): Service[] {
+  return getServicesForLocale(locale).filter((service) => service.parentSlug === parentSlug)
 }
 
-export function getAllServiceSlugs(): string[] {
-  return services.map((service) => service.slug)
+export function getServiceCategorySections(locale: Locale = "en"): Array<ServiceCategorySection & { services: Service[] }> {
+  return serviceCategorySections.map((section) => {
+    const localizedTitle = locale === "ja" ? (serviceCategoryTitlesJa[section.title] ?? section.title) : section.title
+    const localizedHref = locale === "ja" ? `/ja${section.href}` : section.href
+
+    return {
+      ...section,
+      title: localizedTitle,
+      href: localizedHref,
+      services: getServicesFromSlugs(section.serviceSlugs, locale),
+    }
+  })
+}
+
+export function getAllServiceSlugs(locale: Locale = "en"): string[] {
+  return getServicesForLocale(locale).map((service) => service.slug)
 }

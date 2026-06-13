@@ -1,4 +1,6 @@
 import { wards } from "./areas"
+import type { Locale } from "@/lib/i18n/config"
+import { normalizePath } from "@/lib/seo"
 
 export const canonicalRoutes = {
   home: "/",
@@ -38,3 +40,22 @@ export const areaNavigation = wards.map((ward) => ({
     href: `/areas-served/${ward.slug}/${area.slug}/`,
   })),
 }))
+
+export function localizedRoute(path: string, locale: Locale = "en"): string {
+  const normalized = normalizePath(path)
+  if (locale === "ja") {
+    return `/ja${normalized}`
+  }
+  return normalized
+}
+
+export function getAreaNavigation(locale: Locale = "en") {
+  return areaNavigation.map((ward) => ({
+    ...ward,
+    href: localizedRoute(ward.href, locale),
+    areas: ward.areas.map((area) => ({
+      ...area,
+      href: localizedRoute(area.href, locale),
+    })),
+  }))
+}
