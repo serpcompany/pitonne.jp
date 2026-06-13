@@ -24,10 +24,10 @@ const services = [
     image: "/images/medication.jpeg",
   },
   {
-    title: "Wellness Consultations",
-    description: "Discreet access to medication options supported by careful review and straightforward next steps.",
-    href: "/services",
-    image: "/images/wellness-consultation.jpg",
+    title: "Blood Tests",
+    description: "Private blood testing with hormone panels, nutrition evaluation, and tumor marker screening options.",
+    href: "/services/blood-tests",
+    image: "/images/content/sheet/services/nutrition-blood-testing.jpg",
   },
 ]
 

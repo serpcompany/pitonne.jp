@@ -2,6 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
+import { CareAvailableSection } from "@/components/areas/care-available-section"
+import { HowToGetStartedSection } from "@/components/areas/how-to-get-started-section"
+import { LatestPostsSection } from "@/components/shared/latest-posts-section"
 import { getWard, wards } from "@/lib/data/areas"
 import { canonicalUrl } from "@/lib/seo"
 
@@ -14,15 +17,18 @@ export async function generateMetadata({ params }: { params: Promise<{ ward: str
   const ward = getWard(wardSlug)
   if (!ward) return { title: "Area Not Found | Pitonne" }
   
+  const seoTitle = `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
+  const seoDescription = `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
+
   return {
-    title: `IV Therapy & Wellness in ${ward.name}, Tokyo`,
-    description: `Premium IV therapy and stem cell services in ${ward.name} Ward (${ward.nameJa}), Tokyo. ${ward.description}`,
+    title: seoTitle,
+    description: seoDescription,
     alternates: {
       canonical: canonicalUrl(`/areas-served/${ward.slug}/`),
     },
     openGraph: {
-      title: `IV Therapy & Wellness in ${ward.name}, Tokyo`,
-      description: `Premium IV therapy and stem cell services in ${ward.name} Ward (${ward.nameJa}), Tokyo. ${ward.description}`,
+      title: seoTitle,
+      description: seoDescription,
       url: canonicalUrl(`/areas-served/${ward.slug}/`),
     },
   }
@@ -48,7 +54,7 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
           { label: ward.name },
         ]}
         eyebrow={ward.nameJa}
-        title={`Stem Cell & IV Therapy in ${ward.name}, Tokyo`}
+        title={`IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`}
         description={ward.description}
       />
 
@@ -111,92 +117,9 @@ export default async function WardPage({ params }: { params: Promise<{ ward: str
         </div>
       </section>
 
-      {/* Care Available */}
-      <section className="py-16 bg-[#f5ebe0]">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="font-serif text-3xl text-foreground mb-8 text-center">
-            Care Available in {ward.name}
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h3 className="font-semibold text-foreground mb-4">Services We Offer</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">IV therapy and wellness consultation</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Stem cell related treatment planning</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Online medication consultation</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">In-home or hotel visit coordination</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Private follow-up for international visitors</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Concierge scheduling from Nishiazabu</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-card p-8 rounded-lg border border-border">
-              <h3 className="font-semibold text-foreground mb-4">Ideal For</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Busy schedule around {ward.name}, Tokyo</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Hotel or residence coordination</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">English-friendly care planning before a visit</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Wellness support after travel or work fatigue</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#7A8F87]" />
-                  <span className="text-muted-foreground">Private consultation before choosing a service</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How to Get Started */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 max-w-3xl text-center">
-          <h2 className="font-serif text-3xl text-foreground mb-6">
-            How To Get Started
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Use the consultation form to share your {ward.name}, Tokyo location, preferred timing, 
-            and the type of care you want to discuss. Pitonne will confirm the appropriate next step 
-            and whether a clinic visit, in-home visit, hotel visit, or online consultation is suitable.
-          </p>
-          <Link 
-            href="/contact" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[#7A8F87] text-white px-8 py-4 rounded-full hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Pitonne
-          </Link>
-        </div>
-      </section>
+      <CareAvailableSection />
+      <HowToGetStartedSection locationLabel={`${ward.name}, Tokyo`} />
+      <LatestPostsSection />
 
       {/* Back Link */}
       <section className="py-8 border-t border-border">

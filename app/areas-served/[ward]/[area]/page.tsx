@@ -25,15 +25,18 @@ export async function generateMetadata({
 
   const { ward, area } = result
 
+  const seoTitle = `IV Therapy, Stem Cells & Blood Tests in ${area.name}, ${ward.name}`
+  const seoDescription = `IV therapy, stem cell treatments, medications, and blood testing in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. Mobile and in-clinic care from Pitonne.`
+
   return {
-    title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name}`,
-    description: `Premium IV therapy, stem cell treatments, and wellness services in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo.`,
+    title: seoTitle,
+    description: seoDescription,
     alternates: {
       canonical: canonicalUrl(`/areas-served/${ward.slug}/${area.slug}/`),
     },
     openGraph: {
-      title: `Stem Cell & IV Therapy in ${area.name}, ${ward.name}`,
-      description: `Premium IV therapy, stem cell treatments, and wellness services in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo.`,
+      title: seoTitle,
+      description: seoDescription,
       url: canonicalUrl(`/areas-served/${ward.slug}/${area.slug}/`),
     },
   }

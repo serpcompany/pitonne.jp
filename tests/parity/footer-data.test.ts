@@ -21,7 +21,7 @@ describe("footer and CTA data parity", () => {
     expect(businessInfo.hours).toEqual(
       businessHours.map((item) => ({ day: item.day, hours: formatBusinessHours(item) })),
     )
-    expect(businessInfo.bookingUrl).toBe("https://ssv.onemorehand.jp/hic_pitonne/")
+    expect(businessInfo.bookingUrl).toBe("https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=en")
     expect(canonicalRoutes.termsConditions).toBe("/legal/terms-conditions/")
   })
 

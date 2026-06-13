@@ -3,12 +3,9 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
-import { areaNavigation, canonicalRoutes, serviceNavigation } from "@/lib/data/routes"
+import { areaNavigation, canonicalRoutes, type ServiceNavCategory } from "@/lib/data/routes"
 import { businessInfo } from "@/lib/data/site"
-
-const servicesMenu = {
-  categories: serviceNavigation,
-}
+import { ContactButton } from "@/components/shared/contact-button"
 
 const areasMenu = {
   wards: areaNavigation,
@@ -33,10 +30,10 @@ const navigation = [
   { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
   { name: "Blog", href: canonicalRoutes.blog },
   { name: "Videos", href: canonicalRoutes.videos },
-  { name: "Contact", href: canonicalRoutes.contact },
 ]
 
-export function Header() {
+export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCategory[] }) {
+  const servicesMenu = { categories: serviceNavigation }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
@@ -210,14 +207,7 @@ export function Header() {
               </div>
             )}
           </div>
-          <Link 
-            href={canonicalRoutes.contact}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#7A8F87] text-white px-5 py-2.5 rounded-md text-sm font-medium hover:bg-[#245f5a] transition-colors"
-          >
-            Contact Us
-          </Link>
+          <ContactButton className="px-5 py-2.5" />
         </div>
 
         {/* Mobile menu button */}
@@ -352,15 +342,7 @@ export function Header() {
                   </a>
                 ))}
               </div>
-              <Link 
-                href="/contact"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full bg-[#7A8F87] text-white text-center px-5 py-2.5 rounded-md text-sm font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
+              <ContactButton className="w-full px-5 py-2.5" />
             </div>
           </div>
         </div>

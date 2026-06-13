@@ -123,8 +123,13 @@ export function Footer() {
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
               <p>
-                <a href={`mailto:${businessInfo.email}`} className="hover:text-white transition-colors">
-                  {businessInfo.email}
+                <a href="tel:070-2194-0199" className="hover:text-white transition-colors">
+                  JP: {businessInfo.phone}
+                </a>
+              </p>
+              <p>
+                <a href="tel:+17868140323" className="hover:text-white transition-colors">
+                  US: +1 786 814 0323
                 </a>
               </p>
             </address>
@@ -232,7 +237,7 @@ export function Footer() {
           {/* Copyright */}
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/70">
-              &copy; {new Date().getFullYear()} Pitonne Stem Cell & IV Therapy. All rights reserved.
+              &copy; {new Date().getFullYear()} Pitonne Stem Cell & IV Therapy. Website & SEO by <a href="https://serp.co" target="_blank" rel="noopener" className="hover:text-[#7A8F87] transition-colors">SERP</a>
             </p>
             <p className="text-xs text-white/70">
               Nishi Azabu, Minato-ku, Tokyo, Japan

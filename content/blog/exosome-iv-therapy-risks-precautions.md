@@ -29,7 +29,7 @@ At Pitonne | Stem Cell & IV Therapy, we believe this kind of treatment should be
 
 ## An Important Starting Point
 
-In its notice dated **July 31, 2024**, Japan’s Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or stem cell conditioned media-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
+In its notice dated **July 31, 2024**, Japan’s Ministry of Health, Labour and Welfare stated that, at present, there are **no exosome- or [stem cell conditioned media](/blog/stem-cell-therapy-vs-exosome-iv-therapy/)-based products that have been approved as pharmaceuticals in Japan based on established efficacy and safety**.
 
 This does not mean that every treatment should automatically be viewed with alarm. It does mean that patients should be especially careful to understand **what is being used, how it is managed, and what medical explanation is provided** before treatment.
 
@@ -135,4 +135,4 @@ It is important to confirm that the clinic explains the treatment clearly, inclu
 
 When considering Exosome IV therapy, it is important to look beyond the appeal of the treatment itself and also understand the broader safety picture. That includes the general risks of IV treatment, the careful handling of human-derived materials, the importance of medical screening, and the clinic’s readiness to respond if urgent care is needed.
 
-At Pitonne | Stem Cell & IV Therapy, we believe patients should be able to make these decisions with clarity and confidence. That is why we place emphasis on careful explanation, thoughtful screening, and medically guided care in both in-clinic and mobile settings. If you would like to discuss whether treatment may be appropriate for you, please contact us here: [Booking & Consultation](https://ssv.onemorehand.jp/hic_pitonne/)
+At Pitonne | Stem Cell & IV Therapy, we believe patients should be able to make these decisions with clarity and confidence. That is why we place emphasis on careful explanation, thoughtful screening, and medically guided care in both in-clinic and mobile settings. If you would like to discuss whether treatment may be appropriate for you, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)

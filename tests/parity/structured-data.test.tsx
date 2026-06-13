@@ -111,6 +111,7 @@ describe("structured data parity", () => {
           tags: post!.tags,
         }}
         relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter((candidate) => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
         latestPosts={getAllBlogPosts().filter((candidate) => candidate.slug !== post!.slug)}
       />,
     )

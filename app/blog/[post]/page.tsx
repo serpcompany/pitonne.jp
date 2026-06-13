@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog-post-template"
 import { blogPosts, getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getServicesFromSlugs } from "@/lib/data/services"
 import { absoluteUrl, canonicalUrl } from "@/lib/seo"
 
 interface Props {
@@ -77,10 +78,14 @@ export default async function BlogPostPage({ params }: Props) {
     .filter(p => p.slug !== postSlug)
     .slice(0, 3)
 
+  // Resolve related services from frontmatter slugs
+  const relatedServices = getServicesFromSlugs(post.relatedServiceSlugs ?? [])
+
   return (
     <BlogPostTemplate
       post={post}
       relatedPosts={relatedPosts}
+      relatedServices={relatedServices}
       latestPosts={getAllBlogPosts().filter((candidate) => candidate.slug !== postSlug)}
     />
   )

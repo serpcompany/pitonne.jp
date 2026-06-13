@@ -1,7 +1,6 @@
-import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
-import { businessInfo } from "@/lib/data/site"
+import { BookingButton } from "@/components/shared/booking-button"
 import { canonicalUrl } from "@/lib/seo"
 
 export const metadata: Metadata = {
@@ -113,14 +112,7 @@ export default function AboutPage() {
               <p className="text-muted-foreground mb-8">
                 Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.
               </p>
-              <Link 
-                href={businessInfo.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
-              >
-                Book Consultation
-              </Link>
+              <BookingButton />
             </div>
           </div>
         </div>

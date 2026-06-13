@@ -32,7 +32,7 @@ At Pitonne, the right way to frame IV therapy for fatigue is as a possible suppo
 
 Most people are not looking for a diagnosis when they search this phrase. They are usually dealing with that flat, depleted feeling that can show up after long work stretches, hard training, travel, poor sleep, or busy periods where food, fluids, and rest all slipped. They want to know whether a hydration-based reset may help them feel more functional again.
 
-That is understandable, but fatigue is not one-size-fits-all. Tiredness can come from dehydration, but it can also come from stress, illness, anemia, medication effects, sleep issues, infection, hormone changes, and many other factors. A responsible blog post cannot pretend every fatigue complaint belongs in a wellness lane.
+That is understandable, but fatigue is not one-size-fits-all. Tiredness can come from [dehydration](/blog/iv-therapy-for-dehydration/), but it can also come from stress, illness, anemia, medication effects, sleep issues, infection, hormone changes, and many other factors. A responsible blog post cannot pretend every fatigue complaint belongs in a wellness lane.
 
 The safer approach is to separate short-term depletion from persistent fatigue. If the issue looks temporary and tied to recovery or hydration, IV therapy may be worth asking about. If the issue has been ongoing, keeps returning, or comes with other concerning symptoms, the next step may need to be medical evaluation rather than a recovery drip.
 
