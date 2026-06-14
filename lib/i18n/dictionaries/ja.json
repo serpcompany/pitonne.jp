@@ -22,7 +22,8 @@
     "getDirections": "アクセス",
     "sendMessage": "メッセージを送る",
     "learnMore": "詳しく見る",
-    "backTo": "戻る："
+    "backTo": "戻る：",
+    "toggleMenu": "メニューを切り替える"
   },
   "home": {
     "heroEyebrow": "東京のコンシェルジュ・ウェルネス",
@@ -57,7 +58,10 @@
     "followUs": "フォローする",
     "listenPodcast": "ポッドキャストを聴く",
     "closed": "休業",
-    "websiteBy": "ウェブサイト・SEO："
+    "websiteBy": "ウェブサイト・SEO：",
+    "businessName": "Pitonne 幹細胞・点滴療法",
+    "mapTitle": "Pitonne 幹細胞・点滴療法 所在地",
+    "locationShort": "東京都港区西麻布"
   },
   "about": {
     "aboutPitonne": "Pitonneについて",

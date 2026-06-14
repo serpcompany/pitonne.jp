@@ -22,7 +22,8 @@
     "getDirections": "Get Directions",
     "sendMessage": "Send Message",
     "learnMore": "Learn More",
-    "backTo": "Back to"
+    "backTo": "Back to",
+    "toggleMenu": "Toggle menu"
   },
   "home": {
     "heroEyebrow": "Concierge Wellness in Tokyo",
@@ -57,7 +58,10 @@
     "followUs": "Follow Us",
     "listenPodcast": "Listen to Our Podcast",
     "closed": "Closed",
-    "websiteBy": "Website & SEO by"
+    "websiteBy": "Website & SEO by",
+    "businessName": "Pitonne Stem Cell & IV Therapy",
+    "mapTitle": "Pitonne Stem Cell & IV Therapy Location",
+    "locationShort": "Nishi Azabu, Minato-ku, Tokyo, Japan"
   },
   "about": {
     "aboutPitonne": "About Pitonne",
