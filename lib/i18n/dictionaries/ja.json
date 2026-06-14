@@ -22,7 +22,8 @@
     "getDirections": "アクセス",
     "sendMessage": "メッセージを送る",
     "learnMore": "詳しく見る",
-    "backTo": "戻る："
+    "backTo": "戻る：",
+    "toggleMenu": "メニューを切り替える"
   },
   "home": {
     "heroEyebrow": "東京のコンシェルジュ・ウェルネス",
@@ -34,7 +35,21 @@
     "latestPosts": "最新の記事",
     "viewAllPosts": "すべての記事を見る",
     "areasWeServe": "対応エリア",
-    "viewAllAreas": "すべてのエリアを見る"
+    "viewAllAreas": "すべてのエリアを見る",
+    "clinicalCareHeading": "臨床ケアに裏打ちされた",
+    "clinicalCare": "コンシェルジュ・ウェルネスサポート",
+    "homeVisits": "ご自宅・ホテルへの訪問ケア",
+    "nurseLed": "看護師によるサポート",
+    "conciergeService": "東京都心のコンシェルジュサービス",
+    "servicesDescription": "出張点滴療法、幹細胞治療のご相談、オンライン処方サービスまで、Pitonneはお客様一人ひとりに合わせたプライベートなケアを提供します。",
+    "ivTherapyTitle": "点滴療法",
+    "ivTherapyDescription": "回復、エネルギー、免疫力、美肌に合わせた、水分補給と栄養素のサポート。",
+    "stemCellTitle": "幹細胞療法",
+    "stemCellDescription": "実用的な提供方法と個別のケアプランニングに重点を置いた再生ウェルネスサポート。",
+    "medicationTitle": "処方薬",
+    "medicationDescription": "プライバシーに配慮し、適切な場合には医師のレビューを伴う処方サポート。",
+    "bloodTestsTitle": "血液検査",
+    "bloodTestsDescription": "ホルモンパネル、栄養評価、腫瘍マーカースクリーニングを含むプライベート血液検査。"
   },
   "footer": {
     "quickLinks": "クイックリンク",
@@ -43,14 +58,34 @@
     "followUs": "フォローする",
     "listenPodcast": "ポッドキャストを聴く",
     "closed": "休業",
-    "websiteBy": "ウェブサイト・SEO："
+    "websiteBy": "ウェブサイト・SEO：",
+    "businessName": "Pitonne 幹細胞・点滴療法",
+    "mapTitle": "Pitonne 幹細胞・点滴療法 所在地",
+    "locationShort": "東京都港区西麻布"
   },
   "about": {
     "aboutPitonne": "Pitonneについて",
     "commitment": "私たちの約束",
     "whyWeExist": "Pitonneが存在する理由",
     "howWeSupport": "サポートの方法",
-    "meetTheTeam": "チーム紹介"
+    "meetTheTeam": "チーム紹介",
+    "metaDescription": "Pitonneは、東京・西麻布を拠点とするコンシェルジュ型ウェルネスサービスです。プレミアム点滴療法、幹細胞関連のウェルネスサポート、パーソナライズドケアを提供しています。",
+    "heroDescription": "Pitonneは、東京・西麻布を拠点とするコンシェルジュ型ウェルネスサービスです。プレミアム点滴療法、幹細胞関連のウェルネスサポート、ご自宅やホテルへの訪問によるパーソナライズドケアを提供しています。多忙なプロフェッショナル、海外からのお客様、プライバシー・利便性・臨床的サポートを重視するお客様のためのサービスです。東京での暮らしに寄り添った、より身近で、プライベートで、一人ひとりに合ったウェルネスケアを目指しています。",
+    "whyWeExistContent": "私たちの使命は、臨床的な注意深さ、明確なコミュニケーション、パーソナライズドケアにより、プライベートで高品質なウェルネスサポートを提供することです。Pitonneは、東京での点滴療法、幹細胞関連のウェルネスサポート、訪問型サービスへのより思いやりのあるアクセスを提供するために設立されました。利便性と専門的なサポートを組み合わせ、お客様一人ひとりが大切にされ、尊重され、個々のニーズに合った方法でサポートされていると感じられることを目指しています。",
+    "ourTeam": "チーム",
+    "teamDescription": "看護師、保健師としての経験と医師のリーダーシップを結集し、思いやりと明確さをもってお客様をサポートするチームです。",
+    "visitBasedCareTitle": "日常に寄り添う",
+    "realLife": "訪問型ケア",
+    "visitBasedCareContent": "Pitonneは、スケジュールに自然にフィットするウェルネスサポートを求める方のために、柔軟な訪問型ケアを提供しています。ご自宅、ホテル、多忙な仕事の合間でも、プライベートで快適な環境でのケアを実現します。時間、パーソナルな対応、東京でのより穏やかなケア体験を大切にするお客様をサポートします。",
+    "teamKanakoName": "清水 佳奈子",
+    "teamKanakoRole": "看護師・保健師",
+    "teamKanakoBio": "再生医療クリニックの運営に携わり、健康最適化と予防医療に注力しています。看護師・保健師として、幹細胞培養上清液を使用した治療のサポート、法人向けプログラム、体重管理、ファスティング指導などのウェルネスサポートを提供しています。予防医療と現代医学のバランスを取りながら、病気になる前の健康ケアを大切にしています。",
+    "teamSaoriName": "椿 沙織",
+    "teamSaoriRole": "看護師・保健師",
+    "teamSaoriBio": "看護師・保健師としての知識と経験を活かし、再生医療分野での健康サポートに携わっています。幹細胞培養上清液を使用した治療支援、予防ケア、身体メンテナンス、体重管理、法人向けウェルネスプログラムを通じて、一人ひとりの日々のウェルビーイングをサポートすることを大切にしています。",
+    "teamAkiraName": "三上 晃",
+    "teamAkiraRole": "医師",
+    "teamAkiraBio": "研修医時代から「患者第一」という言葉を胸に医療に取り組んでまいりました。自分自身が受けたいと思える医療を提供することが、医師になった原点です。この原則に忠実である限り、患者さまにとって正しい判断へと導いてくれると信じています。"
   },
   "services": {
     "ourServices": "サービス一覧",
@@ -59,13 +94,14 @@
     "keyPoints": "ポイント",
     "relatedServices": "関連サービス",
     "relatedPosts": "関連記事",
-    "frequentlyAskedQuestions": "よくある質問"
-  },
-  "areas": {
-    "areasServed": "対応エリア",
-    "neighborhoods": "周辺エリア",
-    "servicesAvailable": "利用可能なサービス",
-    "nearbyAreas": "近隣エリア"
+    "frequentlyAskedQuestions": "よくある質問",
+    "metaDescription": "医師監修の処方薬、プレミアム点滴療法、血液検査、再生ウェルネスサービスをご覧ください。東京で多忙なプロフェッショナル、旅行者、健康意識の高いお客様のために設計されています。",
+    "heroDescription": "医師監修の処方薬、プレミアム点滴療法、血液検査、再生ウェルネスサービスをご覧ください。東京でプライベートなパーソナライズドケアを求めるお客様のためのサービスです。",
+    "bookThisService": "このサービスを予約",
+    "bookServiceDescription": "Pitonneの予約システムを使って、ご相談のご予約と、このサービスがお客様の目標に合っているかをご確認ください。",
+    "availableTreatments": "利用可能な施術",
+    "viewAllServices": "すべてのサービスを見る",
+    "viewAll": "すべて見る"
   },
   "blog": {
     "blog": "ブログ",
@@ -74,14 +110,160 @@
     "relatedPosts": "関連記事",
     "haveQuestions": "ご質問はありますか？",
     "publishedOn": "公開日：",
-    "by": "著者："
+    "by": "著者：",
+    "metaDescription": "Pitonneによる点滴療法、幹細胞治療、ウェルネスのヒント、健康に関する最新記事をお読みください。",
+    "heroDescription": "Pitonneチームによる点滴療法、幹細胞治療、ウェルネスに関する情報をお届けします。健康について十分な情報に基づいた判断ができるよう、教育的なコンテンツを共有しています。",
+    "categories": "カテゴリー：",
+    "all": "すべて",
+    "featured": "注目",
+    "featuredArticle": "注目の記事",
+    "latestArticles": "最新の記事",
+    "readArticle": "記事を読む",
+    "stayInformed": "最新情報をお届け",
+    "stayInformedDescription": "サービスについてご質問がありますか？点滴療法、幹細胞治療、東京でのウェルネスサポートについて詳しくはお問い合わせください。",
+    "noArticlesFound": "このカテゴリーにはまだ記事がありません。",
+    "viewAllArticles": "すべての記事を見る",
+    "articles": "の記事",
+    "article": "記事",
+    "readOurLatestPosts": "最新の記事を読む",
+    "viewAllPosts": "すべての記事を見る",
+    "bookAConsultation": "ご相談のご予約",
+    "consultationDescription": "詳しくお知りになりたいですか？私たちのサービスがお客様のウェルネス目標をどのようにサポートできるか、ご相談をご予約ください。",
+    "contactPitonne": "Pitonneに問い合わせる",
+    "contactDescription": "臨床ガイド付きウェルネスオプションと、サービスがお客様の目標に適しているかについて、Pitonneにご相談ください。",
+    "relatedPitonneServices": "関連するPitonneサービス"
   },
   "contact": {
     "contactUs": "お問い合わせ",
-    "getInTouch": "ご連絡ください"
+    "getInTouch": "ご連絡ください",
+    "metaDescription": "点滴療法、幹細胞関連のウェルネスサポート、東京でのコンシェルジュケアについて、ご相談やご質問はPitonneにお問い合わせください。",
+    "heroDescription": "ご相談のご予約やサービスについてのご質問はこちらから。チームが迅速にご対応いたします。",
+    "inquiryFormDescription": "Pitonneの安全なお問い合わせフォームから、ご相談のご依頼やサービスについてのご質問をお寄せください。",
+    "email": "メール",
+    "location": "所在地",
+    "japan": "日本",
+    "us": "アメリカ",
+    "address": "〒106-0031 東京都港区西麻布3丁目17-22 1F"
   },
   "faqs": {
-    "frequentlyAskedQuestions": "よくある質問"
+    "frequentlyAskedQuestions": "よくある質問",
+    "metaDescription": "Pitonneの出張訪問、クリニック内診察、点滴療法、エクソソーム点滴療法、サービスエリア、東京でのご予約に関するよくある質問への回答。",
+    "heroDescription": "出張訪問、クリニック内診察、サービスエリア、予約前の準備、エクソソーム点滴療法に関するよくある質問への回答をご覧ください。",
+    "items": [
+      {
+        "question": "出張訪問とクリニック内での診察の両方がありますか？",
+        "answer": "はい。Pitonneは主にご自宅、ホテル、オフィスへの出張訪問を提供していますが、クリニック内での診察も可能です。クリニック内での診察の場合、点滴療法サービスに¥5,000の割引が適用されます。"
+      },
+      {
+        "question": "出張訪問の対応エリアはどこですか？",
+        "answer": "西麻布を拠点とし、主に東京都心部で出張訪問を提供しています。各メニューオプションに記載されているサービスエリアの詳細をご確認ください。ご要望に応じて、遠方のエリアでもご相談の上対応できる場合があります。"
+      },
+      {
+        "question": "出張訪問に追加の交通費はかかりますか？",
+        "answer": "西麻布から5km圏内の出張訪問は料金に含まれています。5kmのサービスエリア外のご予約の場合、距離に応じて追加の交通費がかかります。ご予約時に適切な交通費オプションを選択してください。"
+      },
+      {
+        "question": "クリニック内での診察に割引はありますか？",
+        "answer": "はい。クリニック内での診察の場合、点滴療法サービスに¥5,000の割引が適用されます。血液検査など一部のサービスは除外される場合があります。"
+      },
+      {
+        "question": "エクソソーム点滴療法の前にオンライン医療相談は必要ですか？",
+        "answer": "はい。エクソソーム点滴療法は、医師とのオンライン医療相談の後に提供されます。お客様の状態、目標、医学的適性に基づいて治療が推奨されます。"
+      },
+      {
+        "question": "エクソソーム点滴療法はどのような方に推奨されますか？",
+        "answer": "エクソソーム点滴療法は、回復力の向上、全体的なコンディションの改善、または多忙な時期の追加サポートを求める方に適している場合があります。高度なコンディショニングや男性のウェルネスサポートとして選択されるお客様もいらっしゃいます。"
+      },
+      {
+        "question": "ホテルやオフィスでも施術を受けられますか？",
+        "answer": "はい。自宅訪問に加えて、ホテルやオフィスでの施術も可能です。静かで快適なスペースをご用意ください。施設によっては事前確認が必要な場合があります。"
+      },
+      {
+        "question": "予約前に何か準備する必要はありますか？",
+        "answer": "特別な準備は必要ありません。施術中にリラックスできる椅子やソファなどの快適なスペースをご用意ください。お客様の状態によっては、当日に施術内容が調整される場合があります。"
+      },
+      {
+        "question": "外国人のお客様もサービスを利用できますか？",
+        "answer": "はい。英語でのサポートが可能です。ホテルへの出張訪問を含め、東京滞在中の海外からの旅行者やゲストの方もご利用いただけます。"
+      },
+      {
+        "question": "どのサービスを選べばいいかわかりません。",
+        "answer": "お客様のお悩みや目標に基づいてご案内いたします。どのサービスを選べばよいかわからない場合は、事前にお問い合わせいただくか、まずオンライン相談をご予約ください。"
+      },
+      {
+        "question": "予約の変更やキャンセルはできますか？",
+        "answer": "予約の変更やキャンセルが必要な場合は、できるだけ早めにご連絡ください。タイミングやご予約のサービスによっては、キャンセルポリシーが適用される場合があります。"
+      },
+      {
+        "question": "当日予約は可能ですか？",
+        "answer": "スケジュールと場所によっては当日予約が可能な場合があります。空き状況を確認するため、まずお問い合わせください。"
+      }
+    ]
+  },
+  "areas": {
+    "areasServed": "対応エリア",
+    "neighborhoods": "周辺エリア",
+    "servicesAvailable": "利用可能なサービス",
+    "nearbyAreas": "近隣エリア",
+    "metaTitle": "点滴療法・幹細胞・処方薬・血液検査 | 東京の対応エリア",
+    "metaDescription": "東京都心部での点滴療法、幹細胞治療、処方薬、血液検査。六本木、麻布、渋谷、銀座など、Pitonneの出張・クリニックウェルネスケア。",
+    "heroTitle": "点滴療法・幹細胞・処方薬・血液検査 — 東京の対応エリア",
+    "heroDescription": "Pitonneは東京都心部で点滴療法、幹細胞治療、処方薬、血液検査を提供しています。お客様のご自宅やホテルへ出張し、プライベートなコンシェルジュ・ウェルネスケアをお届けします。",
+    "ward": "区",
+    "viewAllIn": "すべて見る：",
+    "mobileWellnessServices": "出張ウェルネスサービス",
+    "mobileWellnessDescription": "東京都内各所へ出張し、ご自宅やホテルでのウェルネスサービスを提供しています。西麻布クリニックからアクセスしやすい東京都心部を中心にサービスを展開しています。",
+    "homeVisits": "ご自宅への訪問",
+    "homeVisitsDescription": "ご自宅の快適な環境で点滴療法やウェルネスサービスをお受けいただけます。",
+    "hotelService": "ホテルへの訪問",
+    "hotelServiceDescription": "東京のホテルに滞在中の旅行者やビジネス客の方に最適です。",
+    "officeVisits": "オフィスへの訪問",
+    "officeVisitsDescription": "職場で利用できる法人向けウェルネスサービス。",
+    "notSureArea": "対応エリアかどうかわからない場合は？",
+    "notSureAreaDescription": "お客様の場所でのサービス提供の可否をご確認ください。上記に記載されていないエリアでも対応できる場合があります。",
+    "neighborhoodsIn": "エリア一覧：",
+    "viewServices": "サービスを見る",
+    "mapOf": "地図：",
+    "viewAllAreasServed": "すべての対応エリアを見る",
+    "localAccess": "アクセス情報",
+    "areaNotes": "エリア情報",
+    "nearbyLandmarks": "周辺のランドマーク",
+    "otherAreasIn": "その他のエリア：",
+    "careAvailable": "利用可能なケア",
+    "howToGetStarted": "ご利用の流れ",
+    "sendRequest": "お問い合わせ",
+    "clinicalReview": "臨床レビュー",
+    "carePlanning": "ケアプランニング",
+    "sendRequestDesc": "ご希望の場所、タイミング、ご相談したいサービスをお知らせください。",
+    "clinicalReviewDesc": "チームがお客様の目標、健康履歴、臨床的適性を確認します。",
+    "carePlanningDesc": "Pitonneがクリニックまたは訪問型ケアの適切な次のステップをご案内します。",
+    "contactPitonne": "Pitonneに問い合わせる"
+  },
+  "videos": {
+    "watch": "動画",
+    "pitonneVideos": "Pitonne動画",
+    "pitonneVideo": "Pitonne動画",
+    "moreVideos": "その他の動画",
+    "videosDescription": "Pitonneの医師による出張点滴療法、二日酔い点滴サポート、東京でのプライベートウェルネスケアに関する動画。",
+    "metaDescription": "Pitonneの出張点滴療法、二日酔い点滴サポート、東京でのウェルネスケアに関する動画をご覧ください。"
+  },
+  "legal": {
+    "legal": "法的情報",
+    "backToLegal": "法的情報に戻る",
+    "legalInformation": "法的情報",
+    "legalDescription": "Pitonneサービスの利用に関する重要な法的文書とポリシー。",
+    "metaDescription": "Pitonneウェルネスサービスの法的情報、プライバシーポリシー、利用規約、医療免責事項。",
+    "questionsAboutPolicies": "ポリシーについてのご質問は？",
+    "questionsDescription": "法的文書やポリシーについてご質問がございましたら、お問い合わせください。",
+    "privacyPolicy": "プライバシーポリシー",
+    "privacyPolicyDescription": "個人情報の収集、使用、保護について。",
+    "privacyPolicyMeta": "Pitonne幹細胞・点滴療法サービスのプライバシーポリシー。",
+    "termsOfUse": "利用規約",
+    "termsDescription": "Pitonneウェルネスサービスの利用規約。",
+    "termsMeta": "Pitonneウェルネスサービスの利用規約。",
+    "medicalDisclaimer": "医療免責事項",
+    "disclaimerDescription": "重要な医療・健康に関する免責事項。",
+    "disclaimerMeta": "Pitonneウェルネスサービスの医療免責事項。"
   },
   "languageSwitcher": {
     "en": "English",

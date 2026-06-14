@@ -4,6 +4,7 @@ import { getMarkdownPage } from "@/lib/data/pages"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -15,19 +16,27 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
+  const dict = getDictionary(locale as Locale)
 
   return {
-    title: "Terms & Conditions",
-    description: "Terms and Conditions for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+    title: dict.legal.termsOfUse,
+    description: dict.legal.termsMeta,
     alternates: localizedHreflangAlternates("/legal/terms-conditions/", locale as Locale),
     openGraph: {
-      title: "Terms & Conditions",
-      description: "Terms and Conditions for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+      title: dict.legal.termsOfUse,
+      description: dict.legal.termsMeta,
       url: localizedHreflangAlternates("/legal/terms-conditions/", locale as Locale).canonical,
     },
   }
 }
 
-export default function TermsConditionsPage() {
-  return <LegalMarkdownPage page={getMarkdownPage("legal/terms-conditions.md")} canonicalTitle="Terms & Conditions" />
+interface Props {
+  params: Promise<{ locale: string }>
+}
+
+export default async function TermsConditionsPage({ params }: Props) {
+  const { locale } = await params
+  const dict = getDictionary(locale as Locale)
+
+  return <LegalMarkdownPage page={getMarkdownPage("legal/terms-conditions.md")} canonicalTitle={dict.legal.termsOfUse} locale={locale as Locale} />
 }

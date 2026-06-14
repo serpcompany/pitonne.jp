@@ -137,7 +137,7 @@ export default async function LocaleLayout({
           dict={dict}
           serviceNavigation={getServiceCategorySections(typedLocale).map((section) => ({
             name: section.title,
-            href: localizedRoute(section.href, typedLocale),
+            href: section.href,
             items: section.services.map((service) => ({
               name: service.name,
               href: localizedRoute(service.canonicalPath, typedLocale),

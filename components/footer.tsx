@@ -73,14 +73,14 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ]
 
   const areasServed = [
-    { name: "Roppongi", href: localizedRoute("/areas-served/minato/roppongi/", locale) },
-    { name: "Azabu Juban", href: localizedRoute("/areas-served/minato/azabu-juban/", locale) },
-    { name: "Minato / Hiroo", href: localizedRoute("/areas-served/minato/hiroo/", locale) },
-    { name: "Akasaka", href: localizedRoute("/areas-served/minato/akasaka/", locale) },
-    { name: "Shibuya", href: localizedRoute("/areas-served/shibuya/", locale) },
-    { name: "Ebisu", href: localizedRoute("/areas-served/shibuya/ebisu/", locale) },
-    { name: "Ginza", href: localizedRoute("/areas-served/chuo/ginza/", locale) },
-    { name: "Shinagawa", href: localizedRoute("/areas-served/shinagawa/", locale) },
+    { name: locale === "ja" ? "六本木" : "Roppongi", href: localizedRoute("/areas-served/minato/roppongi/", locale) },
+    { name: locale === "ja" ? "麻布十番" : "Azabu Juban", href: localizedRoute("/areas-served/minato/azabu-juban/", locale) },
+    { name: locale === "ja" ? "港区 / 広尾" : "Minato / Hiroo", href: localizedRoute("/areas-served/minato/hiroo/", locale) },
+    { name: locale === "ja" ? "赤坂" : "Akasaka", href: localizedRoute("/areas-served/minato/akasaka/", locale) },
+    { name: locale === "ja" ? "渋谷" : "Shibuya", href: localizedRoute("/areas-served/shibuya/", locale) },
+    { name: locale === "ja" ? "恵比寿" : "Ebisu", href: localizedRoute("/areas-served/shibuya/ebisu/", locale) },
+    { name: locale === "ja" ? "銀座" : "Ginza", href: localizedRoute("/areas-served/chuo/ginza/", locale) },
+    { name: locale === "ja" ? "品川" : "Shinagawa", href: localizedRoute("/areas-served/shinagawa/", locale) },
   ]
 
   return (
@@ -97,7 +97,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Pitonne Stem Cell & IV Therapy Location"
+              title={dict.footer.mapTitle}
               className="grayscale hover:grayscale-0 transition-all duration-300"
             />
           </div>
@@ -122,18 +122,18 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 className="h-8 w-auto mb-4"
               />
             </Link>
-            <p className="text-sm text-white/80 mb-2">Pitonne Stem Cell & IV Therapy</p>
+            <p className="text-sm text-white/80 mb-2">{dict.footer.businessName}</p>
             <address className="text-sm text-white/70 not-italic space-y-1">
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
               <p>
                 <a href="tel:070-2194-0199" className="hover:text-white transition-colors">
-                  JP: {businessInfo.phone}
+                  {dict.contact.japan}: {businessInfo.phone}
                 </a>
               </p>
               <p>
                 <a href="tel:+17868140323" className="hover:text-white transition-colors">
-                  US: +1 786 814 0323
+                  {dict.contact.us}: +1 786 814 0323
                 </a>
               </p>
             </address>
@@ -245,10 +245,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           {/* Copyright */}
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/70">
-              &copy; {new Date().getFullYear()} Pitonne Stem Cell & IV Therapy. {dict.footer.websiteBy} <a href="https://serp.co" target="_blank" rel="noopener" className="hover:text-[#7A8F87] transition-colors">SERP</a>
+              &copy; {new Date().getFullYear()} {dict.footer.businessName}. {dict.footer.websiteBy} <a href="https://serp.co" target="_blank" rel="noopener" className="hover:text-[#7A8F87] transition-colors">SERP</a>
             </p>
             <p className="text-xs text-white/70">
-              Nishi Azabu, Minato-ku, Tokyo, Japan
+              {dict.footer.locationShort}
             </p>
           </div>
         </div>

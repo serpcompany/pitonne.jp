@@ -22,7 +22,8 @@
     "getDirections": "Get Directions",
     "sendMessage": "Send Message",
     "learnMore": "Learn More",
-    "backTo": "Back to"
+    "backTo": "Back to",
+    "toggleMenu": "Toggle menu"
   },
   "home": {
     "heroEyebrow": "Concierge Wellness in Tokyo",
@@ -34,7 +35,21 @@
     "latestPosts": "Latest Posts",
     "viewAllPosts": "View All Posts",
     "areasWeServe": "Areas We Serve",
-    "viewAllAreas": "View All Areas"
+    "viewAllAreas": "View All Areas",
+    "clinicalCareHeading": "Concierge Wellness Support, Backed By",
+    "clinicalCare": "Clinical Care.",
+    "homeVisits": "In-home and hotel visit care",
+    "nurseLed": "Registered nurse-led support",
+    "conciergeService": "Central Tokyo concierge service",
+    "servicesDescription": "From mobile IV therapy support and stem cell treatment consultations to online prescription services, Pitonne offers discreet, personalized care tailored to each client's needs.",
+    "ivTherapyTitle": "IV Therapy",
+    "ivTherapyDescription": "Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.",
+    "stemCellTitle": "Stem Cell Therapy",
+    "stemCellDescription": "Regenerative wellness support focused on practical delivery options and individualized care planning.",
+    "medicationTitle": "Medication",
+    "medicationDescription": "Prescription-based support delivered with discretion and physician review where appropriate.",
+    "bloodTestsTitle": "Blood Tests",
+    "bloodTestsDescription": "Private blood testing with hormone panels, nutrition evaluation, and tumor marker screening options."
   },
   "footer": {
     "quickLinks": "Quick Links",
@@ -43,14 +58,34 @@
     "followUs": "Follow Us",
     "listenPodcast": "Listen to Our Podcast",
     "closed": "Closed",
-    "websiteBy": "Website & SEO by"
+    "websiteBy": "Website & SEO by",
+    "businessName": "Pitonne Stem Cell & IV Therapy",
+    "mapTitle": "Pitonne Stem Cell & IV Therapy Location",
+    "locationShort": "Nishi Azabu, Minato-ku, Tokyo, Japan"
   },
   "about": {
     "aboutPitonne": "About Pitonne",
     "commitment": "Our Commitment",
     "whyWeExist": "Why We Exist",
     "howWeSupport": "How We Support You",
-    "meetTheTeam": "Meet The Team"
+    "meetTheTeam": "Meet The Team",
+    "metaDescription": "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+    "heroDescription": "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care through in-home and hotel visits. We are designed for busy professionals, international visitors, and clients who value privacy, convenience, and clinically guided support. Our goal is to make wellness care feel more accessible, discreet, and tailored to real life in Tokyo.",
+    "whyWeExistContent": "Our mission is to deliver discreet, high quality wellness support with clinical attentiveness, clear communication, and personalized care. We created Pitonne to offer a more thoughtful way to access IV therapy, stem cell related wellness support, and visit based services in Tokyo. By combining convenience with professional support, we aim to help each client feel cared for, respected, and supported in a way that fits their individual needs.",
+    "ourTeam": "Our Team",
+    "teamDescription": "Our team brings together registered nurses, public health experience, and physician leadership to support each client with compassion and clarity.",
+    "visitBasedCareTitle": "Visit-Based Care Designed Around",
+    "realLife": "Real Life.",
+    "visitBasedCareContent": "Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.",
+    "teamKanakoName": "Kanako Shimizu",
+    "teamKanakoRole": "Registered Nurse & Public Health Nurse",
+    "teamKanakoBio": "Kanako is involved in the operation of a regenerative medicine clinic, with a focus on health optimization and preventive care. As a registered nurse and public health nurse, she supports treatments using stem cell conditioned media and provides wellness support including corporate programs, weight management, and fasting guidance. She believes in helping people care for their health before illness develops, while balancing preventive care with conventional medicine.",
+    "teamSaoriName": "Saori Tsubaki",
+    "teamSaoriRole": "Registered Nurse & Public Health Nurse",
+    "teamSaoriBio": "Saori is involved in health support within the field of regenerative medicine, drawing on her knowledge and experience as a registered nurse and public health nurse. She values supporting each individual's daily well-being through treatment assistance using stem cell conditioned media, as well as preventive care, body maintenance, weight management, and corporate wellness programs.",
+    "teamAkiraName": "Akira Mikami",
+    "teamAkiraRole": "Physician",
+    "teamAkiraBio": "Since my years as a resident physician, I have practiced medicine with the words \"Patient First\" held close to my heart. Providing the kind of medical care that I would want to receive myself has always been the foundation of why I chose to become a physician. I believe that as long as I remain true to this principle, it will guide me in making the right decisions for my patients."
   },
   "services": {
     "ourServices": "Our Services",
@@ -59,13 +94,14 @@
     "keyPoints": "Key Points",
     "relatedServices": "Related Services",
     "relatedPosts": "Related Posts",
-    "frequentlyAskedQuestions": "Frequently Asked Questions"
-  },
-  "areas": {
-    "areasServed": "Areas Served",
-    "neighborhoods": "Neighborhoods",
-    "servicesAvailable": "Services Available",
-    "nearbyAreas": "Nearby Areas"
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "metaDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
+    "heroDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.",
+    "bookThisService": "Book This Service",
+    "bookServiceDescription": "Use Pitonne's booking system to request a consultation and confirm whether this service fits your goals.",
+    "availableTreatments": "Available Treatments",
+    "viewAllServices": "View all services",
+    "viewAll": "View all"
   },
   "blog": {
     "blog": "Blog",
@@ -74,14 +110,160 @@
     "relatedPosts": "Related Posts",
     "haveQuestions": "Have Questions?",
     "publishedOn": "Published on",
-    "by": "by"
+    "by": "by",
+    "metaDescription": "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
+    "heroDescription": "Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health.",
+    "categories": "Categories:",
+    "all": "All",
+    "featured": "Featured",
+    "featuredArticle": "Featured Article",
+    "latestArticles": "Latest Articles",
+    "readArticle": "Read Article",
+    "stayInformed": "Stay Informed",
+    "stayInformedDescription": "Have questions about our services? Contact us to learn more about IV therapy, stem cell treatments, and wellness support in Tokyo.",
+    "noArticlesFound": "No articles found in this category yet.",
+    "viewAllArticles": "View all articles",
+    "articles": "Articles",
+    "article": "Article",
+    "readOurLatestPosts": "Read Our Latest Posts",
+    "viewAllPosts": "View All Posts",
+    "bookAConsultation": "Book a Consultation",
+    "consultationDescription": "Interested in learning more? Book a consultation to discuss how our services can support your wellness goals.",
+    "contactPitonne": "Contact Pitonne",
+    "contactDescription": "Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.",
+    "relatedPitonneServices": "Related Pitonne Services"
   },
   "contact": {
     "contactUs": "Contact Us",
-    "getInTouch": "Get in Touch"
+    "getInTouch": "Get in Touch",
+    "metaDescription": "Contact Pitonne to book a consultation or ask questions about IV therapy, stem cell related wellness support, and concierge care in Tokyo.",
+    "heroDescription": "Ready to book a consultation or have questions about our services? Get in touch with us and our team will respond promptly.",
+    "inquiryFormDescription": "Use Pitonne's secure inquiry form to request a consultation or ask questions about services.",
+    "email": "Email",
+    "location": "Location",
+    "japan": "Japan",
+    "us": "U.S.",
+    "address": "106-0031 Tokyo, Minato City, Nishiazabu, 3 Chome-17-22 1F"
   },
   "faqs": {
-    "frequentlyAskedQuestions": "Frequently Asked Questions"
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "metaDescription": "Answers to common questions about Pitonne mobile visits, in clinic appointments, IV therapy, Exosome IV therapy, service areas, and booking in Tokyo.",
+    "heroDescription": "Find answers to common questions about mobile visits, in clinic appointments, service areas, appointment preparation, and Exosome IV therapy.",
+    "items": [
+      {
+        "question": "Are both mobile visits and in clinic appointments available?",
+        "answer": "Yes. Pitonne primarily offers mobile visits to your home, hotel, or office, and in clinic appointments are also available. For in clinic appointments, a \u00A55,000 discount applies to IV therapy services."
+      },
+      {
+        "question": "What areas do you serve for mobile visits?",
+        "answer": "We are based in Nishi Azabu and primarily offer mobile visits across central Tokyo. Please review the service area details listed with each menu option. Depending on the request, appointments in farther areas may also be available upon consultation."
+      },
+      {
+        "question": "Is there an additional travel fee for mobile visits?",
+        "answer": "Mobile visit fees are included within 5 km of our Nishi Azabu location. For appointments outside the 5 km service area, an additional travel fee applies based on distance. Please select the appropriate travel fee option when booking."
+      },
+      {
+        "question": "Is there a discount for in clinic appointments?",
+        "answer": "Yes. For in clinic appointments, a \u00A55,000 discount applies to IV therapy services. Please note that some services, such as blood testing, may be excluded."
+      },
+      {
+        "question": "Is an online medical consultation required before Exosome IV therapy?",
+        "answer": "Yes. Exosome IV therapy is provided after an online medical consultation with a physician. Treatment is recommended based on your condition, goals, and medical suitability."
+      },
+      {
+        "question": "Who is Exosome IV therapy recommended for?",
+        "answer": "Exosome IV therapy may be suitable for those seeking enhanced recovery, improved overall condition, or additional support during demanding periods. It is also selected by some clients for advanced conditioning and men's wellness support."
+      },
+      {
+        "question": "Can treatments be provided at hotels or offices?",
+        "answer": "Yes. In addition to home visits, treatments can also be provided at hotels or offices. Please ensure that a quiet and comfortable space is available. Depending on the property, prior confirmation may be required."
+      },
+      {
+        "question": "What should I prepare before my appointment?",
+        "answer": "No special preparation is required. Please prepare a comfortable space, such as a chair or sofa, where you can relax during treatment. Depending on your condition, some treatment details may be adjusted on the day of service."
+      },
+      {
+        "question": "Are your services available for international clients?",
+        "answer": "Yes. English support is available. Our services are available for international travelers and guests staying in Tokyo, including mobile visits to hotels."
+      },
+      {
+        "question": "What if I'm not sure which service to choose?",
+        "answer": "We can help guide you based on your concerns and goals. If you are unsure which service to choose, please contact us in advance or book an online consultation first."
+      },
+      {
+        "question": "Can I change or cancel my appointment?",
+        "answer": "If you need to change or cancel your appointment, please contact us as early as possible. Depending on the timing and service booked, our cancellation policy may apply."
+      },
+      {
+        "question": "Are same day appointments available?",
+        "answer": "Same day appointments may be available depending on schedule and location. Please contact us first to confirm availability."
+      }
+    ]
+  },
+  "areas": {
+    "areasServed": "Areas Served",
+    "neighborhoods": "Neighborhoods",
+    "servicesAvailable": "Services Available",
+    "nearbyAreas": "Nearby Areas",
+    "metaTitle": "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
+    "metaDescription": "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
+    "heroTitle": "IV Therapy, Stem Cells, Medications & Blood Testing — Areas Served in Tokyo",
+    "heroDescription": "Pitonne provides IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Our team travels to your home or hotel for private, concierge wellness care.",
+    "ward": "Ward",
+    "viewAllIn": "View all in",
+    "mobileWellnessServices": "Mobile Wellness Services",
+    "mobileWellnessDescription": "Our team travels to locations throughout Tokyo to provide in-home and hotel-based wellness services. We primarily serve central Tokyo areas within a reasonable distance from our Nishi-Azabu clinic.",
+    "homeVisits": "Home Visits",
+    "homeVisitsDescription": "Receive IV therapy and wellness services in the comfort of your own home.",
+    "hotelService": "Hotel Service",
+    "hotelServiceDescription": "Perfect for travelers and business visitors staying in Tokyo hotels.",
+    "officeVisits": "Office Visits",
+    "officeVisitsDescription": "Corporate wellness services available at your workplace.",
+    "notSureArea": "Not Sure If We Serve Your Area?",
+    "notSureAreaDescription": "Contact us to confirm service availability in your location. We may be able to accommodate areas not listed above.",
+    "neighborhoodsIn": "Neighborhoods in",
+    "viewServices": "View services",
+    "mapOf": "Map of",
+    "viewAllAreasServed": "View all areas served",
+    "localAccess": "Local Access",
+    "areaNotes": "Area Notes",
+    "nearbyLandmarks": "Nearby Landmarks",
+    "otherAreasIn": "Other Areas in",
+    "careAvailable": "Care Available",
+    "howToGetStarted": "How To Get Started",
+    "sendRequest": "Send Request",
+    "clinicalReview": "Clinical Review",
+    "carePlanning": "Care Planning",
+    "sendRequestDesc": "Share your location, timing, and the service you want to discuss.",
+    "clinicalReviewDesc": "The team reviews your goals, health history, and clinical suitability.",
+    "carePlanningDesc": "Pitonne confirms the appropriate next step for clinic or visit-based care.",
+    "contactPitonne": "Contact Pitonne"
+  },
+  "videos": {
+    "watch": "Watch",
+    "pitonneVideos": "Pitonne Videos",
+    "pitonneVideo": "Pitonne Video",
+    "moreVideos": "More Videos",
+    "videosDescription": "Doctor-led videos from Pitonne covering mobile IV therapy, hangover IV support, and private wellness care in Tokyo.",
+    "metaDescription": "Watch Pitonne videos about mobile IV therapy, hangover IV support, and wellness care in Tokyo."
+  },
+  "legal": {
+    "legal": "Legal",
+    "backToLegal": "Back to Legal",
+    "legalInformation": "Legal Information",
+    "legalDescription": "Important legal documents and policies governing the use of Pitonne services.",
+    "metaDescription": "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+    "questionsAboutPolicies": "Questions About Our Policies?",
+    "questionsDescription": "If you have any questions about our legal documents or policies, please contact us.",
+    "privacyPolicy": "Privacy Policy",
+    "privacyPolicyDescription": "How we collect, use, and protect your personal information.",
+    "privacyPolicyMeta": "Privacy Policy for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+    "termsOfUse": "Terms of Use",
+    "termsDescription": "Terms of service for using Pitonne wellness services.",
+    "termsMeta": "Terms and conditions for Pitonne wellness services in Tokyo.",
+    "medicalDisclaimer": "Medical Disclaimer",
+    "disclaimerDescription": "Important medical and health-related disclaimers.",
+    "disclaimerMeta": "Medical disclaimer for Pitonne wellness services in Tokyo."
   },
   "languageSwitcher": {
     "en": "English",

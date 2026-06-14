@@ -96,7 +96,7 @@ export default async function WatchPage({ params }: Props) {
 
         <div className="mx-auto max-w-5xl">
           <header className="mb-8">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">Pitonne Video</p>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">{dict.videos.pitonneVideo}</p>
             <h1 className="font-serif text-4xl font-bold leading-tight text-foreground md:text-5xl">
               {video.title}
             </h1>
@@ -107,7 +107,7 @@ export default async function WatchPage({ params }: Props) {
           {relatedVideos.length > 0 && (
             <section className="mt-12" aria-labelledby="more-videos">
               <h2 id="more-videos" className="font-serif text-2xl font-bold text-foreground">
-                More Videos
+                {dict.videos.moreVideos}
               </h2>
               <div className="mt-6 grid gap-5 md:grid-cols-3">
                 {relatedVideos.map((related) => (

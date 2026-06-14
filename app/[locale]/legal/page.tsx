@@ -8,24 +8,6 @@ import { locales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
 
-const legalPages = [
-  {
-    title: "Privacy Policy",
-    href: "/legal/privacy-policy",
-    description: "How we collect, use, and protect your personal information.",
-  },
-  {
-    title: "Terms of Use",
-    href: "/legal/terms-conditions/",
-    description: "Terms of service for using Pitonne wellness services.",
-  },
-  {
-    title: "Medical Disclaimer",
-    href: "/legal/disclaimer",
-    description: "Important medical and health-related disclaimers.",
-  },
-]
-
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
@@ -37,13 +19,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
 
+  const dict = getDictionary(locale as Locale)
+
   return {
-    title: "Legal",
-    description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+    title: dict.legal.legal,
+    description: dict.legal.metaDescription,
     alternates: localizedHreflangAlternates("/legal/", locale as Locale),
     openGraph: {
-      title: "Legal",
-      description: "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+      title: dict.legal.legal,
+      description: dict.legal.metaDescription,
       url: localizedHreflangAlternates("/legal/", locale as Locale).canonical,
     },
   }
@@ -57,6 +41,24 @@ export default async function LegalPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
+  const legalPages = [
+    {
+      title: dict.legal.privacyPolicy,
+      href: "/legal/privacy-policy",
+      description: dict.legal.privacyPolicyDescription,
+    },
+    {
+      title: dict.legal.termsOfUse,
+      href: "/legal/terms-conditions/",
+      description: dict.legal.termsDescription,
+    },
+    {
+      title: dict.legal.medicalDisclaimer,
+      href: "/legal/disclaimer",
+      description: dict.legal.disclaimerDescription,
+    },
+  ]
+
   return (
     <div className="bg-[#faf9f7]">
       <PageHero
@@ -64,8 +66,8 @@ export default async function LegalPage({ params }: Props) {
           { label: dict.nav.home, href: localizedRoute("/", locale as Locale) },
           { label: dict.nav.legal },
         ]}
-        title="Legal Information"
-        description="Important legal documents and policies governing the use of Pitonne services."
+        title={dict.legal.legalInformation}
+        description={dict.legal.legalDescription}
       />
 
       {/* Legal Pages Grid */}
@@ -97,12 +99,12 @@ export default async function LegalPage({ params }: Props) {
       <section className="py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="font-serif text-2xl text-[#1a1a1a] mb-4">
-            Questions About Our Policies?
+            {dict.legal.questionsAboutPolicies}
           </h2>
           <p className="text-[#666] mb-6">
-            If you have any questions about our legal documents or policies, please contact us.
+            {dict.legal.questionsDescription}
           </p>
-          <ContactButton />
+          <ContactButton locale={locale as Locale} />
         </div>
       </section>
     </div>

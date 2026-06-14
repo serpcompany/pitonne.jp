@@ -7,6 +7,7 @@ import { getAllBlogPosts, getAllCategories } from "@/lib/data/blog-posts"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
 
 interface Props {
@@ -19,15 +20,17 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
+  const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
 
   return {
-    title: "Blog",
-    description: "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
-    alternates: localizedHreflangAlternates("/blog/", locale as Locale),
+    title: dict.blog.blog,
+    description: dict.blog.metaDescription,
+    alternates: localizedHreflangAlternates("/blog/", typedLocale),
     openGraph: {
-      title: "Blog",
-      description: "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
-      url: localizedCanonicalUrl("/blog/", locale as Locale),
+      title: dict.blog.blog,
+      description: dict.blog.metaDescription,
+      url: localizedCanonicalUrl("/blog/", typedLocale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
     },
   }
@@ -37,6 +40,7 @@ export default async function BlogPage({ params }: Props) {
   const { locale } = await params
   const typedLocale = locale as Locale
   const dateLocale = locale === "ja" ? "ja-JP" : "en-US"
+  const dict = getDictionary(typedLocale)
 
   const posts = getAllBlogPosts(typedLocale).map((post) => ({
     slug: post.slug,
@@ -55,23 +59,23 @@ export default async function BlogPage({ params }: Props) {
     <>
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: localizedRoute("/", typedLocale) },
-          { label: "Blog" },
+          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
+          { label: dict.blog.blog },
         ]}
-        title="Blog"
-        description="Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health."
+        title={dict.blog.blog}
+        description={dict.blog.heroDescription}
       />
 
       {/* Categories */}
       <section className="py-8 bg-card border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm font-medium text-foreground">Categories:</span>
+            <span className="text-sm font-medium text-foreground">{dict.blog.categories}</span>
             <Link
               href={localizedRoute("/blog/", typedLocale)}
               className="px-4 py-1.5 text-sm rounded-full bg-[#7A8F87] text-white"
             >
-              All
+              {dict.blog.all}
             </Link>
             {getAllCategories(typedLocale).map(cat => (
               <Link
@@ -112,14 +116,14 @@ export default async function BlogPage({ params }: Props) {
                         <div className="w-20 h-20 mx-auto rounded-full bg-white/50 flex items-center justify-center mb-4">
                           <div className="w-10 h-10 rounded-full bg-[#d4c4a8]" />
                         </div>
-                        <span className="text-sm text-muted-foreground">Featured Article</span>
+                        <span className="text-sm text-muted-foreground">{dict.blog.featuredArticle}</span>
                       </div>
                     </div>
                   )}
                 </div>
                 <div>
                   <span className="inline-block px-3 py-1 text-xs font-medium bg-[#f5ebe0] text-foreground rounded-full mb-4">
-                    Featured
+                    {dict.blog.featured}
                   </span>
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
                     <span className="text-[#7A8F87]">{featuredPost.category}</span>
@@ -128,7 +132,7 @@ export default async function BlogPage({ params }: Props) {
                     {featuredPost.readingTime && (
                       <>
                         <span>&middot;</span>
-                        <span>{featuredPost.readingTime} min read</span>
+                        <span>{featuredPost.readingTime} {dict.common.minRead}</span>
                       </>
                     )}
                   </div>
@@ -139,7 +143,7 @@ export default async function BlogPage({ params }: Props) {
                     {featuredPost.excerpt}
                   </p>
                   <span className="text-[#7A8F87] font-medium group-hover:underline">
-                    Read Article &rarr;
+                    {dict.blog.readArticle} &rarr;
                   </span>
                 </div>
               </div>
@@ -151,7 +155,7 @@ export default async function BlogPage({ params }: Props) {
       {/* Blog Posts Grid */}
       <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-serif text-foreground mb-8">Latest Articles</h2>
+          <h2 className="text-2xl font-serif text-foreground mb-8">{dict.blog.latestArticles}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
             {otherPosts.map((post) => (
               <Link
@@ -184,7 +188,7 @@ export default async function BlogPage({ params }: Props) {
                     {post.readingTime && (
                       <>
                         <span>&middot;</span>
-                        <span>{post.readingTime} min read</span>
+                        <span>{post.readingTime} {dict.common.minRead}</span>
                       </>
                     )}
                   </div>
@@ -204,9 +208,9 @@ export default async function BlogPage({ params }: Props) {
       {/* Newsletter Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-serif text-foreground mb-6">Stay Informed</h2>
+          <h2 className="text-3xl font-serif text-foreground mb-6">{dict.blog.stayInformed}</h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
-            Have questions about our services? Contact us to learn more about IV therapy, stem cell treatments, and wellness support in Tokyo.
+            {dict.blog.stayInformedDescription}
           </p>
           <ContactButton />
         </div>

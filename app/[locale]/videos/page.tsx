@@ -23,9 +23,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
 
+  const dict = getDictionary(locale as Locale)
+
   return {
-    title: "Videos",
-    description: "Watch Pitonne videos about mobile IV therapy, hangover IV support, and wellness care in Tokyo.",
+    title: dict.nav.videos,
+    description: dict.videos.metaDescription,
     alternates: localizedHreflangAlternates(canonicalRoutes.videos, locale as Locale),
   }
 }
@@ -45,10 +47,10 @@ export default async function VideosPage({ params }: Props) {
         <Breadcrumbs items={[{ label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) }, { label: dict.nav.videos }]} />
 
         <div className="mb-10 max-w-3xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">Watch</p>
-          <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">Pitonne Videos</h1>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">{dict.videos.watch}</p>
+          <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">{dict.videos.pitonneVideos}</h1>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
-            Doctor-led videos from Pitonne covering mobile IV therapy, hangover IV support, and private wellness care in Tokyo.
+            {dict.videos.videosDescription}
           </p>
         </div>
 

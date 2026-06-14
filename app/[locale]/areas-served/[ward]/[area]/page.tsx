@@ -5,6 +5,7 @@ import { getAllAreas, getArea } from "@/lib/data/areas"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 interface Props {
   params: Promise<{ locale: string; ward: string; area: string }>
@@ -31,8 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { ward, area } = result
 
-  const seoTitle = `IV Therapy, Stem Cells & Blood Tests in ${area.name}, ${ward.name}`
-  const seoDescription = `IV therapy, stem cell treatments, medications, and blood testing in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. Mobile and in-clinic care from Pitonne.`
+  const seoTitle = typedLocale === "ja"
+    ? `${area.nameJa}（${ward.nameJa}）の点滴療法・幹細胞・血液検査`
+    : `IV Therapy, Stem Cells & Blood Tests in ${area.name}, ${ward.name}`
+  const seoDescription = typedLocale === "ja"
+    ? `${area.nameJa}（${ward.nameJa}、東京）での点滴療法、幹細胞治療、処方薬、血液検査。Pitonneの出張・クリニックケア。`
+    : `IV therapy, stem cell treatments, medications, and blood testing in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. Mobile and in-clinic care from Pitonne.`
 
   return {
     title: seoTitle,
@@ -65,11 +70,13 @@ export default async function AreaPage({ params }: Props) {
       areaName={area.name}
       areaNameJa={area.nameJa}
       wardName={ward.name}
+      wardNameJa={ward.nameJa}
       wardSlug={ward.slug}
       description={area.description}
       highlights={area.highlights}
       landmarks={area.landmarks}
       otherAreas={otherAreas}
+      locale={locale as Locale}
     />
   )
 }

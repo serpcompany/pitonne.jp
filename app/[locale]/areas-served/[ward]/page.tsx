@@ -10,6 +10,7 @@ import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 interface Props {
   params: Promise<{ locale: string; ward: string }>
@@ -24,11 +25,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ward: wardSlug } = await params
   const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
   const ward = getWard(wardSlug)
   if (!ward) return { title: "Area Not Found | Pitonne" }
 
-  const seoTitle = `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
-  const seoDescription = `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
+  const wardLabel = typedLocale === "ja" ? ward.nameJa : ward.name
+  const seoTitle = typedLocale === "ja"
+    ? `${wardLabel}の点滴療法・幹細胞・血液検査 | 東京`
+    : `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
+  const seoDescription = typedLocale === "ja"
+    ? `${wardLabel}（東京）での点滴療法、幹細胞治療、処方薬、血液検査。Pitonneの出張・クリニックウェルネスケア。`
+    : `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
 
   return {
     title: seoTitle,
@@ -46,12 +53,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function WardPage({ params }: Props) {
   const { locale, ward: wardSlug } = await params
   const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
   const ward = getWard(wardSlug)
 
   if (!ward) {
     notFound()
   }
 
+  const wardLabel = typedLocale === "ja" ? ward.nameJa : ward.name
   const mapQuery = encodeURIComponent(`${ward.name}, Tokyo, Japan`)
   const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
 
@@ -59,12 +68,14 @@ export default async function WardPage({ params }: Props) {
     <div className="bg-background">
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: localizedRoute("/", typedLocale) },
-          { label: "Areas Served", href: localizedRoute("/areas-served/", typedLocale) },
-          { label: ward.name },
+          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
+          { label: dict.nav.areasServed, href: localizedRoute("/areas-served/", typedLocale) },
+          { label: wardLabel },
         ]}
         eyebrow={ward.nameJa}
-        title={`IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`}
+        title={typedLocale === "ja"
+          ? `${ward.nameJa}（東京）の点滴療法・幹細胞・処方薬・血液検査`
+          : `IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`}
         description={ward.description}
       />
 
@@ -72,7 +83,7 @@ export default async function WardPage({ params }: Props) {
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="font-serif text-3xl text-foreground mb-8 text-center">
-            Neighborhoods in {ward.name}
+            {dict.areas.neighborhoodsIn} {typedLocale === "ja" ? ward.nameJa : ward.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
             {ward.areas.map((area) => (
@@ -91,7 +102,7 @@ export default async function WardPage({ params }: Props) {
                   <div>
                     <h3 className="font-medium text-foreground mb-1">{area.name}</h3>
                     <p className="text-sm text-muted-foreground mb-1">{area.nameJa}</p>
-                    <p className="text-sm text-[#7A8F87]">View services &rarr;</p>
+                    <p className="text-sm text-[#7A8F87]">{dict.areas.viewServices} &rarr;</p>
                   </div>
                 </div>
               </Link>
@@ -105,10 +116,12 @@ export default async function WardPage({ params }: Props) {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="mb-8 text-center">
             <h2 className="font-serif text-3xl text-foreground mb-4">
-              Map of {ward.name}, Tokyo
+              {dict.areas.mapOf} {typedLocale === "ja" ? ward.nameJa : ward.name}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Use this map to orient around {ward.name} Ward and the neighborhoods Pitonne serves in central Tokyo.
+              {typedLocale === "ja"
+                ? `${ward.nameJa}周辺とPitonneが東京都心部でサービスを提供するエリアの地図です。`
+                : `Use this map to orient around ${ward.name} Ward and the neighborhoods Pitonne serves in central Tokyo.`}
             </p>
           </div>
           <div className="overflow-hidden rounded-lg border border-border bg-background">
@@ -127,15 +140,15 @@ export default async function WardPage({ params }: Props) {
         </div>
       </section>
 
-      <CareAvailableSection />
-      <HowToGetStartedSection locationLabel={`${ward.name}, Tokyo`} />
-      <LatestPostsSection />
+      <CareAvailableSection locale={typedLocale} />
+      <HowToGetStartedSection locationLabel={`${wardLabel}, Tokyo`} locale={typedLocale} />
+      <LatestPostsSection locale={typedLocale} />
 
       {/* Back Link */}
       <section className="py-8 border-t border-border">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <Link href={localizedRoute("/areas-served/", typedLocale)} className="text-[#7A8F87] hover:underline">
-            &larr; View all areas served
+            &larr; {dict.areas.viewAllAreasServed}
           </Link>
         </div>
       </section>

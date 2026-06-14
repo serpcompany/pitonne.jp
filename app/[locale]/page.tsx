@@ -6,51 +6,7 @@ import { localizedRoute } from "@/lib/data/routes"
 import { BookingButton } from "@/components/shared/booking-button"
 import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
-
-const services = [
-  {
-    title: "IV Therapy",
-    description: "Targeted hydration and nutrient support designed around recovery, energy, immunity, and skin wellness.",
-    href: "/services/iv-therapy",
-    image: "/images/content/sheet/services/iv-therapy.jpg",
-  },
-  {
-    title: "Stem Cell Therapy",
-    description: "Regenerative wellness support focused on practical delivery options and individualized care planning.",
-    href: "/services/stem-cell-therapy",
-    image: "/images/content/sheet/services/stem-cell-therapy.jpg",
-  },
-  {
-    title: "Medication",
-    description: "Prescription-based support delivered with discretion and physician review where appropriate.",
-    href: canonicalRoutes.medication,
-    image: "/images/medication.jpeg",
-  },
-  {
-    title: "Blood Tests",
-    description: "Private blood testing with hormone panels, nutrition evaluation, and tumor marker screening options.",
-    href: "/services/blood-tests",
-    image: "/images/content/sheet/services/nutrition-blood-testing.jpg",
-  },
-]
-
-const blogPosts = [
-  {
-    date: "April 29, 2026",
-    title: "What Is An Exosome IV Drip? Differences From Stem Cell Conditioned Media, Cost, And Risks Explained",
-    href: "/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained",
-  },
-  {
-    date: "March 16, 2026",
-    title: "IV Therapy For Fatigue: When Low Energy May Point To Hydration Support",
-    href: "/blog/iv-therapy-for-fatigue",
-  },
-  {
-    date: "March 16, 2026",
-    title: "IV Therapy For Hangover: What It May Help With And What It Cannot Do",
-    href: "/blog/iv-therapy-for-hangover",
-  },
-]
+import { getAllBlogPosts } from "@/lib/data/blog-posts"
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -59,6 +15,35 @@ interface Props {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
+
+  const services = [
+    {
+      title: dict.home.ivTherapyTitle,
+      description: dict.home.ivTherapyDescription,
+      href: "/services/iv-therapy",
+      image: "/images/content/sheet/services/iv-therapy.jpg",
+    },
+    {
+      title: dict.home.stemCellTitle,
+      description: dict.home.stemCellDescription,
+      href: "/services/stem-cell-therapy",
+      image: "/images/content/sheet/services/stem-cell-therapy.jpg",
+    },
+    {
+      title: dict.home.medicationTitle,
+      description: dict.home.medicationDescription,
+      href: canonicalRoutes.medication,
+      image: "/images/medication.jpeg",
+    },
+    {
+      title: dict.home.bloodTestsTitle,
+      description: dict.home.bloodTestsDescription,
+      href: "/services/blood-tests",
+      image: "/images/content/sheet/services/nutrition-blood-testing.jpg",
+    },
+  ]
+
+  const latestPosts = getAllBlogPosts(locale as Locale).slice(0, 3)
 
   return (
     <>
@@ -98,7 +83,7 @@ export default async function HomePage({ params }: Props) {
           <p className="max-w-xl mx-auto text-muted-foreground mb-8">
             {dict.home.heroDescription}
           </p>
-          <BookingButton className="px-8" />
+          <BookingButton className="px-8" locale={locale as Locale} />
         </div>
       </section>
 
@@ -133,8 +118,8 @@ export default async function HomePage({ params }: Props) {
                 {dict.home.whoWeAre}
               </p>
               <h2 className="text-3xl md:text-4xl font-serif mb-6">
-                Concierge Wellness Support, Backed By{" "}
-                <span className="italic">Clinical Care.</span>
+                {dict.home.clinicalCareHeading}{" "}
+                <span className="italic">{dict.home.clinicalCare}</span>
               </h2>
               <p className="text-muted-foreground mb-8">
                 {dict.home.heroDescription}
@@ -142,15 +127,15 @@ export default async function HomePage({ params }: Props) {
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
                   <Check className="h-5 w-5 text-[#7A8F87]" />
-                  <span>In-home and hotel visit care</span>
+                  <span>{dict.home.homeVisits}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="h-5 w-5 text-[#7A8F87]" />
-                  <span>Registered nurse-led support</span>
+                  <span>{dict.home.nurseLed}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="h-5 w-5 text-[#7A8F87]" />
-                  <span>Central Tokyo concierge service</span>
+                  <span>{dict.home.conciergeService}</span>
                 </li>
               </ul>
               <Link
@@ -175,7 +160,7 @@ export default async function HomePage({ params }: Props) {
               {dict.home.exploreServices}
             </h2>
             <p className="max-w-2xl mx-auto text-muted-foreground">
-              From mobile IV therapy support and stem cell treatment consultations to online prescription services, Pitonne offers discreet, personalized care tailored to each client&apos;s needs.
+              {dict.home.servicesDescription}
             </p>
           </div>
 
@@ -230,15 +215,15 @@ export default async function HomePage({ params }: Props) {
           </div>
 
           <div className="max-w-3xl mx-auto space-y-0">
-            {blogPosts.map((post, index) => (
+            {latestPosts.map((post) => (
               <Link
-                key={index}
-                href={localizedRoute(post.href, locale as Locale)}
+                key={post.slug}
+                href={localizedRoute(`/blog/${post.slug}/`, locale as Locale)}
                 className="block group"
               >
                 <div className="flex items-start gap-4 py-5 border-b border-border">
                   <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
-                    {post.date}
+                    {new Date(post.publishedAt).toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
                   </span>
                   <h3 className="text-base md:text-lg font-medium group-hover:text-[#7A8F87] transition-colors">
                     {post.title}

@@ -52,8 +52,8 @@ export function Header({
   }
 
   const phoneLinks = [
-    { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
-    { label: "U.S.", number: "+1 786 814 0323", href: "tel:+17868140323" },
+    { label: dict.contact.japan, number: businessInfo.phone, href: "tel:070-2194-0199" },
+    { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
   ]
 
   const navigation = [
@@ -246,7 +246,7 @@ export function Header({
           className="lg:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">{dict.common.toggleMenu}</span>
           {mobileMenuOpen ? (
             <X className="h-6 w-6" aria-hidden="true" />
           ) : (
