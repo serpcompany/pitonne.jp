@@ -69,7 +69,7 @@ export default async function ContactPage({ params }: Props) {
                   {dict.contact.inquiryFormDescription}
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
-                  <BookingButton className="w-full sm:w-auto" />
+                  <BookingButton className="w-full sm:w-auto" locale={locale as Locale} />
                   <a
                     href="https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
                     target="_blank"

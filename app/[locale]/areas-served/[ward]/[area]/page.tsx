@@ -73,8 +73,11 @@ export default async function AreaPage({ params }: Props) {
       wardNameJa={ward.nameJa}
       wardSlug={ward.slug}
       description={area.description}
+      descriptionJa={area.descriptionJa}
       highlights={area.highlights}
+      highlightsJa={area.highlightsJa}
       landmarks={area.landmarks}
+      landmarksJa={area.landmarksJa}
       otherAreas={otherAreas}
       locale={locale as Locale}
     />

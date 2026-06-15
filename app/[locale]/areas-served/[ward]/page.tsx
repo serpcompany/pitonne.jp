@@ -76,7 +76,7 @@ export default async function WardPage({ params }: Props) {
         title={typedLocale === "ja"
           ? `${ward.nameJa}（東京）の点滴療法・幹細胞・処方薬・血液検査`
           : `IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`}
-        description={ward.description}
+        description={typedLocale === "ja" ? ward.descriptionJa : ward.description}
       />
 
       {/* Areas Grid */}

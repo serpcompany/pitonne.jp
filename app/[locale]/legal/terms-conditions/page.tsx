@@ -38,5 +38,7 @@ export default async function TermsConditionsPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
-  return <LegalMarkdownPage page={getMarkdownPage("legal/terms-conditions.md")} canonicalTitle={dict.legal.termsOfUse} locale={locale as Locale} />
+  const page = getMarkdownPage("legal/terms-conditions.md", locale as Locale) ?? getMarkdownPage("legal/terms-conditions.md")
+
+  return <LegalMarkdownPage page={page} canonicalTitle={dict.legal.termsOfUse} locale={locale as Locale} />
 }

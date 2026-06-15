@@ -30,11 +30,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${category.name} ${dict.blog.articles}`,
-    description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+    description: typedLocale === "ja"
+      ? `${category.name}に関する記事とガイドをご覧ください。`
+      : `Explore our ${category.name.toLowerCase()} articles and guides.`,
     alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale),
     openGraph: {
       title: `${category.name} ${dict.blog.articles}`,
-      description: `Explore our ${category.name.toLowerCase()} articles and guides.`,
+      description: typedLocale === "ja"
+        ? `${category.name}に関する記事とガイドをご覧ください。`
+        : `Explore our ${category.name.toLowerCase()} articles and guides.`,
       url: localizedCanonicalUrl(`/blog/category/${category.slug}/`, typedLocale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
     },
@@ -53,7 +57,9 @@ export default async function BlogCategoryPage({ params }: Props) {
     notFound()
   }
 
-  const categoryDescription = `Explore our ${category.name.toLowerCase()} articles and guides from the Pitonne team.`
+  const categoryDescription = typedLocale === "ja"
+    ? `Pitonneチームによる${category.name}に関する記事とガイドをご覧ください。`
+    : `Explore our ${category.name.toLowerCase()} articles and guides from the Pitonne team.`
   const categoryPosts = getBlogPostsByCategory(categorySlug, typedLocale)
 
   return (
@@ -166,9 +172,11 @@ export default async function BlogCategoryPage({ params }: Props) {
             {dict.blog.haveQuestions}
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Our team is ready to help you learn more about {category.name.toLowerCase()} and how it might benefit you.
+            {typedLocale === "ja"
+              ? `${category.name}についてもっと知りたい方は、お気軽にお問い合わせください。`
+              : `Our team is ready to help you learn more about ${category.name.toLowerCase()} and how it might benefit you.`}
           </p>
-          <ContactButton />
+          <ContactButton locale={typedLocale} />
         </div>
       </section>
     </div>

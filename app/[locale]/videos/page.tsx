@@ -61,7 +61,7 @@ export default async function VideosPage({ params }: Props) {
                 <div className="relative aspect-video bg-muted">
                   <img
                     src={video.thumbnailUrl}
-                    alt={video.title}
+                    alt={locale === "ja" && video.titleJa ? video.titleJa : video.title}
                     className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]"
                     loading="lazy"
                   />
@@ -71,7 +71,7 @@ export default async function VideosPage({ params }: Props) {
                 </div>
                 <div className="p-5">
                   <h2 className="text-base font-semibold leading-7 text-foreground group-hover:text-[#7A8F87]">
-                    {video.title}
+                    {locale === "ja" && video.titleJa ? video.titleJa : video.title}
                   </h2>
                 </div>
               </Link>

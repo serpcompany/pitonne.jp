@@ -14,8 +14,11 @@ interface AreaPageProps {
   wardNameJa: string
   wardSlug: string
   description: string
+  descriptionJa: string
   highlights: string[]
+  highlightsJa: string[]
   landmarks: string[]
+  landmarksJa: string[]
   otherAreas: { name: string; slug: string }[]
   locale?: Locale
 }
@@ -68,8 +71,11 @@ export function AreaDetailPage({
   wardNameJa,
   wardSlug,
   description,
+  descriptionJa,
   highlights,
+  highlightsJa,
   landmarks,
+  landmarksJa,
   otherAreas,
   locale = "en" as Locale,
 }: AreaPageProps) {
@@ -77,6 +83,10 @@ export function AreaDetailPage({
   const areaFaqs = faqs(areaName, wardName, locale)
   const mapQuery = encodeURIComponent(`${areaName}, ${wardName}, Tokyo, Japan`)
   const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
+
+  const localizedDescription = locale === "ja" ? descriptionJa : description
+  const localizedHighlights = locale === "ja" ? highlightsJa : highlights
+  const localizedLandmarks = locale === "ja" ? landmarksJa : landmarks
 
   return (
     <div className="bg-background">
@@ -91,7 +101,7 @@ export function AreaDetailPage({
         title={locale === "ja"
           ? `${areaNameJa}（${wardNameJa}、東京）の点滴療法・幹細胞・処方薬・血液検査`
           : `IV Therapy, Stem Cells, Medications & Blood Testing in ${areaName}, ${wardName}, Tokyo`}
-        description={description}
+        description={localizedDescription}
       />
 
       <CareAvailableSection locale={locale} />
@@ -107,23 +117,23 @@ export function AreaDetailPage({
                   ? `Pitonneは${areaNameJa}（${wardNameJa}、東京）周辺でウェルネスに関するご相談や訪問型ケアを調整しています。`
                   : `Pitonne coordinates wellness consultations and visit-based care around ${areaName}, ${wardName}, Tokyo.`}
               </p>
-              {(highlights.length > 0 || landmarks.length > 0) && (
+              {(localizedHighlights.length > 0 || localizedLandmarks.length > 0) && (
                 <div className="grid gap-6 md:grid-cols-2">
-                  {highlights.length > 0 && (
+                  {localizedHighlights.length > 0 && (
                     <div>
                       <h3 className="mb-3 font-semibold text-foreground">{dict.areas.areaNotes}</h3>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {highlights.map((highlight) => (
+                        {localizedHighlights.map((highlight) => (
                           <li key={highlight}>{highlight}</li>
                         ))}
                       </ul>
                     </div>
                   )}
-                  {landmarks.length > 0 && (
+                  {localizedLandmarks.length > 0 && (
                     <div>
                       <h3 className="mb-3 font-semibold text-foreground">{dict.areas.nearbyLandmarks}</h3>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        {landmarks.map((landmark) => (
+                        {localizedLandmarks.map((landmark) => (
                           <li key={landmark}>{landmark}</li>
                         ))}
                       </ul>
