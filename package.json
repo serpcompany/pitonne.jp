@@ -12,7 +12,8 @@
     "test:parity": "vitest run tests/parity",
     "test:lighthouse": "lhci autorun",
     "audit:routes": "node scripts/audit-routes.mjs",
-    "audit:content": "node scripts/audit-content.mjs"
+    "audit:content": "node scripts/audit-content.mjs",
+    "audit:strings": "node scripts/audit-hardcoded-strings.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

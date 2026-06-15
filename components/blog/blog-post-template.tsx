@@ -8,6 +8,9 @@ import { BlogSidebar } from "@/components/blog/blog-sidebar"
 import type { BlogPost } from "@/lib/data/blog-posts"
 import type { Service } from "@/lib/data/services"
 import { blogPostingJsonLd } from "@/lib/structured-data"
+import type { Locale } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
+import { localizedRoute } from "@/lib/data/routes"
 
 export interface BlogPostViewModel {
   slug: string
@@ -43,19 +46,20 @@ function MarkdownContent({ content }: { content: string }) {
   return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
 }
 
-function BlogContent({ post }: { post: BlogPostViewModel }) {
+function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewModel; locale?: Locale }) {
   const content = splitFinalTakeaway(post.content)
 
   return (
     <div className="blog-prose">
       <MarkdownContent content={content.before} />
-      <BlogDiscoverySection post={post} />
+      <BlogDiscoverySection post={post} locale={locale} />
       {content.final ? <MarkdownContent content={content.final} /> : null}
     </div>
   )
 }
 
-function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
+function LatestPostsSection({ latestPosts, locale = "en" as Locale }: { latestPosts: BlogPost[]; locale?: Locale }) {
+  const dict = getDictionary(locale)
   if (latestPosts.length === 0) {
     return null
   }
@@ -63,16 +67,16 @@ function LatestPostsSection({ latestPosts }: { latestPosts: BlogPost[] }) {
   return (
     <section className="border-t border-border bg-card py-12 md:py-16">
       <div className="container mx-auto px-4">
-        <h2 className="mb-8 font-serif text-2xl text-foreground">Read Our Latest Posts</h2>
+        <h2 className="mb-8 font-serif text-2xl text-foreground">{dict.blog.readOurLatestPosts}</h2>
         <div className="grid max-w-5xl gap-6 md:grid-cols-3">
           {latestPosts.slice(0, 3).map((post) => (
             <Link
               key={post.slug}
-              href={`/blog/${post.slug}/`}
+              href={localizedRoute(`/blog/${post.slug}/`, locale)}
               className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#7A8F87] hover:shadow-md"
             >
               <p className="mb-2 text-xs text-muted-foreground">
-                {new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                {new Date(post.publishedAt).toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US", { year: "numeric", month: "short", day: "numeric" })}
               </p>
               <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#7A8F87]">{post.title}</h3>
             </Link>
@@ -88,12 +92,15 @@ export function BlogPostTemplate({
   relatedPosts,
   relatedServices,
   latestPosts,
+  locale = "en" as Locale,
 }: {
   post: BlogPostViewModel
   relatedPosts: BlogPost[]
   relatedServices: Service[]
   latestPosts: BlogPost[]
+  locale?: Locale
 }) {
+  const dict = getDictionary(locale)
   return (
     <div className="bg-background">
       {post.author && (
@@ -108,19 +115,19 @@ export function BlogPostTemplate({
               name: post.author.name,
               role: post.author.role ?? "",
             },
-          })}
+          }, locale)}
         />
       )}
 
       <PageHero
         breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Blog", href: "/blog/" },
-          { label: "Article" },
+          { label: dict.nav.home, href: localizedRoute("/", locale) },
+          { label: dict.blog.blog, href: localizedRoute("/blog/", locale) },
+          { label: dict.blog.article },
         ]}
         eyebrow={
           <Link
-            href={`/blog/category/${post.categorySlug}/`}
+            href={localizedRoute(`/blog/category/${post.categorySlug}/`, locale)}
             className="inline-block rounded-full bg-[#7A8F87] px-3 py-1 text-xs font-medium normal-case tracking-normal text-white transition-colors hover:bg-[#245f5a]"
           >
             {post.category}
@@ -132,7 +139,7 @@ export function BlogPostTemplate({
             {post.readingTime && (
               <>
                 <span>&middot;</span>
-                <span>{post.readingTime} min read</span>
+                <span>{post.readingTime} {dict.common.minRead}</span>
               </>
             )}
           </div>
@@ -172,15 +179,15 @@ export function BlogPostTemplate({
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
             <article className="min-w-0">
-              <BlogContent post={post} />
+              <BlogContent post={post} locale={locale} />
             </article>
 
-            <BlogSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} />
+            <BlogSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} locale={locale} />
           </div>
         </div>
       </section>
 
-      <LatestPostsSection latestPosts={latestPosts} />
+      <LatestPostsSection latestPosts={latestPosts} locale={locale} />
     </div>
   )
 }

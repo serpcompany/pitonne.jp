@@ -1,8 +1,8 @@
 import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
-import VideosPage, { metadata as videosMetadata } from "@/app/videos/page"
-import WatchPage, { generateMetadata, generateStaticParams } from "@/app/watch/[video]/page"
+import VideosPage, { generateMetadata as videosGenerateMetadata } from "@/app/[locale]/videos/page"
+import WatchPage, { generateMetadata, generateStaticParams } from "@/app/[locale]/watch/[video]/page"
 import { videoObjectJsonLd, videoBreadcrumbJsonLd, videoListJsonLd } from "@/lib/structured-data"
 import { getVideoBySlug, pitonneVideos } from "@/lib/data/videos"
 
@@ -87,17 +87,20 @@ describe("Pitonne video pages", () => {
   })
 
   it("renders a videos index and watch page with embedded YouTube players", async () => {
-    const videosMarkup = renderToStaticMarkup(React.createElement(VideosPage))
+    const videosMarkup = renderToStaticMarkup(
+      await VideosPage({ params: Promise.resolve({ locale: "en" }) }),
+    )
+    const videosMetadata = await videosGenerateMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(videosMetadata).toMatchObject({
       title: "Videos",
-      alternates: { canonical: `${SITE_URL}/videos/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/videos/` }),
     })
     expect(videosMarkup).toContain("Videos")
     expect(videosMarkup).toContain("/watch/does-a-hangover-iv-really-help/")
 
     const watchMarkup = renderToStaticMarkup(
       await WatchPage({
-        params: Promise.resolve({ video: "does-a-hangover-iv-really-help" }),
+        params: Promise.resolve({ locale: "en", video: "does-a-hangover-iv-really-help" }),
       }),
     )
     expect(watchMarkup).toContain("https://www.youtube-nocookie.com/embed/TWZZkcxUKGI")
@@ -105,17 +108,20 @@ describe("Pitonne video pages", () => {
   })
 
   it("generates static params and metadata for watch pages", async () => {
-    expect(generateStaticParams()).toEqual(
-      pitonneVideos.map((video) => ({ video: video.slug })),
+    const staticParams = generateStaticParams()
+    // Static params now include locale
+    const enParams = staticParams.filter((p) => p.locale === "en")
+    expect(enParams).toEqual(
+      pitonneVideos.map((video) => ({ locale: "en", video: video.slug })),
     )
 
     await expect(
       generateMetadata({
-        params: Promise.resolve({ video: "does-a-hangover-iv-really-help" }),
+        params: Promise.resolve({ locale: "en", video: "does-a-hangover-iv-really-help" }),
       }),
     ).resolves.toMatchObject({
       title: "Does a Hangover IV Really Help",
-      alternates: { canonical: `${SITE_URL}/watch/does-a-hangover-iv-really-help/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/watch/does-a-hangover-iv-really-help/` }),
       openGraph: {
         type: "video.other",
         url: `${SITE_URL}/watch/does-a-hangover-iv-really-help/`,

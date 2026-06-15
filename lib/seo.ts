@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import type { Locale } from "@/lib/i18n/config"
+import { defaultLocale } from "@/lib/i18n/config"
 
 export const SITE_URL = "https://pitonne.jp"
 export const SITE_NAME = "Pitonne"
@@ -31,6 +33,43 @@ export function absoluteUrl(path: string): string {
   }
 
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`
+}
+
+export function localizedCanonicalUrl(path: string, locale: Locale): string {
+  const normalizedPath = normalizePath(path)
+  if (locale === "ja") {
+    return `${SITE_URL}/ja${normalizedPath}`
+  }
+  return `${SITE_URL}${normalizedPath}`
+}
+
+export function localizedPath(path: string, locale: Locale): string {
+  if (locale === defaultLocale) return normalizePath(path)
+  return `/ja${normalizePath(path)}`
+}
+
+export function hreflangAlternates(path: string) {
+  const normalizedPath = normalizePath(path)
+  return {
+    canonical: canonicalUrl(normalizedPath),
+    languages: {
+      en: canonicalUrl(normalizedPath),
+      ja: `${SITE_URL}/ja${normalizedPath}`,
+      "x-default": canonicalUrl(normalizedPath),
+    },
+  }
+}
+
+export function localizedHreflangAlternates(path: string, locale: Locale) {
+  const normalizedPath = normalizePath(path)
+  return {
+    canonical: localizedCanonicalUrl(normalizedPath, locale),
+    languages: {
+      en: canonicalUrl(normalizedPath),
+      ja: `${SITE_URL}/ja${normalizedPath}`,
+      "x-default": canonicalUrl(normalizedPath),
+    },
+  }
 }
 
 export function deploymentRobots(): Metadata["robots"] {

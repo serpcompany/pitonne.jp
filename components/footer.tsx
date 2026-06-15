@@ -1,7 +1,9 @@
 import Link from "next/link"
 import { Instagram, Facebook, Linkedin, Youtube, Twitter, MapPin, Music, Podcast, Pin } from "lucide-react"
-import { businessInfo } from "@/lib/data/site"
-import { canonicalRoutes } from "@/lib/data/routes"
+import { getBusinessInfo } from "@/lib/data/site"
+import { canonicalRoutes, localizedRoute } from "@/lib/data/routes"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/dictionaries"
 
 // Custom SVG icons for platforms not in lucide
 function TikTokIcon({ className }: { className?: string }) {
@@ -36,28 +38,6 @@ function ApplePodcastIcon({ className }: { className?: string }) {
   )
 }
 
-const quickLinks = [
-  { name: "Home", href: canonicalRoutes.home },
-  { name: "About", href: canonicalRoutes.about },
-  { name: "Services", href: canonicalRoutes.services },
-  { name: "Blog", href: canonicalRoutes.blog },
-  { name: "Videos", href: canonicalRoutes.videos },
-  { name: "FAQs", href: canonicalRoutes.faqs },
-  { name: "Contact", href: canonicalRoutes.contact },
-  { name: "Legal", href: canonicalRoutes.legal },
-]
-
-const areasServed = [
-  { name: "Roppongi", href: "/areas-served/minato/roppongi" },
-  { name: "Azabu Juban", href: "/areas-served/minato/azabu-juban" },
-  { name: "Minato / Hiroo", href: "/areas-served/minato/hiroo/" },
-  { name: "Akasaka", href: "/areas-served/minato/akasaka" },
-  { name: "Shibuya", href: "/areas-served/shibuya" },
-  { name: "Ebisu", href: "/areas-served/shibuya/ebisu" },
-  { name: "Ginza", href: "/areas-served/chuo/ginza" },
-  { name: "Shinagawa", href: "/areas-served/shinagawa" },
-]
-
 // Main social links (shown as icons)
 const socialLinks = [
   { name: "Google Maps", href: "https://maps.app.goo.gl/WjMLKSkNw7t2oc5T6", icon: MapPin },
@@ -80,7 +60,30 @@ const podcastLinks = [
   { name: "Goodpods", href: "https://goodpods.com/ja/profile/pitonne-130086", icon: Podcast },
 ]
 
-export function Footer() {
+export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+  const businessInfo = getBusinessInfo(locale)
+  const quickLinks = [
+    { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
+    { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },
+    { name: dict.nav.services, href: localizedRoute(canonicalRoutes.services, locale) },
+    { name: dict.nav.blog, href: localizedRoute(canonicalRoutes.blog, locale) },
+    { name: dict.nav.videos, href: localizedRoute(canonicalRoutes.videos, locale) },
+    { name: dict.nav.faqs, href: localizedRoute(canonicalRoutes.faqs, locale) },
+    { name: dict.nav.contact, href: localizedRoute(canonicalRoutes.contact, locale) },
+    { name: dict.nav.legal, href: localizedRoute(canonicalRoutes.legal, locale) },
+  ]
+
+  const areasServed = [
+    { name: locale === "ja" ? "六本木" : "Roppongi", href: localizedRoute("/areas-served/minato/roppongi/", locale) },
+    { name: locale === "ja" ? "麻布十番" : "Azabu Juban", href: localizedRoute("/areas-served/minato/azabu-juban/", locale) },
+    { name: locale === "ja" ? "港区 / 広尾" : "Minato / Hiroo", href: localizedRoute("/areas-served/minato/hiroo/", locale) },
+    { name: locale === "ja" ? "赤坂" : "Akasaka", href: localizedRoute("/areas-served/minato/akasaka/", locale) },
+    { name: locale === "ja" ? "渋谷" : "Shibuya", href: localizedRoute("/areas-served/shibuya/", locale) },
+    { name: locale === "ja" ? "恵比寿" : "Ebisu", href: localizedRoute("/areas-served/shibuya/ebisu/", locale) },
+    { name: locale === "ja" ? "銀座" : "Ginza", href: localizedRoute("/areas-served/chuo/ginza/", locale) },
+    { name: locale === "ja" ? "品川" : "Shinagawa", href: localizedRoute("/areas-served/shinagawa/", locale) },
+  ]
+
   return (
     <footer className="bg-[#2d2d2d] text-white">
       <div className="container mx-auto px-4 py-12 lg:py-16">
@@ -95,41 +98,43 @@ export function Footer() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Pitonne Stem Cell & IV Therapy Location"
+              title={dict.footer.mapTitle}
               className="grayscale hover:grayscale-0 transition-all duration-300"
             />
           </div>
-          <a 
+          <a
             href="https://maps.app.goo.gl/WjMLKSkNw7t2oc5T6"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 mt-3 text-sm text-[#4AA69D] hover:text-[#5bc4ba] transition-colors"
           >
             <MapPin className="h-4 w-4" />
-            <span>Get Directions</span>
+            <span>{dict.common.getDirections}</span>
           </a>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div>
-            <img 
-              src="/images/pitt-wordlogo-white-32.svg" 
-              alt="Pitonne" 
-              className="h-8 w-auto mb-4"
-            />
-            <p className="text-sm text-white/80 mb-2">Pitonne Stem Cell & IV Therapy</p>
+            <Link href={localizedRoute("/", locale)}>
+              <img
+                src="/images/pitt-wordlogo-white-32.svg"
+                alt="Pitonne"
+                className="h-8 w-auto mb-4"
+              />
+            </Link>
+            <p className="text-sm text-white/80 mb-2">{dict.footer.businessName}</p>
             <address className="text-sm text-white/70 not-italic space-y-1">
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
               <p>
                 <a href="tel:070-2194-0199" className="hover:text-white transition-colors">
-                  JP: {businessInfo.phone}
+                  {dict.contact.japan}: {businessInfo.phone}
                 </a>
               </p>
               <p>
                 <a href="tel:+17868140323" className="hover:text-white transition-colors">
-                  US: +1 786 814 0323
+                  {dict.contact.us}: +1 786 814 0323
                 </a>
               </p>
             </address>
@@ -137,11 +142,11 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.footer.quickLinks}</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <Link 
+                  <Link
                     href={link.href}
                     className="text-sm text-white/70 hover:text-white transition-colors"
                   >
@@ -154,32 +159,37 @@ export function Footer() {
 
           {/* Open Hours */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Open Hours</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.footer.openHours}</h3>
             <ul className="space-y-1.5">
-              {businessInfo.hours.map((item) => (
-                <li key={item.day} className="grid grid-cols-[5.75rem_auto] gap-x-3 text-sm">
-                  <span className="text-white/70">{item.day}</span>
-                  <span className={item.hours === "Closed" ? "text-white/70" : "text-white/90"}>
-                    {item.hours}
-                  </span>
-                </li>
-              ))}
+              {businessInfo.hours.map((item) => {
+                const dayLabel = dict.days[item.day as keyof typeof dict.days] ?? item.day
+                const isClosed = item.hours === "Closed" || item.hours === "休診"
+                const hoursLabel = isClosed ? dict.footer.closed : item.hours
+                return (
+                  <li key={item.day} className="grid grid-cols-[5.75rem_auto] gap-x-3 text-sm">
+                    <span className="text-white/70">{dayLabel}</span>
+                    <span className={isClosed ? "text-white/70" : "text-white/90"}>
+                      {hoursLabel}
+                    </span>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 
           {/* Areas Served */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Areas Served</h3>
-            <Link 
-              href="/areas-served"
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.footer.areasServed}</h3>
+            <Link
+              href={localizedRoute("/areas-served/", locale)}
               className="text-sm text-[#4AA69D] hover:text-[#5bc4ba] transition-colors mb-3 inline-block"
             >
-              View All Areas
+              {dict.nav.viewAllAreas}
             </Link>
             <ul className="space-y-2">
               {areasServed.map((area) => (
                 <li key={area.name}>
-                  <Link 
+                  <Link
                     href={area.href}
                     className="text-sm text-white/70 hover:text-white transition-colors"
                   >
@@ -195,7 +205,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/10">
           {/* Social Links Row */}
           <div className="mb-6">
-            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">Follow Us</p>
+            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">{dict.footer.followUs}</p>
             <div className="flex flex-wrap items-center gap-3">
               {socialLinks.map((social) => (
                 <a
@@ -215,7 +225,7 @@ export function Footer() {
 
           {/* Podcast Links Row */}
           <div className="mb-6">
-            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">Listen to Our Podcast</p>
+            <p className="text-xs text-white/70 uppercase tracking-wider mb-3">{dict.footer.listenPodcast}</p>
             <div className="flex flex-wrap items-center gap-3">
               {podcastLinks.map((podcast) => (
                 <a
@@ -237,10 +247,10 @@ export function Footer() {
           {/* Copyright */}
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/70">
-              &copy; {new Date().getFullYear()} Pitonne Stem Cell & IV Therapy. Website & SEO by <a href="https://serp.co" target="_blank" rel="noopener" className="hover:text-[#7A8F87] transition-colors">SERP</a>
+              &copy; {new Date().getFullYear()} {dict.footer.businessName}. {dict.footer.websiteBy} <a href="https://serp.co" target="_blank" rel="noopener" className="hover:text-[#7A8F87] transition-colors">SERP</a>
             </p>
             <p className="text-xs text-white/70">
-              Nishi Azabu, Minato-ku, Tokyo, Japan
+              {dict.footer.locationShort}
             </p>
           </div>
         </div>

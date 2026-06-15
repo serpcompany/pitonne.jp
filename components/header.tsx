@@ -1,51 +1,78 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
-import { areaNavigation, canonicalRoutes, type ServiceNavCategory } from "@/lib/data/routes"
+import { canonicalRoutes, localizedRoute, getAreaNavigation, type ServiceNavCategory } from "@/lib/data/routes"
 import { businessInfo } from "@/lib/data/site"
 import { ContactButton } from "@/components/shared/contact-button"
+import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/dictionaries"
 
-const areasMenu = {
-  wards: areaNavigation,
+function LanguageSwitcher({ locale }: { locale: Locale }) {
+  const pathname = usePathname()
+  const targetPath = locale === "en"
+    ? `/ja${pathname}`
+    : pathname.replace(/^\/ja/, "") || "/"
+
+  return (
+    <Link
+      href={targetPath}
+      className="text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
+    >
+      {locale === "en" ? "\u65E5\u672C\u8A9E" : "English"}
+    </Link>
+  )
 }
 
-const aboutMenu = {
-  items: [
-    { name: "About", href: canonicalRoutes.about },
-    { name: "FAQs", href: canonicalRoutes.faqs },
-  ],
-}
-
-const phoneLinks = [
-  { label: "Japan", number: businessInfo.phone, href: "tel:070-2194-0199" },
-  { label: "U.S.", number: "+1 786 814 0323", href: "tel:+17868140323" },
-]
-
-const navigation = [
-  { name: "Home", href: canonicalRoutes.home },
-  { name: "About", href: canonicalRoutes.about, hasDropdown: "about" },
-  { name: "Services", href: canonicalRoutes.services, hasDropdown: "services" },
-  { name: "Areas Served", href: canonicalRoutes.areasServed, hasDropdown: "areas" },
-  { name: "Blog", href: canonicalRoutes.blog },
-  { name: "Videos", href: canonicalRoutes.videos },
-]
-
-export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCategory[] }) {
+export function Header({
+  locale,
+  dict,
+  serviceNavigation,
+}: {
+  locale: Locale
+  dict: Dictionary
+  serviceNavigation: ServiceNavCategory[]
+}) {
   const servicesMenu = { categories: serviceNavigation }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
 
+  const areasMenu = {
+    wards: getAreaNavigation(locale),
+  }
+
+  const aboutMenu = {
+    items: [
+      { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },
+      { name: dict.nav.faqs, href: localizedRoute(canonicalRoutes.faqs, locale) },
+    ],
+  }
+
+  const phoneLinks = [
+    { label: dict.contact.japan, number: businessInfo.phone, href: "tel:070-2194-0199" },
+    { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
+  ]
+
+  const navigation = [
+    { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
+    { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale), hasDropdown: "about" },
+    { name: dict.nav.services, href: localizedRoute(canonicalRoutes.services, locale), hasDropdown: "services" },
+    { name: dict.nav.areasServed, href: localizedRoute(canonicalRoutes.areasServed, locale), hasDropdown: "areas" },
+    { name: dict.nav.blog, href: localizedRoute(canonicalRoutes.blog, locale) },
+    { name: dict.nav.videos, href: localizedRoute(canonicalRoutes.videos, locale) },
+  ]
+
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border">
       <nav className="container mx-auto flex items-center justify-between px-4 py-4 lg:px-8">
 {/* Logo */}
-  <Link href="/" className="flex items-center">
-    <img 
-      src="/images/pitt-wordlogo-blk-32.svg" 
-      alt="Pitonne Stem Cell & IV Therapy" 
+  <Link href={localizedRoute("/", locale)} className="flex items-center">
+    <img
+      src="/images/pitt-wordlogo-blk-32.svg"
+      alt="Pitonne Stem Cell & IV Therapy"
       className="h-8 w-auto"
     />
   </Link>
@@ -53,13 +80,13 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
           {navigation.map((item) => (
-            <div 
-              key={item.name} 
+            <div
+              key={item.name}
               className="relative"
               onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.hasDropdown)}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <Link 
+              <Link
                 href={item.href}
                 className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
               >
@@ -94,7 +121,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                   <div className="grid grid-cols-4 gap-6">
                     {servicesMenu.categories.map((category) => (
                       <div key={category.name}>
-                        <Link 
+                        <Link
                           href={category.href}
                           className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
                         >
@@ -116,11 +143,11 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                     ))}
                   </div>
                   <div className="mt-6 pt-4 border-t border-border">
-                      <Link 
-                        href="/services"
+                      <Link
+                        href={localizedRoute("/services/", locale)}
                         className="text-sm font-medium text-[#7A8F87] hover:underline"
                       >
-                        View All Services &rarr;
+                        {dict.nav.viewAllServices} &rarr;
                       </Link>
                     </div>
                   </div>
@@ -134,7 +161,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                   <div className="grid grid-cols-5 gap-4">
                     {areasMenu.wards.map((ward) => (
                       <div key={ward.name}>
-                        <Link 
+                        <Link
                           href={ward.href}
                           className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
                         >
@@ -157,11 +184,11 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                     ))}
                   </div>
                   <div className="mt-6 pt-4 border-t border-border">
-                      <Link 
-                        href="/areas-served"
+                      <Link
+                        href={localizedRoute("/areas-served/", locale)}
                         className="text-sm font-medium text-[#7A8F87] hover:underline"
                       >
-                        View All Areas &rarr;
+                        {dict.nav.viewAllAreas} &rarr;
                       </Link>
                     </div>
                   </div>
@@ -171,8 +198,9 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
           ))}
         </div>
 
-        {/* Phone & CTA */}
+        {/* Language Switcher & Phone & CTA */}
         <div className="hidden lg:flex items-center gap-6">
+          <LanguageSwitcher locale={locale} />
           <div
             className="relative"
             onMouseEnter={() => setActiveDropdown("phone")}
@@ -183,7 +211,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
               className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
             >
               <Phone className="h-4 w-4" />
-              Phone
+              {dict.nav.phone}
               <ChevronDown className="h-4 w-4" />
             </button>
 
@@ -207,7 +235,9 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
               </div>
             )}
           </div>
-          <ContactButton className="px-5 py-2.5" />
+          <ContactButton className="px-5 py-2.5" locale={locale}>
+            {dict.common.contactUs}
+          </ContactButton>
         </div>
 
         {/* Mobile menu button */}
@@ -216,7 +246,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
           className="lg:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <span className="sr-only">Toggle menu</span>
+          <span className="sr-only">{dict.common.toggleMenu}</span>
           {mobileMenuOpen ? (
             <X className="h-6 w-6" aria-hidden="true" />
           ) : (
@@ -229,6 +259,11 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border bg-white max-h-[80vh] overflow-y-auto">
           <div className="container mx-auto px-4 py-4 space-y-1">
+            {/* Language Switcher - Mobile */}
+            <div className="pb-3 mb-1 border-b border-border">
+              <LanguageSwitcher locale={locale} />
+            </div>
+
             {navigation.map((item) => (
               <div key={item.name}>
                 {item.hasDropdown ? (
@@ -240,10 +275,10 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                       )}
                     >
                       {item.name}
-                      <ChevronDown 
+                      <ChevronDown
                         className={`h-4 w-4 transition-transform ${
                           mobileExpandedSection === item.hasDropdown ? 'rotate-180' : ''
-                        }`} 
+                        }`}
                       />
                     </button>
 
@@ -262,7 +297,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                         ))}
                       </div>
                     )}
-                    
+
                     {/* Mobile Services Dropdown */}
                     {item.hasDropdown === "services" && mobileExpandedSection === "services" && (
                       <div className="pl-4 pb-2 space-y-3">
@@ -332,7 +367,7 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                 )}
               </div>
             ))}
-            
+
             <div className="pt-4 border-t border-border">
               <div className="mb-3 space-y-2">
                 {phoneLinks.map((phone) => (
@@ -342,7 +377,9 @@ export function Header({ serviceNavigation }: { serviceNavigation: ServiceNavCat
                   </a>
                 ))}
               </div>
-              <ContactButton className="w-full px-5 py-2.5" />
+              <ContactButton className="w-full px-5 py-2.5" locale={locale}>
+                {dict.common.contactUs}
+              </ContactButton>
             </div>
           </div>
         </div>
