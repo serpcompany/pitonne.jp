@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog-post-template"
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getServicesFromSlugs } from "@/lib/data/services"
 import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  return { title: "Post Not Found" }
+  return { title: getDictionary(typedLocale).common.notFoundPost }
 }
 
 export default async function BlogPostPage({ params }: Props) {

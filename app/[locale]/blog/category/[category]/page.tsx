@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dict = getDictionary(typedLocale)
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
-  if (!category) return { title: "Category Not Found | Pitonne" }
+  if (!category) return { title: dict.common.notFoundCategory }
 
   return {
     title: `${category.name} ${dict.blog.articles}`,

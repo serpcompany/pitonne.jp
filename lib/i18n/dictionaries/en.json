@@ -23,7 +23,12 @@
     "sendMessage": "Send Message",
     "learnMore": "Learn More",
     "backTo": "Back to",
-    "toggleMenu": "Toggle menu"
+    "toggleMenu": "Toggle menu",
+    "notFoundArea": "Area Not Found | Pitonne",
+    "notFoundPost": "Post Not Found | Pitonne",
+    "notFoundCategory": "Category Not Found | Pitonne",
+    "notFoundService": "Service Not Found | Pitonne",
+    "notFoundVideo": "Video Not Found | Pitonne"
   },
   "home": {
     "heroEyebrow": "Concierge Wellness in Tokyo",
