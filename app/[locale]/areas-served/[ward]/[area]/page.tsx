@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const result = getArea(wardSlug, areaSlug)
 
   if (!result) {
-    return { title: "Area Not Found | Pitonne" }
+    const dict = getDictionary(typedLocale)
+    return { title: dict.common.notFoundArea }
   }
 
   const { ward, area } = result

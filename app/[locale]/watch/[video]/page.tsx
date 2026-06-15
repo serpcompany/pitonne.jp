@@ -32,7 +32,7 @@ export async function generateMetadata({
 
   if (!video) {
     return {
-      title: "Video Not Found",
+      title: getDictionary(locale as Locale).common.notFoundVideo,
     }
   }
 

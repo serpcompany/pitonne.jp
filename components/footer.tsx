@@ -163,11 +163,12 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <ul className="space-y-1.5">
               {businessInfo.hours.map((item) => {
                 const dayLabel = dict.days[item.day as keyof typeof dict.days] ?? item.day
-                const hoursLabel = item.hours === "Closed" ? dict.footer.closed : item.hours
+                const isClosed = item.hours === "Closed" || item.hours === "休診"
+                const hoursLabel = isClosed ? dict.footer.closed : item.hours
                 return (
                   <li key={item.day} className="grid grid-cols-[5.75rem_auto] gap-x-3 text-sm">
                     <span className="text-white/70">{dayLabel}</span>
-                    <span className={item.hours === "Closed" ? "text-white/70" : "text-white/90"}>
+                    <span className={isClosed ? "text-white/70" : "text-white/90"}>
                       {hoursLabel}
                     </span>
                   </li>

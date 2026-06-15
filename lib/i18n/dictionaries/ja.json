@@ -23,7 +23,12 @@
     "sendMessage": "メッセージを送る",
     "learnMore": "詳しく見る",
     "backTo": "戻る：",
-    "toggleMenu": "メニューを切り替える"
+    "toggleMenu": "メニューを切り替える",
+    "notFoundArea": "エリアが見つかりません | Pitonne",
+    "notFoundPost": "記事が見つかりません | Pitonne",
+    "notFoundCategory": "カテゴリーが見つかりません | Pitonne",
+    "notFoundService": "サービスが見つかりません | Pitonne",
+    "notFoundVideo": "動画が見つかりません | Pitonne"
   },
   "home": {
     "heroEyebrow": "東京のコンシェルジュ・ウェルネス",

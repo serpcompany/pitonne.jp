@@ -7,6 +7,7 @@ import { getAllServiceSlugs, getChildServices, getService, getServicesFromSlugs 
 import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { locales } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 interface Props {
   params: Promise<{ locale: string; service: string }>
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getService(serviceSlug, locale as Locale)
 
   if (!service) {
-    return { title: "Service Not Found" }
+    return { title: getDictionary(locale as Locale).common.notFoundService }
   }
 
   return {
