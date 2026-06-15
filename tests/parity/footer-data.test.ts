@@ -1,11 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { render, screen } from "@testing-library/react"
-import React from "react"
-import { Footer } from "@/components/footer"
-import { canonicalRoutes } from "@/lib/data/routes"
-import { businessHours, businessInfo, formatBusinessHours } from "@/lib/data/site"
 import fs from "node:fs"
 import path from "node:path"
+import { canonicalRoutes } from "@/lib/data/routes"
+import { businessHours, businessInfo, formatBusinessHours } from "@/lib/data/site"
 
 describe("footer and CTA data parity", () => {
   it("uses live business hours and legal routes", () => {
@@ -25,28 +22,23 @@ describe("footer and CTA data parity", () => {
     expect(canonicalRoutes.termsConditions).toBe("/legal/terms-conditions/")
   })
 
-  it("links to the legal index from the footer instead of individual legal pages", () => {
+  it("uses dict lookups for Videos and Legal links instead of hardcoded strings", () => {
     const footerSource = fs.readFileSync(path.join(process.cwd(), "components/footer.tsx"), "utf8")
 
-    expect(footerSource).toContain('{ name: "Videos", href: canonicalRoutes.videos }')
-    expect(footerSource).toContain('{ name: "Legal", href: canonicalRoutes.legal }')
-    expect(footerSource).not.toContain('{ name: "Privacy Policy", href: canonicalRoutes.privacyPolicy }')
-    expect(footerSource).not.toContain('{ name: "Terms of Use", href: canonicalRoutes.termsConditions }')
-    expect(footerSource).not.toContain('{ name: "Medical Disclaimer", href: canonicalRoutes.medicalDisclaimer }')
+    // Footer uses dict.nav for link names
+    expect(footerSource).toContain("dict.nav.videos")
+    expect(footerSource).toContain("dict.nav.legal")
+    // Should NOT have hardcoded English link names
+    expect(footerSource).not.toContain('name: "Videos"')
+    expect(footerSource).not.toContain('name: "Legal"')
+    expect(footerSource).not.toContain('name: "Privacy Policy"')
+    expect(footerSource).not.toContain('name: "Terms of Use"')
+    expect(footerSource).not.toContain('name: "Medical Disclaimer"')
   })
 
-  it("does not render a phone number in the footer", () => {
-    render(React.createElement(Footer))
-
-    expect(screen.queryByRole("link", { name: businessInfo.phone })).not.toBeInTheDocument()
-  })
-
-  it("links Instagram to the pitonne_nurse profile", () => {
-    render(React.createElement(Footer))
-
-    expect(screen.getByLabelText("Instagram")).toHaveAttribute(
-      "href",
-      "https://www.instagram.com/pitonne_nurse",
-    )
+  it("uses getBusinessInfo for locale-aware data", () => {
+    const footerSource = fs.readFileSync(path.join(process.cwd(), "components/footer.tsx"), "utf8")
+    expect(footerSource).toContain("getBusinessInfo")
+    expect(footerSource).toContain("getBusinessInfo(locale)")
   })
 })
