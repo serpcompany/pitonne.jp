@@ -15,8 +15,11 @@ function renderHirooAreaDetail() {
       wardNameJa={area!.ward.nameJa}
       wardSlug={area!.ward.slug}
       description={area!.area.description}
+      descriptionJa={area!.area.descriptionJa}
       highlights={area!.area.highlights}
+      highlightsJa={area!.area.highlightsJa}
       landmarks={area!.area.landmarks}
+      landmarksJa={area!.area.landmarksJa}
       otherAreas={[]}
     />,
   )

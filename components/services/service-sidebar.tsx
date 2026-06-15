@@ -23,7 +23,7 @@ export function ServiceSidebar({
         <p className="mb-5 text-sm text-muted-foreground">
           {dict.services.bookServiceDescription}
         </p>
-        <BookingButton className="w-full" />
+        <BookingButton className="w-full" locale={locale} />
       </div>
 
       {relatedServices.length > 0 && (

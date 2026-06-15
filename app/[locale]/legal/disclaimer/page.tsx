@@ -40,7 +40,7 @@ export default async function DisclaimerPage({ params }: Props) {
 
   return (
     <LegalMarkdownPage
-      page={getMarkdownPage("legal/disclaimer.md")}
+      page={getMarkdownPage("legal/disclaimer.md", locale as Locale) ?? getMarkdownPage("legal/disclaimer.md")}
       canonicalTitle={dict.legal.medicalDisclaimer}
       description={dict.legal.disclaimerDescription}
       locale={locale as Locale}

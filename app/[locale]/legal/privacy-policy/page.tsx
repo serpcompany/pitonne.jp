@@ -38,5 +38,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
-  return <LegalMarkdownPage page={getMarkdownPage("legal/privacy-policy.md")} canonicalTitle={dict.legal.privacyPolicy} locale={locale as Locale} />
+  const page = getMarkdownPage("legal/privacy-policy.md", locale as Locale) ?? getMarkdownPage("legal/privacy-policy.md")
+
+  return <LegalMarkdownPage page={page} canonicalTitle={dict.legal.privacyPolicy} locale={locale as Locale} />
 }

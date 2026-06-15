@@ -134,7 +134,7 @@ export default async function AboutPage({ params }: Props) {
               <p className="text-muted-foreground mb-8">
                 {dict.about.visitBasedCareContent}
               </p>
-              <BookingButton />
+              <BookingButton locale={locale as Locale} />
             </div>
           </div>
         </div>
