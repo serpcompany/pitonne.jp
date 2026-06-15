@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import HomePage from "@/app/[locale]/page"
-import { businessInfo } from "@/lib/data/site"
+import { getBusinessInfo } from "@/lib/data/site"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 
 const dict = getDictionary("en")
+const businessInfo = getBusinessInfo("en")
 
 describe("home page", () => {
   it("uses an accessible green CTA style and opens the hero booking link in a new tab", async () => {
