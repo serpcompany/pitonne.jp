@@ -1,14 +1,16 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
-import FaqsPage, { metadata } from "@/app/faqs/page"
+import FaqsPage, { generateMetadata } from "@/app/[locale]/faqs/page"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 const SITE_URL = "https://pitonne.jp"
+const dict = getDictionary("en")
 
 describe("FAQs page", () => {
-  it("renders the requested FAQ content", () => {
-    render(<FaqsPage />)
+  it("renders the requested FAQ content", async () => {
+    render(await FaqsPage({ params: Promise.resolve({ locale: "en" }) }))
 
-    expect(screen.getByRole("heading", { name: "FAQs", level: 1 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: dict.faqs.frequentlyAskedQuestions, level: 1 })).toBeInTheDocument()
     expect(
       screen.getByRole("heading", {
         name: "Are both mobile visits and in clinic appointments available?",
@@ -27,9 +29,10 @@ describe("FAQs page", () => {
     const sitemap = (await import("@/app/sitemap")).default()
     const urls = sitemap.map((entry) => entry.url)
 
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(metadata).toMatchObject({
-      title: "FAQs",
-      alternates: { canonical: `${SITE_URL}/faqs/` },
+      title: dict.faqs.frequentlyAskedQuestions,
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/faqs/` }),
     })
     expect(urls).toContain(`${SITE_URL}/faqs/`)
   })

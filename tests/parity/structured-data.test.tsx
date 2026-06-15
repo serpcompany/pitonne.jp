@@ -20,11 +20,12 @@ function jsonLdFrom(markup: string) {
 
 describe("structured data parity", () => {
   it("renders organization and website JSON-LD in the root layout", async () => {
-    const { default: RootLayout } = await import("@/app/layout")
+    const { default: LocaleLayout } = await import("@/app/[locale]/layout")
     const markup = renderToStaticMarkup(
-      <RootLayout>
-        <div>Body</div>
-      </RootLayout>,
+      await LocaleLayout({
+        children: <div>Body</div>,
+        params: Promise.resolve({ locale: "en" }),
+      }),
     )
     const schemas = jsonLdFrom(markup)
 
@@ -72,6 +73,7 @@ describe("structured data parity", () => {
         parentService={getService(service!.parentSlug!)}
         relatedServices={getServicesFromSlugs(service!.relatedServices)}
         relatedPosts={[]}
+        locale="en"
       />,
     )
     const schemas = jsonLdFrom(markup)
@@ -113,6 +115,7 @@ describe("structured data parity", () => {
         relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter((candidate) => candidate.slug !== post!.slug)}
         relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
         latestPosts={getAllBlogPosts().filter((candidate) => candidate.slug !== post!.slug)}
+        locale="en"
       />,
     )
     const schemas = jsonLdFrom(markup)

@@ -106,93 +106,97 @@ describe("SEO parity", () => {
   })
 
   it("exposes core page titles, descriptions, and canonical URLs", async () => {
-    const { metadata: rootMetadata } = await import("@/app/layout")
-    const { metadata: aboutMetadata } = await import("@/app/about/page")
-    const { metadata: servicesMetadata } = await import("@/app/services/page")
-    const { metadata: contactMetadata } = await import("@/app/contact/page")
-    const { generateMetadata: serviceMetadata } = await import("@/app/services/[service]/page")
-    const { generateMetadata: postMetadata } = await import("@/app/blog/[post]/page")
-    const { generateMetadata: categoryMetadata } = await import("@/app/blog/category/[category]/page")
-    const { generateMetadata: wardMetadata } = await import("@/app/areas-served/[ward]/page")
-    const { generateMetadata: areaMetadata } = await import("@/app/areas-served/[ward]/[area]/page")
+    const { generateMetadata: localeLayoutMetadata } = await import("@/app/[locale]/layout")
+    const { generateMetadata: aboutMetadata } = await import("@/app/[locale]/about/page")
+    const { generateMetadata: servicesMetadata } = await import("@/app/[locale]/services/page")
+    const { generateMetadata: contactMetadata } = await import("@/app/[locale]/contact/page")
+    const { generateMetadata: serviceMetadata } = await import("@/app/[locale]/services/[service]/page")
+    const { generateMetadata: postMetadata } = await import("@/app/[locale]/blog/[post]/page")
+    const { generateMetadata: categoryMetadata } = await import("@/app/[locale]/blog/category/[category]/page")
+    const { generateMetadata: wardMetadata } = await import("@/app/[locale]/areas-served/[ward]/page")
+    const { generateMetadata: areaMetadata } = await import("@/app/[locale]/areas-served/[ward]/[area]/page")
 
+    const rootMetadata = await localeLayoutMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(rootMetadata.metadataBase?.toString()).toBe(`${SITE_URL}/`)
     expect(rootMetadata.robots).toMatchObject({ index: false, follow: false })
     expect(rootMetadata.openGraph).toMatchObject({ siteName: "Pitonne", url: `${SITE_URL}/` })
     expect(rootMetadata.twitter).toMatchObject({ card: "summary_large_image" })
 
-    expect(aboutMetadata).toMatchObject({
+    const aboutMeta = await aboutMetadata({ params: Promise.resolve({ locale: "en" }) })
+    expect(aboutMeta).toMatchObject({
       title: "About Pitonne",
-      alternates: { canonical: `${SITE_URL}/about/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/about/` }),
     })
-    expect(aboutMetadata.description).toEqual(expect.stringContaining("concierge wellness service"))
+    expect(aboutMeta.description).toEqual(expect.stringContaining("concierge wellness service"))
 
-    expect(servicesMetadata).toMatchObject({
-      title: "Services",
-      alternates: { canonical: `${SITE_URL}/services/` },
-    })
-
-    expect(contactMetadata).toMatchObject({
-      title: "Contact Pitonne",
-      alternates: { canonical: `${SITE_URL}/contact/` },
+    const servicesMeta = await servicesMetadata({ params: Promise.resolve({ locale: "en" }) })
+    expect(servicesMeta).toMatchObject({
+      title: "Our Services",
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/` }),
     })
 
-    await expect(serviceMetadata({ params: Promise.resolve({ service: "iv-therapy" }) })).resolves.toMatchObject({
+    const contactMeta = await contactMetadata({ params: Promise.resolve({ locale: "en" }) })
+    expect(contactMeta).toMatchObject({
+      title: "Contact Us",
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/contact/` }),
+    })
+
+    await expect(serviceMetadata({ params: Promise.resolve({ locale: "en", service: "iv-therapy" }) })).resolves.toMatchObject({
       title: "IV Therapy",
-      alternates: { canonical: `${SITE_URL}/services/iv-therapy/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/iv-therapy/` }),
     })
 
-    await expect(serviceMetadata({ params: Promise.resolve({ service: "androgenetic-alopecia-medicine" }) })).resolves.toMatchObject({
+    await expect(serviceMetadata({ params: Promise.resolve({ locale: "en", service: "androgenetic-alopecia-medicine" }) })).resolves.toMatchObject({
       title: "AGA Medication",
-      alternates: { canonical: `${SITE_URL}/services/androgenetic-alopecia-medicine/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/androgenetic-alopecia-medicine/` }),
     })
 
-    await expect(serviceMetadata({ params: Promise.resolve({ service: "blood-tests" }) })).resolves.toMatchObject({
+    await expect(serviceMetadata({ params: Promise.resolve({ locale: "en", service: "blood-tests" }) })).resolves.toMatchObject({
       title: "Blood Tests",
-      alternates: { canonical: `${SITE_URL}/services/blood-tests/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/blood-tests/` }),
     })
 
-    await expect(postMetadata({ params: Promise.resolve({ post: "iv-therapy-for-hangover" }) })).resolves.toMatchObject({
-      alternates: { canonical: `${SITE_URL}/blog/iv-therapy-for-hangover/` },
+    await expect(postMetadata({ params: Promise.resolve({ locale: "en", post: "iv-therapy-for-hangover" }) })).resolves.toMatchObject({
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/blog/iv-therapy-for-hangover/` }),
     })
 
-    await expect(categoryMetadata({ params: Promise.resolve({ category: "iv-therapy" }) })).resolves.toMatchObject({
+    await expect(categoryMetadata({ params: Promise.resolve({ locale: "en", category: "iv-therapy" }) })).resolves.toMatchObject({
       title: "IV Therapy Articles",
-      alternates: { canonical: `${SITE_URL}/blog/category/iv-therapy/` },
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/blog/category/iv-therapy/` }),
     })
 
-    await expect(wardMetadata({ params: Promise.resolve({ ward: "minato" }) })).resolves.toMatchObject({
-      alternates: { canonical: `${SITE_URL}/areas-served/minato/` },
+    await expect(wardMetadata({ params: Promise.resolve({ locale: "en", ward: "minato" }) })).resolves.toMatchObject({
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/areas-served/minato/` }),
     })
 
-    await expect(areaMetadata({ params: Promise.resolve({ ward: "minato", area: "roppongi" }) })).resolves.toMatchObject({
-      alternates: { canonical: `${SITE_URL}/areas-served/minato/roppongi/` },
+    await expect(areaMetadata({ params: Promise.resolve({ locale: "en", ward: "minato", area: "roppongi" }) })).resolves.toMatchObject({
+      alternates: expect.objectContaining({ canonical: `${SITE_URL}/areas-served/minato/roppongi/` }),
     })
   })
 
   it("renders Google Tag Manager only for production deployments", async () => {
     vi.resetModules()
-    const { default: ProductionLayout } = await withVercelEnv("production", () => import("@/app/layout"))
-    const productionMarkup = withVercelEnv("production", () =>
-      renderToStaticMarkup(
-        <ProductionLayout>
-          <div>Body</div>
-        </ProductionLayout>,
-      ),
-    )
+    process.env.VERCEL_ENV = "production"
+    const { default: ProductionLayout } = await import("@/app/[locale]/layout")
+    const productionElement = await ProductionLayout({
+      children: <div>Body</div>,
+      params: Promise.resolve({ locale: "en" }),
+    })
+    const productionMarkup = renderToStaticMarkup(productionElement)
     expect(productionMarkup).toContain("GTM-TJ94H7LQ")
     expect(productionMarkup).toContain("googletagmanager.com/ns.html")
 
     vi.resetModules()
-    const { default: PreviewLayout } = await withVercelEnv("preview", () => import("@/app/layout"))
-    const previewMarkup = withVercelEnv("preview", () =>
-      renderToStaticMarkup(
-        <PreviewLayout>
-          <div>Body</div>
-        </PreviewLayout>,
-      ),
-    )
+    process.env.VERCEL_ENV = "preview"
+    const { default: PreviewLayout } = await import("@/app/[locale]/layout")
+    const previewElement = await PreviewLayout({
+      children: <div>Body</div>,
+      params: Promise.resolve({ locale: "en" }),
+    })
+    const previewMarkup = renderToStaticMarkup(previewElement)
     expect(previewMarkup).not.toContain("GTM-TJ94H7LQ")
+
+    delete process.env.VERCEL_ENV
   })
 
   it("removes legacy legal route implementations and redirects", () => {

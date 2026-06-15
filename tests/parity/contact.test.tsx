@@ -1,30 +1,34 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
-import ContactPage from "@/app/contact/page"
-import { businessInfo } from "@/lib/data/site"
+import ContactPage from "@/app/[locale]/contact/page"
+import { getBusinessInfo } from "@/lib/data/site"
+import { getDictionary } from "@/lib/i18n/dictionaries"
+
+const dict = getDictionary("en")
+const info = getBusinessInfo("en")
 
 describe("contact page", () => {
-  it("links to the external booking form instead of rendering a local form", () => {
-    render(<ContactPage />)
+  it("links to the external booking form instead of rendering a local form", async () => {
+    render(await ContactPage({ params: Promise.resolve({ locale: "en" }) }))
 
-    expect(screen.getByRole("link", { name: "Book Consultation" })).toHaveAttribute("href", businessInfo.bookingUrl)
+    expect(screen.getByRole("link", { name: dict.common.bookConsultation })).toHaveAttribute("href", info.bookingUrl)
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /send message/i })).not.toBeInTheDocument()
     expect(screen.queryByText("Nishi-Azabu, Tokyo")).not.toBeInTheDocument()
 
-    const saturdayHours = businessInfo.hours.find((item) => item.day === "Saturday")
+    const saturdayHours = info.hours.find((item) => item.day === "Saturday")
     expect(saturdayHours).toBeDefined()
     expect(screen.getByText(`${saturdayHours!.day}: ${saturdayHours!.hours}`)).toBeInTheDocument()
   })
 
-  it("renders Japan and U.S. phone numbers as callable links", () => {
-    render(<ContactPage />)
+  it("renders Japan and U.S. phone numbers as callable links", async () => {
+    render(await ContactPage({ params: Promise.resolve({ locale: "en" }) }))
 
-    expect(screen.getByRole("link", { name: "Japan: 070-2194-0199" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: `${dict.contact.japan}: ${info.phone}` })).toHaveAttribute(
       "href",
       "tel:070-2194-0199",
     )
-    expect(screen.getByRole("link", { name: "U.S.: +1 786 814 0323" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: `${dict.contact.us}: +1 786 814 0323` })).toHaveAttribute(
       "href",
       "tel:+17868140323",
     )
