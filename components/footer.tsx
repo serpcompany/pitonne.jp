@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Instagram, Facebook, Linkedin, Youtube, Twitter, MapPin, Music, Podcast, Pin } from "lucide-react"
-import { businessInfo } from "@/lib/data/site"
+import { getBusinessInfo } from "@/lib/data/site"
 import { canonicalRoutes, localizedRoute } from "@/lib/data/routes"
 import type { Locale } from "@/lib/i18n/config"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
@@ -61,6 +61,7 @@ const podcastLinks = [
 ]
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+  const businessInfo = getBusinessInfo(locale)
   const quickLinks = [
     { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
     { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },

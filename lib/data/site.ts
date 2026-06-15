@@ -70,6 +70,8 @@ export const businessInfo = {
 
 const businessInfoJa = {
   ...businessInfo,
+  addressLine1: "〒106-0031 東京都港区西麻布",
+  addressLine2: "3丁目17-22 モダンフォルム西麻布 1階",
   bookingUrl: "https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=ja",
   hours: businessHours.map((item) => ({ day: dayNamesJa[item.day], hours: formatBusinessHoursJa(item) })),
   description:
