@@ -36,8 +36,8 @@ function withVercelEnv<T>(value: string | undefined, callback: () => T): T {
 
 describe("SEO parity", () => {
   it("generates a canonical sitemap from static pages and data-backed routes", async () => {
-    const sitemap = (await import("@/app/sitemap")).default()
-    const urls = sitemap.map((entry) => entry.url)
+    const { buildEntries } = await import("@/app/sitemap.xml/route")
+    const urls = buildEntries().map((entry) => entry.url)
 
     expect(urls).toContain(`${SITE_URL}/`)
     expect(urls).toContain(`${SITE_URL}/about/`)
