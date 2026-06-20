@@ -35,7 +35,7 @@ for (const value of expectedBusinessInfo) {
   }
 }
 
-for (const value of ["businessHours", "formatBusinessHours", "hours: businessHours.map"]) {
+for (const value of ["businessHours", "formatBusinessHours", "businessHoursDisplay", "hours: businessHoursDisplay"]) {
   if (!siteData.includes(value)) {
     failures.push(`Business hours must be derived from the shared source in lib/data/site.ts: missing ${value}`)
   }
