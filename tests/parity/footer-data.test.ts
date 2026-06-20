@@ -2,22 +2,20 @@ import { describe, expect, it } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 import { canonicalRoutes } from "@/lib/data/routes"
-import { businessHours, businessInfo, formatBusinessHours } from "@/lib/data/site"
+import { businessHours, businessHoursDisplay, businessInfo } from "@/lib/data/site"
 
 describe("footer and CTA data parity", () => {
   it("uses live business hours and legal routes", () => {
     expect(businessHours).toEqual([
-      { day: "Monday", opens: "10:00", closes: "19:00" },
-      { day: "Tuesday", opens: "10:00", closes: "19:00" },
-      { day: "Wednesday", opens: "10:00", closes: "19:00" },
-      { day: "Thursday", opens: "10:00", closes: "19:00" },
-      { day: "Friday", opens: "10:00", closes: "19:00" },
-      { day: "Saturday", opens: "10:00", closes: "13:00" },
+      { day: "Monday", opens: "09:00", closes: "17:00" },
+      { day: "Tuesday", opens: "09:00", closes: "17:00" },
+      { day: "Wednesday", opens: "09:00", closes: "17:00" },
+      { day: "Thursday", opens: "09:00", closes: "17:00" },
+      { day: "Friday", opens: "09:00", closes: "17:00" },
+      { day: "Saturday", opens: "09:00", closes: "13:00" },
       { day: "Sunday", closed: true },
     ])
-    expect(businessInfo.hours).toEqual(
-      businessHours.map((item) => ({ day: item.day, hours: formatBusinessHours(item) })),
-    )
+    expect(businessInfo.hours).toEqual(businessHoursDisplay)
     expect(businessInfo.bookingUrl).toBe("https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=en")
     expect(canonicalRoutes.termsConditions).toBe("/legal/terms-conditions/")
   })
