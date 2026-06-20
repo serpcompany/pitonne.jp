@@ -8,7 +8,7 @@
 
 /robots.txt
   Content-Type: text/plain; charset=utf-8
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=300, s-maxage=300, must-revalidate
 
 /sitemap.xsl
   Content-Type: application/xml; charset=utf-8

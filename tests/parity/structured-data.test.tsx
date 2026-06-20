@@ -36,7 +36,7 @@ describe("structured data parity", () => {
           "@id": "https://pitonne.jp/#business",
           name: "Pitonne",
           url: "https://pitonne.jp/",
-          telephone: "070-2194-0199",
+          telephone: "03-6821-8285",
         }),
         expect.objectContaining({
           "@type": "WebSite",

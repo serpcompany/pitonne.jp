@@ -52,7 +52,7 @@ export function Header({
   }
 
   const phoneLinks = [
-    { label: dict.contact.japan, number: businessInfo.phone, href: "tel:070-2194-0199" },
+    { label: dict.contact.japan, number: businessInfo.phone, href: "tel:03-6821-8285" },
     { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
   ]
 
