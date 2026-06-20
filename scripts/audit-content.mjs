@@ -10,14 +10,14 @@ function read(file) {
 
 const footer = read("components/footer.tsx")
 const header = read("components/header.tsx")
-const home = read("app/page.tsx")
+const home = read("app/[locale]/page.tsx")
 const layout = read("app/layout.tsx")
 const siteData = read("lib/data/site.ts")
-const serviceDetailPage = read("app/services/[service]/page.tsx")
+const serviceDetailPage = read("app/[locale]/services/[service]/page.tsx")
 const serviceDetailTemplate = read("components/services/service-detail-template.tsx")
 const pageHero = read("components/shared/page-hero.tsx")
 const areaDetailPage = read("components/area-detail-page.tsx")
-const blogPostPage = read("app/blog/[post]/page.tsx")
+const blogPostPage = read("app/[locale]/blog/[post]/page.tsx")
 const blogPostTemplate = read("components/blog/blog-post-template.tsx")
 const globalsCss = read("app/globals.css")
 
@@ -44,7 +44,7 @@ for (const value of ["businessHours", "formatBusinessHours", "hours: businessHou
 for (const [file, source] of [
   ["components/header.tsx", header],
   ["components/footer.tsx", footer],
-  ["app/page.tsx", home],
+  ["app/[locale]/page.tsx", home],
 ]) {
   if (source.includes("/services/medications")) {
     failures.push(`${file} links to non-canonical /services/medications`)
@@ -56,7 +56,7 @@ for (const [file, source] of [
 
 for (const disallowed of ["placeholder", "logoipsum", "glowence"]) {
   const matches = [
-    ["app/page.tsx", home],
+    ["app/[locale]/page.tsx", home],
     ["components/header.tsx", header],
     ["components/footer.tsx", footer],
   ].flatMap(([file, source]) =>
@@ -87,14 +87,14 @@ for (const file of walkContent("content")) {
 
 const serviceDetailUsesSharedHero = serviceDetailTemplate.includes("PageHero")
 const serviceDetailLinksToServices =
-  serviceDetailTemplate.includes('label: "Services"') &&
-  serviceDetailTemplate.includes('href: "/services/"')
+  serviceDetailTemplate.includes("dict.nav.services") &&
+  serviceDetailTemplate.includes('localizedRoute("/services/", locale)')
 
 if (!serviceDetailPage.includes("ServiceDetailTemplate") || !serviceDetailUsesSharedHero || !serviceDetailLinksToServices) {
   failures.push("Service detail hero must include breadcrumb navigation back to Services")
 }
 
-if (!serviceDetailTemplate.includes("Home") || !serviceDetailTemplate.includes("service.name")) {
+if (!serviceDetailTemplate.includes("dict.nav.home") || !serviceDetailTemplate.includes("service.name")) {
   failures.push("Service detail breadcrumbs must include Home and the current service label")
 }
 

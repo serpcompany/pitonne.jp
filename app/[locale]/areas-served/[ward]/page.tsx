@@ -8,16 +8,18 @@ import { LatestPostsSection } from "@/components/shared/latest-posts-section"
 import { getWard, wards } from "@/lib/data/areas"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
 import { getDictionary } from "@/lib/i18n/dictionaries"
+
+export const dynamicParams = false
 
 interface Props {
   params: Promise<{ locale: string; ward: string }>
 }
 
 export async function generateStaticParams() {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     wards.map((ward) => ({ locale, ward: ward.slug }))
   )
 }

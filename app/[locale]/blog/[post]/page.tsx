@@ -6,14 +6,16 @@ import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getServicesFromSlugs } from "@/lib/data/services"
 import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
+
+export const dynamicParams = false
 
 interface Props {
   params: Promise<{ locale: string; post: string }>
 }
 
 export async function generateStaticParams() {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     getAllBlogPosts(locale).map((post) => ({ locale, post: post.slug }))
   )
 }

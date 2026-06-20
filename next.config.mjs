@@ -1,40 +1,17 @@
+import { dirname } from "node:path"
+import { fileURLToPath } from "node:url"
+
+const root = dirname(fileURLToPath(import.meta.url))
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   trailingSlash: true,
-  typescript: {
-    ignoreBuildErrors: true,
+  turbopack: {
+    root,
   },
-  async redirects() {
-    return [
-      // Redirect /en/ prefix to root (prevent duplicate content)
-      {
-        source: "/en/:path*",
-        destination: "/:path*",
-        permanent: true,
-      },
-      // Existing service redirects
-      {
-        source: "/services/medications/",
-        destination: "/services/medication/",
-        permanent: true,
-      },
-      {
-        source: "/services/medications",
-        destination: "/services/medication/",
-        permanent: true,
-      },
-      // Japanese equivalents
-      {
-        source: "/ja/services/medications/",
-        destination: "/ja/services/medication/",
-        permanent: true,
-      },
-      {
-        source: "/ja/services/medications",
-        destination: "/ja/services/medication/",
-        permanent: true,
-      },
-    ]
+  images: {
+    unoptimized: true,
   },
 }
 

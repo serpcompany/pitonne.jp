@@ -8,8 +8,10 @@ import { getVideoBySlug, pitonneVideos, type PitonneVideo } from "@/lib/data/vid
 import { absoluteUrl, localizedHreflangAlternates, SITE_NAME } from "@/lib/seo"
 import { videoBreadcrumbJsonLd, videoObjectJsonLd } from "@/lib/structured-data"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
+
+export const dynamicParams = false
 
 type WatchPageParams = {
   locale: string
@@ -17,7 +19,7 @@ type WatchPageParams = {
 }
 
 export function generateStaticParams(): WatchPageParams[] {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     pitonneVideos.map((video) => ({ locale, video: video.slug }))
   )
 }

@@ -5,11 +5,13 @@ import { services } from "@/lib/data/services"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { canonicalUrl, SITE_URL } from "@/lib/seo"
 
+export const dynamic = "force-static"
+
 interface SitemapEntry {
   url: string
   changeFrequency: "weekly" | "monthly"
   priority: number
-  alternates: { en: string; ja: string }
+  alternates: { en: string; ja: string; xDefault: string }
 }
 
 export function buildEntries(): SitemapEntry[] {
@@ -47,8 +49,8 @@ export function buildEntries(): SitemapEntry[] {
     const jaUrl = `${SITE_URL}/ja${path.endsWith("/") ? path : `${path}/`}`
 
     return [
-      { url: enUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl } },
-      { url: jaUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl } },
+      { url: enUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl, xDefault: enUrl } },
+      { url: jaUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl, xDefault: enUrl } },
     ]
   })
 }
@@ -64,6 +66,7 @@ function toXml(entries: SitemapEntry[]): string {
     <loc>${escapeXml(entry.url)}</loc>
     <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(entry.alternates.en)}" />
     <xhtml:link rel="alternate" hreflang="ja" href="${escapeXml(entry.alternates.ja)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(entry.alternates.xDefault)}" />
     <changefreq>${entry.changeFrequency}</changefreq>
     <priority>${entry.priority}</priority>
   </url>`

@@ -9,11 +9,13 @@ import { pitonneVideos } from "@/lib/data/videos"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import { videoListJsonLd } from "@/lib/structured-data"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map((locale) => ({ locale }))
 }
 
 export async function generateMetadata({

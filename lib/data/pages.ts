@@ -4,7 +4,7 @@ import matter from "gray-matter"
 import { z } from "zod"
 import type { Locale } from "@/lib/i18n/config"
 
-const pageContentDirectory = path.join(process.cwd(), "content", "pages")
+const pageContentDirectory = path.join(/*turbopackIgnore: true*/ process.cwd(), "content", "pages")
 
 const pageFrontmatterSchema = z.object({
   title: z.string().min(1),
@@ -16,6 +16,14 @@ export interface MarkdownPage {
   slug: string
   content: string
   sourcePath: string
+}
+
+export type LegalPageKey = "privacyPolicy" | "termsConditions" | "medicalDisclaimer"
+
+const legalPagePaths: Record<LegalPageKey, string> = {
+  privacyPolicy: "legal/privacy-policy.md",
+  termsConditions: "legal/terms-conditions.md",
+  medicalDisclaimer: "legal/disclaimer.md",
 }
 
 function normalizePageContent(content: string) {
@@ -56,4 +64,11 @@ export function getMarkdownPage(relativePath: string, locale: Locale = "en"): Ma
     content: normalizePageContent(parsed.content),
     sourcePath,
   }
+}
+
+export function getLegalPage(key: LegalPageKey): MarkdownPage
+export function getLegalPage(key: LegalPageKey, locale: Locale): MarkdownPage
+export function getLegalPage(key: LegalPageKey, locale: Locale = "en"): MarkdownPage {
+  const path = legalPagePaths[key]
+  return getMarkdownPage(path, locale) ?? getMarkdownPage(path)
 }

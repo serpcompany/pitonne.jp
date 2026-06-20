@@ -44,8 +44,8 @@ export interface BlogPost {
   readingTime: number
   featureImage?: string
   featured?: boolean
-  relatedServiceSlugs?: string[]
-  tags?: string[]
+  relatedServiceSlugs: string[]
+  tags: string[]
   sourcePath: string
 }
 
@@ -110,7 +110,7 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3, locale: 
   return getBlogPostsByCategory(currentPost.categorySlug, locale).filter((post) => post.slug !== currentSlug).slice(0, limit)
 }
 
-export function getRelatedServiceSlugsForPost(post: Pick<BlogPost, "relatedServiceSlugs" | "categorySlug">): string[] {
+export function getRelatedServiceSlugsForPost(post: { relatedServiceSlugs?: string[]; categorySlug: string }): string[] {
   if (post.relatedServiceSlugs?.length) {
     return post.relatedServiceSlugs
   }
