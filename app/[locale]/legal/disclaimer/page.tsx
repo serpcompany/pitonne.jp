@@ -1,13 +1,15 @@
 import type { Metadata } from "next"
 import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
-import { getMarkdownPage } from "@/lib/data/pages"
+import { getLegalPage } from "@/lib/data/pages"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map((locale) => ({ locale }))
 }
 
 export async function generateMetadata({
@@ -40,7 +42,7 @@ export default async function DisclaimerPage({ params }: Props) {
 
   return (
     <LegalMarkdownPage
-      page={getMarkdownPage("legal/disclaimer.md", locale as Locale) ?? getMarkdownPage("legal/disclaimer.md")}
+      page={getLegalPage("medicalDisclaimer", locale as Locale)}
       canonicalTitle={dict.legal.medicalDisclaimer}
       description={dict.legal.disclaimerDescription}
       locale={locale as Locale}

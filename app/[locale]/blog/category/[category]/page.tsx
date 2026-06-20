@@ -6,16 +6,18 @@ import { ContactButton } from "@/components/shared/contact-button"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
+
+export const dynamicParams = false
 
 interface Props {
   params: Promise<{ locale: string; category: string }>
 }
 
 export async function generateStaticParams() {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     getAllCategories(locale).map((category) => ({ locale, category: category.slug }))
   )
 }

@@ -6,15 +6,17 @@ import { getBlogPostsForService } from "@/lib/data/blog-posts"
 import { getAllServiceSlugs, getChildServices, getService, getServicesFromSlugs } from "@/lib/data/services"
 import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
+
+export const dynamicParams = false
 
 interface Props {
   params: Promise<{ locale: string; service: string }>
 }
 
 export async function generateStaticParams() {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     getAllServiceSlugs(locale).map((slug) => ({ locale, service: slug }))
   )
 }
