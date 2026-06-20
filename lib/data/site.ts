@@ -59,7 +59,7 @@ export const businessInfo = {
   seoName: "Pitonne | Stem Cell & IV Therapy",
   addressLine1: "106-0031 Tokyo, Minato City, Nishiazabu",
   addressLine2: "3 Chome−17−22 モダンフォルム西麻布 1階",
-  phone: "070-2194-0199",
+  phone: "03-6821-8285",
   email: "pitonne.am@gmail.com",
   siteUrl: "https://pitonne.jp",
   bookingUrl: "https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=en",

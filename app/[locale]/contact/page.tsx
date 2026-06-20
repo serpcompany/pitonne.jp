@@ -45,7 +45,7 @@ export default async function ContactPage({ params }: Props) {
   const info = getBusinessInfo(locale as Locale)
 
   const phoneLinks = [
-    { label: dict.contact.japan, number: info.phone, href: "tel:070-2194-0199" },
+    { label: dict.contact.japan, number: info.phone, href: "tel:03-6821-8285" },
     { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
   ]
 
