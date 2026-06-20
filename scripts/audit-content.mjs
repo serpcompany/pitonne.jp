@@ -22,7 +22,7 @@ const blogPostTemplate = read("components/blog/blog-post-template.tsx")
 const globalsCss = read("app/globals.css")
 
 const expectedBusinessInfo = [
-  "070-2194-0199",
+  "03-6821-8285",
   "pitonne.am@gmail.com",
   "106-0031 Tokyo, Minato City, Nishiazabu",
   "3 Chome−17−22 モダンフォルム西麻布 1階",

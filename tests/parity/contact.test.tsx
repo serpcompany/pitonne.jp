@@ -26,7 +26,7 @@ describe("contact page", () => {
 
     expect(screen.getByRole("link", { name: `${dict.contact.japan}: ${info.phone}` })).toHaveAttribute(
       "href",
-      "tel:070-2194-0199",
+      "tel:03-6821-8285",
     )
     expect(screen.getByRole("link", { name: `${dict.contact.us}: +1 786 814 0323` })).toHaveAttribute(
       "href",
