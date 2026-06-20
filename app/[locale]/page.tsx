@@ -4,12 +4,18 @@ import { Check } from "lucide-react"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { localizedRoute } from "@/lib/data/routes"
 import { BookingButton } from "@/components/shared/booking-button"
-import type { Locale } from "@/lib/i18n/config"
+import { nonDefaultLocales, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getAllBlogPosts } from "@/lib/data/blog-posts"
 
+export const dynamicParams = false
+
 interface Props {
   params: Promise<{ locale: string }>
+}
+
+export function generateStaticParams() {
+  return nonDefaultLocales.map((locale) => ({ locale }))
 }
 
 export default async function HomePage({ params }: Props) {

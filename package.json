@@ -2,11 +2,16 @@
   "name": "pitonne-website",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=24 <26"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint . --ext .js,.mjs,.ts,.tsx",
+    "start": "node scripts/serve-static.mjs",
+    "lint": "eslint . --ext .js,.mjs,.ts,.tsx --ignore-pattern out/ --ignore-pattern .next/",
+    "typecheck": "tsc --noEmit --incremental false",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:parity": "vitest run tests/parity",
@@ -45,7 +50,6 @@
     "@radix-ui/react-toggle": "1.1.10",
     "@radix-ui/react-toggle-group": "1.1.11",
     "@radix-ui/react-tooltip": "1.2.8",
-    "@vercel/analytics": "1.6.1",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

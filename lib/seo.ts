@@ -11,7 +11,7 @@ export const DEFAULT_OG_IMAGE = "/images/content/sheet/home.jpg"
 export const GTM_CONTAINER_ID = "GTM-TJ94H7LQ"
 
 export function isProductionDeployment(): boolean {
-  return process.env.VERCEL_ENV === "production"
+  return process.env.DEPLOY_ENV === "production" || process.env.NEXT_PUBLIC_DEPLOY_ENV === "production"
 }
 
 export function normalizePath(path: string): string {

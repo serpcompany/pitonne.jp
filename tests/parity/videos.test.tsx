@@ -109,11 +109,11 @@ describe("Pitonne video pages", () => {
 
   it("generates static params and metadata for watch pages", async () => {
     const staticParams = generateStaticParams()
-    // Static params now include locale
-    const enParams = staticParams.filter((p) => p.locale === "en")
-    expect(enParams).toEqual(
-      pitonneVideos.map((video) => ({ locale: "en", video: video.slug })),
+    const jaParams = staticParams.filter((p) => p.locale === "ja")
+    expect(jaParams).toEqual(
+      pitonneVideos.map((video) => ({ locale: "ja", video: video.slug })),
     )
+    expect(staticParams.some((p) => p.locale === "en")).toBe(false)
 
     await expect(
       generateMetadata({

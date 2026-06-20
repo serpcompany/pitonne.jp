@@ -17,7 +17,11 @@ function walk(dir) {
       continue
     }
     if (entry.name !== "page.tsx") continue
-    const rel = path.relative(path.join(root, "app"), path.dirname(fullPath))
+    const rel = path
+      .relative(path.join(root, "app"), path.dirname(fullPath))
+      .split(path.sep)
+      .filter((segment) => !/^\(.+\)$/.test(segment))
+      .join("/")
     if (rel.includes("[") || rel.includes("]")) continue
     staticRoutes.add(rel === "" ? "/" : `/${rel}/`)
   }
@@ -89,11 +93,11 @@ for (const route of canonicalRoutes) {
   failures.push(`Missing canonical route coverage: ${route}${slug ? ` (${slug})` : ""}`)
 }
 
-const nextConfig = fs.readFileSync(path.join(root, "next.config.mjs"), "utf8")
+const redirects = fs.readFileSync(path.join(root, "public/_redirects"), "utf8")
 for (const [source, destination] of [
   ["/services/medications/", "/services/medication/"],
 ]) {
-  if (!nextConfig.includes(`source: "${source}"`) || !nextConfig.includes(`destination: "${destination}"`)) {
+  if (!redirects.includes(`${source} ${destination} 301`)) {
     failures.push(`Missing redirect from ${source} to ${destination}`)
   }
 }
@@ -110,7 +114,7 @@ for (const duplicateRouteFile of [
 }
 
 for (const removedRedirect of ["/privacy-policy/", "/terms-of-use/", "/legal/terms-and-conditions/", "/medical-disclaimer/"]) {
-  if (nextConfig.includes(`source: "${removedRedirect}"`)) {
+  if (redirects.includes(`${removedRedirect} `)) {
     failures.push(`Remove legacy legal redirect source: ${removedRedirect}`)
   }
 }

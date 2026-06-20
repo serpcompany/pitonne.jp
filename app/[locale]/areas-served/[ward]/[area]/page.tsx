@@ -4,15 +4,17 @@ import { AreaDetailPage } from "@/components/area-detail-page"
 import { getAllAreas, getArea } from "@/lib/data/areas"
 import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
+
+export const dynamicParams = false
 
 interface Props {
   params: Promise<{ locale: string; ward: string; area: string }>
 }
 
 export async function generateStaticParams() {
-  return locales.flatMap((locale) =>
+  return nonDefaultLocales.flatMap((locale) =>
     getAllAreas().map(({ ward, area }) => ({
       locale,
       ward: ward.slug,

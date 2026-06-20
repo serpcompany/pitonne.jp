@@ -1,0 +1,6 @@
+/en / 301
+/en/* /:splat 301
+/services/medications /services/medication/ 301
+/services/medications/ /services/medication/ 301
+/ja/services/medications /ja/services/medication/ 301
+/ja/services/medications/ /ja/services/medication/ 301

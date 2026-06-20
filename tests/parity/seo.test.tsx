@@ -15,21 +15,21 @@ vi.mock("next/font/google", () => ({
   Playfair_Display: () => ({ variable: "font-playfair" }),
 }))
 
-function withVercelEnv<T>(value: string | undefined, callback: () => T): T {
-  const previous = process.env.VERCEL_ENV
+function withDeployEnv<T>(value: string | undefined, callback: () => T): T {
+  const previous = process.env.DEPLOY_ENV
   if (value === undefined) {
-    delete process.env.VERCEL_ENV
+    delete process.env.DEPLOY_ENV
   } else {
-    process.env.VERCEL_ENV = value
+    process.env.DEPLOY_ENV = value
   }
 
   try {
     return callback()
   } finally {
     if (previous === undefined) {
-      delete process.env.VERCEL_ENV
+      delete process.env.DEPLOY_ENV
     } else {
-      process.env.VERCEL_ENV = previous
+      process.env.DEPLOY_ENV = previous
     }
   }
 }
@@ -81,12 +81,29 @@ describe("SEO parity", () => {
     expect(urls).not.toContain(`${SITE_URL}/services/medications/`)
     expect(urls).not.toContain(`${SITE_URL}/areas-served/chiyoda/tokyo-station/`)
     expect(urls.every((url) => url.startsWith(SITE_URL))).toBe(true)
+
+    const rootEntry = buildEntries().find((entry) => entry.url === `${SITE_URL}/`)
+    expect(rootEntry?.alternates).toMatchObject({
+      en: `${SITE_URL}/`,
+      ja: `${SITE_URL}/ja/`,
+      xDefault: `${SITE_URL}/`,
+    })
+  })
+
+  it("includes x-default alternates in sitemap XML", async () => {
+    const { GET } = await import("@/app/sitemap.xml/route")
+    const response = GET()
+    const xml = await response.text()
+
+    expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")
+    expect(xml).toContain('hreflang="x-default" href="https://pitonne.jp/"')
+    expect(xml).not.toContain("https://pitonne.jp/en/")
   })
 
   it("allows production crawling and blocks non-production crawling", async () => {
     const { default: robots } = await import("@/app/robots")
 
-    const production = withVercelEnv("production", () => robots())
+    const production = withDeployEnv("production", () => robots())
     expect(production).toMatchObject({
       rules: {
         userAgent: "*",
@@ -95,7 +112,7 @@ describe("SEO parity", () => {
       sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`],
     })
 
-    const preview = withVercelEnv("preview", () => robots())
+    const preview = withDeployEnv("preview", () => robots())
     expect(preview).toMatchObject({
       rules: {
         userAgent: "*",
@@ -176,7 +193,7 @@ describe("SEO parity", () => {
 
   it("renders Google Tag Manager only for production deployments", async () => {
     vi.resetModules()
-    process.env.VERCEL_ENV = "production"
+    process.env.DEPLOY_ENV = "production"
     const { default: ProductionLayout } = await import("@/app/[locale]/layout")
     const productionElement = await ProductionLayout({
       children: <div>Body</div>,
@@ -187,7 +204,7 @@ describe("SEO parity", () => {
     expect(productionMarkup).toContain("googletagmanager.com/ns.html")
 
     vi.resetModules()
-    process.env.VERCEL_ENV = "preview"
+    process.env.DEPLOY_ENV = "preview"
     const { default: PreviewLayout } = await import("@/app/[locale]/layout")
     const previewElement = await PreviewLayout({
       children: <div>Body</div>,
@@ -196,7 +213,18 @@ describe("SEO parity", () => {
     const previewMarkup = renderToStaticMarkup(previewElement)
     expect(previewMarkup).not.toContain("GTM-TJ94H7LQ")
 
-    delete process.env.VERCEL_ENV
+    delete process.env.DEPLOY_ENV
+  })
+
+  it("generates Japanese paths from the locale segment and bare paths from English wrappers", async () => {
+    const { generateStaticParams: localeLayoutParams } = await import("@/app/[locale]/layout")
+    const { generateStaticParams: localeServicesParams } = await import("@/app/[locale]/services/[service]/page")
+    const { generateStaticParams: englishServicesParams } = await import("@/app/(en)/services/[service]/page")
+
+    expect(await localeLayoutParams()).toEqual([{ locale: "ja" }])
+    const localeServiceParams = await localeServicesParams()
+    expect(localeServiceParams.every((params) => params.locale === "ja")).toBe(true)
+    expect(englishServicesParams().every((params) => !("locale" in params))).toBe(true)
   })
 
   it("removes legacy legal route implementations and redirects", () => {

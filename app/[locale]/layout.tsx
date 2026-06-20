@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import { GoogleTagManager } from "@next/third-parties/google"
-import { Analytics } from "@vercel/analytics/next"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JsonLd } from "@/components/shared/json-ld"
@@ -20,9 +19,11 @@ import {
 } from "@/lib/seo"
 import { businessJsonLd, websiteJsonLd } from "@/lib/structured-data"
 import { getServiceCategorySections } from "@/lib/data/services"
-import { locales, type Locale } from "@/lib/i18n/config"
+import { nonDefaultLocales, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
+
+export const dynamicParams = false
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,7 +36,7 @@ const playfair = Playfair_Display({
 })
 
 export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map((locale) => ({ locale }))
 }
 
 export async function generateMetadata({
@@ -146,7 +147,6 @@ export default async function LocaleLayout({
         />
         <main className="min-h-screen">{children}</main>
         <Footer locale={typedLocale} dict={dict} />
-        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )

@@ -17,11 +17,15 @@ jobs:
           version: 10.14.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm audit:routes
+      - run: pnpm audit:content
       - run: pnpm audit:strings
-      - run: VERCEL_ENV=production pnpm build
+      - run: DEPLOY_ENV=production pnpm build
+      - run: test -f out/index.html && test -f out/ja/index.html && test -f out/robots.txt && test -f out/sitemap.xml && test -f out/videos-sitemap.xml && test -f out/_headers && test -f out/_redirects && test ! -d out/en
       - run: pnpm test:lighthouse

@@ -4,12 +4,14 @@ import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
-import { locales } from "@/lib/i18n/config"
+import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
 
+export const dynamicParams = false
+
 export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map((locale) => ({ locale }))
 }
 
 export async function generateMetadata({
