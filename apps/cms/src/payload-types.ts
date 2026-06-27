@@ -194,11 +194,26 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   /**
-   * Markdown content rendered by the public website.
+   * Use Preview after saving to review the rendered public page.
    */
+  bodyRichText: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   body: string;
   category: string;
-  categorySlug: string;
+  categorySlug: 'iv-therapy' | 'stem-cell-therapy' | 'medication' | 'blood-tests';
   author: {
     name: string;
     role: string;
@@ -212,13 +227,111 @@ export interface BlogPost {
   featuredImage?: (number | null) | Media;
   tags?:
     | {
-        tag: string;
+        tag:
+          | 'allergies'
+          | 'athletes'
+          | 'beauty'
+          | 'booking'
+          | 'clarity'
+          | 'cold and flu'
+          | 'competition'
+          | 'conditioned media'
+          | 'cost'
+          | 'dehydration'
+          | 'detox'
+          | 'exosome iv'
+          | 'fatigue'
+          | 'focus'
+          | 'glutathione'
+          | 'gut health'
+          | 'hangover iv'
+          | 'hydration'
+          | 'immune health'
+          | 'iv therapy'
+          | 'jet lag'
+          | 'low energy'
+          | 'mobile iv therapy'
+          | 'nausea'
+          | 'nutrition'
+          | 'pricing'
+          | 'private care'
+          | 'recovery'
+          | 'regenerative medicine'
+          | 'relaxation'
+          | 'risks'
+          | 'safety'
+          | 'skin iv'
+          | 'stem cell therapy'
+          | 'stress'
+          | 'tokyo'
+          | 'training recovery'
+          | 'travel'
+          | 'vitamins'
+          | 'weight management'
+          | 'wellness'
+          | 'アレルギー'
+          | 'ウェルネス'
+          | 'エクソソーム IV'
+          | 'グルタチオン'
+          | 'スキン IV'
+          | 'ストレス'
+          | 'デトックス'
+          | 'トレーニング後の回復'
+          | 'ビタミン'
+          | 'リスク'
+          | 'リラクゼーション'
+          | '予約'
+          | '二日酔い IV'
+          | '低エネルギー'
+          | '体重管理'
+          | '価格設定'
+          | '免疫の健康'
+          | '再生医療'
+          | '吐き気'
+          | '回復'
+          | '在宅介護'
+          | '安全'
+          | '幹細胞治療'
+          | '旅行'
+          | '明瞭さ'
+          | '時差ぼけ'
+          | '東京'
+          | '栄養'
+          | '水分補給'
+          | '焦点'
+          | '疲労'
+          | '移動式点滴療法'
+          | '競技会'
+          | '美'
+          | '脱水'
+          | '腸の健康'
+          | '調製培地'
+          | '費用'
+          | '選手'
+          | '静脈内療法'
+          | '風邪とインフルエンザ';
         id?: string | null;
       }[]
     | null;
   relatedServiceSlugs?:
     | {
-        slug: string;
+        slug:
+          | 'iv-therapy'
+          | 'exosome-iv-drip'
+          | 'hangover-iv-drip'
+          | 'energy-fatigue-recovery-iv'
+          | 'skin-brightening-iv-drip'
+          | 'immune-boost-iv-therapy'
+          | 'iv-vitamin-therapy'
+          | 'stem-cell-therapy'
+          | 'stem-cell-nasal-spray'
+          | 'medication'
+          | 'ed-medication'
+          | 'androgenetic-alopecia-medicine'
+          | 'blood-tests'
+          | 'hormone-blood-testing'
+          | 'nutrition-blood-testing'
+          | 'tumor-marker-blood-testing';
         id?: string | null;
       }[]
     | null;
@@ -238,8 +351,23 @@ export interface Page {
   metaTitle?: string | null;
   metaDescription?: string | null;
   /**
-   * Optional Markdown content for page-specific copy.
+   * Optional page copy. Use Preview after saving to review the rendered public page.
    */
+  bodyRichText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   body?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -432,6 +560,7 @@ export interface BlogPostsSelect<T extends boolean = true> {
   slug?: T;
   title?: T;
   excerpt?: T;
+  bodyRichText?: T;
   body?: T;
   category?: T;
   categorySlug?: T;
@@ -471,6 +600,7 @@ export interface PagesSelect<T extends boolean = true> {
   heroDescription?: T;
   metaTitle?: T;
   metaDescription?: T;
+  bodyRichText?: T;
   body?: T;
   updatedAt?: T;
   createdAt?: T;

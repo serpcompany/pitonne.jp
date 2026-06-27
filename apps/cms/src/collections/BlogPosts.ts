@@ -1,5 +1,23 @@
 import type { CollectionConfig } from "payload"
 import { authenticated, publishedOrAuthenticated } from "@/lib/access"
+import {
+  blogCategorySelectOptions,
+  blogTagOptions,
+  relatedServiceSlugOptions,
+  syncBlogPostCategory,
+} from "@/lib/contentOptions"
+import { contentRichTextEditor, populateRichTextFromMarkdown, syncRichTextAndMarkdown } from "@/lib/richTextMarkdown"
+
+const publicWebUrl = process.env.PAYLOAD_PUBLIC_WEB_URL || "http://localhost:3000"
+
+function getBlogPostUrl(slug: unknown, locale?: string) {
+  if (typeof slug !== "string" || !slug) {
+    return null
+  }
+
+  const localePrefix = locale === "ja" ? "/ja" : ""
+  return `${publicWebUrl}${localePrefix}/blog/${slug}/`
+}
 
 export const BlogPosts: CollectionConfig = {
   slug: "blog-posts",
@@ -11,6 +29,9 @@ export const BlogPosts: CollectionConfig = {
   },
   admin: {
     defaultColumns: ["title", "slug", "category", "publishedAt", "_status"],
+    preview: (doc, { locale }) => {
+      return getBlogPostUrl(doc.slug, locale)
+    },
     useAsTitle: "title",
   },
   defaultSort: "-publishedAt",
@@ -37,13 +58,23 @@ export const BlogPosts: CollectionConfig = {
       required: true,
     },
     {
+      name: "bodyRichText",
+      type: "richText",
+      editor: contentRichTextEditor,
+      label: "Body",
+      localized: true,
+      required: true,
+      admin: {
+        description: "Use Preview after saving to review the rendered public page.",
+      },
+    },
+    {
       name: "body",
       type: "textarea",
       localized: true,
       required: true,
       admin: {
-        rows: 18,
-        description: "Markdown content rendered by the public website.",
+        hidden: true,
       },
     },
     {
@@ -54,10 +85,15 @@ export const BlogPosts: CollectionConfig = {
           type: "text",
           localized: true,
           required: true,
+          admin: {
+            hidden: true,
+          },
         },
         {
           name: "categorySlug",
-          type: "text",
+          type: "select",
+          label: "Category",
+          options: blogCategorySelectOptions,
           required: true,
         },
       ],
@@ -120,7 +156,8 @@ export const BlogPosts: CollectionConfig = {
       fields: [
         {
           name: "tag",
-          type: "text",
+          type: "select",
+          options: blogTagOptions,
           required: true,
         },
       ],
@@ -131,12 +168,17 @@ export const BlogPosts: CollectionConfig = {
       fields: [
         {
           name: "slug",
-          type: "text",
+          type: "select",
+          options: relatedServiceSlugOptions,
           required: true,
         },
       ],
     },
   ],
+  hooks: {
+    afterRead: [populateRichTextFromMarkdown],
+    beforeValidate: [syncBlogPostCategory, syncRichTextAndMarkdown],
+  },
   timestamps: true,
   versions: {
     drafts: {

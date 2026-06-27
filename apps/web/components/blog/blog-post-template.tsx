@@ -43,7 +43,126 @@ function splitFinalTakeaway(content: string) {
 }
 
 function MarkdownContent({ content }: { content: string }) {
-  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+  const parts = splitVideoEmbeds(content)
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.type === "video" ? (
+          <VideoEmbed key={`${part.url}-${index}`} title={part.title} url={part.url} />
+        ) : (
+          <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>
+            {part.content}
+          </ReactMarkdown>
+        ),
+      )}
+    </>
+  )
+}
+
+type MarkdownPart = { content: string; type: "markdown" } | { title?: string; type: "video"; url: string }
+
+function splitVideoEmbeds(content: string): MarkdownPart[] {
+  const parts: MarkdownPart[] = []
+  const videoFencePattern = /```video\s*\n([\s\S]*?)\n```/g
+  let lastIndex = 0
+
+  for (const match of content.matchAll(videoFencePattern)) {
+    if (match.index === undefined) {
+      continue
+    }
+
+    const markdown = content.slice(lastIndex, match.index).trim()
+    if (markdown) {
+      parts.push({ type: "markdown", content: markdown })
+    }
+
+    try {
+      const parsed = JSON.parse(match[1]) as { title?: unknown; url?: unknown }
+      if (typeof parsed.url === "string" && parsed.url.trim()) {
+        parts.push({
+          type: "video",
+          title: typeof parsed.title === "string" ? parsed.title : undefined,
+          url: parsed.url,
+        })
+      }
+    } catch {
+      parts.push({ type: "markdown", content: match[0] })
+    }
+
+    lastIndex = match.index + match[0].length
+  }
+
+  const trailing = content.slice(lastIndex).trim()
+  if (trailing) {
+    parts.push({ type: "markdown", content: trailing })
+  }
+
+  return parts.length > 0 ? parts : [{ type: "markdown", content }]
+}
+
+function getVideoEmbedUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url)
+    const host = parsed.hostname.replace(/^www\./, "")
+
+    if (host === "youtu.be") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0]
+      return id ? `https://www.youtube.com/embed/${id}` : null
+    }
+
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (parsed.pathname.startsWith("/embed/")) {
+        return parsed.toString()
+      }
+
+      const id = parsed.searchParams.get("v")
+      return id ? `https://www.youtube.com/embed/${id}` : null
+    }
+
+    if (host === "vimeo.com") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0]
+      return id ? `https://player.vimeo.com/video/${id}` : null
+    }
+
+    if (host === "player.vimeo.com" && parsed.pathname.startsWith("/video/")) {
+      return parsed.toString()
+    }
+  } catch {
+    return null
+  }
+
+  return null
+}
+
+function VideoEmbed({ title, url }: { title?: string; url: string }) {
+  const embedUrl = getVideoEmbedUrl(url)
+  const label = title || "Embedded video"
+
+  if (!embedUrl) {
+    return (
+      <p>
+        <a href={url}>{label}</a>
+      </p>
+    )
+  }
+
+  return (
+    <figure className="my-8">
+      <div className="aspect-video overflow-hidden rounded-lg border border-border bg-black">
+        <iframe
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="h-full w-full"
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          src={embedUrl}
+          title={label}
+        />
+      </div>
+      {title ? <figcaption className="mt-2 text-sm text-muted-foreground">{title}</figcaption> : null}
+    </figure>
+  )
 }
 
 function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewModel; locale?: Locale }) {

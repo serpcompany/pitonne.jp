@@ -3,7 +3,6 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { sqliteD1Adapter } from "@payloadcms/db-d1-sqlite"
 import { mcpPlugin } from "@payloadcms/plugin-mcp"
-import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { r2Storage } from "@payloadcms/storage-r2"
 import { CloudflareContext, getCloudflareContext } from "@opennextjs/cloudflare"
 import type { GetPlatformProxyOptions } from "wrangler"
@@ -13,6 +12,7 @@ import { BlogPosts } from "@/collections/BlogPosts"
 import { Media } from "@/collections/Media"
 import { Pages } from "@/collections/Pages"
 import { Users } from "@/collections/Users"
+import { contentRichTextEditor } from "@/lib/richTextMarkdown"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -75,7 +75,7 @@ export default buildConfig({
   collections: [Users, Media, BlogPosts, Pages],
   cors,
   db: sqliteD1Adapter({ binding: bindings.D1 }),
-  editor: lexicalEditor(),
+  editor: contentRichTextEditor,
   graphQL: {
     disablePlaygroundInProduction: true,
   },

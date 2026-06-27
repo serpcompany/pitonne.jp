@@ -1,5 +1,28 @@
 import type { CollectionConfig } from "payload"
 import { authenticated, publishedOrAuthenticated } from "@/lib/access"
+import { contentRichTextEditor, populateRichTextFromMarkdown, syncRichTextAndMarkdown } from "@/lib/richTextMarkdown"
+
+const publicWebUrl = process.env.PAYLOAD_PUBLIC_WEB_URL || "http://localhost:3000"
+const pageRoutes: Record<string, string> = {
+  about: "/about/",
+  contact: "/contact/",
+  faqs: "/faqs/",
+  home: "/",
+}
+
+function getPageUrl(key: unknown, locale?: string) {
+  if (typeof key !== "string") {
+    return null
+  }
+
+  const route = pageRoutes[key]
+  if (!route) {
+    return null
+  }
+
+  const localePrefix = locale === "ja" ? "/ja" : ""
+  return `${publicWebUrl}${localePrefix}${route}`
+}
 
 export const Pages: CollectionConfig = {
   slug: "pages",
@@ -11,6 +34,9 @@ export const Pages: CollectionConfig = {
   },
   admin: {
     defaultColumns: ["key", "title", "_status", "updatedAt"],
+    preview: (doc, { locale }) => {
+      return getPageUrl(doc.key, locale)
+    },
     useAsTitle: "title",
   },
   fields: [
@@ -51,15 +77,28 @@ export const Pages: CollectionConfig = {
       localized: true,
     },
     {
+      name: "bodyRichText",
+      type: "richText",
+      editor: contentRichTextEditor,
+      label: "Body",
+      localized: true,
+      admin: {
+        description: "Optional page copy. Use Preview after saving to review the rendered public page.",
+      },
+    },
+    {
       name: "body",
       type: "textarea",
       localized: true,
       admin: {
-        rows: 10,
-        description: "Optional Markdown content for page-specific copy.",
+        hidden: true,
       },
     },
   ],
+  hooks: {
+    afterRead: [populateRichTextFromMarkdown],
+    beforeValidate: [syncRichTextAndMarkdown],
+  },
   timestamps: true,
   versions: {
     drafts: {

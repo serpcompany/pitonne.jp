@@ -31,6 +31,10 @@ Local CMS admin:
 - URL: `http://localhost:3001/admin`
 - Email: `local-admin@pitonne.test`
 - Password: `local-admin-password`
+- Blog and page content use Payload's native rich text editor with toolbar controls, uploads, code blocks, and video embeds.
+- Blog posts and pages use Payload's native `Preview` admin action, pointed at the local public site.
+- Blog `Category`, `Tags`, and `Related Service Slugs` are controlled selectors backed by the existing site categories, markdown tags, and service slugs.
+- Use the CMS `Preview` action after saving a blog post or page to open the matching public URL. Locally this uses `PAYLOAD_PUBLIC_WEB_URL=http://localhost:3000`.
 
 Local public site:
 
