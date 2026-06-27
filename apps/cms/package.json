@@ -1,0 +1,48 @@
+{
+  "name": "cms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "build:worker": "opennextjs-cloudflare build",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "typecheck": "tsc --noEmit --incremental false"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.1",
+    "@payloadcms/db-d1-sqlite": "3.85.1",
+    "@payloadcms/next": "3.85.1",
+    "@payloadcms/plugin-mcp": "3.85.1",
+    "@payloadcms/richtext-lexical": "3.85.1",
+    "@payloadcms/storage-r2": "3.85.1",
+    "@payloadcms/ui": "3.85.1",
+    "cross-env": "10.1.0",
+    "dotenv": "16.6.1",
+    "graphql": "^16.8.1",
+    "next": "16.2.9",
+    "payload": "3.85.1",
+    "rclone.js": "^0.6.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "16.2.9",
+    "typescript": "6.0.3",
+    "wrangler": "^4.105.0"
+  },
+  "engines": {
+    "node": ">=24 <26",
+    "pnpm": "^10"
+  }
+}

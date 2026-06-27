@@ -1,0 +1,19 @@
+name = "pitonne-cms"
+main = ".open-next/worker.js"
+compatibility_date = "2026-06-27"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "D1"
+database_name = "pitonne-cms"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "src/migrations"
+remote = false
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "pitonne-cms-media"

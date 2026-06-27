@@ -1,0 +1,7 @@
+[mcp_servers.payload_cms]
+command = "bash"
+args = [
+  "-lc",
+  'if [ -f apps/cms/.env.local ]; then set -a; . apps/cms/.env.local; set +a; fi; test -n "$PAYLOAD_MCP_API_KEY" || { echo "Set PAYLOAD_MCP_API_KEY to a Payload MCP API key from http://localhost:3001/admin before starting Codex." >&2; exit 1; }; exec npx -y mcp-remote@latest http://127.0.0.1:3001/api/mcp --header "Authorization: Bearer $PAYLOAD_MCP_API_KEY"',
+]
+enabled = true

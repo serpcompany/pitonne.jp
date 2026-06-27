@@ -27,5 +27,5 @@ jobs:
       - run: pnpm audit:content
       - run: pnpm audit:strings
       - run: DEPLOY_ENV=production pnpm build
-      - run: test -f out/index.html && test -f out/ja/index.html && test -f out/robots.txt && test -f out/sitemap.xml && test -f out/videos-sitemap.xml && test -f out/_headers && test -f out/_redirects && test ! -d out/en
+      - run: test -f apps/web/out/index.html && test -f apps/web/out/ja/index.html && test -f apps/web/out/robots.txt && test -f apps/web/out/sitemap.xml && test -f apps/web/out/videos-sitemap.xml && test -f apps/web/out/_headers && test -f apps/web/out/_redirects && test ! -d apps/web/out/en
       - run: pnpm test:lighthouse

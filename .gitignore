@@ -4,6 +4,7 @@ __v0_devtools.tsx
 __v0_jsx-dev-runtime.ts
 .snowflake/
 .v0-trash/
+.devin/
 .vercel/
 .lighthouseci/
 next.user-config.*
@@ -14,6 +15,8 @@ next.user-config.*
 # Common ignores
 node_modules
 .next/
+.open-next/
 out/
 .wrangler/
+cloudflare-env.d.ts
 .DS_Store
