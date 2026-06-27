@@ -146,6 +146,9 @@ export default async function ContactPage({ params }: Props) {
                         </p>
                       ))}
                     </div>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      {dict.footer.afterHoursNote}
+                    </p>
                   </div>
                 </div>
               </div>

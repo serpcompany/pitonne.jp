@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Instagram, Facebook, Linkedin, Youtube, Twitter, MapPin, Music, Podcast, Pin } from "lucide-react"
+import { getServiceCategorySections } from "@/lib/data/services"
 import { getBusinessInfo } from "@/lib/data/site"
 import { canonicalRoutes, localizedRoute } from "@/lib/data/routes"
 import type { Locale } from "@/lib/i18n/config"
@@ -60,8 +61,44 @@ const podcastLinks = [
   { name: "Goodpods", href: "https://goodpods.com/ja/profile/pitonne-130086", icon: Podcast },
 ]
 
+function FooterHours({
+  dict,
+  hours,
+}: {
+  dict: Dictionary
+  hours: ReturnType<typeof getBusinessInfo>["hours"]
+}) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.footer.openHours}</h3>
+      <ul className="space-y-1.5">
+        {hours.map((item) => {
+          const dayLabel = dict.days[item.day as keyof typeof dict.days] ?? item.day
+          const isClosed = item.hours === "Closed" || item.hours === "休診"
+          const hoursLabel = isClosed ? dict.footer.closed : item.hours
+          return (
+            <li key={item.day} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 text-sm">
+              <span className="min-w-0 text-white/70">{dayLabel}</span>
+              <span className={isClosed ? "text-white/70" : "text-white/90"}>
+                {hoursLabel}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="mt-3 text-sm leading-relaxed text-white/70">
+        {dict.footer.afterHoursNote}
+      </p>
+    </div>
+  )
+}
+
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const businessInfo = getBusinessInfo(locale)
+  const serviceLinks = getServiceCategorySections(locale).map((section) => ({
+    name: section.title,
+    href: section.href,
+  }))
   const quickLinks = [
     { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
     { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },
@@ -113,7 +150,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </a>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-y-8 gap-x-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-x-20">
           {/* Company Info */}
           <div>
             <Link href={localizedRoute("/", locale)}>
@@ -138,6 +175,9 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 </a>
               </p>
             </address>
+            <div className="mt-6">
+              <FooterHours dict={dict} hours={businessInfo.hours} />
+            </div>
           </div>
 
           {/* Quick Links */}
@@ -157,23 +197,20 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </ul>
           </div>
 
-          {/* Open Hours */}
+          {/* Services */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.footer.openHours}</h3>
-            <ul className="space-y-1.5">
-              {businessInfo.hours.map((item) => {
-                const dayLabel = dict.days[item.day as keyof typeof dict.days] ?? item.day
-                const isClosed = item.hours === "Closed" || item.hours === "休診"
-                const hoursLabel = isClosed ? dict.footer.closed : item.hours
-                return (
-                  <li key={item.day} className="grid grid-cols-[5.75rem_auto] gap-x-3 text-sm">
-                    <span className="text-white/70">{dayLabel}</span>
-                    <span className={isClosed ? "text-white/70" : "text-white/90"}>
-                      {hoursLabel}
-                    </span>
-                  </li>
-                )
-              })}
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.nav.services}</h3>
+            <ul className="space-y-2">
+              {serviceLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-white/70 hover:text-white transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
