@@ -39,6 +39,20 @@ describe("CMS data integration", () => {
     await expect(getAllBlogPostsWithCms("en")).resolves.toEqual(getAllBlogPosts("en"))
   })
 
+  it("does not fall back to markdown posts when configured CMS has no published posts", async () => {
+    process.env.CMS_API_URL = "https://cms.example.com"
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        responseJson({
+          docs: [],
+        }),
+      ),
+    )
+
+    await expect(getAllBlogPostsWithCms("en")).resolves.toEqual([])
+  })
+
   it("normalizes CMS blog posts, localized requests, media URLs, and arrays", async () => {
     process.env.CMS_API_URL = "https://cms.example.com"
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {

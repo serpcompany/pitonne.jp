@@ -21,7 +21,74 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    crop: false,
-    focalPoint: false,
+    adminThumbnail: "thumbnail",
+    crop: true,
+    displayPreview: true,
+    focalPoint: true,
+    formatOptions: {
+      format: "webp",
+      options: {
+        quality: 82,
+      },
+    },
+    imageSizes: [
+      {
+        name: "thumbnail",
+        width: 400,
+        height: 300,
+        fit: "cover",
+        position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: {
+            quality: 78,
+          },
+        },
+      },
+      {
+        name: "card",
+        width: 768,
+        height: 432,
+        fit: "cover",
+        position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: {
+            quality: 82,
+          },
+        },
+      },
+      {
+        name: "hero",
+        width: 1600,
+        height: 900,
+        fit: "cover",
+        position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: {
+            quality: 84,
+          },
+        },
+      },
+      {
+        name: "openGraph",
+        width: 1200,
+        height: 630,
+        fit: "cover",
+        position: "centre",
+        formatOptions: {
+          format: "webp",
+          options: {
+            quality: 84,
+          },
+        },
+      },
+    ],
+    mimeTypes: ["image/*"],
+    resizeOptions: {
+      width: 2400,
+      withoutEnlargement: true,
+    },
   },
 }

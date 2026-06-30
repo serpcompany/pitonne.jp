@@ -17,6 +17,7 @@ import { VideoEmbed } from "@/blocks/VideoEmbed"
 type RichTextValue = Record<string, unknown>
 type RichTextBackedDoc = TypeWithID & {
   body?: string | null
+  bodyEditorMode?: "markdown" | "richText" | null
   bodyRichText?: RichTextValue | null
 }
 
@@ -76,6 +77,19 @@ export const populateRichTextFromMarkdown: CollectionAfterReadHook<RichTextBacke
 
 export const syncRichTextAndMarkdown: CollectionBeforeValidateHook<RichTextBackedDoc> = async ({ data, req }) => {
   if (!data) {
+    return data
+  }
+
+  if (data.bodyEditorMode === "markdown") {
+    if (typeof data.body === "string") {
+      data.bodyRichText = data.body ? await markdownToRichText(data.body, req) : null
+      return data
+    }
+
+    if (isRichTextValue(data.bodyRichText)) {
+      data.body = await richTextToMarkdown(data.bodyRichText, req)
+    }
+
     return data
   }
 

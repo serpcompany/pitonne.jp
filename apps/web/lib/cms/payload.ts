@@ -71,6 +71,7 @@ const API_URL_ENV_NAMES = ["CMS_API_URL", "PAYLOAD_API_URL", "PAYLOAD_PUBLIC_SER
 
 const blogPostCache = new Map<string, Promise<CmsBlogPost[] | null>>()
 const pageCache = new Map<string, Promise<CmsPageContent | null>>()
+const shouldCacheCmsRequests = process.env.NODE_ENV === "production"
 
 export function getCmsBaseUrl(): string | null {
   const rawUrl = API_URL_ENV_NAMES.map((name) => process.env[name]).find((value): value is string => Boolean(value?.trim()))
@@ -127,7 +128,7 @@ async function fetchPayloadList<T>(pathname: string, params: Record<string, stri
 
   try {
     const response = await fetch(url, {
-      cache: "force-cache",
+      cache: shouldCacheCmsRequests ? "force-cache" : "no-store",
       headers,
     })
 
@@ -240,6 +241,10 @@ async function fetchCmsBlogPosts(locale: Locale): Promise<CmsBlogPost[] | null> 
 }
 
 export function getCmsBlogPosts(locale: Locale): Promise<CmsBlogPost[] | null> {
+  if (!shouldCacheCmsRequests) {
+    return fetchCmsBlogPosts(locale)
+  }
+
   const cacheKey = `${getCmsBaseUrl() || "disabled"}:${locale}`
   if (!blogPostCache.has(cacheKey)) {
     blogPostCache.set(cacheKey, fetchCmsBlogPosts(locale))
@@ -265,6 +270,10 @@ async function fetchCmsPage(key: CmsPageKey, locale: Locale): Promise<CmsPageCon
 }
 
 export function getCmsPage(key: CmsPageKey, locale: Locale): Promise<CmsPageContent | null> {
+  if (!shouldCacheCmsRequests) {
+    return fetchCmsPage(key, locale)
+  }
+
   const cacheKey = `${getCmsBaseUrl() || "disabled"}:${locale}:${key}`
   if (!pageCache.has(cacheKey)) {
     pageCache.set(cacheKey, fetchCmsPage(key, locale))

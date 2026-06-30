@@ -58,6 +58,19 @@ export const BlogPosts: CollectionConfig = {
       required: true,
     },
     {
+      name: "bodyEditorMode",
+      type: "radio",
+      label: "Body editor",
+      defaultValue: "richText",
+      options: [
+        { label: "Rich text", value: "richText" },
+        { label: "Raw Markdown", value: "markdown" },
+      ],
+      admin: {
+        description: "Choose the editing surface for the body. Both modes stay synced on save.",
+      },
+    },
+    {
       name: "bodyRichText",
       type: "richText",
       editor: contentRichTextEditor,
@@ -65,6 +78,7 @@ export const BlogPosts: CollectionConfig = {
       localized: true,
       required: true,
       admin: {
+        condition: (_data, siblingData) => siblingData.bodyEditorMode !== "markdown",
         description: "Use Preview after saving to review the rendered public page.",
       },
     },
@@ -74,7 +88,17 @@ export const BlogPosts: CollectionConfig = {
       localized: true,
       required: true,
       admin: {
-        hidden: true,
+        components: {
+          afterInput: [
+            {
+              path: "@/components/admin/MarkdownPreview",
+              exportName: "MarkdownPreview",
+            },
+          ],
+        },
+        condition: (_data, siblingData) => siblingData.bodyEditorMode === "markdown",
+        description: "Raw Markdown source rendered by the public website.",
+        rows: 18,
       },
     },
     {
@@ -147,7 +171,17 @@ export const BlogPosts: CollectionConfig = {
     {
       name: "featuredImage",
       type: "upload",
+      displayPreview: true,
+      filterOptions: {
+        mimeType: {
+          contains: "image/",
+        },
+      },
+      maxDepth: 1,
       relationTo: "media",
+      admin: {
+        description: "Only image uploads are accepted. Node CMS runtimes with sharp enabled generate web image sizes in Media.",
+      },
     },
     {
       name: "tags",

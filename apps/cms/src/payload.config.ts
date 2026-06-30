@@ -20,10 +20,19 @@ const realpath = (value: string) => (fs.existsSync(value) ? fs.realpathSync(valu
 const isPayloadCLI = process.argv.some((value) => realpath(value)?.endsWith(path.join("payload", "bin.js")))
 const isProduction = process.env.NODE_ENV === "production"
 const isNextProductionBuild = process.env.NEXT_PHASE === "phase-production-build"
+const isCloudflareWorkerRuntime =
+  typeof globalThis.navigator?.userAgent === "string" &&
+  globalThis.navigator.userAgent.toLowerCase().includes("cloudflare-workers")
 const localAdminEmail = process.env.PAYLOAD_LOCAL_ADMIN_EMAIL
 const localAdminPassword = process.env.PAYLOAD_LOCAL_ADMIN_PASSWORD
 const wranglerPersistPath = process.env.WRANGLER_PERSIST_PATH
 const shouldBootstrapLocalAdmin = !isProduction && Boolean(localAdminEmail && localAdminPassword)
+const canLoadSharp = !isNextProductionBuild && !isCloudflareWorkerRuntime
+const shouldLoadSharp =
+  canLoadSharp &&
+  (process.env.PAYLOAD_ENABLE_SHARP === "true" ||
+    (process.env.PAYLOAD_ENABLE_SHARP !== "false" && !isProduction))
+const sharpDependency = shouldLoadSharp ? (await import(/* webpackIgnore: true */ "sharp")).default : undefined
 
 if (isProduction && !process.env.PAYLOAD_SECRET) {
   throw new Error("PAYLOAD_SECRET is required in production.")
@@ -154,6 +163,7 @@ export default buildConfig({
   },
   secret: process.env.PAYLOAD_SECRET || "development-only-change-me",
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  sharp: sharpDependency,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },

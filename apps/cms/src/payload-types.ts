@@ -183,6 +183,42 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    openGraph?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -194,9 +230,13 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   /**
+   * Choose the editing surface for the body. Both modes stay synced on save.
+   */
+  bodyEditorMode?: ('richText' | 'markdown') | null;
+  /**
    * Use Preview after saving to review the rendered public page.
    */
-  bodyRichText: {
+  bodyRichText?: {
     root: {
       type: string;
       children: {
@@ -210,10 +250,13 @@ export interface BlogPost {
       version: number;
     };
     [k: string]: unknown;
-  };
-  body: string;
+  } | null;
+  /**
+   * Raw Markdown source rendered by the public website.
+   */
+  body?: string | null;
   category: string;
-  categorySlug: 'iv-therapy' | 'stem-cell-therapy' | 'medication' | 'blood-tests';
+  categorySlug: 'blood-tests' | 'iv-therapy' | 'medication' | 'stem-cell-therapy';
   author: {
     name: string;
     role: string;
@@ -224,6 +267,9 @@ export interface BlogPost {
    */
   readingTime?: number | null;
   featured?: boolean | null;
+  /**
+   * Only image uploads are accepted. Node CMS runtimes with sharp enabled generate web image sizes in Media.
+   */
   featuredImage?: (number | null) | Media;
   tags?:
     | {
@@ -316,21 +362,21 @@ export interface BlogPost {
   relatedServiceSlugs?:
     | {
         slug:
-          | 'iv-therapy'
-          | 'exosome-iv-drip'
-          | 'hangover-iv-drip'
-          | 'energy-fatigue-recovery-iv'
-          | 'skin-brightening-iv-drip'
-          | 'immune-boost-iv-therapy'
-          | 'iv-vitamin-therapy'
-          | 'stem-cell-therapy'
-          | 'stem-cell-nasal-spray'
-          | 'medication'
-          | 'ed-medication'
           | 'androgenetic-alopecia-medicine'
           | 'blood-tests'
+          | 'ed-medication'
+          | 'energy-fatigue-recovery-iv'
+          | 'exosome-iv-drip'
+          | 'hangover-iv-drip'
           | 'hormone-blood-testing'
+          | 'immune-boost-iv-therapy'
+          | 'iv-therapy'
+          | 'iv-vitamin-therapy'
+          | 'medication'
           | 'nutrition-blood-testing'
+          | 'skin-brightening-iv-drip'
+          | 'stem-cell-nasal-spray'
+          | 'stem-cell-therapy'
           | 'tumor-marker-blood-testing';
         id?: string | null;
       }[]
@@ -350,6 +396,7 @@ export interface Page {
   heroDescription?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  bodyEditorMode?: ('richText' | 'markdown') | null;
   /**
    * Optional page copy. Use Preview after saving to review the rendered public page.
    */
@@ -551,6 +598,52 @@ export interface MediaSelect<T extends boolean = true> {
   filesize?: T;
   width?: T;
   height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        openGraph?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -560,6 +653,7 @@ export interface BlogPostsSelect<T extends boolean = true> {
   slug?: T;
   title?: T;
   excerpt?: T;
+  bodyEditorMode?: T;
   bodyRichText?: T;
   body?: T;
   category?: T;
@@ -600,6 +694,7 @@ export interface PagesSelect<T extends boolean = true> {
   heroDescription?: T;
   metaTitle?: T;
   metaDescription?: T;
+  bodyEditorMode?: T;
   bodyRichText?: T;
   body?: T;
   updatedAt?: T;

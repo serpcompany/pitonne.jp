@@ -3,7 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import matter from "gray-matter"
 import { z } from "zod"
-import { getCmsBlogPosts, type CmsBlogPost } from "@/lib/cms/payload"
+import { getCmsBlogPosts, isCmsConfigured, type CmsBlogPost } from "@/lib/cms/payload"
 import type { Locale } from "@/lib/i18n/config"
 
 const contentRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..", "content")
@@ -116,10 +116,14 @@ export function getAllBlogPosts(locale: Locale = "en"): BlogPost[] {
 
 export async function getAllBlogPostsWithCms(locale: Locale = "en"): Promise<BlogPost[]> {
   const cmsPosts = await getCmsBlogPosts(locale)
-  if (cmsPosts && cmsPosts.length > 0) {
+  if (cmsPosts) {
     return cmsPosts
       .map(fromCmsPost)
       .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  }
+
+  if (isCmsConfigured()) {
+    return []
   }
 
   return getAllBlogPosts(locale)

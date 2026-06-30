@@ -1,4 +1,4 @@
-import type { CollectionConfig } from "payload"
+import type { CollectionBeforeValidateHook, CollectionConfig, TypeWithID } from "payload"
 import { authenticated, publishedOrAuthenticated } from "@/lib/access"
 import { contentRichTextEditor, populateRichTextFromMarkdown, syncRichTextAndMarkdown } from "@/lib/richTextMarkdown"
 
@@ -22,6 +22,18 @@ function getPageUrl(key: unknown, locale?: string) {
 
   const localePrefix = locale === "ja" ? "/ja" : ""
   return `${publicWebUrl}${localePrefix}${route}`
+}
+
+type PageWithBodyEditorMode = TypeWithID & {
+  bodyEditorMode?: "markdown" | "richText" | null
+}
+
+const forcePageRichTextMode: CollectionBeforeValidateHook<PageWithBodyEditorMode> = ({ data }) => {
+  if (data) {
+    data.bodyEditorMode = "richText"
+  }
+
+  return data
 }
 
 export const Pages: CollectionConfig = {
@@ -77,6 +89,18 @@ export const Pages: CollectionConfig = {
       localized: true,
     },
     {
+      name: "bodyEditorMode",
+      type: "radio",
+      defaultValue: "richText",
+      options: [
+        { label: "Rich text", value: "richText" },
+        { label: "Raw Markdown", value: "markdown" },
+      ],
+      admin: {
+        hidden: true,
+      },
+    },
+    {
       name: "bodyRichText",
       type: "richText",
       editor: contentRichTextEditor,
@@ -97,7 +121,7 @@ export const Pages: CollectionConfig = {
   ],
   hooks: {
     afterRead: [populateRichTextFromMarkdown],
-    beforeValidate: [syncRichTextAndMarkdown],
+    beforeValidate: [forcePageRichTextMode, syncRichTextAndMarkdown],
   },
   timestamps: true,
   versions: {

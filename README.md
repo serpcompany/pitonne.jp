@@ -11,6 +11,7 @@ Small pnpm monorepo for the Pitonne public website and Payload CMS.
 
 - `pnpm dev`: run the public site.
 - `pnpm dev:cms`: run the CMS.
+- `pnpm --filter cms generate:content-options`: regenerate Payload blog category, tag, and related service select options from `apps/web/content`.
 - `CMS_API_URL=http://localhost:3001 CMS_EMAIL=local-admin@pitonne.test CMS_PASSWORD=local-admin-password pnpm seed:cms`: seed local CMS content from the existing markdown/page content.
 - `pnpm build`: build the public static site to `apps/web/out`.
 - `PAYLOAD_SECRET=dev-build-secret pnpm --filter cms build:worker`: build the CMS Worker bundle.
@@ -31,9 +32,11 @@ Local CMS admin:
 - URL: `http://localhost:3001/admin`
 - Email: `local-admin@pitonne.test`
 - Password: `local-admin-password`
-- Blog and page content use Payload's native rich text editor with toolbar controls, uploads, code blocks, and video embeds.
+- Blog posts use `Body editor` to switch between Payload rich text and raw Markdown. Raw Markdown mode includes an in-admin rendered Markdown preview, and both modes sync to the Markdown body consumed by the public static site.
+- Page content uses Payload's native rich text editor with toolbar controls, uploads, code blocks, and video embeds.
 - Blog posts and pages use Payload's native `Preview` admin action, pointed at the local public site.
-- Blog `Category`, `Tags`, and `Related Service Slugs` are controlled selectors backed by the existing site categories, markdown tags, and service slugs.
+- Blog `Category`, `Tags`, and `Related Service Slugs` are controlled Payload `select` fields generated from real site content. Run `pnpm --filter cms generate:content-options` after changing `apps/web/content/services/**/*.md` or `apps/web/content/blog/**/*.md`.
+- Media uploads accept images only. Node CMS runtimes with `PAYLOAD_ENABLE_SHARP=true` use Payload's native `sharp` integration to generate thumbnail, card, hero, and Open Graph image sizes. Cloudflare Worker builds and runtime keep R2 storage and image-only validation, but leave native `sharp` disabled.
 - Use the CMS `Preview` action after saving a blog post or page to open the matching public URL. Locally this uses `PAYLOAD_PUBLIC_WEB_URL=http://localhost:3000`.
 
 Local public site:
@@ -41,6 +44,28 @@ Local public site:
 - URL: `http://localhost:3000`
 - Blog: `http://localhost:3000/blog/`
 - Japanese blog: `http://localhost:3000/ja/blog/`
+- To test CMS-authored public blog content locally, run the public site with `CMS_API_URL=http://localhost:3001`. When this is set, blog pages read published posts from the local CMS instead of falling back to Markdown content. Drafts remain visible only in Payload admin until published.
+
+### Blog Editing Workflow
+
+Blog posts keep two body fields so the CMS can author in rich text while the static web app continues to consume Markdown:
+
+- `bodyRichText`: Payload Lexical rich text field shown by default.
+- `body`: Markdown textarea shown only when `Body editor` is set to `Raw Markdown`.
+
+On save, rich text mode converts `bodyRichText` to Markdown and stores it in `body`. Raw Markdown mode treats `body` as the source of truth, including when the textarea is intentionally cleared, and converts it back into `bodyRichText` for later rich text editing.
+
+Featured images are Payload upload relations to `media`. The relation picker is filtered to images, and the `media` collection rejects non-image uploads via Payload's native upload validation.
+
+For local end-to-end testing, create or edit a blog post in Payload admin, publish it, and refresh `http://localhost:3000/blog/`. In development, CMS requests are uncached so public blog changes should be visible without restarting the public web server. Deleting the published post in Payload removes it from the public blog on refresh.
+
+Blog select options are generated into `apps/cms/src/generated/contentOptions.ts`:
+
+- Categories come from English service frontmatter where `kind: parent`, with Japanese labels matched by service `slug`.
+- Related service slugs come from all English service frontmatter `slug` and `title` values.
+- Tags come from the union of `tags` in English and Japanese blog frontmatter.
+
+Payload imports the generated TypeScript file at runtime instead of scanning Markdown files, which keeps Worker bundles static while preserving `apps/web/content` as the source data.
 
 ## Codex MCP
 

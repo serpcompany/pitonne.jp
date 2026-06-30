@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "build:worker": "opennextjs-cloudflare build",
+    "generate:content-options": "node scripts/generate-content-options.mjs",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
@@ -30,7 +31,10 @@
     "payload": "3.85.1",
     "rclone.js": "^0.6.6",
     "react": "19.2.7",
-    "react-dom": "19.2.7"
+    "react-dom": "19.2.7",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "sharp": "0.34.5"
   },
   "devDependencies": {
     "@types/node": "^24.12.3",
@@ -38,6 +42,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.16.0",
     "eslint-config-next": "16.2.9",
+    "gray-matter": "^4.0.3",
     "typescript": "6.0.3",
     "wrangler": "^4.105.0"
   },
