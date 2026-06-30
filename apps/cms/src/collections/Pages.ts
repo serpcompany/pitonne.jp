@@ -1,40 +1,7 @@
-import type { CollectionBeforeValidateHook, CollectionConfig, TypeWithID } from "payload"
+import type { CollectionConfig } from "payload"
 import { authenticated, publishedOrAuthenticated } from "@/lib/access"
+import { getPagePreviewUrl } from "@/lib/adminPreviewUrls"
 import { contentRichTextEditor, populateRichTextFromMarkdown, syncRichTextAndMarkdown } from "@/lib/richTextMarkdown"
-
-const publicWebUrl = process.env.PAYLOAD_PUBLIC_WEB_URL || "http://localhost:3000"
-const pageRoutes: Record<string, string> = {
-  about: "/about/",
-  contact: "/contact/",
-  faqs: "/faqs/",
-  home: "/",
-}
-
-function getPageUrl(key: unknown, locale?: string) {
-  if (typeof key !== "string") {
-    return null
-  }
-
-  const route = pageRoutes[key]
-  if (!route) {
-    return null
-  }
-
-  const localePrefix = locale === "ja" ? "/ja" : ""
-  return `${publicWebUrl}${localePrefix}${route}`
-}
-
-type PageWithBodyEditorMode = TypeWithID & {
-  bodyEditorMode?: "markdown" | "richText" | null
-}
-
-const forcePageRichTextMode: CollectionBeforeValidateHook<PageWithBodyEditorMode> = ({ data }) => {
-  if (data) {
-    data.bodyEditorMode = "richText"
-  }
-
-  return data
-}
 
 export const Pages: CollectionConfig = {
   slug: "pages",
@@ -47,7 +14,7 @@ export const Pages: CollectionConfig = {
   admin: {
     defaultColumns: ["key", "title", "_status", "updatedAt"],
     preview: (doc, { locale }) => {
-      return getPageUrl(doc.key, locale)
+      return getPagePreviewUrl(doc.key, locale)
     },
     useAsTitle: "title",
   },
@@ -89,18 +56,6 @@ export const Pages: CollectionConfig = {
       localized: true,
     },
     {
-      name: "bodyEditorMode",
-      type: "radio",
-      defaultValue: "richText",
-      options: [
-        { label: "Rich text", value: "richText" },
-        { label: "Raw Markdown", value: "markdown" },
-      ],
-      admin: {
-        hidden: true,
-      },
-    },
-    {
       name: "bodyRichText",
       type: "richText",
       editor: contentRichTextEditor,
@@ -121,7 +76,7 @@ export const Pages: CollectionConfig = {
   ],
   hooks: {
     afterRead: [populateRichTextFromMarkdown],
-    beforeValidate: [forcePageRichTextMode, syncRichTextAndMarkdown],
+    beforeValidate: [syncRichTextAndMarkdown],
   },
   timestamps: true,
   versions: {

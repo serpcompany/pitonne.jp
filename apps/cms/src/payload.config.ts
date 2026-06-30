@@ -94,6 +94,7 @@ export default buildConfig({
       { label: "Japanese", code: "ja" },
     ],
     defaultLocale: "en",
+    defaultLocalePublishOption: "active",
     fallback: true,
   },
   logger: isProduction ? cloudflareLogger : undefined,

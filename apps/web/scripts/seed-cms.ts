@@ -54,7 +54,7 @@ if (!cmsUrl) {
 }
 
 const baseUrl = new URL(cmsUrl)
-let authToken = process.env.CMS_API_TOKEN
+let authToken = process.env.CMS_AUTH_TOKEN
 
 function apiUrl(pathname: string, params: Record<string, string | number | undefined> = {}) {
   const url = new URL(pathname, baseUrl)
@@ -74,7 +74,7 @@ async function loginIfNeeded() {
   const email = process.env.CMS_EMAIL
   const password = process.env.CMS_PASSWORD
   if (!email || !password) {
-    throw new Error("Set CMS_API_TOKEN or CMS_EMAIL/CMS_PASSWORD before running this seed script.")
+    throw new Error("Set CMS_AUTH_TOKEN to a Payload login JWT or set CMS_EMAIL/CMS_PASSWORD before running this seed script.")
   }
 
   const response = await fetch(apiUrl("/api/users/login"), {

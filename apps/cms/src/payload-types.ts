@@ -230,13 +230,9 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   /**
-   * Choose the editing surface for the body. Both modes stay synced on save.
-   */
-  bodyEditorMode?: ('richText' | 'markdown') | null;
-  /**
    * Use Preview after saving to review the rendered public page.
    */
-  bodyRichText?: {
+  bodyRichText: {
     root: {
       type: string;
       children: {
@@ -250,11 +246,8 @@ export interface BlogPost {
       version: number;
     };
     [k: string]: unknown;
-  } | null;
-  /**
-   * Raw Markdown source rendered by the public website.
-   */
-  body?: string | null;
+  };
+  body: string;
   category: string;
   categorySlug: 'blood-tests' | 'iv-therapy' | 'medication' | 'stem-cell-therapy';
   author: {
@@ -396,7 +389,6 @@ export interface Page {
   heroDescription?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
-  bodyEditorMode?: ('richText' | 'markdown') | null;
   /**
    * Optional page copy. Use Preview after saving to review the rendered public page.
    */
@@ -653,7 +645,6 @@ export interface BlogPostsSelect<T extends boolean = true> {
   slug?: T;
   title?: T;
   excerpt?: T;
-  bodyEditorMode?: T;
   bodyRichText?: T;
   body?: T;
   category?: T;
@@ -694,7 +685,6 @@ export interface PagesSelect<T extends boolean = true> {
   heroDescription?: T;
   metaTitle?: T;
   metaDescription?: T;
-  bodyEditorMode?: T;
   bodyRichText?: T;
   body?: T;
   updatedAt?: T;

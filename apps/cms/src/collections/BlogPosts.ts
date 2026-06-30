@@ -6,18 +6,8 @@ import {
   relatedServiceSlugOptions,
   syncBlogPostCategory,
 } from "@/lib/contentOptions"
+import { getBlogPostPreviewUrl } from "@/lib/adminPreviewUrls"
 import { contentRichTextEditor, populateRichTextFromMarkdown, syncRichTextAndMarkdown } from "@/lib/richTextMarkdown"
-
-const publicWebUrl = process.env.PAYLOAD_PUBLIC_WEB_URL || "http://localhost:3000"
-
-function getBlogPostUrl(slug: unknown, locale?: string) {
-  if (typeof slug !== "string" || !slug) {
-    return null
-  }
-
-  const localePrefix = locale === "ja" ? "/ja" : ""
-  return `${publicWebUrl}${localePrefix}/blog/${slug}/`
-}
 
 export const BlogPosts: CollectionConfig = {
   slug: "blog-posts",
@@ -30,7 +20,7 @@ export const BlogPosts: CollectionConfig = {
   admin: {
     defaultColumns: ["title", "slug", "category", "publishedAt", "_status"],
     preview: (doc, { locale }) => {
-      return getBlogPostUrl(doc.slug, locale)
+      return getBlogPostPreviewUrl(doc.slug, locale)
     },
     useAsTitle: "title",
   },
@@ -58,19 +48,6 @@ export const BlogPosts: CollectionConfig = {
       required: true,
     },
     {
-      name: "bodyEditorMode",
-      type: "radio",
-      label: "Body editor",
-      defaultValue: "richText",
-      options: [
-        { label: "Rich text", value: "richText" },
-        { label: "Raw Markdown", value: "markdown" },
-      ],
-      admin: {
-        description: "Choose the editing surface for the body. Both modes stay synced on save.",
-      },
-    },
-    {
       name: "bodyRichText",
       type: "richText",
       editor: contentRichTextEditor,
@@ -78,7 +55,6 @@ export const BlogPosts: CollectionConfig = {
       localized: true,
       required: true,
       admin: {
-        condition: (_data, siblingData) => siblingData.bodyEditorMode !== "markdown",
         description: "Use Preview after saving to review the rendered public page.",
       },
     },
@@ -88,16 +64,7 @@ export const BlogPosts: CollectionConfig = {
       localized: true,
       required: true,
       admin: {
-        components: {
-          afterInput: [
-            {
-              path: "@/components/admin/MarkdownPreview",
-              exportName: "MarkdownPreview",
-            },
-          ],
-        },
-        condition: (_data, siblingData) => siblingData.bodyEditorMode === "markdown",
-        description: "Raw Markdown source rendered by the public website.",
+        hidden: true,
         rows: 18,
       },
     },

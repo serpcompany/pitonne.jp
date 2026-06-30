@@ -14,6 +14,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "test:admin-preview-urls": "node --experimental-strip-types tests/adminPreviewUrls.test.mjs",
     "typecheck": "tsc --noEmit --incremental false"
   },
   "dependencies": {
@@ -32,8 +33,6 @@
     "rclone.js": "^0.6.6",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1",
     "sharp": "0.34.5"
   },
   "devDependencies": {

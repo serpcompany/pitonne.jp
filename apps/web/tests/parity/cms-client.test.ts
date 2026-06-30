@@ -6,6 +6,7 @@ import { resetCmsClientCacheForTests } from "@/lib/cms/payload"
 const previousEnv = {
   CMS_API_TOKEN: process.env.CMS_API_TOKEN,
   CMS_API_URL: process.env.CMS_API_URL,
+  CMS_AUTH_TOKEN: process.env.CMS_AUTH_TOKEN,
   PAYLOAD_API_URL: process.env.PAYLOAD_API_URL,
   PAYLOAD_PUBLIC_SERVER_URL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
 }
@@ -55,11 +56,14 @@ describe("CMS data integration", () => {
 
   it("normalizes CMS blog posts, localized requests, media URLs, and arrays", async () => {
     process.env.CMS_API_URL = "https://cms.example.com"
-    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+    process.env.CMS_API_TOKEN = "must-not-be-sent"
+    process.env.CMS_AUTH_TOKEN = "must-not-be-sent"
+    const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = new URL(String(input))
       expect(url.pathname).toBe("/api/blog-posts")
       expect(url.searchParams.get("locale")).toBe("ja")
       expect(url.searchParams.get("where[_status][equals]")).toBe("published")
+      expect(new Headers(init?.headers).has("Authorization")).toBe(false)
 
       return responseJson({
         docs: [

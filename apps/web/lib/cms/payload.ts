@@ -122,9 +122,6 @@ async function fetchPayloadList<T>(pathname: string, params: Record<string, stri
   const headers: HeadersInit = {
     Accept: "application/json",
   }
-  if (process.env.CMS_API_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.CMS_API_TOKEN}`
-  }
 
   try {
     const response = await fetch(url, {

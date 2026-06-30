@@ -32,7 +32,7 @@ Local CMS admin:
 - URL: `http://localhost:3001/admin`
 - Email: `local-admin@pitonne.test`
 - Password: `local-admin-password`
-- Blog posts use `Body editor` to switch between Payload rich text and raw Markdown. Raw Markdown mode includes an in-admin rendered Markdown preview, and both modes sync to the Markdown body consumed by the public static site.
+- Blog posts use Payload's native Lexical rich text editor. On save, the CMS stores synchronized hidden Markdown for the public static site.
 - Page content uses Payload's native rich text editor with toolbar controls, uploads, code blocks, and video embeds.
 - Blog posts and pages use Payload's native `Preview` admin action, pointed at the local public site.
 - Blog `Category`, `Tags`, and `Related Service Slugs` are controlled Payload `select` fields generated from real site content. Run `pnpm --filter cms generate:content-options` after changing `apps/web/content/services/**/*.md` or `apps/web/content/blog/**/*.md`.
@@ -45,15 +45,16 @@ Local public site:
 - Blog: `http://localhost:3000/blog/`
 - Japanese blog: `http://localhost:3000/ja/blog/`
 - To test CMS-authored public blog content locally, run the public site with `CMS_API_URL=http://localhost:3001`. When this is set, blog pages read published posts from the local CMS instead of falling back to Markdown content. Drafts remain visible only in Payload admin until published.
+- The public web app does not send `CMS_AUTH_TOKEN`, `CMS_API_TOKEN`, or any bearer token for CMS reads. Payload published content is read through normal public collection access. The seed script can use `CMS_AUTH_TOKEN` as an already-issued Payload login JWT; it is not the MCP API key and it is not generic REST API-key auth.
 
 ### Blog Editing Workflow
 
-Blog posts keep two body fields so the CMS can author in rich text while the static web app continues to consume Markdown:
+Blog posts keep two body fields so the CMS can author in Payload Lexical rich text while the static web app continues to consume Markdown:
 
-- `bodyRichText`: Payload Lexical rich text field shown by default.
-- `body`: Markdown textarea shown only when `Body editor` is set to `Raw Markdown`.
+- `bodyRichText`: Payload Lexical rich text field shown in admin.
+- `body`: hidden Markdown storage generated for the public website.
 
-On save, rich text mode converts `bodyRichText` to Markdown and stores it in `body`. Raw Markdown mode treats `body` as the source of truth, including when the textarea is intentionally cleared, and converts it back into `bodyRichText` for later rich text editing.
+On save, the CMS converts `bodyRichText` to Markdown and stores it in `body`. Existing Markdown content still backfills `bodyRichText` when read.
 
 Featured images are Payload upload relations to `media`. The relation picker is filtered to images, and the `media` collection rejects non-image uploads via Payload's native upload validation.
 
