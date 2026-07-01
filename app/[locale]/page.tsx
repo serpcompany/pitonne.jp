@@ -128,7 +128,7 @@ export default async function HomePage({ params }: Props) {
                 <span className="italic">{dict.home.clinicalCare}</span>
               </h2>
               <p className="text-muted-foreground mb-8">
-                {dict.home.heroDescription}
+                {dict.home.aboutDescription}
               </p>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3">
@@ -197,6 +197,33 @@ export default async function HomePage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {locale === "ja" ? (
+        <section className="py-20 lg:py-28 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4">
+                {dict.home.whyChooseFeaturesTitle}
+              </p>
+              <h2 className="text-3xl md:text-4xl font-serif mb-6">
+                {dict.home.whyChooseTitle}
+              </h2>
+              <div className="space-y-4 text-muted-foreground mb-8">
+                <p>{dict.home.whyChooseDescription}</p>
+                <p>{dict.home.whyChooseSecondaryDescription}</p>
+              </div>
+              <ul className="grid gap-3 md:grid-cols-2">
+                {dict.home.whyChooseFeatures.map((feature) => (
+                  <li key={feature} className="flex items-center gap-3">
+                    <Check className="h-5 w-5 shrink-0 text-[#7A8F87]" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* Blog Section */}
       <section className="py-20 lg:py-28 bg-white relative overflow-hidden">

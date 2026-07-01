@@ -33,10 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const wardLabel = typedLocale === "ja" ? ward.nameJa : ward.name
   const seoTitle = typedLocale === "ja"
-    ? `${wardLabel}の点滴療法・幹細胞・血液検査 | 東京`
+    ? `${wardLabel}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
     : `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
   const seoDescription = typedLocale === "ja"
-    ? `${wardLabel}（東京）での点滴療法、幹細胞治療、処方薬、血液検査。Pitonneの出張・クリニックウェルネスケア。`
+    ? `${wardLabel}での訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査。Pitonneがご希望の場所へ看護師を派遣します。`
     : `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
 
   return {
@@ -76,7 +76,7 @@ export default async function WardPage({ params }: Props) {
         ]}
         eyebrow={ward.nameJa}
         title={typedLocale === "ja"
-          ? `${ward.nameJa}（東京）の点滴療法・幹細胞・処方薬・血液検査`
+          ? `${ward.nameJa}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
           : `IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`}
         description={typedLocale === "ja" ? ward.descriptionJa : ward.description}
       />

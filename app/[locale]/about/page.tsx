@@ -119,8 +119,8 @@ export default async function AboutPage({ params }: Props) {
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img
-                  src="/images/content/pages/Back_View_H.jpg"
-                  alt="Pitonne private consultation room"
+                  src="/images/content/sheet/about-how-we-support-you.jpg"
+                  alt={dict.about.howWeSupportImageAlt}
                   className="w-full h-full object-cover"
                 />
               </div>

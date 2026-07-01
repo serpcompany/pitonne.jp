@@ -5,14 +5,17 @@ kind: parent
 category: blood-tests
 canonicalPath: /services/blood-tests/
 shortDescription: >-
-  Private blood testing designed to be added to your IV therapy appointment for
-  a convenient, discreet, and efficient wellness check.
+  Pitonne's blood testing is designed for clients who want to better understand
+  their current health status and support their ongoing health management.
+
+  It is often chosen by busy professionals, frequent travelers, and those who
+  may find it difficult to schedule routine health checkups.
 fullDescription: >-
-  Blood Testing at Pitonne is designed as a private and convenient option for
-  clients who want to monitor their condition as part of a modern wellness
-  routine. It is especially helpful for busy professionals, entrepreneurs,
-  freelancers, and travelers who may find it difficult to make time for standard
-  annual health checkups.
+  Pitonne's blood testing is designed for clients who want to better understand
+  their current health status and support their ongoing health management.
+
+  It is often chosen by busy professionals, frequent travelers, and those who
+  may find it difficult to schedule routine health checkups.
 image: /images/content/sheet/services/blood-tests.jpg
 imageSourcePath: /images/content/sheet/services/blood-tests.jpg
 benefits:
@@ -58,49 +61,12 @@ relatedServices:
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv
 ---
-## Treatment Overview
+Pitonne's blood testing is designed for clients who want to better understand their current health status and support their ongoing health management.
 
-Blood Testing at Pitonne is designed as a private and convenient option for clients who want to monitor their condition as part of a modern wellness routine. It is especially helpful for busy professionals, entrepreneurs, freelancers, and travelers who may find it difficult to make time for standard annual health checkups.
+It is often chosen by busy professionals, frequent travelers, and those who may find it difficult to schedule routine health checkups.
 
-When combined with IV therapy, blood collection is typically performed before the IV during the same appointment. In many cases, both the blood test and IV can be completed with a single needle insertion, allowing for a smoother and more efficient experience. The blood draw itself usually takes less than a minute.
+Because testing can be performed in the comfort of your home or hotel, it offers a convenient way to stay informed about your health.
 
-Results are typically available in about one week and are provided by a doctor via email or LINE. If any values require more urgent attention, our medical team may contact you sooner by phone. When appropriate, we may also assist with referrals for further evaluation or physician guided online prescriptions.
+For mobile visits, blood testing is available only as an add on to IV therapy appointments. We do not offer mobile blood draw appointments without IV therapy.
 
-At Pitonne, mobile blood testing is available only for clients receiving IV therapy. If you are interested in private blood testing only, please contact us in advance to discuss available options.
-
-## Why Clients Choose Blood Testing at Pitonne
-
-- Can be added to your IV therapy appointment for convenience
-- Often completed with a single needle insertion when combined with IV therapy
-- Blood collection is quick and usually takes less than a minute
-- Results are typically available in about one week
-- Results are delivered by a doctor via email or LINE
-- If significantly abnormal values are found, our medical team may contact you sooner by phone
-- Referrals for further testing or specialist evaluation may be available when needed
-- Depending on physician assessment, online prescriptions may also be available when appropriate
-- Private care offers a higher level of discretion and flexibility than standard insurance based testing
-
-## How It Works
-
-### 1. Consultation and Test Selection
-
-We review your goals, symptoms, and medical background, then confirm the most appropriate blood testing items for your needs.
-
-### 2. Blood Collection
-
-For clients receiving IV therapy, blood collection is usually performed before the IV during the same appointment. In many cases, both can be completed with a single needle insertion.
-
-### 3. Physician Review and Results
-
-Results are typically available in about one week and are reviewed by a doctor. Results are then shared with you by email or LINE. If urgent follow up is needed, our team may contact you sooner by phone.
-
-## Helpful Notes
-
-- Mobile blood testing is available only for clients receiving IV therapy.
-- If you would like blood testing only, please contact us in advance.
-- Blood collection is usually completed quickly and may take less than a minute.
-- Results are typically available in about one week.
-- Results are generally shared by a doctor via email or LINE.
-- If abnormal values require earlier attention, our medical team may contact you sooner by phone.
-- This is private medical care and is not covered by insurance.
-- Test items can be selected more flexibly depending on your goals and provider guidance.
+Clinic based blood testing is available by appointment and may be booked as a standalone service.

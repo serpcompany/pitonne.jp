@@ -79,6 +79,8 @@ export const serviceCategorySections: ServiceCategorySection[] = [
       "skin-brightening-iv-drip",
       "immune-boost-iv-therapy",
       "iv-vitamin-therapy",
+      "high-dose-vitamin-c-iv-therapy",
+      "nmn-iv-therapy",
     ],
   },
   {

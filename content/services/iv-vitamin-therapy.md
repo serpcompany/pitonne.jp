@@ -1,96 +1,131 @@
 ---
-title: IV Vitamin Therapy
+title: Custom Vitamin IV & Injection
 slug: iv-vitamin-therapy
 kind: leaf
 category: iv-therapy
 parentSlug: iv-therapy
 canonicalPath: /services/iv-vitamin-therapy/
 shortDescription: >-
-  A versatile IV therapy designed to deliver hydration, essential vitamins, and
-  nutrients for daily wellness, recovery, and vitality support.
+  A personalized vitamin therapy designed to match your individual health goals,
+  lifestyle, and condition.
+
+  Following an online consultation with a partner physician, your treatment is
+  customized using vitamins, minerals, and other supportive nutrients based on
+  your needs.
+
+  Depending on the formulation and your schedule, treatment may be provided as
+  either an IV drip or an intravenous injection.
 fullDescription: >-
-  IV Vitamin Therapy is designed to deliver hydration, essential vitamins,
-  minerals, and supportive nutrients directly into the bloodstream for efficient
-  absorption and condition support. This treatment is often chosen by clients
-  who want practical wellness support for hydration, fatigue, recovery, and
-  daily condition maintenance.
+  Pitonne's Custom Vitamin IV & Injection allows your treatment to be tailored
+  to your health condition, wellness goals, and lifestyle.
+
+  It is a popular option for busy professionals, travelers, and clients who want
+  a personalized approach to hydration and nutrient support.
+
+  Most treatments are provided as an IV drip. However, if you have limited time,
+  certain formulations may be administered as a quick intravenous injection
+  instead.
+
+  An IV drip typically takes 30–45 minutes, while an intravenous injection can
+  often be completed in approximately 15 minutes.
+
+  Please note that intravenous injection is not suitable for every formulation.
+  Eligibility depends on the selected ingredients, dosage, and your physician's
+  recommendation.
 image: /images/content/sheet/services/iv-vitamin-therapy.jpg
 imageSourcePath: /images/content/sheet/services/iv-vitamin-therapy.jpg
 benefits:
-  - Supports hydration and daily recovery
-  - Helps support energy levels and vitality
-  - Supports immune function and general wellness
-  - Provides vitamins and nutrients for condition support
-  - May help support mental clarity and overall balance
+  - Personalized treatment based on your health goals
+  - Custom vitamin and nutrient formulations
+  - Choice of IV drip or intravenous injection when appropriate
+  - Physician-guided online consultation
+  - 'Available at your home, hotel, office, or our partner clinic'
 keyPoints:
-  - Supports hydration and daily recovery
-  - Helps support energy levels and vitality
-  - Supports immune function and general wellness
+  - Personalized treatment based on your health goals
+  - Custom vitamin and nutrient formulations
+  - Choice of IV drip or intravenous injection when appropriate
 faqs:
-  - question: What is IV Vitamin Therapy?
+  - question: What is Custom Vitamin IV & Injection?
     answer: >-
-      IV Vitamin Therapy is a hydration and nutrient-based IV treatment designed
-      to deliver vitamins, minerals, and supportive nutrients directly into the
-      bloodstream for efficient absorption and overall wellness support.
-  - question: What can this treatment support?
+      It is a personalized vitamin therapy tailored to your health condition and
+      wellness goals using physician-guided treatment planning.
+  - question: Can I choose an injection instead of an IV drip?
     answer: >-
-      This treatment may help support hydration, recovery, energy levels, immune
-      function, and overall vitality. Your provider may tailor the treatment
-      based on your goals and current condition.
-  - question: How is this different from a standard hydration IV?
+      In many cases, yes. Depending on the formulation, dosage, and your
+      treatment plan, a quick intravenous injection may be available.
+  - question: How long does treatment take?
     answer: >-
-      A hydration-focused IV is generally centered on fluid and electrolyte
-      support, while IV Vitamin Therapy may include additional vitamins and
-      nutrients for broader wellness and recovery support. The most suitable
-      option depends on your goals and provider guidance.
-  - question: How often can I receive this treatment?
+      IV drips generally take 30–45 minutes, while intravenous injections can
+      often be completed in about 15 minutes.
+  - question: Can the formulation be customized?
     answer: >-
-      Treatment frequency depends on your goals, daily routine, and overall
-      wellness plan. Some clients choose it occasionally, while others may
-      incorporate it into a regular wellness routine based on provider
-      recommendations.
+      Yes. Your physician will recommend a personalized combination of vitamins
+      and nutrients based on your health condition, goals, and medical history.
 relatedServices:
   - energy-fatigue-recovery-iv
   - immune-boost-iv-therapy
 ---
+A personalized vitamin therapy designed to match your individual health goals, lifestyle, and condition.
+
+Following an online consultation with a partner physician, your treatment is customized using vitamins, minerals, and other supportive nutrients based on your needs.
+
+Depending on the formulation and your schedule, treatment may be provided as either an IV drip or an intravenous injection.
+
+---
+
 ## Treatment Overview
 
-IV Vitamin Therapy is designed to deliver hydration, essential vitamins, minerals, and supportive nutrients directly into the bloodstream for efficient absorption and condition support. This treatment is often chosen by clients who want practical wellness support for hydration, fatigue, recovery, and daily condition maintenance.
+### Custom Vitamin IV & Injection
 
-It may help support energy levels, hydration balance, immune function, and overall vitality, making it a flexible option for busy professionals, travelers, and anyone looking to maintain day-to-day wellness and performance.
+Pitonne's Custom Vitamin IV & Injection allows your treatment to be tailored to your health condition, wellness goals, and lifestyle.
 
-At Pitonne, selected treatments may be provided after an online medical consultation with a partner physician, followed by a personalized IV appointment at home, in a hotel, at the office, or at our partner clinic in Nishi Azabu.
+It is a popular option for busy professionals, travelers, and clients who want a personalized approach to hydration and nutrient support.
+
+Most treatments are provided as an IV drip. However, if you have limited time, certain formulations may be administered as a quick intravenous injection instead.
+
+An IV drip typically takes **30–45 minutes**, while an intravenous injection can often be completed in **approximately 15 minutes**.
+
+Please note that intravenous injection is not suitable for every formulation. Eligibility depends on the selected ingredients, dosage, and your physician's recommendation.
+
+---
 
 ## Key Benefits
 
-- Supports hydration and daily recovery
-- Helps support energy levels and vitality
-- Supports immune function and general wellness
-- Provides vitamins and nutrients for condition support
-- May help support mental clarity and overall balance
+* Personalized treatment based on your health goals
+* Custom vitamin and nutrient formulations
+* Choice of IV drip or intravenous injection when appropriate
+* Physician-guided online consultation
+* Available at your home, hotel, office, or our partner clinic
+
+---
 
 ## How It Works
 
-### 1. Consultation
+### 1. Online Consultation
 
-We review your symptoms, goals, and health history to determine whether this treatment is appropriate for you.
+Your symptoms, health history, current medications, and treatment goals are reviewed by a partner physician.
 
-### 2. Personalized Plan
+### 2. Personalized Treatment Plan
 
-Your treatment plan is tailored based on your condition, schedule, and wellness priorities. Timing, expectations, and any questions are reviewed before treatment begins.
+A customized formulation is recommended based on your condition and wellness priorities.
 
-### 3. Treatment and Follow-Up
+If appropriate, your provider will also advise whether an IV drip or intravenous injection is the better option.
 
-Treatment is provided with comfort, safety, and practical wellness support in mind. Ongoing guidance may be provided depending on your treatment plan and goals.
+### 3. Treatment & Follow-Up
+
+Your treatment is provided by a registered nurse with safety and comfort in mind.
+
+Follow-up guidance is available whenever needed.
+
+---
 
 ## Helpful Notes
 
-- Please follow any guidance provided before and after treatment.
-- Staying hydrated and allowing time for recovery may help support your results.
-- Treatment frequency may vary depending on your condition and wellness goals.
-- If you have any questions after treatment, please contact us.
-- This treatment is intended as supportive wellness care and is not a substitute for regular medical care or treatment.
+* Treatment is available only after physician assessment.
+* IV drips typically take **30–45 minutes**.
+* Intravenous injections usually take **around 15 minutes**.
+* Not all formulations can be administered as an injection.
+* Eligibility depends on the ingredients, dosage, and your individual treatment plan.
+* Please contact us if you have any questions before or after your appointment.
 
-## Physician-Guided Wellness Care
-
-Your provider can help determine whether IV Vitamin Therapy, a hydration-focused IV, or another option best fits your goals.
+---
