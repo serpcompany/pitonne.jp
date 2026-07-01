@@ -61,21 +61,60 @@ Medication-based care can be a good fit when a patient wants a discreet treatmen
 
 ## How It Works
 
-### 1. Online Consultation
+### 1. Choose Your Consultation Menu
 
-We review symptoms, goals, health history, and current medications through a private online consultation with a partner physician.
+Select the consultation or prescription menu that best fits your needs.
 
-### 2. Personalized Plan
+Pitonne offers physician guided online prescription services for selected treatments, including discreet and convenient options for clients who prefer remote care in Tokyo.
 
-If treatment is appropriate, the physician recommends the suitable prescription option and explains use, timing, precautions, and expectations.
+### 2. Submit Your Information
 
-### 3. Pickup or Delivery
+At the time of booking, we will ask you to provide the necessary information in advance, including:
 
-If prescribed, eligible medication can be arranged for clinic pickup or local delivery, including bike courier service in select central Tokyo areas.
+- Full name
+- Date of birth
+- Email address
+- Delivery address or clinic pickup preference
+- Medical history
+- Current medications
+- Allergy information
+
+This helps us prepare your consultation safely and efficiently.
+
+### 3. Online Medical Consultation
+
+You will complete an online medical consultation with our partner physician.
+
+Based on your symptoms, medical history, and treatment goals, the physician will determine whether a prescription is appropriate.
+
+For follow up visits, re-examination fees are waived unless otherwise advised.
+
+### 4. Payment
+
+After your consultation, payment is completed by cashless payment, such as credit card.
+
+Please note that delivery fees are charged separately for online prescription orders unless you choose clinic pickup.
+
+### 5. Receive Your Medication
+
+After payment is confirmed, your medication can be received in one of the following ways:
+
+- Clinic pickup: Free of charge
+- Within 5 km: ¥4,400
+- 5-10 km: ¥6,600
+- 10-20 km: ¥9,900
+- Over 20 km: Please contact us
+
+Delivery fees include bike courier delivery and handling fees.
+
+Same day delivery may be available depending on your location and appointment time.
 
 ## Helpful Notes
 
-- Medication services require physician assessment and prescription approval.
-- Share your full health history and current medications during consultation.
-- Delivery availability depends on your location and selected service option.
-- Always follow provider instructions for timing, dosage, and use.
+- This service is by appointment only.
+- Prescription approval is subject to physician assessment and may not be available in all cases.
+- Delivery fees apply separately for online prescription orders unless you choose clinic pickup.
+- Delivery fees include bike courier delivery and handling fees.
+- Same day delivery may be available depending on your location and timing, but cannot be guaranteed.
+- Follow up visits may be available with no re-examination fee, depending on the treatment.
+- If you are unsure which menu to choose, please contact us in advance.

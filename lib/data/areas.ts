@@ -25,7 +25,7 @@ export const wards: Ward[] = [
     name: "Minato",
     nameJa: "港区",
     description: "Minato is one of Tokyo's most prestigious wards, home to embassies, international businesses, and upscale residential areas. Our Nishi Azabu clinic is centrally located in Minato, providing convenient access to premium IV therapy and stem cell treatments.",
-    descriptionJa: "港区は東京で最も格式の高い区のひとつで、各国大使館、国際的な企業、高級住宅地が集まるエリアです。Pitonneの西麻布クリニックは港区の中心部に位置し、上質な点滴療法や幹細胞治療への便利なアクセスを提供しています。",
+    descriptionJa: "港区は、大使館や外資系企業、高級住宅街が集まる、東京を代表する国際色豊かなエリアです。 Pitonneは西麻布を拠点としており、港区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。",
     areas: [
       {
         slug: "roppongi",
@@ -160,7 +160,7 @@ export const wards: Ward[] = [
     name: "Shibuya",
     nameJa: "渋谷区",
     description: "Shibuya ward is the heart of Tokyo's youth culture, fashion, and technology scenes. From the famous Shibuya Crossing to the trendy streets of Harajuku, this dynamic ward attracts visitors and residents who appreciate our modern approach to wellness.",
-    descriptionJa: "渋谷区は東京の若者文化、ファッション、テクノロジーの中心地です。有名な渋谷スクランブル交差点から原宿のトレンディな通りまで、Pitonneのモダンなウェルネスアプローチを支持する方々が集まる活気あふれる区です。",
+    descriptionJa: "渋谷区は、流行や文化の発信地として知られ、オフィスや商業施設、住宅街が調和する東京を代表するエリアです。 Pitonneでは、渋谷区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。",
     areas: [
       {
         slug: "ebisu",
@@ -337,7 +337,7 @@ export const wards: Ward[] = [
     name: "Chuo",
     nameJa: "中央区",
     description: "Chuo ward is Tokyo's historic commercial heart, encompassing the luxury shopping district of Ginza and the traditional market area of Tsukiji. Business travelers and tourists in this central location benefit from our convenient IV therapy services.",
-    descriptionJa: "中央区は東京の歴史ある商業の中心地で、高級ショッピング街の銀座や伝統的な市場エリアの築地を擁しています。この中心的なロケーションに滞在するビジネス旅行者や観光客の方々に、Pitonneの便利な点滴療法サービスをご利用いただいています。",
+    descriptionJa: "中央区は、銀座や築地をはじめ、商業施設やオフィス、ホテルが集まる東京を代表するエリアです。 Pitonneでは、中央区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスなど、ご希望の場所へ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。",
     areas: [
       {
         slug: "ginza",
@@ -430,7 +430,7 @@ export const wards: Ward[] = [
     name: "Chiyoda",
     nameJa: "千代田区",
     description: "Chiyoda ward is Tokyo's political and business center, home to the Imperial Palace, government ministries, and major corporate headquarters. Our professional IV therapy services cater to the busy executives and officials working in this important district.",
-    descriptionJa: "千代田区は皇居、官公庁、大企業の本社が集まる東京の政治・ビジネスの中心です。Pitonneのプロフェッショナルな点滴療法サービスは、この重要な地区で働く多忙なエグゼクティブや関係者の方々にご利用いただいています。",
+    descriptionJa: "千代田区は、皇居や官公庁、大手企業の本社が集まる、東京を代表するビジネス・行政の中心地です。 Pitonneでは、千代田区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスなど、ご希望の場所へ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。",
     areas: [
       {
         slug: "kanda",
@@ -523,7 +523,7 @@ export const wards: Ward[] = [
     name: "Shinagawa",
     nameJa: "品川区",
     description: "Shinagawa ward is a major business and transportation hub, home to many corporate headquarters and the Shinkansen station connecting Tokyo to western Japan. Our IV therapy services support the busy professionals passing through this vital area.",
-    descriptionJa: "品川区は多くの企業本社と西日本を結ぶ新幹線駅を擁する主要なビジネス・交通拠点です。Pitonneの点滴療法サービスは、この重要なエリアを行き来する多忙なプロフェッショナルの方々をサポートしています。",
+    descriptionJa: "品川区は、多くの企業が集まるビジネス街であり、新幹線が発着する品川駅を有する東京の主要な交通拠点です。 Pitonneでは、品川区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。",
     areas: [
       {
         slug: "gotanda",
