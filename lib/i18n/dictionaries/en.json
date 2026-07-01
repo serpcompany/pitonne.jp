@@ -54,7 +54,19 @@
     "medicationTitle": "Medication",
     "medicationDescription": "Prescription-based support delivered with discretion and physician review where appropriate.",
     "bloodTestsTitle": "Blood Tests",
-    "bloodTestsDescription": "Private blood testing with hormone panels, nutrition evaluation, and tumor marker screening options."
+    "bloodTestsDescription": "Private blood testing with hormone panels, nutrition evaluation, and tumor marker screening options.",
+    "aboutDescription": "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care.",
+    "whyChooseTitle": "Why Choose Pitonne",
+    "whyChooseDescription": "Pitonne provides discreet concierge wellness support with registered nurse-led care and physician collaboration.",
+    "whyChooseSecondaryDescription": "Our service is designed for busy professionals, international visitors, and clients who want efficient, private wellness care in Tokyo.",
+    "whyChooseFeaturesTitle": "Pitonne Features",
+    "whyChooseFeatures": [
+      "Privacy-conscious concierge support",
+      "Registered nurse visit support",
+      "Physician collaboration",
+      "Convenience at home or hotels",
+      "Care plans tailored to each client"
+    ]
   },
   "footer": {
     "quickLinks": "Quick Links",
@@ -83,6 +95,7 @@
     "visitBasedCareTitle": "Visit-Based Care Designed Around",
     "realLife": "Real Life.",
     "visitBasedCareContent": "Pitonne provides flexible visit based care for people who want wellness support that fits naturally into their schedule. Whether at home, in a hotel, or between demanding work commitments, our service is built to offer discreet and comfortable care in a setting that feels convenient and private. We support clients who value time, personalized attention, and a calmer care experience in Tokyo.",
+    "howWeSupportImageAlt": "Pitonne visit-based care team arriving for private support",
     "teamKanakoName": "Kanako Shimizu",
     "teamKanakoRole": "Registered Nurse & Public Health Nurse",
     "teamKanakoBio": "Kanako is involved in the operation of a regenerative medicine clinic, with a focus on health optimization and preventive care. As a registered nurse and public health nurse, she supports treatments using stem cell conditioned media and provides wellness support including corporate programs, weight management, and fasting guidance. She believes in helping people care for their health before illness develops, while balancing preventive care with conventional medicine.",
@@ -103,11 +116,116 @@
     "frequentlyAskedQuestions": "Frequently Asked Questions",
     "metaDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
     "heroDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.",
+    "heroImageAlt": "Pitonne online consultation and wellness service planning",
     "bookThisService": "Book This Service",
     "bookServiceDescription": "Use Pitonne's booking system to request a consultation and confirm whether this service fits your goals.",
     "availableTreatments": "Available Treatments",
     "viewAllServices": "View all services",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "howItWorksTitle": "How It Works",
+    "howItWorksDescription": "Simple, discreet, and physician guided care from booking to treatment or prescription delivery.",
+    "pricingTitle": "Transparent pricing for mobile IV therapy and online prescription services",
+    "pricingDescription": "All prices below include tax. For mobile IV therapy, additional travel fees may apply depending on your location. If you visit our clinic directly for IV therapy, ¥5,000 will be deducted from the listed IV treatment price. For online prescriptions, clinic pickup is free, while bike courier delivery fees apply separately depending on the delivery distance.",
+    "pricingSections": [
+      {
+        "title": "IV Therapy Pricing",
+        "items": [
+          {
+            "label": "Exosome IV Drip",
+            "price": "¥165,000"
+          },
+          {
+            "label": "Hangover Recovery IV",
+            "price": "¥33,000"
+          },
+          {
+            "label": "Energy & Fatigue Recovery IV",
+            "price": "¥33,000"
+          },
+          {
+            "label": "Skin Brightening / Sun Exposure Support IV",
+            "price": "¥33,000"
+          },
+          {
+            "label": "Immune Support IV",
+            "price": "¥33,000"
+          },
+          {
+            "label": "Vitamin Injection (optional add-on only)",
+            "price": "from ¥11,000"
+          },
+          {
+            "label": "Blood Testing (optional add-on only)",
+            "price": "from ¥11,000"
+          },
+          {
+            "label": "Within 5 km of Nishi Azabu",
+            "price": "Included"
+          },
+          {
+            "label": "5 to 10 km mobile visit fee",
+            "price": "¥11,000"
+          },
+          {
+            "label": "10 to 20 km mobile visit fee",
+            "price": "¥16,500"
+          },
+          {
+            "label": "Over 20 km mobile visit fee",
+            "price": "from ¥26,500"
+          }
+        ]
+      },
+      {
+        "title": "Online Prescription Pricing",
+        "items": [
+          {
+            "label": "Initial Online Consultation",
+            "price": "¥5,500"
+          },
+          {
+            "label": "Cialis 20 mg (2 tablets)",
+            "price": "from ¥4,400"
+          },
+          {
+            "label": "Cialis 20 mg (10 tablets)",
+            "price": "¥22,000"
+          },
+          {
+            "label": "AGA Medication Set",
+            "price": "¥11,000"
+          },
+          {
+            "label": "Stem Cell Nasal Spray (1 bottle)",
+            "price": "from ¥22,000"
+          },
+          {
+            "label": "Clinic pickup",
+            "price": "Free"
+          },
+          {
+            "label": "Bike courier delivery within 5 km",
+            "price": "¥4,400"
+          },
+          {
+            "label": "Bike courier delivery 5 to 10 km",
+            "price": "¥6,600"
+          },
+          {
+            "label": "Bike courier delivery 10 to 20 km",
+            "price": "¥9,900"
+          }
+        ]
+      }
+    ],
+    "pricingNotesTitle": "Important Notes",
+    "pricingNotes": [
+      "All prices shown include tax.",
+      "Mobile IV therapy includes the visit fee within 5 km of Nishi Azabu. Additional travel fees apply for locations beyond 5 km.",
+      "Clients who visit the clinic directly for IV therapy receive a ¥5,000 discount on the listed IV treatment price.",
+      "For online prescriptions, clinic pickup is free. Bike courier delivery fees apply separately based on delivery distance.",
+      "Treatment suitability and final recommendations are determined after consultation."
+    ]
   },
   "blog": {
     "blog": "Blog",
@@ -137,7 +255,13 @@
     "consultationDescription": "Interested in learning more? Book a consultation to discuss how our services can support your wellness goals.",
     "contactPitonne": "Contact Pitonne",
     "contactDescription": "Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.",
-    "relatedPitonneServices": "Related Pitonne Services"
+    "relatedPitonneServices": "Related Pitonne Services",
+    "categoryDescriptions": {
+      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team."
+    },
+    "categoryCtaDescriptions": {
+      "iv-therapy": "Our team is ready to help you learn more about IV therapy and how it might support your goals."
+    }
   },
   "contact": {
     "contactUs": "Contact Us",
@@ -153,12 +277,12 @@
   },
   "faqs": {
     "frequentlyAskedQuestions": "Frequently Asked Questions",
-    "metaDescription": "Answers to common questions about Pitonne mobile visits, in clinic appointments, IV therapy, Exosome IV therapy, service areas, and booking in Tokyo.",
+    "metaDescription": "Find answers to common questions about mobile visits, in clinic appointments, service areas, appointment preparation, and Exosome IV therapy.",
     "heroDescription": "Find answers to common questions about mobile visits, in clinic appointments, service areas, appointment preparation, and Exosome IV therapy.",
     "items": [
       {
         "question": "Are both mobile visits and in clinic appointments available?",
-        "answer": "Yes. Pitonne primarily offers mobile visits to your home, hotel, or office, and in clinic appointments are also available. For in clinic appointments, a \u00A55,000 discount applies to IV therapy services."
+        "answer": "Yes. Pitonne primarily offers mobile visits to your home, hotel, or office, and in clinic appointments are also available. For in clinic appointments, a ¥5,000 discount applies to IV therapy services."
       },
       {
         "question": "What areas do you serve for mobile visits?",
@@ -170,15 +294,15 @@
       },
       {
         "question": "Is there a discount for in clinic appointments?",
-        "answer": "Yes. For in clinic appointments, a \u00A55,000 discount applies to IV therapy services. Please note that some services, such as blood testing, may be excluded."
+        "answer": "Yes. For in clinic appointments, a ¥5,000 discount applies to IV therapy services. Please note that some services, such as blood testing, may be excluded."
       },
       {
         "question": "Is an online medical consultation required before Exosome IV therapy?",
         "answer": "Yes. Exosome IV therapy is provided after an online medical consultation with a physician. Treatment is recommended based on your condition, goals, and medical suitability."
       },
       {
-        "question": "Who is Exosome IV therapy recommended for?",
-        "answer": "Exosome IV therapy may be suitable for those seeking enhanced recovery, improved overall condition, or additional support during demanding periods. It is also selected by some clients for advanced conditioning and men's wellness support."
+        "question": "What purposes do clients typically choose Exosome IV therapy for?",
+        "answer": "Exosome IV therapy is selected by some clients as part of their health management and conditioning routine. It is also chosen by those seeking additional support during demanding periods."
       },
       {
         "question": "Can treatments be provided at hotels or offices?",
@@ -198,11 +322,11 @@
       },
       {
         "question": "Can I change or cancel my appointment?",
-        "answer": "If you need to change or cancel your appointment, please contact us as early as possible. Depending on the timing and service booked, our cancellation policy may apply."
+        "answer": "If you need to change or cancel your appointment, please contact us as early as possible.\n\nCancellation fees apply starting 24 hours before your scheduled appointment time."
       },
       {
         "question": "Are same day appointments available?",
-        "answer": "Same day appointments may be available depending on schedule and location. Please contact us first to confirm availability."
+        "answer": "Same day appointments may be available depending on schedule and location. Please contact us to confirm availability."
       }
     ]
   },

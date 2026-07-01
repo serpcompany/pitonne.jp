@@ -40,6 +40,11 @@ export function Header({
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false)
+    setMobileExpandedSection(null)
+  }
+
   const areasMenu = {
     wards: getAreaNavigation(locale),
   }
@@ -290,7 +295,7 @@ export function Header({
                             key={link.name}
                             href={link.href}
                             className="block py-1 text-sm text-muted-foreground"
-                            onClick={() => setMobileMenuOpen(false)}
+                            onClick={closeMobileMenu}
                           >
                             {link.name}
                           </Link>
@@ -306,7 +311,7 @@ export function Header({
                             <Link
                               href={category.href}
                               className="block py-1 text-sm font-medium text-foreground"
-                              onClick={() => setMobileMenuOpen(false)}
+                              onClick={closeMobileMenu}
                             >
                               {category.name}
                             </Link>
@@ -316,7 +321,7 @@ export function Header({
                                   key={service.name}
                                   href={service.href}
                                   className="block py-1 text-sm text-muted-foreground"
-                                  onClick={() => setMobileMenuOpen(false)}
+                                  onClick={closeMobileMenu}
                                 >
                                   {service.name}
                                 </Link>
@@ -335,7 +340,7 @@ export function Header({
                             <Link
                               href={ward.href}
                               className="block py-1 text-sm font-medium text-foreground"
-                              onClick={() => setMobileMenuOpen(false)}
+                              onClick={closeMobileMenu}
                             >
                               {ward.name} <span className="text-muted-foreground font-normal">{ward.nameJa}</span>
                             </Link>
@@ -345,7 +350,7 @@ export function Header({
                                   key={area.name}
                                   href={area.href}
                                   className="block py-1 text-sm text-muted-foreground"
-                                  onClick={() => setMobileMenuOpen(false)}
+                                  onClick={closeMobileMenu}
                                 >
                                   {area.name}
                                 </Link>
@@ -360,7 +365,7 @@ export function Header({
                   <Link
                     href={item.href}
                     className="block py-2 text-base font-medium text-foreground"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     {item.name}
                   </Link>
@@ -371,13 +376,13 @@ export function Header({
             <div className="pt-4 border-t border-border">
               <div className="mb-3 space-y-2">
                 {phoneLinks.map((phone) => (
-                  <a key={phone.label} href={phone.href} className="flex items-center gap-2 text-sm font-medium">
+                  <a key={phone.label} href={phone.href} className="flex items-center gap-2 text-sm font-medium" onClick={closeMobileMenu}>
                     <Phone className="h-4 w-4" />
                     <span>{phone.label}: {phone.number}</span>
                   </a>
                 ))}
               </div>
-              <ContactButton className="w-full px-5 py-2.5" locale={locale}>
+              <ContactButton className="w-full px-5 py-2.5" locale={locale} onClick={closeMobileMenu}>
                 {dict.common.contactUs}
               </ContactButton>
             </div>

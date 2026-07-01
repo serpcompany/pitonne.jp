@@ -29,18 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
   if (!category) return { title: dict.common.notFoundCategory }
+  const categoryDescriptions = dict.blog.categoryDescriptions as Record<string, string>
+  const categoryDescription = categoryDescriptions[category.slug] ?? dict.blog.heroDescription
 
   return {
     title: `${category.name} ${dict.blog.articles}`,
-    description: typedLocale === "ja"
-      ? `${category.name}に関する記事とガイドをご覧ください。`
-      : `Explore our ${category.name.toLowerCase()} articles and guides.`,
+    description: categoryDescription,
     alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale),
     openGraph: {
       title: `${category.name} ${dict.blog.articles}`,
-      description: typedLocale === "ja"
-        ? `${category.name}に関する記事とガイドをご覧ください。`
-        : `Explore our ${category.name.toLowerCase()} articles and guides.`,
+      description: categoryDescription,
       url: localizedCanonicalUrl(`/blog/category/${category.slug}/`, typedLocale),
       locale: locale === "ja" ? "ja_JP" : "en_US",
     },
@@ -59,9 +57,10 @@ export default async function BlogCategoryPage({ params }: Props) {
     notFound()
   }
 
-  const categoryDescription = typedLocale === "ja"
-    ? `Pitonneチームによる${category.name}に関する記事とガイドをご覧ください。`
-    : `Explore our ${category.name.toLowerCase()} articles and guides from the Pitonne team.`
+  const categoryDescriptions = dict.blog.categoryDescriptions as Record<string, string>
+  const categoryCtaDescriptions = dict.blog.categoryCtaDescriptions as Record<string, string>
+  const categoryDescription = categoryDescriptions[category.slug] ?? dict.blog.heroDescription
+  const categoryCtaDescription = categoryCtaDescriptions[category.slug] ?? dict.blog.contactDescription
   const categoryPosts = getBlogPostsByCategory(categorySlug, typedLocale)
 
   return (
@@ -174,9 +173,7 @@ export default async function BlogCategoryPage({ params }: Props) {
             {dict.blog.haveQuestions}
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            {typedLocale === "ja"
-              ? `${category.name}についてもっと知りたい方は、お気軽にお問い合わせください。`
-              : `Our team is ready to help you learn more about ${category.name.toLowerCase()} and how it might benefit you.`}
+            {categoryCtaDescription}
           </p>
           <ContactButton locale={typedLocale} />
         </div>

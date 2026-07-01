@@ -7,6 +7,8 @@ import { serviceJsonLd } from "@/lib/structured-data"
 import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 export function ServiceParentTemplate({ service, childServices, locale = "en" as Locale }: { service: Service; childServices: Service[]; locale?: Locale }) {
   const dict = getDictionary(locale)
@@ -32,6 +34,12 @@ export function ServiceParentTemplate({ service, childServices, locale = "en" as
 
       <section className="bg-card py-16 md:py-20">
         <div className="container mx-auto px-4">
+          {service.content && (
+            <section className="blog-prose mx-auto mb-16 max-w-4xl">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{service.content}</ReactMarkdown>
+            </section>
+          )}
+
           <div className="mb-8 flex items-center justify-between gap-6">
             <h2 className="font-serif text-3xl text-foreground md:text-4xl">{dict.services.availableTreatments}</h2>
             <Link href={localizedRoute("/services/", locale)} className="text-sm text-[#7A8F87] hover:underline">
