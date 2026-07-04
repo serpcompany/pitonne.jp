@@ -28,6 +28,8 @@ IV therapy for hangover is one of the most common wellness search phrases in thi
 
 At Pitonne, the better framing is that IV therapy for hangover may help support hydration and comfort in selected situations after clinician screening. It is not a cure for heavy drinking, it does not erase the effects of alcohol instantly, and it should never be used to gloss over symptoms that may actually point to alcohol poisoning or another urgent issue.
 
+{{video:does-a-hangover-iv-really-help}}
+
 ## What People Usually Mean by "IV Therapy for Hangover"
 
 Most people searching this phrase are dealing with a mix of [dehydration](/blog/iv-therapy-for-dehydration/), headache, nausea, [fatigue](/blog/iv-therapy-for-fatigue/), and that washed-out feeling that can follow a night of drinking. They are usually not asking for a complex medical intervention. They are asking whether hydration support may help them recover more comfortably.

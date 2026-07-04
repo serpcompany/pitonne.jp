@@ -15,6 +15,31 @@ export interface PitonneVideo {
 
 const rawVideos = [
   {
+    slug: "iv-therapy-for-hangover-hydration-and-recovery-support",
+    title: "IV Therapy for Hangover Hydration & Recovery Support",
+    description:
+      "Click here to get started: https://pitonne.jp/\n\nWhat is a Hangover IV, and can it help after a night of drinking? In this video, a doctor explains Hangover IV therapy in simple, patient-friendly English, including hydration support, alcohol-related fatigue, and the importance of medical screening before treatment.\n\nAt Pitonne | Stem Cell & IV Therapy, we support international travelers, foreign residents in Tokyo, business travelers, and busy professionals seeking private, convenient, medically guided care. Our mobile IV service is appointment-based, with nurse visits to your home, hotel, or office within our coverage area, followed by an online medical consultation before treatment. If approved by the physician, IV therapy is administered safely by our nurse. Clinic visits are also available with a ¥5,000 discount on IV menu prices.\nFor more information, please visit our website and contact us for a consultation.\n\n\n#HangoverIVTokyo #HangoverIV #HangoverDripTokyo #HangoverTreatmentTokyo #IVTherapyTokyo #MobileIVTokyo #TokyoIVTherapy #HydrationIVTokyo #IVDripTokyo #MobileIVTherapyTokyo #HangoverRecoveryTokyo #DehydrationSupportTokyo #AlcoholRecoveryIV #TokyoWellnessClinic #TokyoMedicalWellness #HotelIVServiceTokyo #HomeIVTherapyTokyo #OfficeIVTherapyTokyo #TravelWellnessTokyo #BusinessTravelerTokyo #TokyoHealthSupport #PrivateIVTokyo #DoctorGuidedIVTokyo #NurseVisitIVTokyo #WellnessIVTokyo #VitaminIVTokyo #TokyoRecoverySupport #InternationalPatientsTokyo #TokyoClinic #TokyoMobileIV",
+    url: "https://www.youtube.com/watch?v=wDjmsOyulh0",
+    youtubeId: "wDjmsOyulh0",
+    thumbnailUrl: "https://i.ytimg.com/vi/wDjmsOyulh0/hqdefault.jpg",
+    uploadDate: "2026-06-13T00:00:00.000Z",
+    duration: "PT2M14S",
+  },
+  {
+    slug: "tokyo-mobile-iv-hotel-home-office",
+    title: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
+    titleJa: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
+    description:
+      "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします\nhttps://pitonne.jp/\n\n#MobileIVTokyo\n#HowToBookAMobileIV\n#HowToBookMobileIVTokyo\n#MobileIVTherapyTokyo\n#MobileIV\n#TokyoMobileIVTherapy\n#MobileIVTreatmentTokyo\n#MobileIVDripTokyo\n#IVTherapyTokyo\n#MobileHydrationTherapyTokyo\n#MobileIVClinicTokyo\n#IVDripTherapyTokyo\n#BestMobileIVTokyo\n#MobileIVInfusionTokyo\n#MobileIVWellnessTokyo\n#MobileIVVitaminTherapyTokyo\n#BookMobileIVTokyo\n#MobileIVHealthTokyo\n#MobileIVAppointmentTokyo",
+    descriptionJa:
+      "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします\nhttps://pitonne.jp/\n\n#MobileIVTokyo\n#HowToBookAMobileIV\n#HowToBookMobileIVTokyo\n#MobileIVTherapyTokyo\n#MobileIV\n#TokyoMobileIVTherapy\n#MobileIVTreatmentTokyo\n#MobileIVDripTokyo\n#IVTherapyTokyo\n#MobileHydrationTherapyTokyo\n#MobileIVClinicTokyo\n#IVDripTherapyTokyo\n#BestMobileIVTokyo\n#MobileIVInfusionTokyo\n#MobileIVWellnessTokyo\n#MobileIVVitaminTherapyTokyo\n#BookMobileIVTokyo\n#MobileIVHealthTokyo\n#MobileIVAppointmentTokyo",
+    url: "https://www.youtube.com/watch?v=IGmMAn8K7UY",
+    youtubeId: "IGmMAn8K7UY",
+    thumbnailUrl: "https://i.ytimg.com/vi/IGmMAn8K7UY/hqdefault.jpg",
+    uploadDate: "2026-06-13T00:00:00.000Z",
+    duration: "PT2M34S",
+  },
+  {
     slug: "how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo-ova",
     title: "How to Book a Mobile IV at Your Hotel, Home, or Office in Tokyo",
     titleJa: "東京のホテル・自宅・オフィスで出張点滴を予約する方法",

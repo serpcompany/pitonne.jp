@@ -200,6 +200,12 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           {/* Services */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">{dict.nav.services}</h3>
+            <Link
+              href={localizedRoute(canonicalRoutes.services, locale)}
+              className="text-sm text-[#4AA69D] hover:text-[#5bc4ba] transition-colors mb-3 inline-block"
+            >
+              {dict.nav.viewAllServices}
+            </Link>
             <ul className="space-y-2">
               {serviceLinks.map((link) => (
                 <li key={link.name}>

@@ -34,6 +34,8 @@ At Pitonne | Stem Cell & IV Therapy, we offer both in-clinic appointments and mo
 
 In this article, we explain how Pitonne's mobile IV service works, how it differs from an in-clinic visit, and what to prepare before making a reservation.
 
+{{video:how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo-ova}}
+
 ## Pitonne Offers Both In-Clinic and Mobile IV Appointments
 
 At Pitonne, patients may choose between visiting the clinic or arranging a mobile IV appointment within our service area. This flexibility is especially helpful for travelers staying in Tokyo, patients who prefer private care in their hotel or residence, and those with demanding schedules who want to reduce travel time.

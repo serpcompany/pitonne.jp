@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { getServicesFromSlugs } from "@/lib/data/services"
+import { getVideoBySlug } from "@/lib/data/videos"
 
 const migratedDraftSlugs = [
   "exosome-iv-tokyo-mobile-in-clinic-booking",
@@ -78,6 +79,55 @@ describe("blog post parity", () => {
     expect(screen.getAllByRole("link", { name: "Blog" }).some((link) => link.getAttribute("href") === "/blog")).toBe(true)
     expect(screen.getByRole("heading", { name: "Read Our Latest Posts" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Questions About This Topic?" })).not.toBeInTheDocument()
+  })
+
+  it("renders blog video markers as YouTube embeds", () => {
+    const post = getBlogPostBySlug("iv-therapy-for-hangover-in-tokyo")
+    expect(post).toBeDefined()
+
+    const { container } = render(
+      <BlogPostTemplate
+        post={{
+          title: post!.title,
+          slug: post!.slug,
+          date: new Date(post!.publishedAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          content: post!.content,
+          excerpt: post!.excerpt,
+          readingTime: post!.readingTime,
+          category: post!.category,
+          categorySlug: post!.categorySlug,
+          author: post!.author,
+          featureImage: post!.featureImage,
+          relatedServiceSlugs: post!.relatedServiceSlugs,
+          tags: post!.tags,
+        }}
+        relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter((candidate) => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
+        latestPosts={getAllBlogPosts().filter((candidate) => candidate.slug !== post!.slug)}
+      />,
+    )
+
+    expect(screen.getByTitle("IV Therapy for Hangover Hydration & Recovery Support")).toHaveAttribute(
+      "src",
+      "https://www.youtube-nocookie.com/embed/wDjmsOyulh0?rel=0&modestbranding=1",
+    )
+    expect(container.textContent).not.toContain("{{video:")
+  })
+
+  it("keeps blog video markers mapped to known Pitonne videos", () => {
+    const videoMarkerPattern = /\{\{video:([a-z0-9-]+)\}\}/g
+
+    for (const locale of ["en", "ja"] as const) {
+      for (const post of getAllBlogPosts(locale)) {
+        for (const match of post.content.matchAll(videoMarkerPattern)) {
+          expect(getVideoBySlug(match[1]), `${post.sourcePath} references ${match[1]}`).toBeDefined()
+        }
+      }
+    }
   })
 
   it("keeps migrated legacy blog bodies in sync with tracked markdown files", () => {

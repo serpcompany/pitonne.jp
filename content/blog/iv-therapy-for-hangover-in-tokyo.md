@@ -26,6 +26,8 @@ After a long night of drinking, many people wake up with thirst, headache, [naus
 
 At Pitonne | Stem Cell & IV Therapy, we believe hangover support should be approached with the same clarity as any other medical service: discreetly, carefully, and with appropriate medical judgment. In this article, we explain what hangover IV therapy may help support, what it should not be expected to do, and what to review before booking.
 
+{{video:iv-therapy-for-hangover-hydration-and-recovery-support}}
+
 ## What a Hangover Actually Is
 
 A hangover is a group of symptoms that can occur after drinking too much alcohol. According to the National Institute on Alcohol Abuse and Alcoholism, common symptoms include:
