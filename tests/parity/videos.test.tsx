@@ -10,8 +10,10 @@ const SITE_URL = "https://pitonne.jp"
 
 describe("Pitonne video pages", () => {
   it("keeps exact public YouTube metadata for the channel videos", () => {
-    expect(pitonneVideos).toHaveLength(4)
+    expect(pitonneVideos).toHaveLength(6)
     expect(pitonneVideos.map((video) => video.youtubeId)).toEqual([
+      "wDjmsOyulh0",
+      "IGmMAn8K7UY",
       "ovaSaAMcluk",
       "TWZZkcxUKGI",
       "I_-f5HJzHuk",
@@ -19,6 +21,26 @@ describe("Pitonne video pages", () => {
     ])
 
     expect(pitonneVideos[0]).toMatchObject({
+      slug: "iv-therapy-for-hangover-hydration-and-recovery-support",
+      title: "IV Therapy for Hangover Hydration & Recovery Support",
+      url: "https://www.youtube.com/watch?v=wDjmsOyulh0",
+      thumbnailUrl: "https://i.ytimg.com/vi/wDjmsOyulh0/hqdefault.jpg",
+      uploadDate: "2026-06-13T00:00:00.000Z",
+      duration: "PT2M14S",
+    })
+    expect(pitonneVideos[0].description).toContain("Clinic visits are also available with a ¥5,000 discount")
+
+    expect(pitonneVideos[1]).toMatchObject({
+      slug: "tokyo-mobile-iv-hotel-home-office",
+      title: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
+      url: "https://www.youtube.com/watch?v=IGmMAn8K7UY",
+      thumbnailUrl: "https://i.ytimg.com/vi/IGmMAn8K7UY/hqdefault.jpg",
+      uploadDate: "2026-06-13T00:00:00.000Z",
+      duration: "PT2M34S",
+    })
+    expect(pitonneVideos[1].description).toContain("#MobileIVTokyo")
+
+    expect(pitonneVideos[2]).toMatchObject({
       slug: "how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo-ova",
       title: "How to Book a Mobile IV at Your Hotel, Home, or Office in Tokyo",
       url: "https://www.youtube.com/watch?v=ovaSaAMcluk",
@@ -26,16 +48,16 @@ describe("Pitonne video pages", () => {
       uploadDate: "2026-05-26T00:00:00.000Z",
       duration: "PT2M34S",
     })
-    expect(pitonneVideos[0].description).toContain("#MobileIVTokyo")
+    expect(pitonneVideos[2].description).toContain("#MobileIVTokyo")
 
-    expect(pitonneVideos[2]).toMatchObject({
+    expect(pitonneVideos[4]).toMatchObject({
       slug: "can-ed-medication-be-prescribed-online-in-japan",
       title: "Can ED Medication Be Prescribed Online in Japan",
       thumbnailUrl: "https://i.ytimg.com/vi/I_-f5HJzHuk/maxresdefault.jpg",
       uploadDate: "2026-05-18T00:00:00.000Z",
       duration: "PT2M5S",
     })
-    expect(pitonneVideos[2].description).toContain("ED治療薬が日本でオンライン処方できるのか")
+    expect(pitonneVideos[4].description).toContain("ED治療薬が日本でオンライン処方できるのか")
   })
 
   it("builds watch paths, embed URLs, and lookups from slugs", () => {
@@ -57,9 +79,9 @@ describe("Pitonne video pages", () => {
       name: video.title,
       description: video.description,
       thumbnailUrl: [video.thumbnailUrl],
-      uploadDate: "2026-05-26T00:00:00.000Z",
-      duration: "PT2M34S",
-      embedUrl: "https://www.youtube-nocookie.com/embed/ovaSaAMcluk?rel=0&modestbranding=1",
+      uploadDate: "2026-06-13T00:00:00.000Z",
+      duration: "PT2M14S",
+      embedUrl: "https://www.youtube-nocookie.com/embed/wDjmsOyulh0?rel=0&modestbranding=1",
       url: `${SITE_URL}/watch/${video.slug}/`,
       publisher: { "@id": `${SITE_URL}/#business` },
     })
@@ -69,7 +91,7 @@ describe("Pitonne video pages", () => {
       "@type": "ItemList",
       name: "Pitonne Videos",
     })
-    expect(listSchema.itemListElement).toHaveLength(4)
+    expect(listSchema.itemListElement).toHaveLength(6)
     expect(listSchema.itemListElement[0]).toMatchObject({
       "@type": "ListItem",
       position: 1,
