@@ -26,6 +26,8 @@ describe("footer and CTA data parity", () => {
     // Footer uses dict.nav for link names
     expect(footerSource).toContain("dict.nav.videos")
     expect(footerSource).toContain("dict.nav.legal")
+    expect(footerSource).toContain("dict.nav.viewAllServices")
+    expect(footerSource).toContain("canonicalRoutes.services")
     // Should NOT have hardcoded English link names
     expect(footerSource).not.toContain('name: "Videos"')
     expect(footerSource).not.toContain('name: "Legal"')

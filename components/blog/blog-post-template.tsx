@@ -6,11 +6,14 @@ import { JsonLd } from "@/components/shared/json-ld"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
 import { BlogSidebar } from "@/components/blog/blog-sidebar"
 import type { BlogPost } from "@/lib/data/blog-posts"
+import { getVideoBySlug } from "@/lib/data/videos"
 import type { Service } from "@/lib/data/services"
 import { blogPostingJsonLd } from "@/lib/structured-data"
 import type { Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
+
+const videoEmbedPattern = /\{\{video:([a-z0-9-]+)\}\}/g
 
 export interface BlogPostViewModel {
   slug: string
@@ -42,8 +45,53 @@ function splitFinalTakeaway(content: string) {
   }
 }
 
-function MarkdownContent({ content }: { content: string }) {
-  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+function BlogVideoEmbed({ slug, locale }: { slug: string; locale: Locale }) {
+  const video = getVideoBySlug(slug)
+
+  if (!video) {
+    return null
+  }
+
+  const displayTitle = locale === "ja" && video.titleJa ? video.titleJa : video.title
+
+  return (
+    <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+      <div className="bg-black">
+        <iframe
+          src={video.embedUrl}
+          title={displayTitle}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+          className="aspect-video w-full"
+        />
+      </div>
+      <figcaption className="px-4 py-3 text-sm font-medium text-foreground">
+        <Link href={localizedRoute(video.watchPath, locale)}>{displayTitle}</Link>
+      </figcaption>
+    </figure>
+  )
+}
+
+function MarkdownContent({ content, locale }: { content: string; locale: Locale }) {
+  const segments = content.split(videoEmbedPattern)
+
+  if (segments.length === 1) {
+    return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+  }
+
+  return (
+    <>
+      {segments.map((segment, index) => {
+        if (index % 2 === 1) {
+          return <BlogVideoEmbed key={`${segment}-${index}`} slug={segment} locale={locale} />
+        }
+
+        const markdown = segment.trim()
+        return markdown ? <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown> : null
+      })}
+    </>
+  )
 }
 
 function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewModel; locale?: Locale }) {
@@ -51,9 +99,9 @@ function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewMode
 
   return (
     <div className="blog-prose">
-      <MarkdownContent content={content.before} />
+      <MarkdownContent content={content.before} locale={locale} />
       <BlogDiscoverySection post={post} locale={locale} />
-      {content.final ? <MarkdownContent content={content.final} /> : null}
+      {content.final ? <MarkdownContent content={content.final} locale={locale} /> : null}
     </div>
   )
 }
