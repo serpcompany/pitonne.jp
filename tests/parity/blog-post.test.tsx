@@ -24,6 +24,16 @@ const migratedDraftSlugs = [
   "iv-therapy-for-detox-support",
 ]
 
+const addedBilingualPostSlugs = [
+  "high-dose-vitamin-c-50g-g6pd-test-tokyo",
+  "blood-tests-before-regular-iv-therapy-tokyo",
+  "how-long-does-iv-therapy-take-tokyo",
+  "how-often-can-you-get-iv-therapy-tokyo",
+  "iv-therapy-side-effects-safety-guide",
+  "iv-therapy-vs-oral-vitamins",
+  "mobile-iv-therapy-tokyo-home-hotel-clinic",
+]
+
 describe("blog post parity", () => {
   it("loads static posts from markdown files with frontmatter", () => {
     const post = getBlogPostBySlug("iv-therapy-for-hangover")
@@ -160,6 +170,41 @@ describe("blog post parity", () => {
       expect(post?.relatedServiceSlugs.length).toBeGreaterThan(0)
       expect(post?.tags.length).toBeGreaterThan(0)
       expect(post?.tags.every((tag) => !japaneseScript.test(tag))).toBe(true)
+    }
+  })
+
+  it("loads the new bilingual posts without mixed-language or editorial artifacts", () => {
+    const japaneseScript = /[\u3040-\u30ff\u3400-\u9fff]/
+    const editorialArtifacts =
+      /English Version|Japanese Version|日本語版|SEO Information|SEO情報|Meta description|メタディスクリプション|Recommended slug|Suggested slug|推奨スラッグ|Primary keyword|Secondary keywords|Related keywords|メインキーワード|関連キーワード|Internal Link Suggestions|Recommended Internal Links|Suggested Internal Links|内部リンク候補|推奨内部リンク/i
+
+    expect(getAllBlogPosts("en")).toHaveLength(33)
+    expect(getAllBlogPosts("ja")).toHaveLength(33)
+
+    for (const slug of addedBilingualPostSlugs) {
+      const en = getBlogPostBySlug(slug, "en")
+      const ja = getBlogPostBySlug(slug, "ja")
+
+      expect(en, `English post ${slug}`).toBeDefined()
+      expect(ja, `Japanese post ${slug}`).toBeDefined()
+      expect(en?.sourcePath).toBe(`content/blog/${slug}.md`)
+      expect(ja?.sourcePath).toBe(`content/blog/ja/${slug}.md`)
+      expect(en?.readingTime).toBe(ja?.readingTime)
+      expect(en).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
+      expect(ja).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
+      expect(en?.featureImage).toBeUndefined()
+      expect(ja?.featureImage).toBeUndefined()
+      expect(`${en?.title}\n${en?.excerpt}\n${en?.content}`).not.toMatch(japaneseScript)
+      expect(`${ja?.title}\n${ja?.excerpt}\n${ja?.content}`).toMatch(japaneseScript)
+      expect(en?.content).not.toMatch(editorialArtifacts)
+      expect(ja?.content).not.toMatch(editorialArtifacts)
+      expect(en?.content).not.toMatch(/^# /m)
+      expect(ja?.content).not.toMatch(/^# /m)
+      expect(en?.content).not.toContain("iv-therapy-time-tokyo-visit-drip")
+      expect(ja?.content).not.toContain("iv-therapy-time-tokyo-visit-drip")
+      expect(ja?.content).not.toMatch(/https:\/\/pitonne\.jp\/(?!ja\/)/)
+      expect(en?.relatedServiceSlugs.length).toBeGreaterThan(0)
+      expect(ja?.relatedServiceSlugs).toEqual(en?.relatedServiceSlugs)
     }
   })
 
