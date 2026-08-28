@@ -26,13 +26,14 @@ describe("pull request preview workflow", () => {
     expect(workflow).toContain("--commit-hash=${{ github.event.pull_request.head.sha }}")
   })
 
-  it("keeps preview permissions narrow and updates one marked PR comment", () => {
-    expect(workflow).toContain("pull-requests: write")
+  it("keeps preview permissions read-only and leaves one comment to Cloudflare Pages", () => {
+    expect(workflow).toContain("permissions:\n      contents: read")
+    expect(workflow).not.toContain("pull-requests: write")
     expect(workflow).not.toContain("issues: write")
-    expect(workflow).toContain("<!-- pitonne-cloudflare-pr-preview -->")
     expect(workflow).toContain("pages-deployment-alias-url")
-    expect(workflow).toContain("steps.deploy.outputs.deployment-url")
-    expect(workflow).toContain("issues.updateComment")
+    expect(workflow).not.toContain("actions/github-script")
+    expect(workflow).not.toContain("issues.createComment")
+    expect(workflow).not.toContain("issues.updateComment")
   })
 
   it("checks that local and deployed previews remain non-indexable", () => {

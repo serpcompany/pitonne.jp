@@ -8,7 +8,7 @@
 - Requires PR.
 - Requires GitHub Actions test.
 - Same-repository PRs receive an automatic Cloudflare Pages preview after the full `test` job passes.
-- The preview uses a stable, collision-free alias based on the PR number (`pr-<number>.pitonne-jp.pages.dev`). New commits replace that alias and update the existing bot comment with the stable URL, immutable deployment URL, and deployed SHA.
+- The preview uses a stable, collision-free alias based on the PR number (`pr-<number>.pitonne-jp.pages.dev`). New commits replace that alias, and the Cloudflare Pages integration updates its existing PR comment with the stable URL, immutable deployment URL, and deployed SHA.
 - PR preview builds use `DEPLOY_ENV=preview` and `NEXT_PUBLIC_DEPLOY_ENV=preview`; verify `robots.txt` contains `Disallow: /` before sharing the URL.
 - Forked PRs run validation without receiving Cloudflare secrets or a deployment. PR previews never use the `staging`, `main`, `staging.pitonne.jp`, or `pitonne.jp` aliases.
 
