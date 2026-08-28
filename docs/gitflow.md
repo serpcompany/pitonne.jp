@@ -36,4 +36,4 @@ Deployment source of truth:
 - Required GitHub secret:
     - `CLOUDFLARE_API_TOKEN`: Cloudflare account API token with Account > Cloudflare Pages > Edit permission.
 
-Lighthouse CI keeps the best-practices threshold at `0.95`. Collection skips only the accepted `third-party-cookies` best-practices audit caused by the current LeadConnector integration (in addition to the pre-existing color-contrast exclusion); inspector issues, console errors, and all other best-practices audits remain enabled. Removing the underlying cookies is tracked separately in GitHub issue #51.
+Lighthouse CI keeps the best-practices threshold at `0.95`. Collection skips only the accepted `third-party-cookies` best-practices audit caused by the current LeadConnector integration (in addition to the pre-existing color-contrast exclusion); inspector issues, console errors, and all other best-practices audits remain enabled. Removing the underlying cookies is tracked separately in [GitHub issue #51](https://github.com/serpcompany/pitonne.jp/issues/51).
