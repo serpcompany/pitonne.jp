@@ -13,13 +13,13 @@ describe("contact page", () => {
 
     expect(screen.getByRole("link", { name: dict.common.bookConsultation })).toHaveAttribute("href", info.bookingUrl)
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
-    expect(screen.queryByTitle("Contact")).not.toBeInTheDocument()
+    expect(screen.queryByTitle(dict.contact.formTitle)).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: dict.common.sendMessage })).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole("button", { name: dict.common.sendMessage }))
 
     expect(screen.getByRole("dialog", { name: dict.contact.formTitle })).toBeInTheDocument()
-    expect(screen.getByTitle("Contact")).toHaveAttribute(
+    expect(screen.getByTitle(dict.contact.formTitle)).toHaveAttribute(
       "src",
       "https://api.leadconnectorhq.com/widget/form/QJR9bZP4y72C8jUcGC7F",
     )
@@ -50,5 +50,14 @@ describe("contact page", () => {
     expect(container).not.toHaveTextContent(retiredAddress)
     expect(container.querySelector('a[href^="mailto:"]')).not.toBeInTheDocument()
     expect(info).not.toHaveProperty("email")
+  })
+
+  it("does not offer the English-only contact form on the Japanese contact page", async () => {
+    const jaDict = getDictionary("ja")
+
+    render(await ContactPage({ params: Promise.resolve({ locale: "ja" }) }))
+
+    expect(screen.queryByRole("button", { name: jaDict.common.sendMessage })).not.toBeInTheDocument()
+    expect(screen.queryByTitle(jaDict.contact.formTitle)).not.toBeInTheDocument()
   })
 })

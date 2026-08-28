@@ -73,11 +73,7 @@ export default async function ContactPage({ params }: Props) {
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <BookingButton className="w-full sm:w-auto" locale={locale as Locale} />
-                  <ContactFormDialog
-                    buttonLabel={dict.common.sendMessage}
-                    closeLabel={dict.contact.closeForm}
-                    title={dict.contact.formTitle}
-                  />
+                  {locale === "en" ? <ContactFormDialog locale="en" /> : null}
                 </div>
               </div>
             </div>
