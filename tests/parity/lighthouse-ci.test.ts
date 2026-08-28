@@ -10,12 +10,16 @@ describe("Lighthouse CI setup", () => {
       devDependencies?: Record<string, string>
     }
     const workflow = fs.readFileSync(path.join(root, ".github/workflows/ci.yml"), "utf8")
-    const lighthouserc = fs.readFileSync(path.join(root, "lighthouserc.json"), "utf8")
+    const lighthouserc = fs.readFileSync(path.join(root, "lighthouserc.cjs"), "utf8")
 
     expect(packageJson.scripts?.["test:lighthouse"]).toContain("lhci autorun")
     expect(packageJson.devDependencies).toHaveProperty("@lhci/cli")
     expect(workflow).toContain("pnpm test:lighthouse")
     expect(lighthouserc).toContain("http://localhost:3000/")
     expect(lighthouserc).toContain("http://localhost:3000/blog/")
+    expect(lighthouserc).toContain('skipAudits: ["color-contrast", "third-party-cookies"]')
+    expect(lighthouserc).toContain('"categories:best-practices": ["error", { minScore: 0.95 }]')
+    expect(lighthouserc).not.toContain('"inspector-issues"')
+    expect(lighthouserc).not.toContain('"errors-in-console"')
   })
 })

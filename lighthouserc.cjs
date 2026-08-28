@@ -1,0 +1,32 @@
+module.exports = {
+  ci: {
+    collect: {
+      startServerCommand: "pnpm start",
+      startServerReadyPattern: "Ready",
+      url: [
+        "http://localhost:3000/",
+        "http://localhost:3000/blog/",
+        "http://localhost:3000/services/iv-therapy/",
+        "http://localhost:3000/blog/iv-therapy-for-hangover/",
+      ],
+      numberOfRuns: 1,
+      settings: {
+        chromeFlags: "--headless --no-sandbox",
+        preset: "desktop",
+        // The accepted LeadConnector integration currently sets third-party cookies.
+        skipAudits: ["color-contrast", "third-party-cookies"],
+      },
+    },
+    assert: {
+      assertions: {
+        "categories:accessibility": ["error", { minScore: 0.95 }],
+        "categories:best-practices": ["error", { minScore: 0.95 }],
+        "categories:seo": ["error", { minScore: 0.9 }],
+        "categories:performance": ["warn", { minScore: 0.5 }],
+      },
+    },
+    upload: {
+      target: "temporary-public-storage",
+    },
+  },
+}

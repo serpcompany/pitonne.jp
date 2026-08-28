@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
 const root = process.cwd()
+const require = createRequire(import.meta.url)
 
 describe("brand color", () => {
   it("keeps the Pitonne green unchanged", () => {
@@ -14,7 +16,7 @@ describe("brand color", () => {
   })
 
   it("does not fail Lighthouse on the brand color contrast audit", () => {
-    const lighthouseConfig = JSON.parse(readFileSync(join(root, "lighthouserc.json"), "utf8"))
+    const lighthouseConfig = require(join(root, "lighthouserc.cjs"))
 
     expect(lighthouseConfig.ci.collect.settings.skipAudits).toContain("color-contrast")
   })
