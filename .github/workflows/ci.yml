@@ -29,3 +29,74 @@ jobs:
       - run: DEPLOY_ENV=production pnpm build
       - run: test -f out/index.html && test -f out/ja/index.html && test -f out/robots.txt && test -f out/sitemap.xml && test -f out/videos-sitemap.xml && test -f out/_headers && test -f out/_redirects && test ! -d out/en
       - run: pnpm test:lighthouse
+
+  preview:
+    name: Deploy PR preview
+    needs: test
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.base.ref == 'staging' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: cloudflare-pages-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+    env:
+      CLOUDFLARE_ACCOUNT_ID: cec5f04e1d18bcc65f2be0aefb04f059
+      CLOUDFLARE_PROJECT_NAME: pitonne-jp
+      DEPLOY_ENV: preview
+      NEXT_PUBLIC_DEPLOY_ENV: preview
+      PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build non-indexable preview
+        run: pnpm build
+
+      - name: Verify static preview output
+        run: |
+          test -f out/index.html
+          test -f out/ja/index.html
+          test -f out/robots.txt
+          test -f out/sitemap.xml
+          test -f out/videos-sitemap.xml
+          test -f out/_headers
+          test -f out/_redirects
+          test ! -d out/en
+          grep -Fq "Disallow: /" out/robots.txt
+
+      - name: Deploy isolated Cloudflare Pages preview
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          wranglerVersion: "4.103.0"
+          command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.PREVIEW_BRANCH }} --commit-hash=${{ github.event.pull_request.head.sha }}
+
+      - name: Verify deployed preview
+        env:
+          STABLE_PREVIEW_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+        run: |
+          test -n "$STABLE_PREVIEW_URL"
+          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/" > /dev/null
+          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/ja/" > /dev/null
+          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/robots.txt" | grep -Fq "Disallow: /"
