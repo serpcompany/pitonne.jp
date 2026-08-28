@@ -22,7 +22,7 @@ This Privacy Policy explains how Pitonne collects, uses, stores, and protects pe
 - Clinic Name: Pitonne Stem Cell & IV Therapy
 - Address: 106-0031 Tokyo, Minato City, Nishiazabu, 3 Chome-17-22 モダンフォルム西麻布 1階
 - Phone Number: 03-6821-8285
-- Contact Email: pitonne.am@gmail.com
+- Contact Form: https://pitonne.jp/contact/
 
 ## 2. Personal Information Collected
 
@@ -83,7 +83,7 @@ Requests should be submitted using the contact details listed below.
 - Clinic Name: Pitonne Stem Cell & IV Therapy
 - Address: 106-0031 Tokyo, Minato City, Nishiazabu, 3 Chome-17-22 モダンフォルム西麻布 1階
 - Phone Number: 03-6821-8285
-- Email Address: pitonne.am@gmail.com
+- Contact Form: https://pitonne.jp/contact/
 
 ## 10. Anonymous Processed Information
 

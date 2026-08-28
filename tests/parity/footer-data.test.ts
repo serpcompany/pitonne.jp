@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 import { canonicalRoutes } from "@/lib/data/routes"
-import { businessHours, businessHoursDisplay, businessInfo } from "@/lib/data/site"
+import { businessHours, businessHoursDisplay, businessInfo, getBusinessInfo } from "@/lib/data/site"
 
 describe("footer and CTA data parity", () => {
   it("uses live business hours and legal routes", () => {
@@ -16,7 +16,8 @@ describe("footer and CTA data parity", () => {
       { day: "Sunday", closed: true },
     ])
     expect(businessInfo.hours).toEqual(businessHoursDisplay)
-    expect(businessInfo.bookingUrl).toBe("https://ssv.onemorehand.jp/hic_pitonne/reserve/index?preview=on&lang=en")
+    expect(businessInfo.bookingUrl).toBe("https://api.leadconnectorhq.com/booking/pitonne/bp/english")
+    expect(getBusinessInfo("ja").bookingUrl).toBe("https://api.leadconnectorhq.com/booking/pitonne/bp/japanese")
     expect(canonicalRoutes.termsConditions).toBe("/legal/terms-conditions/")
   })
 
