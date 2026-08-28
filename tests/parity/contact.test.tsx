@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import ContactPage from "@/app/[locale]/contact/page"
 import { getBusinessInfo } from "@/lib/data/site"
@@ -8,12 +8,21 @@ const dict = getDictionary("en")
 const info = getBusinessInfo("en")
 
 describe("contact page", () => {
-  it("links to the external booking form instead of rendering a local form", async () => {
+  it("opens the secure GHL contact form instead of linking to the legacy inquiry site", async () => {
     render(await ContactPage({ params: Promise.resolve({ locale: "en" }) }))
 
     expect(screen.getByRole("link", { name: dict.common.bookConsultation })).toHaveAttribute("href", info.bookingUrl)
     expect(screen.queryByRole("textbox", { name: /full name/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole("button", { name: /send message/i })).not.toBeInTheDocument()
+    expect(screen.queryByTitle("Contact")).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: dict.common.sendMessage })).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole("button", { name: dict.common.sendMessage }))
+
+    expect(screen.getByRole("dialog", { name: dict.contact.formTitle })).toBeInTheDocument()
+    expect(screen.getByTitle("Contact")).toHaveAttribute(
+      "src",
+      "https://api.leadconnectorhq.com/widget/form/QJR9bZP4y72C8jUcGC7F",
+    )
     expect(screen.queryByText("Nishi-Azabu, Tokyo")).not.toBeInTheDocument()
 
     const saturdayHours = info.hours.find((item) => item.day === "Saturday")
@@ -32,5 +41,14 @@ describe("contact page", () => {
       "href",
       "tel:+17868140323",
     )
+  })
+
+  it("does not expose the retired Gmail address", async () => {
+    const { container } = render(await ContactPage({ params: Promise.resolve({ locale: "en" }) }))
+    const retiredAddress = ["pitonne.am", "gmail.com"].join("@")
+
+    expect(container).not.toHaveTextContent(retiredAddress)
+    expect(container.querySelector('a[href^="mailto:"]')).not.toBeInTheDocument()
+    expect(info).not.toHaveProperty("email")
   })
 })

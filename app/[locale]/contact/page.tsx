@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { Phone, MapPin, Clock } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { BookingButton } from "@/components/shared/booking-button"
+import { ContactFormDialog } from "@/components/contact/contact-form-dialog"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import { getBusinessInfo } from "@/lib/data/site"
 import type { Locale } from "@/lib/i18n/config"
@@ -72,14 +73,11 @@ export default async function ContactPage({ params }: Props) {
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <BookingButton className="w-full sm:w-auto" locale={locale as Locale} />
-                  <a
-                    href="https://ssv.onemorehand.jp/hic_pitonne/support/inquiry?preview=on&lang=en"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-[#7A8F87] px-8 py-3 text-sm font-medium text-[#7A8F87] transition-colors hover:bg-[#7A8F87] hover:text-white w-full sm:w-auto"
-                  >
-                    {dict.common.sendMessage}
-                  </a>
+                  <ContactFormDialog
+                    buttonLabel={dict.common.sendMessage}
+                    closeLabel={dict.contact.closeForm}
+                    title={dict.contact.formTitle}
+                  />
                 </div>
               </div>
             </div>
@@ -106,18 +104,6 @@ export default async function ContactPage({ params }: Props) {
                         </a>
                       ))}
                     </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
-                    <Mail className="h-5 w-5 text-[#7A8F87]" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">{dict.contact.email}</h3>
-                    <a href="mailto:pitonne.am@gmail.com" className="text-muted-foreground hover:text-[#7A8F87] transition-colors">
-                      pitonne.am@gmail.com
-                    </a>
                   </div>
                 </div>
 

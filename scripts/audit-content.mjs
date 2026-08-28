@@ -23,10 +23,10 @@ const globalsCss = read("app/globals.css")
 
 const expectedBusinessInfo = [
   "03-6821-8285",
-  "pitonne.am@gmail.com",
   "106-0031 Tokyo, Minato City, Nishiazabu",
   "3 Chome−17−22 モダンフォルム西麻布 1階",
-  "https://ssv.onemorehand.jp/hic_pitonne/",
+  "https://api.leadconnectorhq.com/booking/pitonne/bp/english",
+  "https://api.leadconnectorhq.com/booking/pitonne/bp/japanese",
 ]
 
 for (const value of expectedBusinessInfo) {

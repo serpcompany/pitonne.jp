@@ -1,4 +1,4 @@
-import { businessHours, businessInfo, getBusinessInfo, isOpenBusinessHours } from "@/lib/data/site"
+import { businessHours, getBusinessInfo, isOpenBusinessHours } from "@/lib/data/site"
 import type { BlogPost } from "@/lib/data/blog-posts"
 import type { Service } from "@/lib/data/services"
 import type { PitonneVideo } from "@/lib/data/videos"
@@ -17,7 +17,6 @@ export function businessJsonLd(locale: Locale = "en") {
     name: info.name,
     url: localizedCanonicalUrl("/", locale),
     telephone: info.phone,
-    email: info.email,
     description: info.description,
     inLanguage: locale === "ja" ? "ja" : "en",
     availableLanguage: [
