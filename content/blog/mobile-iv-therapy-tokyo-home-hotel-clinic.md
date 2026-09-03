@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 6
+featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg
+featureImageAlt: "Clinician carrying medical equipment into a hotel room"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 8
+featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg
+featureImageAlt: "Gloved clinician arranging blood sample tubes for laboratory review"
 featured: false
 relatedServiceSlugs:
   - blood-tests

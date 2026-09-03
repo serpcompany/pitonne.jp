@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 6
+featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg
+featureImageAlt: "医療機器を持ってホテルの客室に入る医療従事者"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

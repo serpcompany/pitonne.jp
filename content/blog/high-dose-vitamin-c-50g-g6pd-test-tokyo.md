@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 7
+featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg
+featureImageAlt: "Clinician examining a blood sample beside a microscope and IV bag"
 featured: false
 relatedServiceSlugs:
   - high-dose-vitamin-c-iv-therapy

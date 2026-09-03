@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 6
+featureImage: /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg
+featureImageAlt: "医療従事者が点滴を確認する中で点滴を受ける患者"
 featured: false
 relatedServiceSlugs:
   - iv-therapy
