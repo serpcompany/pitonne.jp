@@ -24,6 +24,7 @@ const blogPostFrontmatterSchema = z.object({
   }),
   readingTime: z.number().int().positive(),
   featureImage: z.string().optional(),
+  featureImageAlt: z.string().min(1).optional(),
   featured: z.boolean().optional(),
   relatedServiceSlugs: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
@@ -43,6 +44,7 @@ export interface BlogPost {
   }
   readingTime: number
   featureImage?: string
+  featureImageAlt?: string
   featured?: boolean
   relatedServiceSlugs: string[]
   tags: string[]
@@ -70,6 +72,7 @@ function loadBlogPosts(locale: Locale): BlogPost[] {
       return {
         ...frontmatter,
         featureImage: frontmatter.featureImage || undefined,
+        featureImageAlt: frontmatter.featureImageAlt || undefined,
         featured: frontmatter.featured ?? false,
         relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
         tags: frontmatter.tags ?? [],

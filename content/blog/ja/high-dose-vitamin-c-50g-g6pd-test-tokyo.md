@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 7
+featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg
+featureImageAlt: "顕微鏡と点滴バッグのそばで血液サンプルを確認する医療従事者"
 featured: false
 relatedServiceSlugs:
   - high-dose-vitamin-c-iv-therapy

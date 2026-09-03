@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 5
+featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
+featureImageAlt: "座って点滴を受ける患者のそばで輸液ポンプを確認する医療従事者"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

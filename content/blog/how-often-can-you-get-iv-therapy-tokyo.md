@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 7
+featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg
+featureImageAlt: "Clinician reviewing an IV therapy schedule on a desk calendar"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

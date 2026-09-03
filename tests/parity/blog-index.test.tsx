@@ -13,12 +13,19 @@ describe("blog index page", () => {
     expect(screen.queryByAltText("Pitonne wellness care and treatment insights in Tokyo")).not.toBeInTheDocument()
   })
 
-  it("renders the featured-post placeholder and uses accessible active category contrast", async () => {
+  it("renders supplied featured images with descriptive alt text and accessible active category contrast", async () => {
     render(await BlogPage({ params: Promise.resolve({ locale: "en" }) }))
 
-    expect(getAllBlogPosts()[0].featureImage).toBeUndefined()
-    expect(screen.queryByAltText(getAllBlogPosts()[0].title)).not.toBeInTheDocument()
-    expect(screen.getByText(dict.blog.featuredArticle)).toBeInTheDocument()
+    const postsWithNewImages = getAllBlogPosts().filter((post) =>
+      post.featureImage?.startsWith("/images/content/blog/"),
+    )
+    expect(postsWithNewImages).toHaveLength(7)
+    for (const post of postsWithNewImages) {
+      expect(post.featureImageAlt).toBeTruthy()
+      expect(screen.getByRole("img", { name: post.featureImageAlt }).getAttribute("src")).toContain(
+        encodeURIComponent(post.featureImage!),
+      )
+    }
     expect(screen.getByRole("link", { name: dict.blog.all })).toHaveClass("bg-[#7A8F87]")
   })
 })
