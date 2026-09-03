@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 8
+featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg
+featureImageAlt: "検査のために血液サンプルの試験管を並べる医療従事者"
 featured: false
 relatedServiceSlugs:
   - blood-tests

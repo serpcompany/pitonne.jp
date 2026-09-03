@@ -23,6 +23,7 @@ export interface BlogPostViewModel {
   content: string
   excerpt: string
   featureImage?: string | null
+  featureImageAlt?: string | null
   readingTime?: number
   category: string
   categorySlug: string
@@ -216,7 +217,11 @@ export function BlogPostTemplate({
           <div className="container mx-auto -mt-8 px-4">
             <div className="mx-auto max-w-4xl lg:max-w-none lg:px-0">
               <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
-                <img src={post.featureImage} alt={post.title} className="max-h-[420px] w-full rounded-lg object-cover shadow-lg" />
+                <img
+                  src={post.featureImage}
+                  alt={post.featureImageAlt || post.title}
+                  className="max-h-[420px] w-full rounded-lg object-cover shadow-lg"
+                />
               </div>
             </div>
           </div>

@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 6
+featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
+featureImageAlt: "比較のために並べられた点滴バッグと経口サプリメント"
 featured: false
 relatedServiceSlugs:
   - iv-vitamin-therapy

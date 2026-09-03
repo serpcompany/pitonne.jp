@@ -9,6 +9,8 @@ author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 readingTime: 7
+featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg
+featureImageAlt: "卓上カレンダーで点滴のスケジュールを確認する医療従事者"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

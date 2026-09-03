@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 6
+featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
+featureImageAlt: "IV bag and oral supplements arranged side by side for comparison"
 featured: false
 relatedServiceSlugs:
   - iv-vitamin-therapy

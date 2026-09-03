@@ -66,6 +66,7 @@ export default async function BlogPostPage({ params }: Props) {
         content: staticPost.content,
         excerpt: staticPost.excerpt,
         featureImage: staticPost.featureImage,
+        featureImageAlt: staticPost.featureImageAlt,
         readingTime: staticPost.readingTime,
         category: staticPost.category,
         categorySlug: staticPost.categorySlug,

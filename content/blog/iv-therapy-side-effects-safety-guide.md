@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 5
+featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
+featureImageAlt: "Clinician monitoring an IV infusion pump beside a seated patient"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

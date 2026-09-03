@@ -118,7 +118,7 @@ export default async function BlogCategoryPage({ params }: Props) {
                     {post.featureImage ? (
                       <img
                         src={post.featureImage}
-                        alt={post.title}
+                        alt={post.featureImageAlt || post.title}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (

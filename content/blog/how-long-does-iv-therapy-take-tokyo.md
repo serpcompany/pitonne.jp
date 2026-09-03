@@ -9,6 +9,8 @@ author:
   name: Pitonne Medical Team
   role: Wellness Experts
 readingTime: 6
+featureImage: /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg
+featureImageAlt: "Patient receiving an IV infusion while a clinician checks the drip"
 featured: false
 relatedServiceSlugs:
   - iv-therapy

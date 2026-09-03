@@ -32,7 +32,38 @@ const addedBilingualPostSlugs = [
   "iv-therapy-side-effects-safety-guide",
   "iv-therapy-vs-oral-vitamins",
   "mobile-iv-therapy-tokyo-home-hotel-clinic",
-]
+] as const
+
+const featuredImageMetadata = {
+  "blood-tests-before-regular-iv-therapy-tokyo": {
+    altEn: "Gloved clinician arranging blood sample tubes for laboratory review",
+    altJa: "検査のために血液サンプルの試験管を並べる医療従事者",
+  },
+  "high-dose-vitamin-c-50g-g6pd-test-tokyo": {
+    altEn: "Clinician examining a blood sample beside a microscope and IV bag",
+    altJa: "顕微鏡と点滴バッグのそばで血液サンプルを確認する医療従事者",
+  },
+  "how-long-does-iv-therapy-take-tokyo": {
+    altEn: "Patient receiving an IV infusion while a clinician checks the drip",
+    altJa: "医療従事者が点滴を確認する中で点滴を受ける患者",
+  },
+  "how-often-can-you-get-iv-therapy-tokyo": {
+    altEn: "Clinician reviewing an IV therapy schedule on a desk calendar",
+    altJa: "卓上カレンダーで点滴のスケジュールを確認する医療従事者",
+  },
+  "iv-therapy-side-effects-safety-guide": {
+    altEn: "Clinician monitoring an IV infusion pump beside a seated patient",
+    altJa: "座って点滴を受ける患者のそばで輸液ポンプを確認する医療従事者",
+  },
+  "iv-therapy-vs-oral-vitamins": {
+    altEn: "IV bag and oral supplements arranged side by side for comparison",
+    altJa: "比較のために並べられた点滴バッグと経口サプリメント",
+  },
+  "mobile-iv-therapy-tokyo-home-hotel-clinic": {
+    altEn: "Clinician carrying medical equipment into a hotel room",
+    altJa: "医療機器を持ってホテルの客室に入る医療従事者",
+  },
+} as const
 
 describe("blog post parity", () => {
   it("loads static posts from markdown files with frontmatter", () => {
@@ -192,8 +223,11 @@ describe("blog post parity", () => {
       expect(en?.readingTime).toBe(ja?.readingTime)
       expect(en).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
       expect(ja).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
-      expect(en?.featureImage).toBeUndefined()
-      expect(ja?.featureImage).toBeUndefined()
+      const expectedImage = `/images/content/blog/${slug}.jpg`
+      const expectedMetadata = featuredImageMetadata[slug]
+      expect(en).toMatchObject({ featureImage: expectedImage, featureImageAlt: expectedMetadata.altEn })
+      expect(ja).toMatchObject({ featureImage: expectedImage, featureImageAlt: expectedMetadata.altJa })
+      expect(fs.statSync(path.join(process.cwd(), "public", expectedImage.slice(1))).size).toBeLessThan(100 * 1024)
       expect(`${en?.title}\n${en?.excerpt}\n${en?.content}`).not.toMatch(japaneseScript)
       expect(`${ja?.title}\n${ja?.excerpt}\n${ja?.content}`).toMatch(japaneseScript)
       expect(en?.content).not.toMatch(editorialArtifacts)
@@ -206,6 +240,29 @@ describe("blog post parity", () => {
       expect(en?.relatedServiceSlugs.length).toBeGreaterThan(0)
       expect(ja?.relatedServiceSlugs).toEqual(en?.relatedServiceSlugs)
     }
+  })
+
+  it("renders a descriptive localized alt text for a supplied featured image", () => {
+    const post = getBlogPostBySlug("blood-tests-before-regular-iv-therapy-tokyo", "ja")
+    expect(post).toBeDefined()
+
+    render(
+      <BlogPostTemplate
+        post={{
+          ...post!,
+          date: new Date(post!.publishedAt).toLocaleDateString("ja-JP"),
+        }}
+        relatedPosts={[]}
+        relatedServices={[]}
+        latestPosts={[]}
+        locale="ja"
+      />,
+    )
+
+    expect(screen.getByRole("img", { name: featuredImageMetadata["blood-tests-before-regular-iv-therapy-tokyo"].altJa })).toHaveAttribute(
+      "src",
+      post!.featureImage,
+    )
   })
 
   it("keeps all blog markdown filenames, language, and discovery metadata linted", () => {
