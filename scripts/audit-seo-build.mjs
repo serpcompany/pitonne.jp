@@ -9,7 +9,8 @@
  * - internal links that resolve to a page (no 404s, no redirects)
  * - the sitemap index pattern: robots.txt advertises only /sitemap-index.xml, which lists root-level
  *   /sitemap-<group>.xml URL sets; /sitemap.xml serves the same XML as the index
- * - every page is listed in exactly one child sitemap, and every sitemap URL (and hreflang alternate) is a page
+ * - every indexable page is listed in exactly one child sitemap; every sitemap URL (and hreflang alternate) is a page,
+ *   equals that page's canonical URL, and is not noindex
  * - the homepage is listed as the bare origin; every other sitemap URL ends in a slash
  * - no oversized image files
  *
@@ -106,6 +107,8 @@ function resolveInternal(href) {
 const allFiles = walk(OUT)
 const pages = allFiles.filter((file) => file.endsWith(".html"))
 const findings = []
+// Canonical URL and robots noindex of each page, keyed by URL path, for the sitemap checks
+const pageInfo = new Map()
 const report = (urlPath, message) => findings.push(`${urlPath}: ${message}`)
 
 for (const file of pages) {
@@ -117,6 +120,7 @@ for (const file of pages) {
   const description = metaContent(html, "description") || ""
   const canonical = attribute((html.match(/<link[^>]*rel="canonical"[^>]*>/) || [""])[0], "href")
   const h1Count = (html.match(/<h1[\s>]/g) || []).length
+  pageInfo.set(urlPath, { canonical, noindex: /\bnoindex\b/i.test(metaContent(html, "robots") || "") })
 
   if (title.length < TITLE_RANGE[0] || title.length > TITLE_RANGE[1]) {
     report(urlPath, `title is ${title.length} chars (want ${TITLE_RANGE.join("–")}): ${title}`)
@@ -148,6 +152,8 @@ for (const file of pages) {
 const readOut = (file) => (fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), "utf8") : null)
 const locs = (xml) => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
 
+// Non-production builds disallow everything and noindex every page, so noindex checks apply only to indexable builds
+const indexable = !/^Disallow:\s*\/\s*$/im.test(readOut("robots.txt") || "")
 const robotsSitemaps = [...(readOut("robots.txt") || "").matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(([, url]) => url)
 if (robotsSitemaps.length !== 1 || robotsSitemaps[0] !== `${SITE_URL}/${SITEMAP_INDEX}`) {
   report("/robots.txt", `must list only Sitemap: ${SITE_URL}/${SITEMAP_INDEX} (found ${robotsSitemaps.join(", ") || "none"})`)
@@ -190,7 +196,15 @@ for (const sitemap of childSitemaps) {
     sitemapOwners.set(url, [...(sitemapOwners.get(url) || []), sitemap])
     if (url === `${SITE_URL}/`) report(`/${sitemap}`, `lists the homepage as ${url} (use ${SITE_URL})`)
     else if (url !== SITE_URL && !url.endsWith("/")) report(`/${sitemap}`, `URL has no trailing slash: ${url}`)
-    if (!isPage(url)) report(`/${sitemap}`, `lists URL that is not a page: ${url}`)
+    if (!isPage(url)) {
+      report(`/${sitemap}`, `lists URL that is not a page: ${url}`)
+      continue
+    }
+    const page = pageInfo.get(url === SITE_URL ? "/" : decodeURI(new URL(url).pathname))
+    // The homepage canonical is still https://pitonne.jp/ until the page itself writes the bare origin (#91)
+    const canonical = url === SITE_URL && page?.canonical === `${SITE_URL}/` ? SITE_URL : page?.canonical
+    if (canonical !== url) report(`/${sitemap}`, `${url} does not match the page canonical ${page?.canonical}`)
+    if (indexable && page?.noindex) report(`/${sitemap}`, `lists a noindex page: ${url}`)
   }
   for (const tag of xml.match(/<xhtml:link\s[^>]*>/g) || []) {
     const href = attribute(tag, "href")
@@ -204,7 +218,8 @@ const sitemapPaths = new Set([...sitemapOwners.keys()].map((url) => (url === SIT
 for (const file of pages) {
   const urlPath = "/" + path.relative(OUT, file).replace(/index\.html$/, "")
   if (urlPath.startsWith("/404") || urlPath.startsWith("/_not-found")) continue
-  if (!sitemapPaths.has(urlPath)) report(urlPath, "is not listed in any sitemap")
+  // A noindex page (or any page of a non-production build) need not be in a sitemap
+  if (!sitemapPaths.has(urlPath) && indexable && !pageInfo.get(urlPath)?.noindex) report(urlPath, "is not listed in any sitemap")
 }
 
 for (const file of allFiles) {

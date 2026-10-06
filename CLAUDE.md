@@ -61,7 +61,8 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`
   (the CMS offers only H2–H4, and a body that starts with `# Title` has that line dropped), complete Open Graph tags (use `pageOpenGraph()` from `lib/seo.ts`),
   broken or redirecting internal links, images over 5 MB, and the sitemap index pattern: `robots.txt` lists only
-  `/sitemap-index.xml`, every page is in exactly one child sitemap, and every sitemap URL and hreflang alternate is a page.
+  `/sitemap-index.xml`, every indexable page is in exactly one child sitemap, and every sitemap URL is a page that isn't
+  `noindex` and whose canonical equals that URL (hreflang alternates must be pages too).
 - JSON-LD is typed with `schema-dts` (`WithContext<...>` in `lib/structured-data.ts`), so `pnpm typecheck`
   rejects properties that aren't valid for a schema.org type.
 

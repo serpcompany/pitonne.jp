@@ -94,8 +94,11 @@ describe("sitemap URLs", () => {
     const urls = allEntries.map((entry) => entry.url)
     expect(new Set(urls).size).toBe(urls.length)
     for (const group of sitemapGroups) {
-      expect(byGroup[group].length).toBeGreaterThan(0)
       expect(byGroup[group].length).toBeLessThanOrEqual(MAX_SITEMAP_URLS)
+    }
+    // Groups defined in code always have URLs; blog and categories come from the CMS and may be empty (a valid urlset)
+    for (const group of ["pages", "services", "areas", "videos"] as const) {
+      expect(byGroup[group].length).toBeGreaterThan(0)
     }
   })
 

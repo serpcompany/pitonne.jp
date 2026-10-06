@@ -77,14 +77,7 @@ jobs:
 
       - name: Verify static output
         run: |
-          test -f out/index.html
-          test -f out/ja/index.html
-          test -f out/robots.txt
-          test -f out/sitemap.xml
-          test -f out/sitemap-index.xml
-          test -f out/_headers
-          test -f out/_redirects
-          test ! -d out/en
+          pnpm audit:out
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
