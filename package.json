@@ -10,7 +10,7 @@
     "dev": "next dev",
     "cms": "KEYSTATIC=1 NEXT_PUBLIC_KEYSTATIC_STORAGE=local next dev",
     "cms:cloud": "KEYSTATIC=1 next dev",
-    "build": "next build",
+    "build": "next build && node scripts/environment-headers.mjs",
     "start": "node scripts/serve-static.mjs",
     "lint": "eslint . --ext .js,.mjs,.ts,.tsx --ignore-pattern out/ --ignore-pattern .next/",
     "typecheck": "tsc --noEmit --incremental false",

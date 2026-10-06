@@ -32,10 +32,24 @@ const routesPath = path.join(OUT, "_routes.json")
 const excludedRoutes = fs.existsSync(routesPath) ? JSON.parse(fs.readFileSync(routesPath, "utf8")).exclude ?? [] : []
 const htmlInExcludedRoutes = excludedRoutes.flatMap((rule) => htmlUnder(rule.replace(/^\//, "").replace(/\*$/, "")))
 
+// Indexability must agree: a build whose robots.txt disallows everything (anything but production) also sends
+// X-Robots-Tag: noindex from _headers (scripts/environment-headers.mjs), and a production build never does.
+const read = (file) => (fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), "utf8") : null)
+const robots = read("robots.txt")
+const headers = read("_headers")
+const indexMismatch = []
+if (robots !== null && headers !== null) {
+  const disallowsAll = /^Disallow:\s*\/\s*$/m.test(robots)
+  const sendsNoindex = /^\s*X-Robots-Tag:.*\bnoindex\b/im.test(headers)
+  if (disallowsAll && !sendsNoindex) indexMismatch.push("out/robots.txt disallows crawling but out/_headers sends no X-Robots-Tag: noindex")
+  if (!disallowsAll && sendsNoindex) indexMismatch.push("out/_headers sends X-Robots-Tag: noindex but out/robots.txt allows crawling")
+}
+
 const failures = [
   ...[...required, ...childSitemaps].filter((file) => !fs.existsSync(path.join(OUT, file))).map((file) => `missing out/${file}`),
   ...forbidden.filter((file) => fs.existsSync(path.join(OUT, file))).map((file) => `unexpected out/${file}`),
   ...htmlInExcludedRoutes.map((file) => `out/${file} is a page under a path _routes.json keeps off the Function`),
+  ...indexMismatch,
   ...(fs.existsSync(indexPath) && childSitemaps.length === 0 ? [`out/${SITEMAP_INDEX} lists no sitemaps`] : []),
 ]
 

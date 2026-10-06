@@ -1,46 +1,73 @@
 name: Deploy
 
+# Builds the static export and uploads it to Cloudflare Pages, then smoke-tests the environment.
+# - CI (.github/workflows/ci.yml) calls it after each push to `staging` (Staging) or `main` (Production), and for PR
+#   previews (`pr-<n>`).
+# - A manual run (Actions > Deploy > Run workflow) redeploys the branch it's run from: `main` to Production, `staging`
+#   to Staging. It skips CI's test gate, so use it only to redeploy a commit CI already passed.
 on:
-  push:
-    branches:
-      - staging
-      - main
+  workflow_call:
+    inputs:
+      environment:
+        description: production, staging or preview
+        type: string
+        required: true
+      pr:
+        description: Pull request number (preview only)
+        type: number
+        required: false
+      ref:
+        description: Commit to deploy (defaults to the triggering commit)
+        type: string
+        required: false
   workflow_dispatch:
 
-jobs:
-  # Draft saves from the CMS don't change the built site. This check is a separate job so a skipped run never joins
-  # the deploy concurrency group, where it would cancel a real deploy still in progress.
-  changes:
-    name: Check for draft-only changes
-    runs-on: ubuntu-latest
-    outputs:
-      skip: ${{ steps.drafts.outputs.skip }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - id: drafts
-        if: github.event_name == 'push'
-        run: node scripts/draft-only-change.mjs "${{ github.event.before }}" "${{ github.sha }}"
+permissions:
+  contents: read
+  deployments: write
 
+jobs:
   deploy:
     name: Deploy to Cloudflare Pages
-    needs: changes
-    if: needs.changes.outputs.skip != 'true'
-    concurrency:
-      group: cloudflare-pages-${{ github.ref_name }}
-      cancel-in-progress: true
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
-      deployments: write
+    timeout-minutes: 30
+    # One deploy per target and environment at a time; a newer queued deploy replaces an older queued one, and a running
+    # deploy is never cancelled. Staging, Production and each PR preview are separate groups.
+    concurrency:
+      group: deploy-pages-${{ inputs.environment == 'preview' && format('pr-{0}', inputs.pr) || inputs.environment || (github.ref_name == 'main' && 'production') || github.ref_name }}
+      cancel-in-progress: false
     env:
       CLOUDFLARE_ACCOUNT_ID: cec5f04e1d18bcc65f2be0aefb04f059
       CLOUDFLARE_PROJECT_NAME: pitonne-jp
       WRANGLER_SEND_METRICS: "false"
+      TARGET: ${{ inputs.environment || (github.ref_name == 'main' && 'production') || (github.ref_name == 'staging' && 'staging') || '' }}
+      PR_NUMBER: ${{ inputs.pr }}
+      DEPLOY_SHA: ${{ inputs.ref || github.sha }}
     steps:
+      # Production deploys only from main and Staging only from staging; previews only to their own pr-<n> alias.
+      # So no PR or other branch can ever reach the `main` or `staging` aliases (pitonne.jp, staging.pitonne.jp).
+      - name: Resolve environment
+        run: |
+          fail() { echo "::error::$1"; exit 1; }
+          case "$TARGET" in
+            production) [ "$GITHUB_REF" = refs/heads/main ] || fail "Production deploys only from main (got $GITHUB_REF)."; branch=main ;;
+            staging) [ "$GITHUB_REF" = refs/heads/staging ] || fail "Staging deploys only from staging (got $GITHUB_REF)."; branch=staging ;;
+            preview)
+              [ "$GITHUB_EVENT_NAME" = pull_request ] || fail "Previews deploy only for pull requests."
+              [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]] || fail "A preview needs a pull request number."
+              branch="pr-$PR_NUMBER" ;;
+            *) fail "Run this workflow from main (Production) or staging (Staging)." ;;
+          esac
+          {
+            echo "DEPLOY_ENV=$TARGET"
+            echo "NEXT_PUBLIC_DEPLOY_ENV=$TARGET"
+            echo "PAGES_BRANCH=$branch"
+          } >> "$GITHUB_ENV"
+          echo "Deploying $DEPLOY_SHA to $TARGET (Pages branch $branch)."
+
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.DEPLOY_SHA }}
 
       - uses: pnpm/action-setup@v4
         with:
@@ -62,22 +89,20 @@ jobs:
             exit 1
           fi
 
-      - name: Configure deployment environment
-        run: |
-          if [ "$GITHUB_REF_NAME" = "main" ]; then
-            echo "DEPLOY_ENV=production" >> "$GITHUB_ENV"
-            echo "NEXT_PUBLIC_DEPLOY_ENV=production" >> "$GITHUB_ENV"
-          else
-            echo "DEPLOY_ENV=preview" >> "$GITHUB_ENV"
-            echo "NEXT_PUBLIC_DEPLOY_ENV=preview" >> "$GITHUB_ENV"
-          fi
-
       - name: Build static export
         run: pnpm build
 
+      # Production must be indexable; every other environment must not be
       - name: Verify static output
         run: |
           pnpm audit:out
+          if [ "$DEPLOY_ENV" = production ]; then
+            if grep -Fxq "Disallow: /" out/robots.txt; then echo "::error::Production robots.txt disallows crawling."; exit 1; fi
+            if grep -Fq "X-Robots-Tag: noindex" out/_headers; then echo "::error::Production _headers sends noindex."; exit 1; fi
+          else
+            grep -Fxq "Disallow: /" out/robots.txt
+            grep -Fq "X-Robots-Tag: noindex" out/_headers
+          fi
 
       - name: Deploy to Cloudflare Pages
         id: deploy
@@ -85,12 +110,27 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
           wranglerVersion: "4.103.0"
-          command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.PAGES_BRANCH }} --commit-hash=${{ env.DEPLOY_SHA }}
+          # GitHub deployment records for Staging and Production; the Cloudflare Pages app comments on PR previews
+          gitHubToken: ${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}
 
       - name: Smoke-test canonical host redirects
-        if: github.ref_name == 'main'
+        if: env.DEPLOY_ENV == 'production'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"
+
+      # Production allows crawling and lists its sitemap; Staging and previews send noindex and disallow crawling
+      - name: Smoke-test environment behaviour
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+          ALIAS_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+        run: |
+          case "$DEPLOY_ENV" in
+            production) node scripts/smoke-environment.mjs production "$DEPLOYMENT_URL" https://pitonne.jp ;;
+            staging) node scripts/smoke-environment.mjs staging "${ALIAS_URL:-https://staging.pitonne-jp.pages.dev}" "$DEPLOYMENT_URL" https://staging.pitonne.jp ;;
+            preview) node scripts/smoke-environment.mjs preview "${ALIAS_URL:-https://$PAGES_BRANCH.pitonne-jp.pages.dev}" "$DEPLOYMENT_URL" ;;
+          esac
+          echo "Deployed $DEPLOY_SHA to $DEPLOY_ENV: ${ALIAS_URL:-$DEPLOYMENT_URL}" >> "$GITHUB_STEP_SUMMARY"

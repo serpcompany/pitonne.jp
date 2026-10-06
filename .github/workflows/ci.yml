@@ -1,11 +1,23 @@
 name: CI
 
+# Tests every PR and every push to staging and main, and deploys (via .github/workflows/deploy.yml):
+# - a push to `staging` to Staging (https://staging.pitonne.jp), a push to `main` to Production (https://pitonne.jp);
+# - same-repository PRs into `staging` or `main` to a `pr-<n>` preview, after the test job passes.
+# Code changes deploy only after the test job passes. CMS content saves deploy without waiting for it (see `changes`).
 on:
   pull_request:
   push:
     branches:
       - staging
       - main
+
+# A new push to a PR cancels that PR's older run; every push to staging and main gets its own run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -32,66 +44,81 @@ jobs:
       - run: pnpm audit:seo
       - run: pnpm test:lighthouse
 
+  # Classifies the push. A separate job, so a skipped deploy never joins the deploy concurrency group.
+  # - skip: only draft blog posts changed (a draft saved from the CMS), so the built site is unchanged.
+  # - fast: only CMS content changed and the previous commit passed `test`, so this deploys without waiting for `test`.
+  #   The build validates the content itself. When the previous commit hasn't passed (still running or failed), its
+  #   code isn't proven yet, so the push waits for `test` like a code change.
+  changes:
+    name: Classify changes
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: read
+    outputs:
+      skip: ${{ steps.classify.outputs.skip }}
+      fast: ${{ steps.base.outputs.fast }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: classify
+        run: node scripts/draft-only-change.mjs "${{ github.event.before }}" "${{ github.sha }}"
+      - id: base
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+          CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
+        run: |
+          fast=false
+          if [ "$CONTENT_ONLY" = true ]; then
+            passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$BEFORE/check-runs?check_name=test" \
+              --jq '[.check_runs[] | select(.conclusion == "success")] | length')
+            if [ "${passed:-0}" -gt 0 ]; then fast=true; else echo "The previous commit hasn't passed test; waiting for test."; fi
+          fi
+          echo "fast=$fast" >> "$GITHUB_OUTPUT"
+
+  # CMS content: deploy now, so publishing stays quick
+  deploy-content:
+    name: Deploy content
+    needs: changes
+    if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
+    permissions:
+      contents: read
+      deployments: write
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    secrets: inherit
+
+  # Everything else: deploy only after the test job passes
+  deploy:
+    name: Deploy
+    needs: [changes, test]
+    if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
+    permissions:
+      contents: read
+      deployments: write
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    secrets: inherit
+
+  # Forked PRs get no secrets and no preview. Previews are non-indexable and never use the main or staging aliases.
   preview:
     name: Deploy PR preview
     needs: test
     if: >-
       github.event_name == 'pull_request' &&
-      github.event.pull_request.base.ref == 'staging' &&
+      contains(fromJSON('["staging", "main"]'), github.event.pull_request.base.ref) &&
       github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency:
-      group: cloudflare-pages-pr-${{ github.event.pull_request.number }}
-      cancel-in-progress: true
     permissions:
       contents: read
-    env:
-      CLOUDFLARE_ACCOUNT_ID: cec5f04e1d18bcc65f2be0aefb04f059
-      CLOUDFLARE_PROJECT_NAME: pitonne-jp
-      DEPLOY_ENV: preview
-      NEXT_PUBLIC_DEPLOY_ENV: preview
-      PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
-      WRANGLER_SEND_METRICS: "false"
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.14.0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build non-indexable preview
-        run: pnpm build
-
-      - name: Verify static preview output
-        run: |
-          pnpm audit:out
-          grep -Fq "Disallow: /" out/robots.txt
-
-      - name: Deploy isolated Cloudflare Pages preview
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
-          packageManager: pnpm
-          wranglerVersion: "4.103.0"
-          command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.PREVIEW_BRANCH }} --commit-hash=${{ github.event.pull_request.head.sha }}
-
-      - name: Verify deployed preview
-        env:
-          STABLE_PREVIEW_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
-        run: |
-          test -n "$STABLE_PREVIEW_URL"
-          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/" > /dev/null
-          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/ja/" > /dev/null
-          curl --fail --silent --show-error --retry 5 --retry-all-errors "$STABLE_PREVIEW_URL/robots.txt" | grep -Fq "Disallow: /"
+      deployments: write
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: preview
+      pr: ${{ github.event.pull_request.number }}
+      ref: ${{ github.event.pull_request.head.sha }}
+    secrets: inherit
