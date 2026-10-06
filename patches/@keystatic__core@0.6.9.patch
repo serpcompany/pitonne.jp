@@ -1,0 +1,18 @@
+diff --git a/dist/index-3c244051.js b/dist/index-3c244051.js
+index 233c8ca00c98b9ceec745b211cb5057911c2bf2d..8971770e0930c83ee739ea34030efae095552dac 100644
+--- a/dist/index-3c244051.js
++++ b/dist/index-3c244051.js
+@@ -26536,8 +26536,12 @@ function markdocNodeToProseMirrorNode$1(node, parentType) {
+     } = node.attributes;
+     const state = getState$1();
+     const fields = state.schema.config.heading.schema;
++    // Patched (pitonne.jp): clamp pasted/loaded heading levels to the editor's allowed levels, so pasting markdown
++    // like "# Title" can't create a heading level the field disallows (e.g. an H1 when only H2-H4 are allowed)
++    const allowedLevels = state.schema.config.heading.levels;
++    const clampedLevel = allowedLevels.length ? Math.min(Math.max(level, Math.min(...allowedLevels)), Math.max(...allowedLevels)) : level;
+     return createAndFill$1(node, schema.nodes.heading, {
+-      level: node.attributes.level,
++      level: clampedLevel,
+       props: toSerialized(deserializeProps$1(fields, attrs, state), fields)
+     });
+   }

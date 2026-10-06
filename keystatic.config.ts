@@ -91,7 +91,14 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
       relatedServiceSlugs: fields.multiselect({ label: "Related services", options: BLOG_RELATED_SERVICE_OPTIONS }),
       tags: fields.ignored(),
       draft: fields.checkbox({ label: "Draft", description: "Drafts are never published, including on previews." }),
-      content: fields.markdoc({ label: "Content", extension: "md", description: "Use H2/H3 headings; the title is the page's only H1." }),
+      content: fields.markdoc({
+        label: "Content",
+        extension: "md",
+        description:
+          "Start with your first paragraph; don't repeat the title (it's already the page's main heading). Use Heading 2 for sections and Heading 3–4 inside them.",
+        // The post title is the page's only H1
+        options: { heading: [2, 3, 4] },
+      }),
     },
   })
 }

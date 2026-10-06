@@ -10,6 +10,7 @@ import {
   getAllCategories,
   loadBlogPostsFromDirectory,
   localizeBlogContentHref,
+  withoutLeadingTitleHeading,
 } from "@/lib/data/blog-posts"
 import { BLOG_RELATED_SERVICE_OPTIONS } from "@/lib/blog-rules"
 import { blogCategories, loadBlogCategoriesFromDirectory } from "@/lib/data/blog-categories"
@@ -215,6 +216,12 @@ describe("blog content model", () => {
         expect(serviceSlugs, `${post.sourcePath} relatedServiceSlugs`).toContain(slug)
       }
     }
+  })
+
+  it("drops a leading title heading from the body", () => {
+    expect(withoutLeadingTitleHeading("# My Title\n\nIntro paragraph.\n\n## Section")).toBe("Intro paragraph.\n\n## Section")
+    expect(withoutLeadingTitleHeading("Intro.\n\n# Later heading")).toBe("Intro.\n\n# Later heading")
+    expect(withoutLeadingTitleHeading("## Section\n\nText")).toBe("## Section\n\nText")
   })
 
   it("uses the post title as alt text when a feature image has none", () => {

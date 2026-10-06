@@ -16,11 +16,11 @@ describe("blog index page", () => {
   it("renders supplied featured images with descriptive alt text and accessible active category contrast", async () => {
     render(await BlogPage({ params: Promise.resolve({ locale: "en" }) }))
 
-    const postsWithNewImages = getAllBlogPosts().filter((post) =>
-      post.featureImage?.startsWith("/images/content/blog/"),
-    )
-    expect(postsWithNewImages.map((post) => post.slug)).toEqual(getAllBlogPosts().map((post) => post.slug))
-    for (const post of postsWithNewImages) {
+    // Editors add posts in the CMS, with or without a feature image, so check every post that has one
+    const postsWithImages = getAllBlogPosts().filter((post) => post.featureImage)
+    expect(postsWithImages.length).toBeGreaterThan(0)
+    for (const post of postsWithImages) {
+      expect(post.featureImage).toMatch(/^\/images\/content\/blog\//)
       expect(post.featureImageAlt).toBeTruthy()
       expect(screen.getByRole("img", { name: post.featureImageAlt }).getAttribute("src")).toContain(
         encodeURIComponent(post.featureImage!),

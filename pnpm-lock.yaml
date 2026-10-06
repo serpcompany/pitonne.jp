@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@keystatic/core@0.6.9':
+    hash: 099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c
+    path: patches/@keystatic__core@0.6.9.patch
+
 importers:
 
   .:
@@ -13,10 +18,10 @@ importers:
         version: 3.10.0(react-hook-form@7.71.1(react@19.2.4))
       '@keystatic/core':
         specifier: ^0.6.9
-        version: 0.6.9(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
+        version: 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
       '@keystatic/next':
         specifier: ^5.0.5
-        version: 5.0.5(@keystatic/core@0.6.9(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@next/third-parties':
         specifier: 16.2.4
         version: 16.2.4(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
@@ -5210,7 +5215,7 @@ snapshots:
     optionalDependencies:
       next: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
-  '@keystatic/core@0.6.9(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
+  '@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@braintree/sanitize-url': 6.0.4
@@ -5279,10 +5284,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@keystatic/next@5.0.5(@keystatic/core@0.6.9(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@keystatic/next@5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
-      '@keystatic/core': 0.6.9(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
+      '@keystatic/core': 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
       '@types/react': 19.2.14
       chokidar: 3.6.0
       next: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
