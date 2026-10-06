@@ -37,7 +37,10 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         name: { label: "Title", description: "Aim for about 60 characters.", validation: { isRequired: true } },
         slug: {
           label: "Slug",
-          description: "Becomes the URL and filename. Use the same slug for the English and Japanese versions. Don't change it after publishing.",
+          description:
+            locale === "ja"
+              ? "To link this post to its English version, paste the English post's slug here exactly (for a Japanese-only post, write a new English-style slug). Don't change it after publishing."
+              : "Becomes the URL. The Japanese version of this post must use the same slug. Don't change it after publishing.",
           validation: { pattern: slugPattern },
         },
       }),

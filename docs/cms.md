@@ -12,9 +12,8 @@ Keystatic Cloud team; no GitHub account is needed.
 
 ### Writing and publishing a post
 
-1. Choose **Blog (English)** or **Blog (Japanese)**, then **Add**.
-2. When Keystatic asks to create a branch, give it a short name such as `new-jet-lag-post`. Every change is saved on its
-   own branch first; the live site is never edited directly.
+1. Make sure the branch box at the top left says **main**.
+2. Choose **Blog (English)** or **Blog (Japanese)**, then **Add**.
 3. Fill in the fields. Keystatic shows a message under any field that needs fixing:
    - **Title**: about 60 characters.
    - **Slug**: becomes the web address. Use the same slug for the English and Japanese versions of a post, and don't
@@ -25,14 +24,19 @@ Keystatic Cloud team; no GitHub account is needed.
    - **Feature image**: optional; keep images under 1 MB. **Alt text** (optional) describes the image for screen
      readers; if it's empty, the post title is used.
    - **Draft**: tick it to save without publishing.
-4. Choose **Save**. The site checks the change and publishes it automatically, usually within 10 minutes. If a check
-   fails, the change is not published; ask a developer.
-5. To make another change after publishing, start again from the `main` branch (step 2 creates a new branch).
+4. Choose **Create** (or **Save** when editing). The site rebuilds and the change is live within a few minutes. If the
+   build fails, the live site doesn't change; ask a developer.
 
 ### Translations
 
-English and Japanese posts are separate entries paired by slug. A post can exist in one language only; the other
-language simply has no page for it until a translation with the same slug is published.
+English and Japanese posts are separate entries paired by slug:
+
+1. Publish the English post and note its **Slug** (for example `iv-therapy-aftercare-what-to-do-after-a-drip`).
+2. Choose **Blog (Japanese)**, then **Add**, and write the Japanese version.
+3. In **Slug**, paste the English post's slug exactly. That links the two, including the language switcher.
+
+A post can exist in one language only; the other language simply has no page for it until a translation with the same
+slug is published.
 
 ### Categories
 
@@ -44,9 +48,9 @@ posts are moved to another category.
 
 - **Local editing**: `pnpm cms` edits files in your checkout; `pnpm cms:cloud` uses Keystatic Cloud and commits to
   GitHub. Open http://127.0.0.1:3000/keystatic (Keystatic switches `localhost` to `127.0.0.1`).
-- **Publishing flow**: Keystatic Cloud commits to `cms/*` branches. CI runs on those pushes, and
-  `.github/workflows/cms-publish.yml` opens a PR into `main`, squash-merges the tested commit and runs the deploy
-  workflow. A failed CI run leaves the branch unmerged.
+- **Publishing flow**: the Keystatic Cloud GitHub app is on the `main` ruleset's bypass list, so CMS saves commit
+  straight to `main`, which triggers CI and the deploy (a build that fails isn't deployed). If a save ever lands on a
+  `cms/*` branch instead, `.github/workflows/cms-publish.yml` merges it into `main` once CI passes and deploys.
 - **Undoing a change**: revert the CMS merge commit on `main` (`git revert <sha>`) through a normal PR; history is the
   version record.
 - **Access**: editors are managed in the Keystatic Cloud project `serp/pitonne-website` (free plan: up to 3 users per
