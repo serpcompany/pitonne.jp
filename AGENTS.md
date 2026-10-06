@@ -35,13 +35,13 @@ pnpm check
 ```
 
 It runs lint → typecheck → test → audit:routes → audit:content → audit:strings → audit:meta →
-`DEPLOY_ENV=production pnpm build` → audit:out (the export has the files Cloudflare Pages needs and no `out/en/`) →
-audit:seo, in about 30 seconds. This is a single package, so the push check is the same command.
+`DEPLOY_ENV=production pnpm build` → audit:out (the export has the files Cloudflare Pages needs, every sitemap the
+index lists, and no `out/en/`) → audit:seo, in about 30 seconds. This is a single package, so the push check is the same command.
 
 Run it once per state: if the tree hasn't changed since the last green run, cite that run instead of repeating it.
 CI (`.github/workflows/ci.yml`) runs the same steps one by one, plus `pnpm test:lighthouse`, and CI on the final
-commit is the record. CI still lists the `out/` checks inline rather than calling `pnpm audit:out`, so keep `check`
-and the CI steps in step by hand when adding one.
+commit is the record. CI lists the steps itself rather than calling `pnpm check`, so keep the two in step by hand
+when adding one.
 
 ## Evidence beyond the gate
 

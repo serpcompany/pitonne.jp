@@ -46,6 +46,11 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - **Business data**: `lib/data/site.ts` — `getBusinessInfo(locale)`
 - **Content data**: `lib/data/blog-posts.ts`, `lib/data/services.ts` (accept `locale` param)
 - **Area data**: `lib/data/areas.ts` (co-located en/ja fields)
+- **Sitemaps**: `lib/sitemaps.ts`. `/sitemap-index.xml` is the entry point and lists one root-level child per content
+  group (`/sitemap-pages.xml`, `-services`, `-areas`, `-blog`, `-categories`, `-videos`), each served by
+  `app/sitemap-<group>.xml/route.ts`. `/sitemap.xml` serves the same XML as the index; `/videos-sitemap.xml` 301s to
+  `/sitemap-videos.xml`. The English homepage is listed as `https://pitonne.jp` (no slash); every other URL ends in `/`.
+  A new route type goes in an existing group or a new group (add it to `sitemapGroups`, a route file and `public/_headers`).
 - **i18n docs**: `docs/i18n.md`
 
 ## Audits and parity tests
@@ -55,7 +60,9 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
   Use the optional `metaTitle` / `metaDescription` frontmatter instead of editing the visible title/excerpt.
 - `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`
   (the CMS offers only H2–H4, and a body that starts with `# Title` has that line dropped), complete Open Graph tags (use `pageOpenGraph()` from `lib/seo.ts`),
-  broken or redirecting internal links, URLs listed in more than one sitemap, and images over 5 MB.
+  broken or redirecting internal links, images over 5 MB, and the sitemap index pattern: `robots.txt` lists only
+  `/sitemap-index.xml`, every indexable page is in exactly one child sitemap, and every sitemap URL is a page that isn't
+  `noindex` and whose canonical equals that URL (hreflang alternates must be pages too).
 - JSON-LD is typed with `schema-dts` (`WithContext<...>` in `lib/structured-data.ts`), so `pnpm typecheck`
   rejects properties that aren't valid for a schema.org type.
 
