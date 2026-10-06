@@ -106,6 +106,11 @@ export function estimateReadingTime(markdown: string, locale: Locale): number {
   return Math.max(1, Math.ceil(minutes))
 }
 
+// The page renders the title as its only <h1>, so a body that starts with its own "# Title" line drops it
+export function withoutLeadingTitleHeading(markdown: string): string {
+  return markdown.replace(/^#[ \t]+[^\n]*\n*/, "")
+}
+
 export function loadBlogPostsFromDirectory(
   directory: string,
   locale: Locale,
@@ -148,7 +153,7 @@ export function loadBlogPostsFromDirectory(
         return []
       }
 
-      const content = parsed.content.trim()
+      const content = withoutLeadingTitleHeading(parsed.content.trim())
 
       return [
         {

@@ -77,6 +77,8 @@ function BlogVideoEmbed({ slug, locale }: { slug: string; locale: Locale }) {
 function markdownComponents(locale: Locale): Components {
   return {
     a: ({ node: _node, href, ...props }) => <a href={href ? localizeBlogContentHref(href, locale) : href} {...props} />,
+    // The post title is the page's only <h1>
+    h1: ({ node: _node, ...props }) => <h2 {...props} />,
   }
 }
 
