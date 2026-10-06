@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Post-deploy smoke test for the canonical-host redirects (issue #79, functions/_middleware.ts).
+// Post-deploy smoke test for the canonical-host redirects (issue #79, functions/_middleware.ts) and the slashed-file
+// redirect (issue #92: `/robots.txt/` -> `/robots.txt` on pitonne.jp).
 // Asserts that each non-canonical host returns one 308 to the same path and query on https://pitonne.jp, and that
 // requests the Function passes through still get `_redirects`, `_headers` and 404s from the static asset server.
 // Run after a production deploy:
@@ -14,7 +15,7 @@ export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
 
 // A new deployment can take a few seconds to replace the previous one at the edge. The first check waits for that
 // (up to ATTEMPTS tries); once the edge has answered, every later check gets LATER_ATTEMPTS tries. Worst case, with
-// every request hanging until its timeout: 12 x 15 s + 18 x 2 x 15 s, about 12 minutes, inside the job's 20.
+// every request hanging until its timeout: 12 x 15 s + 22 x 2 x 15 s, about 14 minutes, inside the job's 20.
 const ATTEMPTS = 12
 const LATER_ATTEMPTS = 2
 const RETRY_DELAY_MS = 5000
@@ -50,17 +51,35 @@ export function passThroughChecks(origin, headers = SMOKE_HEADERS) {
   ]
 }
 
+/**
+ * A file URL with a trailing slash returns one 308 to the file on the same host, keeping the query string. On pitonne.jp
+ * this needs no header; on a non-canonical host the smoke-test header puts the request on the same path.
+ */
+export function slashedFileChecks(origin, marker, headers) {
+  const query = `?smoke=${encodeURIComponent(marker)}`
+  const checks = [
+    redirect(`${origin}/sitemap-index.xml/${query}`, `${origin}/sitemap-index.xml${query}`),
+    redirect(`${origin}/robots.txt/`, `${origin}/robots.txt`),
+  ]
+  return headers ? checks.map((check) => ({ ...check, headers })) : checks
+}
+
 /** The production checks run after each deploy to main. `zone: true` marks www, which a zone rule redirects. */
 export function smokeChecks({ deploymentUrl, marker }) {
   const query = `?smoke=${encodeURIComponent(marker)}`
   const checks = [
     ...redirectChecks(PAGES_ORIGIN, marker),
     ...passThroughChecks(PAGES_ORIGIN),
+    ...slashedFileChecks(CANONICAL_ORIGIN, marker),
     redirect(`${WWW_ORIGIN}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`, { zone: true }),
   ]
   if (deploymentUrl) {
     const origin = new URL(deploymentUrl).origin
-    checks.push(...redirectChecks(origin, marker), ...passThroughChecks(origin))
+    checks.push(
+      ...redirectChecks(origin, marker),
+      ...passThroughChecks(origin),
+      ...slashedFileChecks(origin, marker, SMOKE_HEADERS),
+    )
   }
   return checks
 }

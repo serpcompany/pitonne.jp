@@ -83,5 +83,8 @@ fixing it comes first.
 
 - Tests check rules, not content snapshots. Editors add and change posts at any time, so don't assert post counts,
   that every post has an image or tags, or the text of a post.
+- Trailing-slash exceptions to the [URL trailing-slash standard](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/url-trailing-slash.md):
+  the slashed form of a path excluded in `public/_routes.json` (`/images/x.jpg/`, `/favicon.ico/`) never reaches the
+  Function and returns 404, and `/keystatic/*` is left as requested (the Keystatic router reads a slash as a segment).
 - Don't rewrite reviewed Japanese copy (content, dictionaries, frontmatter). Add to it instead, and flag
   AI-written Japanese in the PR for native review.
