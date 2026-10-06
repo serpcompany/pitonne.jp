@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { AreaDetailPage } from "@/components/area-detail-page"
 import { getAllAreas, getArea } from "@/lib/data/areas"
-import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { fitsTitleLimit, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -38,8 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const enTitleWithWard = `IV Therapy, Stem Cells & Blood Tests in ${area.name}, ${ward.name}`
   const seoTitle = typedLocale === "ja"
     ? `${area.nameJa}（${ward.nameJa}）の点滴療法・幹細胞・血液検査`
-    // Keep "<title> | Pitonne" within 70 characters for long area names
-    : enTitleWithWard.length <= 60 ? enTitleWithWard : `IV Therapy, Stem Cells & Blood Tests in ${area.name}`
+    // Drop the ward for long area names so the full <title> stays within the audit limit
+    : fitsTitleLimit(enTitleWithWard) ? enTitleWithWard : `IV Therapy, Stem Cells & Blood Tests in ${area.name}`
   const seoDescription = typedLocale === "ja"
     ? `${area.nameJa}（${ward.nameJa}、東京）で点滴療法、幹細胞治療、処方薬、血液検査をご希望の方へ。Pitonneでは看護師がご自宅・ホテル・オフィスへお伺いする訪問点滴と、クリニックでの施術に対応しています。医師によるオンライン診療のもと、安心してご利用いただけます。`
     : `IV therapy, stem cell treatments, medications, and blood testing in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. Mobile and in-clinic care from Pitonne.`
@@ -48,11 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: seoTitle,
     description: seoDescription,
     alternates: localizedHreflangAlternates(`/areas-served/${ward.slug}/${area.slug}/`, typedLocale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: seoTitle,
       description: seoDescription,
-      url: localizedCanonicalUrl(`/areas-served/${ward.slug}/${area.slug}/`, typedLocale),
-      locale,
+      path: `/areas-served/${ward.slug}/${area.slug}/`,
+      locale: typedLocale,
     }),
   }
 }

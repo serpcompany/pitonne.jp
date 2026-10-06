@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
 import { getAllBlogPosts, getAllCategories } from "@/lib/data/blog-posts"
-import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -29,11 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dict.blog.metaTitle,
     description: dict.blog.metaDescription,
     alternates: localizedHreflangAlternates("/blog/", typedLocale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: dict.blog.metaTitle,
       description: dict.blog.metaDescription,
-      url: localizedCanonicalUrl("/blog/", typedLocale),
-      locale,
+      path: "/blog/",
+      locale: typedLocale,
     }),
   }
 }

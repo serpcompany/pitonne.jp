@@ -6,7 +6,7 @@ import { CareAvailableSection } from "@/components/areas/care-available-section"
 import { HowToGetStartedSection } from "@/components/areas/how-to-get-started-section"
 import { LatestPostsSection } from "@/components/shared/latest-posts-section"
 import { getWard, wards } from "@/lib/data/areas"
-import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
@@ -43,11 +43,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: seoTitle,
     description: seoDescription,
     alternates: localizedHreflangAlternates(`/areas-served/${ward.slug}/`, typedLocale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: seoTitle,
       description: seoDescription,
-      url: localizedCanonicalUrl(`/areas-served/${ward.slug}/`, typedLocale),
-      locale,
+      path: `/areas-served/${ward.slug}/`,
+      locale: typedLocale,
     }),
   }
 }

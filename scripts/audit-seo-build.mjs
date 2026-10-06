@@ -18,8 +18,9 @@ import path from "node:path"
 
 const OUT = path.resolve(process.argv[2] || "out")
 const SITE_URL = "https://pitonne.jp"
-const TITLE_RANGE = [15, 70]
-const DESCRIPTION_RANGE = [110, 160]
+const limits = JSON.parse(fs.readFileSync(new URL("../lib/seo-limits.json", import.meta.url), "utf8"))
+const TITLE_RANGE = [limits.title.min, limits.title.max]
+const DESCRIPTION_RANGE = [limits.description.min, limits.description.max]
 const REQUIRED_OG = ["og:title", "og:description", "og:image", "og:url", "og:type"]
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const SITEMAPS = ["sitemap.xml", "videos-sitemap.xml"]
@@ -68,7 +69,12 @@ const redirectSources = fs
   .filter(Boolean)
 
 function resolveInternal(href) {
-  const pathname = decodeURI(href.split("#")[0].split("?")[0])
+  let pathname
+  try {
+    pathname = decodeURI(href.split("#")[0].split("?")[0])
+  } catch {
+    return "broken" // malformed percent-encoding
+  }
   if (!pathname) return "ok"
   if (redirectSources.some((source) => source === pathname || (source.endsWith("*") && pathname.startsWith(source.slice(0, -1))))) {
     return "redirect"

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
-import { localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -27,11 +27,11 @@ export async function generateMetadata({
     title: dict.legal.metaTitle,
     description: dict.legal.metaDescription,
     alternates: localizedHreflangAlternates("/legal/", locale as Locale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: dict.legal.metaTitle,
       description: dict.legal.metaDescription,
-      url: localizedHreflangAlternates("/legal/", locale as Locale).canonical,
-      locale,
+      path: "/legal/",
+      locale: locale as Locale,
     }),
   }
 }

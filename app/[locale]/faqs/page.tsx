@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import type { FAQPage, WithContext } from "schema-dts"
 import { JsonLd } from "@/components/shared/json-ld"
 import { PageHero } from "@/components/shared/page-hero"
-import { localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -26,11 +26,11 @@ export async function generateMetadata({
     title: dict.faqs.frequentlyAskedQuestions,
     description: dict.faqs.metaDescription,
     alternates: localizedHreflangAlternates("/faqs/", locale as Locale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: dict.faqs.frequentlyAskedQuestions,
       description: dict.faqs.metaDescription,
-      url: localizedHreflangAlternates("/faqs/", locale as Locale).canonical,
-      locale,
+      path: "/faqs/",
+      locale: locale as Locale,
     }),
   }
 }

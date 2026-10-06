@@ -11,7 +11,16 @@ export function GET() {
       const enUrl = canonicalUrl(video.watchPath)
       const jaUrl = `${SITE_URL}/ja${video.watchPath}`
 
-      return [enUrl, jaUrl].map((watchUrl) => [
+      const entries = [
+        { watchUrl: enUrl, title: video.title, description: video.metaDescription ?? video.description },
+        {
+          watchUrl: jaUrl,
+          title: video.titleJa ?? video.title,
+          description: video.metaDescriptionJa ?? video.descriptionJa ?? video.description,
+        },
+      ]
+
+      return entries.map(({ watchUrl, title, description }) => [
         "  <url>",
         `    <loc>${escapeXml(watchUrl)}</loc>`,
         `    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enUrl)}" />`,
@@ -19,8 +28,8 @@ export function GET() {
         `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enUrl)}" />`,
         "    <video:video>",
         `      <video:thumbnail_loc>${escapeXml(video.thumbnailUrl)}</video:thumbnail_loc>`,
-        `      <video:title>${escapeXml(video.title)}</video:title>`,
-        `      <video:description>${escapeXml(video.description)}</video:description>`,
+        `      <video:title>${escapeXml(title)}</video:title>`,
+        `      <video:description>${escapeXml(description)}</video:description>`,
         `      <video:player_loc>${escapeXml(video.embedUrl)}</video:player_loc>`,
         `      <video:duration>${durationToSeconds(video.duration)}</video:duration>`,
         `      <video:publication_date>${escapeXml(video.uploadDate)}</video:publication_date>`,

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { ServicesIndexTemplate } from "@/components/services/services-index-template"
 import { getServiceCategorySections } from "@/lib/data/services"
-import { localizedHreflangAlternates, localizedCanonicalUrl, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -24,11 +24,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dict.services.metaTitle,
     description: dict.services.metaDescription,
     alternates: localizedHreflangAlternates("/services/", locale as Locale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: dict.services.metaTitle,
       description: dict.services.metaDescription,
-      url: localizedCanonicalUrl("/services/", locale as Locale),
-      locale,
+      path: "/services/",
+      locale: locale as Locale,
     }),
   }
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
 import { getLegalPage } from "@/lib/data/pages"
-import { localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -24,11 +24,11 @@ export async function generateMetadata({
     title: dict.legal.privacyPolicy,
     description: dict.legal.privacyPolicyMeta,
     alternates: localizedHreflangAlternates("/legal/privacy-policy/", locale as Locale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: dict.legal.privacyPolicy,
       description: dict.legal.privacyPolicyMeta,
-      url: localizedHreflangAlternates("/legal/privacy-policy/", locale as Locale).canonical,
-      locale,
+      path: "/legal/privacy-policy/",
+      locale: locale as Locale,
     }),
   }
 }

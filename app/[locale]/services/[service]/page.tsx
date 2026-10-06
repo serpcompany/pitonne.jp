@@ -4,7 +4,7 @@ import { ServiceDetailTemplate } from "@/components/services/service-detail-temp
 import { ServiceParentTemplate } from "@/components/services/service-parent-template"
 import { getBlogPostsForService } from "@/lib/data/blog-posts"
 import { getAllServiceSlugs, getChildServices, getService, getServicesFromSlugs } from "@/lib/data/services"
-import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
+import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -36,19 +36,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: metaTitle,
     description: metaDescription,
     alternates: localizedHreflangAlternates(service.canonicalPath, locale as Locale),
-    openGraph: pageOpenGraph({
+    ...pageSocialMetadata({
       title: metaTitle,
       description: metaDescription,
-      url: localizedCanonicalUrl(service.canonicalPath, locale as Locale),
-      locale,
+      path: service.canonicalPath,
+      locale: locale as Locale,
       images: service.image ? [absoluteUrl(service.image)] : undefined,
     }),
-    twitter: {
-      card: "summary_large_image",
-      title: metaTitle,
-      description: metaDescription,
-      images: service.image ? [absoluteUrl(service.image)] : undefined,
-    },
   }
 }
 

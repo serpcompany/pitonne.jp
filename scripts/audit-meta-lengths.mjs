@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 // Reports blog/service pages whose rendered <title> or meta description falls outside
-// the ranges used by Ahrefs Site Audit: title 15–70 chars (including " | Pitonne"),
-// meta description 110–160 chars. Exits non-zero when any page is out of range.
+// the Ahrefs Site Audit ranges in lib/seo-limits.json (title includes the " | Pitonne" suffix).
+// Exits non-zero when any page is out of range.
 import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 
-const TITLE_SUFFIX = " | Pitonne"
-const TITLE_MIN = 15
-const TITLE_MAX = 70
-const DESC_MIN = 110
-const DESC_MAX = 160
+const limits = JSON.parse(fs.readFileSync(new URL("../lib/seo-limits.json", import.meta.url), "utf8"))
+const TITLE_SUFFIX = limits.titleSuffix
+const TITLE_MIN = limits.title.min
+const TITLE_MAX = limits.title.max
+const DESC_MIN = limits.description.min
+const DESC_MAX = limits.description.max
 
 const sources = [
   { dir: "content/blog", titleKey: "title", descKey: "excerpt" },
