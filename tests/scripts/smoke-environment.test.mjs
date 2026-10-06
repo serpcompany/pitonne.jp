@@ -52,16 +52,33 @@ describe("environment smoke test", () => {
     expect(await run(pagesPage, { attempts: 1, probeFn: challenged })).toMatchObject({ ok: false })
   })
 
-  it("retries the first check while the deployment propagates, later checks briefly", async () => {
+  it("retries each origin's checks until it has had time to settle, then briefly", async () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => {})
+    let clock = 0
+    const now = () => clock
     const calls = new Map()
     const probeFn = async (url) => {
       calls.set(url, (calls.get(url) ?? 0) + 1)
+      clock += 10
       return response(500, "")
     }
-    const checks = environmentChecks("staging", "https://x.pages.dev")
-    expect(await runChecks(checks, { attempts: 5, delayMs: 0, probeFn })).toBe(false)
-    expect(checks.map((check) => calls.get(check.url))).toEqual([5, 2, 2])
+    const checks = ["https://x.pages.dev", "https://abc12345.x.pages.dev"].flatMap((origin) =>
+      environmentChecks("staging", origin),
+    )
+    expect(await runChecks(checks, { delayMs: 0, probeFn, now, settleMs: 100 })).toBe(false)
+    // Each origin's window opens at its first check, which retries until 100 ms later; the rest are past it
+    expect(checks.map((check) => calls.get(check.url))).toEqual([10, 2, 2, 10, 2, 2])
+
+    calls.clear()
+    clock = 0
+    const settling = async (url) => {
+      calls.set(url, (calls.get(url) ?? 0) + 1)
+      clock += 10
+      return clock >= 50 ? response(200, STAGING_ROBOTS) : response(404, "")
+    }
+    const robots = byPath("staging")["/robots.txt"]
+    expect(await runChecks([robots], { delayMs: 0, probeFn: settling, now })).toBe(true)
+    expect(calls.get(robots.url)).toBe(5)
     log.mockRestore()
   })
 

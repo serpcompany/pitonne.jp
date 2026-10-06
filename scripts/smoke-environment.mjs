@@ -13,11 +13,12 @@ import { SMOKE_HEADERS } from "./smoke-canonical-host.mjs"
 export const SITEMAP_LINE = "Sitemap: https://pitonne.jp/sitemap-index.xml"
 const ENVIRONMENTS = new Set(["production", "staging", "preview"])
 
-// The first check waits for the new deployment to reach the edge; later checks get a short budget.
-// A brand-new deployment URL can answer 404 for over a minute (seen 2026-10-06 on Staging), so the first check
-// waits about two minutes.
-const ATTEMPTS = 24
-const LATER_ATTEMPTS = 2
+// A new deployment takes a while to reach the edge, and a brand-new deployment URL can answer 404 for over a minute,
+// for some paths while others already work (seen 2026-10-06 on Staging, issue #109). So every check on an origin keeps
+// retrying until SETTLE_MS after that origin's first check starts, and gets at least ATTEMPTS tries. Worst case, with
+// every request hanging until its timeout, per origin: 135 s + 3 x 2 x 15 s, about 4 minutes; 3 origins on Staging.
+const ATTEMPTS = 2
+const SETTLE_MS = 120_000
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
 
@@ -81,10 +82,16 @@ export async function probe(url) {
   return { status: response.status, headers: response.headers, body: await response.text() }
 }
 
-/** Runs one check with retries. Returns { ok, warning?, message }. */
-export async function run(check, { attempts = ATTEMPTS, delayMs = RETRY_DELAY_MS, probeFn = probe } = {}) {
+/**
+ * Runs one check, retrying while it fails: at least `attempts` tries, and until `until` (a Date.now() time).
+ * Returns { ok, warning?, message }.
+ */
+export async function run(
+  check,
+  { attempts = ATTEMPTS, until = 0, delayMs = RETRY_DELAY_MS, probeFn = probe, now = Date.now } = {},
+) {
   let message = null
-  for (let attempt = 1; attempt <= attempts; attempt++) {
+  for (let attempt = 1; ; attempt++) {
     try {
       const response = await probeFn(check.url)
       if (isZoneHost(check.url) && response.headers.has("cf-mitigated")) {
@@ -95,16 +102,19 @@ export async function run(check, { attempts = ATTEMPTS, delayMs = RETRY_DELAY_MS
       message = error.message
     }
     if (message === null) return { ok: true, message: `${check.url}: ok` }
-    if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs))
+    if (attempt >= attempts && now() >= until) return { ok: false, message: `${check.url}: ${message}` }
+    await new Promise((resolve) => setTimeout(resolve, delayMs))
   }
-  return { ok: false, message: `${check.url}: ${message}` }
 }
 
-export async function runChecks(checks, options = {}) {
+export async function runChecks(checks, { settleMs = SETTLE_MS, ...options } = {}) {
+  const now = options.now ?? Date.now
+  const settleUntil = new Map()
   let passed = true
-  for (const [index, check] of checks.entries()) {
-    const attempts = index === 0 ? options.attempts : Math.min(options.attempts ?? ATTEMPTS, LATER_ATTEMPTS)
-    const result = await run(check, { ...options, attempts })
+  for (const check of checks) {
+    const { origin } = new URL(check.url)
+    if (!settleUntil.has(origin)) settleUntil.set(origin, now() + settleMs)
+    const result = await run(check, { ...options, until: settleUntil.get(origin) })
     if (!result.ok) passed = false
     console.log(`${result.ok ? (result.warning ? "::warning::" : "ok ") : "::error::"}${result.message}`)
   }
