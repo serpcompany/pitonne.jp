@@ -1,15 +1,13 @@
 ---
-slug: iv-therapy-for-fatigue
 title: 疲労に対する点滴療法：エネルギー不足が水分補給の必要性を示唆する場合
 excerpt: 疲労に対する点滴療法は、特定の脱水症状や回復の場面では有効である場合がありますが、持続的な倦怠感については、より広範な医学的視点からの検討が必要です。
 metaDescription: 疲労に対する点滴療法は、特定の脱水症状や回復の場面では有効である場合がありますが、持続的な倦怠感については、より広範な医学的視点からの検討が必要です。点滴療法でできること・できないこと、診察の内容、まず医師に相談すべき場合をPitonneが解説します。
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-fatigue/featureImage.jpg
 featureImageAlt: 街を見渡す窓のそばで、白いバスローブ姿で笑顔を見せながら点滴を受ける女性
 featured: false
 relatedServiceSlugs:

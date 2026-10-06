@@ -1,15 +1,13 @@
 ---
-slug: how-often-can-you-get-iv-therapy-tokyo
 title: "点滴はどれくらいの頻度で受けられる？東京で考える治療間隔と安全性"
 excerpt: "点滴を検討している方から、「どのくらいの間隔で受けられますか？」という質問をよく受けます。頻度は、点滴の種類、成分や量、体調、既往歴、服薬、目的によって異なります。"
 metaDescription: 点滴を検討している方から、「どのくらいの間隔で受けられますか？」という質問をよく受けます。頻度は、点滴の種類、成分や量、体調、既往歴、服薬、目的によって異なります。エクソソーム点滴やビタミン点滴の間隔の考え方、継続前に確認したいこと、医療機関への相談を優先すべき場合も解説します。
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg
+featureImage: /images/content/blog/ja/how-often-can-you-get-iv-therapy-tokyo/featureImage.jpg
 featureImageAlt: "卓上カレンダーで点滴のスケジュールを確認する医療従事者"
 featured: false
 relatedServiceSlugs:

@@ -31,7 +31,7 @@ function markdownFrontmatter(dir) {
   return fs
     .readdirSync(path.join(root, dir))
     .filter((fileName) => fileName.endsWith(".md"))
-    .map((fileName) => matter(fs.readFileSync(path.join(root, dir, fileName), "utf8")).data)
+    .map((fileName) => ({ slug: fileName.replace(/\.md$/, ""), ...matter(fs.readFileSync(path.join(root, dir, fileName), "utf8")).data }))
 }
 
 function areaRoutes() {

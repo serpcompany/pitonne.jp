@@ -257,13 +257,7 @@
     "consultationDescription": "Interested in learning more? Book a consultation to discuss how our services can support your wellness goals.",
     "contactPitonne": "Contact Pitonne",
     "contactDescription": "Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.",
-    "relatedPitonneServices": "Related Pitonne Services",
-    "categoryDescriptions": {
-      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team, covering hydration, recovery, Exosome IV therapy, safety, and booking in Tokyo."
-    },
-    "categoryCtaDescriptions": {
-      "iv-therapy": "Our team is ready to help you learn more about IV therapy and how it might support your goals."
-    }
+    "relatedPitonneServices": "Related Pitonne Services"
   },
   "contact": {
     "contactUs": "Contact Us",

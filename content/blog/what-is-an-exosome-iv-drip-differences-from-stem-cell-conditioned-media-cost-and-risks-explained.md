@@ -1,6 +1,4 @@
 ---
-slug: >-
-  what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained
 title: >-
   What Is an Exosome IV Drip? Differences From Stem Cell Conditioned Media, Cost, and Risks Explained
 metaTitle: What Is an Exosome IV Drip? Cost, Risks, and Differences
@@ -8,12 +6,11 @@ excerpt: >-
   What is an Exosome IV drip? Learn how it differs from stem cell conditioned
   media, what it may cost, the main risks, and what to confirm before booking.
 publishedAt: '2026-04-25'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/services/Exosome_H.jpg
+featureImage: /images/content/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/featureImage.jpg
 featureImageAlt: >-
   IV bag labeled Exosome on a drip stand, with Tokyo Tower softly blurred
   through the window

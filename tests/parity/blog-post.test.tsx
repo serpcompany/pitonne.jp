@@ -223,11 +223,11 @@ describe("blog post parity", () => {
       expect(en?.readingTime).toBeGreaterThan(0)
       expect(ja?.readingTime).toBeGreaterThan(0)
       expect(en).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
-      expect(ja).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
-      const expectedImage = `/images/content/blog/${slug}.jpg`
+      expect(ja).toMatchObject({ category: "点滴療法", categorySlug: "iv-therapy", featured: false })
+      const expectedImage = `/images/content/blog/${slug}/featureImage.jpg`
       const expectedMetadata = featuredImageMetadata[slug]
       expect(en).toMatchObject({ featureImage: expectedImage, featureImageAlt: expectedMetadata.altEn })
-      expect(ja).toMatchObject({ featureImage: expectedImage, featureImageAlt: expectedMetadata.altJa })
+      expect(ja).toMatchObject({ featureImage: `/images/content/blog/ja/${slug}/featureImage.jpg`, featureImageAlt: expectedMetadata.altJa })
       expect(fs.statSync(path.join(process.cwd(), "public", expectedImage.slice(1))).size).toBeLessThan(100 * 1024)
       expect(`${en?.title}\n${en?.excerpt}\n${en?.content}`).not.toMatch(japaneseScript)
       expect(`${ja?.title}\n${ja?.excerpt}\n${ja?.content}`).toMatch(japaneseScript)

@@ -1,18 +1,16 @@
 ---
-slug: iv-therapy-for-hangover-in-tokyo
 title: 'IV Therapy for Hangover: A Private Option for Hydration and Recovery Support'
 metaTitle: 'IV Therapy for Hangover in Tokyo: Private Recovery Support'
 excerpt: >-
   Considering IV therapy for a hangover in Tokyo? Learn how it may support
   hydration and recovery, when it should not be used, and what to check first.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/iv-therapy-for-hangover-in-tokyo/featureImage.jpg
 featureImageAlt: Clinician starting an IV in the arm of a patient resting at home in a bathrobe
 relatedServiceSlugs:
   - 'hangover-iv-drip'

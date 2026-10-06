@@ -1,15 +1,13 @@
 ---
-slug: how-long-does-iv-therapy-take-tokyo
 title: "点滴の所要時間はどれくらい？東京の訪問点滴の流れを解説"
 excerpt: >-
   Pitonneでは、点滴そのものの所要時間は約30〜60分、初回は問診や説明を含めて約1時間が目安です。東京の訪問点滴について、所要時間が変わる理由、予約から問診、点滴、終了後の案内までの当日の流れ、予約前に準備したい情報を解説します。
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg
+featureImage: /images/content/blog/ja/how-long-does-iv-therapy-take-tokyo/featureImage.jpg
 featureImageAlt: "医療従事者が点滴を確認する中で点滴を受ける患者"
 featured: false
 relatedServiceSlugs:

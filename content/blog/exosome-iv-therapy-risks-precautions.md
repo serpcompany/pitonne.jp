@@ -1,18 +1,16 @@
 ---
-slug: exosome-iv-therapy-risks-precautions
 title: 'What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment'
 metaTitle: 'Exosome IV Therapy Risks and Precautions: Safety Guide'
 excerpt: >-
   Learn the key risks and precautions of Exosome IV therapy, from general IV
   risks and pre-treatment screening to what to review before booking.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImage: /images/content/blog/exosome-iv-therapy-risks-precautions/featureImage.jpg
 featureImageAlt: >-
   IV bag hand-labeled Immune Boost on a drip stand by a window overlooking Tokyo
   Tower

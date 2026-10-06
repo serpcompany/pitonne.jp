@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-cold-flu-tokyo
 title: 風邪やインフルエンザに点滴療法は必要ですか？ 対症療法を検討する前に知っておくべきこと
 excerpt: >-
   喉の痛み、鼻水、咳、発熱、倦怠感、頭痛。風邪やインフルエンザのような症状が現れると、多くの人は、点滴療法なら症状を早く和らげられるのではないかと自然と考えるものです。特に、水分を摂るだけでは……
 metaDescription: 喉の痛み、鼻水、咳、発熱、倦怠感、頭痛。風邪やインフルエンザのような症状が現れると、多くの人は、点滴療法なら症状を早く和らげられるのではないかと自然と考えるものです。特に、水分を摂るだけでは……点滴療法が検討される場合や、まず医師の診察を受けるべき場合をPitonneが解説します。
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-cold-flu-tokyo/featureImage.jpg
 featureImageAlt: 東京の街並みと東京タワーを背景に、点滴スタンドに吊るされた「Immune Boost」の点滴バッグ
 relatedServiceSlugs:
   - immune-boost-iv-therapy

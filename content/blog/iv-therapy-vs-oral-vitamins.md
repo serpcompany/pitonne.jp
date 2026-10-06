@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-vs-oral-vitamins
 title: "IV Therapy vs. Oral Vitamins: What Is the Difference?"
 excerpt: >-
   IV therapy vs. oral vitamins: learn how the route, amount, safety checks, and
   risks differ, and what to ask before choosing an IV or supplements.
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
+featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins/featureImage.jpg
 featureImageAlt: "IV bag and oral supplements arranged side by side for comparison"
 featured: false
 relatedServiceSlugs:

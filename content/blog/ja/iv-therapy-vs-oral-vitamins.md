@@ -1,15 +1,13 @@
 ---
-slug: iv-therapy-vs-oral-vitamins
 title: "点滴とサプリメントの違いとは？東京でIV Therapyを考える前に知っておきたいこと"
 excerpt: "「ビタミンを補うなら、サプリメントと点滴のどちらがよいのだろう？」どちらも体内に成分を取り入れる方法ですが、摂取経路、使用量、確認事項、リスクは異なります。"
 metaDescription: '「ビタミンを補うなら、サプリメントと点滴のどちらがよいのだろう？」どちらも体内に成分を取り入れる方法ですが、摂取経路、使用量、確認事項、リスクは異なります。サプリメントが向いている場合、点滴を検討する場合、選ぶときの確認ポイント、医療機関への相談を優先すべき場合を解説します。'
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
+featureImage: /images/content/blog/ja/iv-therapy-vs-oral-vitamins/featureImage.jpg
 featureImageAlt: "比較のために並べられた点滴バッグと経口サプリメント"
 featured: false
 relatedServiceSlugs:

@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-allergies
 title: >-
   Is IV Therapy Helpful When Allergies Feel Overwhelming? How Pitonne Thinks About Supportive Care and Whole-Body Condition
 metaTitle: 'IV Therapy for Allergies: Supportive Care and What to Know'
@@ -7,13 +6,12 @@ excerpt: >-
   When allergies affect sleep and energy, some patients ask about IV therapy.
   Learn how it may support hydration, why it is not a cure, and what to review.
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-allergies.jpg
+featureImage: /images/content/blog/iv-therapy-for-allergies/featureImage.jpg
 featureImageAlt: IV drip chamber and tubing against a soft background of fresh green leaves
 relatedServiceSlugs:
   - iv-vitamin-therapy

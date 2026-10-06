@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-athletes-training-recovery
 title: >-
   Do Athletes and Serious Trainees Benefit From IV Therapy? Daily Recovery
   Support and What to Check Before Competition
@@ -8,7 +7,6 @@ excerpt: >-
   Learn how athletes and serious trainees may use IV therapy for recovery
   support, and why anti-doping rules on IV volume matter before competition.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -22,7 +20,7 @@ tags:
   - athletes
   - training recovery
   - competition
-featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImage: /images/content/blog/iv-therapy-for-athletes-training-recovery/featureImage.jpg
 featureImageAlt: >-
   IV bag hand-labeled Energy & Fatigue Recovery hanging by a window overlooking
   Tokyo Tower

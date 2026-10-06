@@ -1,18 +1,31 @@
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js"
 
 const root = dirname(fileURLToPath(import.meta.url))
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "export",
-  trailingSlash: true,
-  turbopack: {
-    root,
-  },
-  images: {
-    unoptimized: true,
-  },
-}
+/** @type {(phase: string) => import('next').NextConfig} */
+export default function nextConfig(phase) {
+  // The local Keystatic admin (/keystatic) needs a dynamic API route, which static export forbids. Its route
+  // files use the `.keystatic.tsx` / `.keystatic.ts` extension and load only under `pnpm cms`, so `pnpm dev`
+  // keeps static-export checks.
+  const isKeystatic = phase === PHASE_DEVELOPMENT_SERVER && process.env.KEYSTATIC === "1"
 
-export default nextConfig
+  return {
+    output: isKeystatic ? undefined : "export",
+    // Keystatic redirects localhost to 127.0.0.1 in cloud/GitHub mode, so allow that origin's dev resources
+    allowedDevOrigins: isKeystatic ? ["127.0.0.1"] : undefined,
+    pageExtensions: isKeystatic ? ["tsx", "ts", "jsx", "js", "keystatic.tsx", "keystatic.ts"] : ["tsx", "ts", "jsx", "js"],
+    trailingSlash: true,
+    // Keystatic's router reads a trailing slash as an extra path segment (its OAuth callback
+    // /keystatic/cloud/oauth/callback/ becomes "not found"), so the CMS dev server doesn't add one. Skipping the
+    // redirect, rather than turning trailingSlash off, avoids cached 308 loops when switching between dev and cms.
+    skipTrailingSlashRedirect: isKeystatic,
+    turbopack: {
+      root,
+    },
+    images: {
+      unoptimized: true,
+    },
+  }
+}

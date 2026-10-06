@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-fatigue-in-tokyo
 title: 点滴療法は疲労に効果があるか？ 支持療法を検討する前に知っておくべきこと
 excerpt: 「休んだつもりなのに、まだ疲れが残っている。」「東京に来てから予定がぎっしりで、体が重く感じる。」「忙しすぎて、疲れが当たり前になってきた。」
 metaDescription: '「休んだつもりなのに、まだ疲れが残っている。」「東京に来てから予定がぎっしりで、体が重く感じる。」「忙しすぎて、疲れが当たり前になってきた。」疲労の原因は必ずしも同じとは限りません。点滴療法を検討すべき場合や、まず医学的評価が必要な場合、Pitonneの考え方を解説します。'
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-fatigue-in-tokyo/featureImage.jpg
 featureImageAlt: 東京の高層階の部屋で、バスローブ姿でソファにくつろぎながら点滴を受ける女性
 relatedServiceSlugs:
   - energy-fatigue-recovery-iv

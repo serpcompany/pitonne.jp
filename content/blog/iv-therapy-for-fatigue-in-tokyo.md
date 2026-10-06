@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-fatigue-in-tokyo
 title: 'Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care'
 metaTitle: Is IV Therapy Helpful for Fatigue in Tokyo? What to Know
 excerpt: >-
@@ -7,13 +6,12 @@ excerpt: >-
   supportive care for fatigue, why it is not a cure, and when to seek medical
   care.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImage: /images/content/blog/iv-therapy-for-fatigue-in-tokyo/featureImage.jpg
 featureImageAlt: >-
   Woman in a bathrobe relaxing on a sofa during an IV drip in a Tokyo high-rise
   room

@@ -1,15 +1,13 @@
 ---
-slug: iv-therapy-side-effects-safety-guide
 title: "IV Therapy Side Effects: What to Watch For Before, During, and After a Drip"
 metaTitle: 'IV Therapy Side Effects and Safety: What to Watch For'
 excerpt: "Learn about possible IV therapy side effects and safety considerations before, during, and after an infusion, including symptoms that require medical attention."
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
+featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide/featureImage.jpg
 featureImageAlt: "Clinician monitoring an IV infusion pump beside a seated patient"
 featured: false
 relatedServiceSlugs:

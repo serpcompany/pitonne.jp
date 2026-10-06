@@ -1,17 +1,15 @@
 ---
-slug: how-often-can-you-get-iv-therapy-tokyo
 title: "How Often Can You Get IV Therapy? Understanding Treatment Intervals in Tokyo"
 metaTitle: How Often Can You Get IV Therapy? Intervals in Tokyo
 excerpt: >-
   How often can you get IV therapy? Learn why intervals depend on the treatment,
   ingredients, health history, and medications, and what to confirm first.
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg
+featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo/featureImage.jpg
 featureImageAlt: "Clinician reviewing an IV therapy schedule on a desk calendar"
 featured: false
 relatedServiceSlugs:

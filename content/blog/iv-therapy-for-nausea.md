@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-nausea
 title: >-
   Do You Need IV Therapy When You Feel Nauseous? What to Know Before Considering Supportive Care
 metaTitle: 'IV Therapy for Nausea: What to Know About Supportive Care'
@@ -8,13 +7,12 @@ excerpt: >-
   hydration if fluids are hard to keep down, and when to seek medical care
   first.
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-nausea.jpg
+featureImage: /images/content/blog/iv-therapy-for-nausea/featureImage.jpg
 featureImageAlt: >-
   Person pressing a hand to their stomach while holding a plate of unfinished
   food

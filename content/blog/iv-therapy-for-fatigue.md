@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-fatigue
 title: 'IV Therapy for Fatigue: When Low Energy May Point to Hydration Support'
 metaTitle: 'IV Therapy for Fatigue: When Hydration Support May Help'
 excerpt: >-
   IV therapy for fatigue may help in selected hydration and recovery situations,
   but persistent low energy needs a broader medical view.
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImage: /images/content/blog/iv-therapy-for-fatigue/featureImage.jpg
 featureImageAlt: >-
   Smiling woman in a white bathrobe receiving an IV drip beside a window with
   city views

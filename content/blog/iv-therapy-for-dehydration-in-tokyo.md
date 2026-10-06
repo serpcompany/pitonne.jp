@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-dehydration-in-tokyo
 title: >-
   Is IV Therapy Helpful for Dehydration? What to Know When Considering Hydration
   Support
@@ -9,7 +8,6 @@ excerpt: >-
   hydration may be considered, why oral fluids come first, and when to see a
   doctor.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -21,7 +19,7 @@ tags:
   - iv therapy
   - dehydration
   - hydration
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/iv-therapy-for-dehydration-in-tokyo/featureImage.jpg
 featureImageAlt: >-
   Gloved clinician securing an IV line in the forearm of a patient wearing a
   bathrobe

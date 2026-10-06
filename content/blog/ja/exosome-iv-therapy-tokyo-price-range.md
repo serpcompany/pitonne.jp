@@ -1,10 +1,8 @@
 ---
-slug: exosome-iv-therapy-tokyo-price-range
 title: 東京でのエクソソーム点滴療法の価格帯は？ 低価格なプランを比較する前に確認すべきこと
 excerpt: >-
   東京でエクソソーム点滴療法について調べ始めると、まず最初に浮かぶ疑問の一つは、「一般的な価格帯はどのくらいか」ということでしょう。実際には、「エクソソーム点滴療法」や「幹細胞培養上清点滴療法」として提供される治療法は、その価格に大きなばらつきがあります...
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -17,7 +15,7 @@ tags:
   - 価格設定
   - 東京
   - 在宅介護
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/ja/exosome-iv-therapy-tokyo-price-range/featureImage.jpg
 featureImageAlt: 東京タワーを望む高層階の部屋で、点滴スタンドに吊るされたエクソソーム点滴のバッグ
 ---
 東京でエクソソーム点滴療法について調べ始めると、まず最初に浮かぶ疑問の一つが「一般的な価格帯はどのくらいか？」ということでしょう。 実際には、「エクソソーム点滴療法」や「幹細胞培養上清点滴」として提供される治療の費用は、比較的手頃な価格帯から非常に高額なものまで、幅広くなっています。

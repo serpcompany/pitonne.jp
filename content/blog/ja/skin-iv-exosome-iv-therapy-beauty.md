@@ -1,12 +1,10 @@
 ---
-slug: skin-iv-exosome-iv-therapy-beauty
 title: 点滴療法は美容に効果があるのでしょうか？ピトンが考える「スキンIV」と「エクソソームIV」療法
 excerpt: >-
   「最近、実際の疲れよりも顔に疲れが出ている気がする。」  「睡眠不足だったり忙しかったりすると、それが顔に現れてしまう。」 
   「大切なイベントの前には、心身ともに整った状態でいたい。」
 metaDescription: '「最近、実際の疲れよりも顔に疲れが出ている気がする。」「睡眠不足だったり忙しかったりすると、それが顔に現れてしまう。」「大切なイベントの前には、心身ともに整った状態でいたい。」Pitonneが考える「スキンIV」と「エクソソームIV」療法、美容点滴を近道として扱うべきでない理由を解説します。'
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -21,7 +19,7 @@ tags:
   - 美
   - グルタチオン
   - エクソソーム IV
-featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
+featureImage: /images/content/blog/ja/skin-iv-exosome-iv-therapy-beauty/featureImage.jpg
 featureImageAlt: 東京タワーを背景に、点滴スタンドに吊るされた「Skin Brightening」と手書きされた点滴バッグ
 ---
 「最近、気分ほどには疲れて見えないのに、見た目だけは疲れて見えるんです」  

@@ -1,10 +1,8 @@
 ---
-slug: iv-therapy-for-dehydration-in-tokyo
 title: 点滴療法は脱水症状に効果があるか？水分補給療法を検討する際に知っておくべきこと
 excerpt: >-
   脱水症状は、多くの人が思っている以上に体に悪影響を及ぼすことがあります。暑い天候、屋外での長時間の活動、旅行、トレーニング、多忙なスケジュール、アルコールの摂取、睡眠不足、不規則な食事などは、すべて疲労感やめまい、ふらつきなどの原因となり得ます……
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -16,7 +14,7 @@ tags:
   - 静脈内療法
   - 脱水
   - 水分補給
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-dehydration-in-tokyo/featureImage.jpg
 featureImageAlt: バスローブ姿の患者の前腕に点滴ラインを固定する、手袋をした医療従事者
 ---
 脱水症状は、多くの人が思っている以上に体に悪影響を及ぼす可能性があります。暑い天候、屋外での長時間の活動、旅行、トレーニング、多忙な業務スケジュール、アルコールの摂取、睡眠不足、不規則な食事などは、すべて体調不良、立ちくらみ、疲労感、あるいは単に「いつもの自分ではない」という感覚を引き起こす要因となり得ます。

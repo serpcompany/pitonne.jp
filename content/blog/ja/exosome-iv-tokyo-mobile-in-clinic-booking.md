@@ -1,11 +1,9 @@
 ---
-slug: exosome-iv-tokyo-mobile-in-clinic-booking
 title: 東京でエクソソーム点滴を受ける方法：モバイル点滴サービス「Mobile IV Flow」と「Pitonne」での来院予約
 excerpt: >-
   東京でエクソソームIVを検討する際、多くの患者様は、クリニックへの来院が必要かどうか、ホテルやご自宅での治療が可能かどうか、また予約前にどのような情報が必要かについて知りたいと考えています。海外からの渡航については……
 metaDescription: 東京でエクソソームIVを検討する際、多くの患者様は、クリニックへの来院が必要かどうか、ホテルやご自宅での治療が可能かどうか、また予約前にどのような情報が必要かについて知りたいと考えています。海外からの渡航については……Pitonneの来院予約と訪問点滴の流れ、予約前の準備について解説します。
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -19,7 +17,7 @@ tags:
   - 移動式点滴療法
   - 東京
   - 予約
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/ja/exosome-iv-tokyo-mobile-in-clinic-booking/featureImage.jpg
 featureImageAlt: 東京タワーが見える窓際に準備されたエクソソーム点滴
 ---
 東京でエクソソーム点滴を検討する際、多くの患者様は、クリニックへ通院する必要があるのか、ホテルや自宅での施術が可能なのか、また予約前にどのような情報が必要なのかを知りたいと考えています。 海外からの旅行者、日本在住の外国人、多忙なビジネスパーソンにとって、治療そのものは決断の一要素に過ぎません。治療体験がどのように手配されるかを理解することも、同様に重要です。

@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-relaxation
 title: 点滴療法はリラックスに効果的か？　ピトンが考える水分補給、ビタミン点滴、そしてエクソソーム点滴療法
 excerpt: >-
   「リラックスしたいのに、なかなかリラックスできない」という感覚は、多くの人が思っている以上に身体的な要因によるものです。ピトンヌでは、リラクゼーションを目的とした点滴療法を、単なる気分転換のためのサービスではなく、全身のコンディションを整えるためのサポートとして捉えています。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-relaxation.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-relaxation/featureImage.jpg
 featureImageAlt: ぐっすり眠った後、ベッドの上で気持ちよさそうに伸びをする男性
 relatedServiceSlugs:
   - iv-vitamin-therapy

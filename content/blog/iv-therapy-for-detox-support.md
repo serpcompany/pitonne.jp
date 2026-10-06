@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-detox-support
 title: 'Is IV Therapy Good for Detox? How Pitonne Thinks About Hydration, Vitamins, and Exosome IV Therapy'
 metaTitle: 'IV Therapy for Detox: Hydration, Vitamins, and Exosome IV'
 excerpt: '“Lately my body just feels heavy.” “I’ve had too many dinners, too much travel, and I don’t feel clear.” “Do you offer a detox IV?”'
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/wellness-consultation.jpg
+featureImage: /images/content/blog/iv-therapy-for-detox-support/featureImage.jpg
 featureImageAlt: >-
   Clinician consulting with a woman in a white bathrobe in a hotel room before
   treatment

@@ -1,17 +1,15 @@
 ---
-slug: exosome-iv-therapy-risks-precautions
 title: エクソソームIV療法のリスクと注意事項とは？治療前に確認すべき安全上のポイント
 excerpt: >-
   エクソソームIV療法を検討する際、多くの患者さんは当然ながら、その治療法の内容や作用機序に注目します。しかし、安全性についてどのように考えるべきか、どのような注意事項があるかを理解することも、同様に重要です...
 metaDescription: エクソソームIV療法を検討する際、多くの患者さんは当然ながら、その治療法の内容や作用機序に注目します。しかし、安全性についてどのように考えるべきか、どのような注意事項があるかを理解することも、同様に重要です...点滴に伴う一般的なリスク、治療前のスクリーニング、予約前に確認すべき事項を解説します。
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImage: /images/content/blog/ja/exosome-iv-therapy-risks-precautions/featureImage.jpg
 featureImageAlt: 東京タワーが見える窓辺で、点滴スタンドに吊るされた「Immune Boost」と手書きされた点滴バッグ
 relatedServiceSlugs:
   - exosome-iv-drip

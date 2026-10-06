@@ -4,3 +4,21 @@
 /services/medications/ /services/medication/ 301
 /ja/services/medications /ja/services/medication/ 301
 /ja/services/medications/ /ja/services/medication/ 301
+
+# Blog feature images moved to per-post folders for the CMS (issue #64)
+/images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo/featureImage.jpg 301
+/images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo/featureImage.jpg 301
+/images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg /images/content/blog/how-long-does-iv-therapy-take-tokyo/featureImage.jpg 301
+/images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg /images/content/blog/how-often-can-you-get-iv-therapy-tokyo/featureImage.jpg 301
+/images/content/blog/iv-therapy-side-effects-safety-guide.jpg /images/content/blog/iv-therapy-side-effects-safety-guide/featureImage.jpg 301
+/images/content/blog/iv-therapy-vs-oral-vitamins.jpg /images/content/blog/iv-therapy-vs-oral-vitamins/featureImage.jpg 301
+/images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic/featureImage.jpg 301
+/images/content/services/Exosome_H.jpg /images/content/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-allergies.jpg /images/content/blog/iv-therapy-for-allergies/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-focus-clarity.jpg /images/content/blog/iv-therapy-for-focus-clarity/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-gut-health.jpg /images/content/blog/iv-therapy-for-gut-health/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-immune-health.jpg /images/content/blog/iv-therapy-for-immune-health/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-jet-lag.jpg /images/content/blog/iv-therapy-for-jet-lag/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-nausea.jpg /images/content/blog/iv-therapy-for-nausea/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-relaxation.jpg /images/content/blog/iv-therapy-for-relaxation/featureImage.jpg 301
+/images/content/sheet/blog/iv-therapy-for-stress.jpg /images/content/blog/iv-therapy-for-stress/featureImage.jpg 301

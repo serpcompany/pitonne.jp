@@ -1,16 +1,13 @@
 ---
-slug: >-
-  what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained
 title: エクソソーム点滴とは？幹細胞培養上清との違い、費用、リスクについて解説
 excerpt: >-
   「エクソソーム点滴」という言葉を耳にしたことはあっても、それが具体的に何を指すのか、あるいは幹細胞培養上清液とどう異なるのか、よく分からないという方は多いでしょう。このガイドでは、その治療内容、費用、および安全性に関する注意点について解説します。
 publishedAt: '2026-04-25'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/services/Exosome_H.jpg
+featureImage: /images/content/blog/ja/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/featureImage.jpg
 featureImageAlt: 窓の向こうにぼんやりと東京タワーが見える、点滴スタンドに吊るされた「Exosome」と書かれた点滴バッグ
 featured: true
 relatedServiceSlugs:

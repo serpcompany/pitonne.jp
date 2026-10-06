@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-dehydration
 title: 脱水症状に対する点滴療法：水分補給のサポートが有効な場合
 excerpt: >-
   脱水症状に対する点滴療法は、状況によっては水分補給に役立つ場合がありますが、すべてのケースに有効というわけではありません。ここでは、安全に実施するための考え方について解説します。
 metaDescription: 脱水症状に対する点滴療法は、状況によっては水分補給に役立つ場合がありますが、すべてのケースに有効というわけではありません。ここでは、安全に実施するための考え方について解説します。点滴療法でできること・できないこと、診察の内容、まず医療従事者に相談すべき場合も紹介します。
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-dehydration/featureImage.jpg
 featureImageAlt: ストライプのクッションに置いた患者の腕に点滴ラインを留置する、青い手袋の医療従事者
 featured: false
 relatedServiceSlugs:

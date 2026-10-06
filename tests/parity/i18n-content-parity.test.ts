@@ -25,7 +25,9 @@ describe("i18n content file parity", () => {
     for (const [dir, files] of [["content/blog", en], ["content/blog/ja", ja]] as const) {
       for (const file of files) {
         const { data } = matter(fs.readFileSync(path.join(root, dir, file), "utf8"))
-        expect(`${data.slug}.md`, `${dir}/${file}`).toBe(file)
+        // The filename is the slug (Keystatic doesn't store it in frontmatter)
+        expect(data.slug, `${dir}/${file}`).toBeUndefined()
+        expect(file, `${dir}/${file}`).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/)
       }
     }
   })

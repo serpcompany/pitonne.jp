@@ -1,16 +1,14 @@
 ---
-slug: blood-tests-before-regular-iv-therapy-tokyo
 title: "Are Blood Tests Needed Before IV Therapy? What to Know Before Regular IV Therapy in Tokyo"
 metaTitle: 'Blood Tests Before Regular IV Therapy in Tokyo: What to Know'
 excerpt: "People who are considering regular IV therapy often ask, “Do I need a blood test before I begin?”"
 metaDescription: Do you need a blood test before regular IV therapy in Tokyo? Learn what tests may check, when they may be advised, and what to tell your medical team.
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg
+featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo/featureImage.jpg
 featureImageAlt: "Gloved clinician arranging blood sample tubes for laboratory review"
 featured: false
 relatedServiceSlugs:
