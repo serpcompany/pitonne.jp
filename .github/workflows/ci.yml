@@ -6,8 +6,6 @@ on:
     branches:
       - staging
       - main
-      # CMS saves; cms-publish.yml merges and deploys them once this run passes
-      - "cms/**"
 
 jobs:
   test:

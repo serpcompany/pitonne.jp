@@ -97,7 +97,6 @@ describe("blog content model", () => {
     ["excerpt under 110 characters without a metaDescription", { excerpt: "x".repeat(90) }, "excerpt"],
     ["metaDescription shorter than 110 characters", { metaDescription: "Too short for search results." }, "metaDescription"],
     ["metaTitle longer than 60 characters", { metaTitle: "x".repeat(61) }, "metaTitle"],
-    ["featureImage without featureImageAlt", { featureImageAlt: undefined }, "featureImageAlt"],
   ])("rejects %s", (_label, override, field) => {
     const dir = writePosts({ "example-post.md": { ...validFrontmatter, ...override } })
     expect(() => loadBlogPostsFromDirectory(dir, "en", "content/blog")).toThrow(field)
@@ -216,6 +215,11 @@ describe("blog content model", () => {
         expect(serviceSlugs, `${post.sourcePath} relatedServiceSlugs`).toContain(slug)
       }
     }
+  })
+
+  it("uses the post title as alt text when a feature image has none", () => {
+    const dir = writePosts({ "example-post.md": { ...validFrontmatter, featureImageAlt: undefined } })
+    expect(loadBlogPostsFromDirectory(dir, "en", "content/blog")[0].featureImageAlt).toBe(validFrontmatter.title)
   })
 
   it("allows a post without a feature image or alt text", () => {

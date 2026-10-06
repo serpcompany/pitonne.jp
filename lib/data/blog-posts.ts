@@ -55,10 +55,6 @@ export const blogPostFrontmatterSchema = z
     // Drafts are excluded from every build (production, staging, and PR previews)
     draft: z.boolean().optional(),
   })
-  .refine((data) => !data.featureImage || data.featureImageAlt, {
-    message: "featureImageAlt is required when featureImage is set",
-    path: ["featureImageAlt"],
-  })
   .refine((data) => data.metaDescription || data.excerpt.length >= META_DESCRIPTION_MIN_LENGTH, {
     message: `excerpt is the meta description, so it needs ${META_DESCRIPTION_MIN_LENGTH}+ characters unless metaDescription is set`,
     path: ["excerpt"],
@@ -161,7 +157,8 @@ export function loadBlogPostsFromDirectory(
           category: category.name[locale],
           readingTime: readingTime ?? estimateReadingTime(content, locale),
           featureImage: frontmatter.featureImage || undefined,
-          featureImageAlt: frontmatter.featureImageAlt || undefined,
+          // Alt text is optional in the CMS; an image without it is described by the post title
+          featureImageAlt: frontmatter.featureImage ? frontmatter.featureImageAlt || frontmatter.title : undefined,
           featured: frontmatter.featured ?? false,
           relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
           tags: frontmatter.tags ?? [],

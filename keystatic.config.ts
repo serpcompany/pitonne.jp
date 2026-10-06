@@ -37,7 +37,10 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         name: { label: "Title", description: "Aim for about 60 characters.", validation: { isRequired: true } },
         slug: {
           label: "Slug",
-          description: "Becomes the URL and filename. Use the same slug for the English and Japanese versions. Don't change it after publishing.",
+          description:
+            locale === "ja"
+              ? "To link this post to its English version, paste the English post's slug here exactly (for a Japanese-only post, write a new English-style slug). Don't change it after publishing."
+              : "Becomes the URL. The Japanese version of this post must use the same slug. Don't change it after publishing.",
           validation: { pattern: slugPattern },
         },
       }),
@@ -80,11 +83,9 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         directory: `public/${imageFolder}`,
         publicPath: `/${imageFolder}/`,
       }),
-      // Required even without an image: Keystatic can't make one field conditional on another
       featureImageAlt: fields.text({
-        label: "Feature image alt text",
-        description: "Describe the feature image for screen readers.",
-        validation: { isRequired: true },
+        label: "Feature image alt text (optional)",
+        description: "Describes the image for screen readers and search engines. If left empty, the post title is used.",
       }),
       featured: fields.checkbox({ label: "Featured" }),
       relatedServiceSlugs: fields.multiselect({ label: "Related services", options: BLOG_RELATED_SERVICE_OPTIONS }),
@@ -135,12 +136,12 @@ const blogCategories = collection({
   },
 })
 
-// The deployed CMS (and `pnpm cms:cloud`) signs in through Keystatic Cloud and commits to GitHub on `cms/` branches,
-// which .github/workflows/cms-publish.yml merges and deploys. `pnpm cms` edits local files instead.
+// The deployed CMS (and `pnpm cms:cloud`) signs in through Keystatic Cloud and commits straight to main (the Keystatic
+// Cloud app bypasses the main ruleset), which deploys the site. `pnpm cms` edits local files instead.
 const useLocal = process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === "local"
 
 export default config({
-  storage: useLocal ? { kind: "local" } : { kind: "cloud", branchPrefix: "cms/" },
+  storage: useLocal ? { kind: "local" } : { kind: "cloud" },
   cloud: { project: "serp/pitonne-website" },
   ui: { brand: { name: "Pitonne" } },
   collections: {

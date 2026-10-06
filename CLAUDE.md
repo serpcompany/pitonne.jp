@@ -14,13 +14,13 @@
   a missing translation gets no page, index/category entry, hreflang, or sitemap URL in that locale.
 - `draft: true` blog posts are excluded from every build (production, staging, PR previews). Don't link to drafts.
 - Blog frontmatter rules (zod in `lib/data/blog-posts.ts`, limits in `lib/blog-rules.ts`): excerpt 70–160 chars (110+
-  unless `metaDescription` is set), `featureImageAlt` required with `featureImage`. The slug is the filename; don't add a
-  `slug:` key. `readingTime` is computed at build; don't add it to new posts.
+  unless `metaDescription` is set). `featureImageAlt` is optional; an image without it uses the post title. The slug is
+  the filename; don't add a `slug:` key. `readingTime` is computed at build; don't add it to new posts.
 - Blog posts are edited in Keystatic (`keystatic.config.ts`, guide in `docs/cms.md`) at `/keystatic`, a static
-  single-page app served for every `/keystatic/*` path by `public/_redirects`. CMS saves land on `cms/*` branches and
-  `.github/workflows/cms-publish.yml` merges and deploys them after CI passes. Locally, `pnpm cms` edits files and
-  `pnpm cms:cloud` uses Keystatic Cloud. Feature images live in `public/images/content/blog/<slug>/` (English)
-  and `public/images/content/blog/ja/<slug>/` (Japanese), one folder per post and locale.
+  single-page app served for every `/keystatic/*` path by `public/_redirects`. CMS saves commit straight to `main` (the
+  Keystatic Cloud app bypasses the ruleset) and deploy; editors use the Draft checkbox, not branches. Locally, `pnpm cms`
+  edits files and `pnpm cms:cloud` uses Keystatic Cloud. Feature images live in `public/images/content/blog/<slug>/`
+  (English) and `public/images/content/blog/ja/<slug>/` (Japanese).
 - Blog markdown links to internal pages use locale-neutral relative paths (`/blog/<slug>/`, `/contact/`), never
   `https://pitonne.jp/...` or `/ja/...`; Japanese posts resolve them to `/ja/...` at render time.
 - Blog categories live in `content/blog-categories/<slug>.json` (bilingual `name`/`nameJa`, `description`/`descriptionJa`,
