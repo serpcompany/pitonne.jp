@@ -55,10 +55,6 @@ export const blogPostFrontmatterSchema = z
     // Drafts are excluded from every build (production, staging, and PR previews)
     draft: z.boolean().optional(),
   })
-  .refine((data) => data.metaDescription || data.excerpt.length >= META_DESCRIPTION_MIN_LENGTH, {
-    message: `excerpt is the meta description, so it needs ${META_DESCRIPTION_MIN_LENGTH}+ characters unless metaDescription is set`,
-    path: ["excerpt"],
-  })
 
 export interface BlogPost {
   slug: string
@@ -104,6 +100,42 @@ export function estimateReadingTime(markdown: string, locale: Locale): number {
       : text.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE
 
   return Math.max(1, Math.ceil(minutes))
+}
+
+// A short excerpt is still the meta description, extended with the post's own opening sentences (verbatim, same
+// language) to reach the audit:meta range. A too-short excerpt must never block publishing a CMS save.
+export function fallbackMetaDescription(excerpt: string, markdown: string, locale: Locale): string | undefined {
+  if (excerpt.length >= META_DESCRIPTION_MIN_LENGTH) {
+    return undefined
+  }
+
+  const separator = locale === "ja" ? "" : " "
+  const sentences =
+    plainText(markdown)
+      .split(/\n\s*\n/)
+      .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+      .filter((paragraph) => /[。！？.!?]$/.test(paragraph))
+      .join(separator)
+      .match(/[^。！？.!?]+[。！？.!?]+/g) ?? []
+
+  let description = excerpt
+  for (const sentence of sentences) {
+    const next = `${description}${separator}${sentence.trim()}`
+    if (next.length > META_DESCRIPTION_MAX_LENGTH) {
+      break
+    }
+    description = next
+    if (description.length >= META_DESCRIPTION_MIN_LENGTH) {
+      return description
+    }
+  }
+
+  // No sentence fits: cut the next one at the limit rather than leave the description short
+  const remainder = sentences.join(separator)
+  if (!remainder) {
+    return undefined
+  }
+  return `${excerpt}${separator}${remainder}`.slice(0, META_DESCRIPTION_MAX_LENGTH - 1).trimEnd() + "…"
 }
 
 // The page renders the title as its only <h1>, so a body that starts with its own "# Title" line drops it
@@ -160,6 +192,7 @@ export function loadBlogPostsFromDirectory(
           ...frontmatter,
           slug: slug!,
           category: category.name[locale],
+          metaDescription: frontmatter.metaDescription ?? fallbackMetaDescription(frontmatter.excerpt, content, locale),
           readingTime: readingTime ?? estimateReadingTime(content, locale),
           featureImage: frontmatter.featureImage || undefined,
           // Alt text is optional in the CMS; an image without it is described by the post title
@@ -219,7 +252,9 @@ export function getBlogCategoryLocales(categorySlug: string): Locale[] {
 
 // Blog markdown links to locale-neutral paths (/blog/..., /contact/); JA posts resolve them to /ja/...,
 // except for blog posts that have no Japanese version, which keep pointing at the English page.
-export function localizeBlogContentHref(href: string, locale: Locale): string {
+// Editors often paste full https://pitonne.jp/... links; they render as locale-neutral relative paths
+export function localizeBlogContentHref(rawHref: string, locale: Locale): string {
+  const href = rawHref.replace(/^https?:\/\/(?:www\.)?pitonne\.jp(?=\/|$)/i, "") || "/"
   if (locale === "en" || !href.startsWith("/") || href.startsWith("//")) return href
   if (href === "/ja" || href.startsWith("/ja/") || href.startsWith("/images/")) return href
 
