@@ -3,7 +3,7 @@ import { Phone, MapPin, Clock } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { BookingButton } from "@/components/shared/booking-button"
 import { ContactFormDialog } from "@/components/contact/contact-form-dialog"
-import { localizedHreflangAlternates } from "@/lib/seo"
+import { localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
 import { getBusinessInfo } from "@/lib/data/site"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
@@ -28,11 +28,12 @@ export async function generateMetadata({
     title: dict.contact.contactUs,
     description: dict.contact.metaDescription,
     alternates: localizedHreflangAlternates("/contact/", locale as Locale),
-    openGraph: {
+    openGraph: pageOpenGraph({
       title: dict.contact.contactUs,
       description: dict.contact.metaDescription,
       url: localizedHreflangAlternates("/contact/", locale as Locale).canonical,
-    },
+      locale,
+    }),
   }
 }
 

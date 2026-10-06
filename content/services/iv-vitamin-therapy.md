@@ -15,6 +15,7 @@ shortDescription: >-
 
   Depending on the formulation and your schedule, treatment may be provided as
   either an IV drip or an intravenous injection.
+metaDescription: Custom vitamin IV drips and injections in Tokyo, tailored with vitamins, minerals, and nutrients to your goals after an online physician consultation.
 fullDescription: >-
   Pitonne's Custom Vitamin IV & Injection allows your treatment to be tailored
   to your health condition, wellness goals, and lifestyle.

@@ -18,8 +18,7 @@ export function businessJsonLd(locale: Locale = "en") {
     url: localizedCanonicalUrl("/", locale),
     telephone: info.phone,
     description: info.description,
-    inLanguage: locale === "ja" ? "ja" : "en",
-    availableLanguage: [
+    knowsLanguage: [
       { "@type": "Language", name: "English", alternateName: "en" },
       { "@type": "Language", name: "Japanese", alternateName: "ja" },
     ],
@@ -49,10 +48,6 @@ export function websiteJsonLd(locale: Locale = "en") {
     url: localizedCanonicalUrl("/", locale),
     publisher: { "@id": businessId },
     inLanguage: locale === "ja" ? "ja" : "en",
-    availableLanguage: [
-      { "@type": "Language", name: "English", alternateName: "en" },
-      { "@type": "Language", name: "Japanese", alternateName: "ja" },
-    ],
   }
 }
 
@@ -66,7 +61,6 @@ export function serviceJsonLd(service: Service, locale: Locale = "en") {
     url: localizedCanonicalUrl(service.canonicalPath, locale),
     image: service.image ? absoluteUrl(service.image) : undefined,
     provider: { "@id": businessId },
-    inLanguage: locale === "ja" ? "ja" : "en",
     areaServed: {
       "@type": "City",
       name: "Tokyo",

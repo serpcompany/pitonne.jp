@@ -3,10 +3,12 @@ slug: skin-iv-exosome-iv-therapy-beauty
 title: >-
   Is IV Therapy Good for Beauty? How Pitonne Thinks About Skin IV and Exosome IV
   Therapy
+metaTitle: 'IV Therapy for Beauty: Skin IV and Exosome IV Therapy'
 excerpt: >-
   "Lately I look more tired than I feel."   "When I'm sleep-deprived or busy, it
   shows on my face."   "I want to feel and look more put together before an
   important event."
+metaDescription: Is IV therapy good for beauty? Learn how Pitonne approaches Skin IV with hydration, vitamins, and glutathione, and why beauty IVs are not a shortcut.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -26,8 +28,6 @@ tags:
   - exosome iv
 featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
 ---
-# Is IV Therapy Good for Beauty? How Pitonne Thinks About Skin IV and Exosome IV Therapy
-
 "Lately I look more tired than I feel."  
 "When I'm sleep-deprived or busy, it shows on my face."  
 "I want to feel and look more put together before an important event."

@@ -157,8 +157,10 @@ describe("Pitonne video pages", () => {
     const xml = await response.text()
 
     expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")
-    expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">')
+    expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">')
     expect(xml).toContain("<loc>https://pitonne.jp/watch/does-a-hangover-iv-really-help/</loc>")
+    expect(xml).toContain("<loc>https://pitonne.jp/ja/watch/does-a-hangover-iv-really-help/</loc>")
+    expect(xml).toContain('<xhtml:link rel="alternate" hreflang="ja" href="https://pitonne.jp/ja/watch/does-a-hangover-iv-really-help/" />')
     expect(xml).toContain("<video:title>Does a Hangover IV Really Help</video:title>")
     expect(xml).toContain("<video:player_loc>https://www.youtube-nocookie.com/embed/TWZZkcxUKGI?rel=0&amp;modestbranding=1</video:player_loc>")
     expect(xml).toContain("<video:duration>94</video:duration>")

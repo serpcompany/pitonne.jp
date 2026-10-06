@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/shared/json-ld"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { localizedRoute } from "@/lib/data/routes"
 import { pitonneVideos } from "@/lib/data/videos"
-import { localizedHreflangAlternates } from "@/lib/seo"
+import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
 import { videoListJsonLd } from "@/lib/structured-data"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
@@ -28,9 +28,15 @@ export async function generateMetadata({
   const dict = getDictionary(locale as Locale)
 
   return {
-    title: dict.nav.videos,
+    title: dict.videos.metaTitle,
     description: dict.videos.metaDescription,
     alternates: localizedHreflangAlternates(canonicalRoutes.videos, locale as Locale),
+    openGraph: pageOpenGraph({
+      title: dict.videos.metaTitle,
+      description: dict.videos.metaDescription,
+      url: localizedCanonicalUrl(canonicalRoutes.videos, locale as Locale),
+      locale,
+    }),
   }
 }
 

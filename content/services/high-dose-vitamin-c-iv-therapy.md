@@ -16,6 +16,7 @@ shortDescription: >-
 
   Treatment is provided following an online consultation with a partner
   physician and is tailored to your health condition and individual needs.
+metaDescription: High-dose vitamin C IV therapy in Tokyo in 25 g or 50 g doses, given at your home, hotel, office, or partner clinic after an online physician consultation.
 fullDescription: >-
   Pitonne's High Dose Vitamin C IV Therapy delivers concentrated vitamin C
   through intravenous infusion as part of a physician-guided wellness plan.

@@ -7,6 +7,7 @@ canonicalPath: /services/medication/
 shortDescription: >-
   Private online consultations with a partner physician for eligible
   prescription medication services.
+metaDescription: Private online consultations with a partner physician for eligible prescriptions, with clinic pickup or local delivery in select central Tokyo areas.
 fullDescription: >-
   Our medication services are provided through private online consultations with
   a partner physician. After your consultation, eligible prescriptions can be

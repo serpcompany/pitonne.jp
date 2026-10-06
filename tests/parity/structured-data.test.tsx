@@ -61,6 +61,13 @@ describe("structured data parity", () => {
         dayOfWeek: "Sunday",
       }),
     )
+
+    // schema.org: inLanguage/availableLanguage are not valid on MedicalBusiness or WebSite (Ahrefs validation error)
+    const websiteSchema = schemas.find((schema) => schema["@id"] === "https://pitonne.jp/#website")
+    expect(businessSchema).not.toHaveProperty("inLanguage")
+    expect(businessSchema).not.toHaveProperty("availableLanguage")
+    expect(businessSchema.knowsLanguage).toHaveLength(2)
+    expect(websiteSchema).not.toHaveProperty("availableLanguage")
   })
 
   it("renders Service JSON-LD on service detail pages", () => {

@@ -1,6 +1,5 @@
 import { getAllAreas, wards } from "@/lib/data/areas"
 import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
-import { pitonneVideos } from "@/lib/data/videos"
 import { services } from "@/lib/data/services"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { canonicalUrl, SITE_URL } from "@/lib/seo"
@@ -34,7 +33,7 @@ export function buildEntries(): SitemapEntry[] {
     ...staticPaths,
     ...services.map((service) => service.canonicalPath),
     ...blogPosts.map((post) => `/blog/${post.slug}/`),
-    ...pitonneVideos.map((video) => video.watchPath),
+    // Watch pages are listed only in videos-sitemap.xml so each URL appears in exactly one sitemap.
     ...getAllCategories().map((category) => `/blog/category/${category.slug}/`),
     ...wards.map((ward) => `/areas-served/${ward.slug}/`),
     ...getAllAreas().map(({ ward, area }) => `/areas-served/${ward.slug}/${area.slug}/`),

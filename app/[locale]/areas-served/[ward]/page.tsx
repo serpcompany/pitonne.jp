@@ -6,7 +6,7 @@ import { CareAvailableSection } from "@/components/areas/care-available-section"
 import { HowToGetStartedSection } from "@/components/areas/how-to-get-started-section"
 import { LatestPostsSection } from "@/components/shared/latest-posts-section"
 import { getWard, wards } from "@/lib/data/areas"
-import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
@@ -36,19 +36,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `${wardLabel}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
     : `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
   const seoDescription = typedLocale === "ja"
-    ? `${wardLabel}での訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査。Pitonneがご希望の場所へ看護師を派遣します。`
+    ? `${wardLabel}（東京都）で訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご希望の方へ。Pitonneでは看護師がご自宅・ホテル・オフィスへお伺いし、医師によるオンライン診療のもとで、お一人おひとりに合わせたケアをご提供します。`
     : `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
 
   return {
     title: seoTitle,
     description: seoDescription,
     alternates: localizedHreflangAlternates(`/areas-served/${ward.slug}/`, typedLocale),
-    openGraph: {
+    openGraph: pageOpenGraph({
       title: seoTitle,
       description: seoDescription,
       url: localizedCanonicalUrl(`/areas-served/${ward.slug}/`, typedLocale),
-      locale: locale === "ja" ? "ja_JP" : "en_US",
-    },
+      locale,
+    }),
   }
 }
 

@@ -1,8 +1,10 @@
 ---
 slug: iv-therapy-for-athletes-training-recovery
 title: アスリートや本格的なトレーニングを行う人は、点滴療法の恩恵を受けられるのか？　日々の回復サポートと、試合前に確認すべきこと
+metaTitle: アスリートに点滴療法は役立つ？回復サポートと試合前の確認事項
 excerpt: >-
   アスリートや日常的に激しいトレーニングを行う人々は、日常生活をはるかに超える身体的負荷を体に課すことがよくあります。トレーニング量が増えるにつれ、……の変動に気づくことが多くなります。
+metaDescription: アスリートや本格的にトレーニングを行う方にとって、点滴療法は回復やコンディション管理の選択肢になるのでしょうか。水分補給点滴やエクソソーム点滴の位置づけ、睡眠や栄養など基本の重要性、競技選手が大会前に統括団体の規則やTUEを確認すべき理由をPitonneが解説します。
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -21,8 +23,6 @@ tags:
   - 競技会
 featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
 ---
-# アスリートや本格的なトレーニングを行う人にとって、点滴療法は有益か？日々の回復サポートと試合前のチェックポイント
-
 アスリートや定期的に激しいトレーニングを行う人々は、日常生活をはるかに超える身体的負荷を体に課していることがよくあります。 トレーニング量が増えるにつれ、回復状態、疲労、水分補給、そして全体的なコンディションの変動に気づくことが多くなります。睡眠不足、移動、仕事によるストレス、そして繰り返されるハードなトレーニングセッションは、こうした症状をさらに顕著にする可能性があります。
 
 一般的に、トレーニング負荷の高い人は、身体が適応しようとする正常なプロセスの一環として、繰り返される身体的ストレスや軽度の炎症反応を経験することがあります。 時間が経つにつれ、これらは疲労感、回復の遅れ、そして体が本来あるべきほど容易に回復していないという感覚の一因となり得ます。これが、睡眠、栄養、水分補給、そして回復習慣に真剣に取り組むことが極めて重要となる理由の一つです。
@@ -105,6 +105,6 @@ Pitonne | Stem Cell & IV Therapyでは、こうした問題を真摯に受け止
 **参考文献**
 
 * [JADA FAQ](https://www.playtruejapan.org/faq/)  
-* [JADA：医療従事者への注意喚起](https://www.playtruejapan.org/medical-staff/medicine/caution.html)  
+* [JADA：医療従事者への注意喚起](https://www.realchampion.jp/medical-staff/medicine/caution.html)  
 * [USADA：点滴投与に関する解説](https://www.usada.org/athlete-advisory/iv-infusions-explanatory-note/)  
 * [WADA禁止物質リスト](https://www.wada-ama.org/en/prohibited-list-1)

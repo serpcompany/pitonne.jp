@@ -14,6 +14,9 @@ function blogContentDirectory(locale: Locale): string {
 const blogPostFrontmatterSchema = z.object({
   slug: z.string().min(1),
   title: z.string().min(1),
+  // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
+  metaTitle: z.string().min(1).optional(),
+  metaDescription: z.string().min(1).optional(),
   excerpt: z.string().min(1),
   publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   category: z.string().min(1),
@@ -33,6 +36,8 @@ const blogPostFrontmatterSchema = z.object({
 export interface BlogPost {
   slug: string
   title: string
+  metaTitle?: string
+  metaDescription?: string
   excerpt: string
   content: string
   publishedAt: string

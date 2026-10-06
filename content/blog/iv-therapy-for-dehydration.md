@@ -1,6 +1,7 @@
 ---
 slug: iv-therapy-for-dehydration
 title: 'IV Therapy for Dehydration: When Hydration Support May Make Sense'
+metaTitle: 'IV Therapy for Dehydration: When It May Make Sense'
 excerpt: >-
   IV therapy for dehydration may help support hydration in the right situation,
   but it is not the answer for every case. Here is how to think about it safely.
@@ -22,8 +23,6 @@ tags:
   - hydration
   - recovery
 ---
-# IV Therapy for Dehydration: When Hydration Support May Make Sense
-
 IV therapy for dehydration is usually something people look into when they feel drained, dizzy, headachy, or run down and want faster hydration support than they feel they can get from fluids alone. It can make sense in the right setting, but it is not automatically the best answer for every case of dehydration.
 
 At Pitonne, the safer way to talk about IV therapy for dehydration is simple: it may help support hydration when someone has been screened appropriately and the issue appears to be mild or moderate wellness-related dehydration. It is not a substitute for emergency care, and it is not how serious dehydration, heat illness, or an underlying medical problem should be handled.

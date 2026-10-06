@@ -11,6 +11,7 @@ shortDescription: >-
   All treatments are performed by physicians at our partner clinics. Our team
   supports you throughout the process, from your initial consultation and
   appointment coordination to treatment-day assistance and follow-up care.
+metaDescription: Consultation support and referral coordination for autologous stem cell therapy at trusted partner clinics in Tokyo, from booking to follow-up care.
 fullDescription: >-
   Pitonne helps connect clients with trusted partner clinics offering autologous
   stem cell therapy in Tokyo.

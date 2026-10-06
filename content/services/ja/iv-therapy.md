@@ -1,5 +1,6 @@
 ---
 title: 点滴療法
+metaTitle: 東京の点滴療法・訪問点滴
 slug: iv-therapy
 kind: parent
 category: iv-therapy

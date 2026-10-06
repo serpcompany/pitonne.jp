@@ -4,6 +4,10 @@ export interface PitonneVideo {
   titleJa?: string
   description: string
   descriptionJa?: string
+  // SEO overrides for the watch page <title>/meta description (YouTube descriptions are too long)
+  metaTitle?: string
+  metaDescription?: string
+  metaDescriptionJa?: string
   url: string
   youtubeId: string
   thumbnailUrl: string
@@ -16,6 +20,8 @@ export interface PitonneVideo {
 const rawVideos = [
   {
     slug: "iv-therapy-for-hangover-hydration-and-recovery-support",
+    metaDescription: "A doctor explains hangover IV therapy in plain English: hydration support, alcohol-related fatigue, and why medical screening matters before treatment in Tokyo.",
+    metaDescriptionJa: "二日酔い点滴は飲酒後のつらさに役立つのか、医師がわかりやすく解説します。水分補給のサポートやアルコールによる疲労感、施術前の医療スクリーニングの重要性についてご説明します。東京のホテル・ご自宅・オフィスへの訪問にも対応しています。",
     title: "IV Therapy for Hangover Hydration & Recovery Support",
     description:
       "Click here to get started: https://pitonne.jp/\n\nWhat is a Hangover IV, and can it help after a night of drinking? In this video, a doctor explains Hangover IV therapy in simple, patient-friendly English, including hydration support, alcohol-related fatigue, and the importance of medical screening before treatment.\n\nAt Pitonne | Stem Cell & IV Therapy, we support international travelers, foreign residents in Tokyo, business travelers, and busy professionals seeking private, convenient, medically guided care. Our mobile IV service is appointment-based, with nurse visits to your home, hotel, or office within our coverage area, followed by an online medical consultation before treatment. If approved by the physician, IV therapy is administered safely by our nurse. Clinic visits are also available with a ¥5,000 discount on IV menu prices.\nFor more information, please visit our website and contact us for a consultation.\n\n\n#HangoverIVTokyo #HangoverIV #HangoverDripTokyo #HangoverTreatmentTokyo #IVTherapyTokyo #MobileIVTokyo #TokyoIVTherapy #HydrationIVTokyo #IVDripTokyo #MobileIVTherapyTokyo #HangoverRecoveryTokyo #DehydrationSupportTokyo #AlcoholRecoveryIV #TokyoWellnessClinic #TokyoMedicalWellness #HotelIVServiceTokyo #HomeIVTherapyTokyo #OfficeIVTherapyTokyo #TravelWellnessTokyo #BusinessTravelerTokyo #TokyoHealthSupport #PrivateIVTokyo #DoctorGuidedIVTokyo #NurseVisitIVTokyo #WellnessIVTokyo #VitaminIVTokyo #TokyoRecoverySupport #InternationalPatientsTokyo #TokyoClinic #TokyoMobileIV",
@@ -27,6 +33,8 @@ const rawVideos = [
   },
   {
     slug: "tokyo-mobile-iv-hotel-home-office",
+    metaDescription: "Learn how to book a mobile IV in Tokyo, with a registered nurse visiting your hotel, home, or office after an online consultation with a partner physician.",
+    metaDescriptionJa: "東京で訪問点滴を受ける方法をご紹介します。ご予約後、看護師がホテル・ご自宅・オフィスへお伺いし、施術前に医師によるオンライン診療を行います。医師の確認・判断のもとで、安全に点滴を実施します。完全予約制で、来院での点滴には割引料金もご用意しています。",
     title: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
     titleJa: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
     description:
@@ -41,6 +49,9 @@ const rawVideos = [
   },
   {
     slug: "how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo-ova",
+    metaTitle: "How to Book a Mobile IV in Tokyo: Hotel, Home, or Office",
+    metaDescription: "Watch a doctor explain how mobile IV booking works in Tokyo, from sharing your details to a nurse visit at your hotel, home, or office and physician approval.",
+    metaDescriptionJa: "東京のホテル・ご自宅・オフィスで出張点滴を予約する方法を医師が解説します。ご予約時の情報のご提出から、看護師の訪問、施術前のオンライン診療、医師の確認のもとでの点滴まで、サービスの流れをご紹介します。プライベートで便利な医療サポートをお探しの方へ。",
     title: "How to Book a Mobile IV at Your Hotel, Home, or Office in Tokyo",
     titleJa: "東京のホテル・自宅・オフィスで出張点滴を予約する方法",
     description:
@@ -55,6 +66,8 @@ const rawVideos = [
   },
   {
     slug: "does-a-hangover-iv-really-help",
+    metaDescription: "Does a hangover IV really help? A doctor explains hydration support, alcohol-related fatigue, and why medical screening comes first before IV treatment.",
+    metaDescriptionJa: "二日酔い点滴は本当に効果があるのか？医師が二日酔い点滴療法について、水分補給のサポートやアルコールによる疲労感、施術前の医療スクリーニングの重要性を含めてわかりやすく解説します。東京での訪問点滴にも対応しています。飲酒後の体調管理の参考にご覧ください。",
     title: "Does a Hangover IV Really Help",
     titleJa: "二日酔い点滴は本当に効果がある？",
     description:
@@ -69,6 +82,8 @@ const rawVideos = [
   },
   {
     slug: "can-ed-medication-be-prescribed-online-in-japan",
+    metaDescription: "Can ED medication be prescribed online in Japan? A doctor explains why sildenafil and tadalafil need medical review and how online consultations work.",
+    metaDescriptionJa: "日本でED治療薬はオンライン処方できるのか、医師がわかりやすく解説します。シルデナフィルやタダラフィルは処方薬であり、症状や既往歴、服用中の薬の確認など、医師による適切な診察が必要な理由をご説明します。オンライン診療を活用した処方の流れもご紹介します。",
     title: "Can ED Medication Be Prescribed Online in Japan",
     titleJa: "日本でED治療薬はオンライン処方できる？",
     description:
@@ -83,6 +98,9 @@ const rawVideos = [
   },
   {
     slug: "how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo",
+    metaTitle: "How to Book a Mobile IV in Tokyo: Hotel, Home, or Office",
+    metaDescription: "How do you book a mobile IV in Tokyo? A doctor explains who uses it, common IV menus, and how a nurse visits your hotel, home, or office after a consultation.",
+    metaDescriptionJa: "東京のホテル・ご自宅・オフィスで出張点滴を予約する方法を医師が解説します。どのような方が利用しているか、よく相談される点滴メニュー、予約から看護師の訪問、オンライン診療、施術までの流れをご紹介します。完全予約制で、対応エリア内へお伺いします。",
     title: "How to Book a Mobile IV at Your Hotel, Home, or Office in Tokyo",
     titleJa: "東京のホテル・自宅・オフィスで出張点滴を予約する方法",
     description:

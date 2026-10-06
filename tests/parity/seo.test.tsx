@@ -63,7 +63,9 @@ describe("SEO parity", () => {
     }
 
     for (const video of pitonneVideos) {
-      expect(urls).toContain(`${SITE_URL}${video.watchPath}`)
+      // Watch pages belong only to videos-sitemap.xml (no page in multiple sitemaps)
+      expect(urls).not.toContain(`${SITE_URL}${video.watchPath}`)
+      expect(urls).not.toContain(`${SITE_URL}/ja${video.watchPath}`)
     }
 
     for (const ward of wards) {

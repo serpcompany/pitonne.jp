@@ -87,7 +87,7 @@
     "whyWeExist": "Why We Exist",
     "howWeSupport": "How We Support You",
     "meetTheTeam": "Meet The Team",
-    "metaDescription": "Learn about Pitonne, a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
+    "metaDescription": "Learn about Pitonne, a concierge wellness service in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care.",
     "heroDescription": "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and personalized care through in-home and hotel visits. We are designed for busy professionals, international visitors, and clients who value privacy, convenience, and clinically guided support. Our goal is to make wellness care feel more accessible, discreet, and tailored to real life in Tokyo.",
     "whyWeExistContent": "Our mission is to deliver discreet, high quality wellness support with clinical attentiveness, clear communication, and personalized care. We created Pitonne to offer a more thoughtful way to access IV therapy, stem cell related wellness support, and visit based services in Tokyo. By combining convenience with professional support, we aim to help each client feel cared for, respected, and supported in a way that fits their individual needs.",
     "ourTeam": "Our Team",
@@ -114,7 +114,8 @@
     "relatedServices": "Related Services",
     "relatedPosts": "Related Posts",
     "frequentlyAskedQuestions": "Frequently Asked Questions",
-    "metaDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients in Tokyo.",
+    "metaDescription": "Explore physician-guided medications, premium IV therapy, blood testing, and regenerative wellness services for busy professionals and travelers in Tokyo.",
+    "metaTitle": "Our Services",
     "heroDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.",
     "heroImageAlt": "Pitonne online consultation and wellness service planning",
     "bookThisService": "Book This Service",
@@ -236,6 +237,7 @@
     "publishedOn": "Published on",
     "by": "by",
     "metaDescription": "Read the latest articles about IV therapy, stem cell treatments, wellness tips, and health insights from Pitonne in Tokyo.",
+    "metaTitle": "IV Therapy & Wellness Blog",
     "heroDescription": "Insights on IV therapy, stem cell treatments, and wellness from the Pitonne team. We share educational content to help you make informed decisions about your health.",
     "categories": "Categories:",
     "all": "All",
@@ -257,7 +259,7 @@
     "contactDescription": "Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.",
     "relatedPitonneServices": "Related Pitonne Services",
     "categoryDescriptions": {
-      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team."
+      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team, covering hydration, recovery, exosome IV therapy, safety, and booking in Tokyo."
     },
     "categoryCtaDescriptions": {
       "iv-therapy": "Our team is ready to help you learn more about IV therapy and how it might support your goals."
@@ -337,8 +339,8 @@
     "neighborhoods": "Neighborhoods",
     "servicesAvailable": "Services Available",
     "nearbyAreas": "Nearby Areas",
-    "metaTitle": "IV Therapy, Stem Cells, Medications & Blood Tests | Areas Served in Tokyo",
-    "metaDescription": "IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Mobile and in-clinic wellness care in Roppongi, Azabu, Shibuya, Ginza, and more from Pitonne.",
+    "metaTitle": "Areas Served in Tokyo: IV Therapy, Stem Cells & Blood Tests",
+    "metaDescription": "IV therapy, stem cell treatments, medications, and blood tests across central Tokyo, with mobile and in-clinic care in Roppongi, Azabu, Shibuya, Ginza and more.",
     "heroTitle": "IV Therapy, Stem Cells, Medications & Blood Testing — Areas Served in Tokyo",
     "heroDescription": "Pitonne provides IV therapy, stem cell treatments, medications, and blood testing throughout central Tokyo. Our team travels to your home or hotel for private, concierge wellness care.",
     "ward": "Ward",
@@ -377,7 +379,8 @@
     "pitonneVideo": "Pitonne Video",
     "moreVideos": "More Videos",
     "videosDescription": "Doctor-led videos from Pitonne covering mobile IV therapy, hangover IV support, and private wellness care in Tokyo.",
-    "metaDescription": "Watch Pitonne videos about mobile IV therapy, hangover IV support, and wellness care in Tokyo."
+    "metaDescription": "Watch Pitonne videos about mobile IV therapy, hangover IV support, online ED medication, and booking concierge care at your hotel, home, or office in Tokyo.",
+    "metaTitle": "Videos"
   },
   "legal": {
     "legal": "Legal",
@@ -385,17 +388,19 @@
     "legalInformation": "Legal Information",
     "legalDescription": "Important legal documents and policies governing the use of Pitonne services.",
     "metaDescription": "Legal information, privacy policy, terms and conditions, and medical disclaimer for Pitonne wellness services.",
+    "metaTitle": "Legal Information",
     "questionsAboutPolicies": "Questions About Our Policies?",
     "questionsDescription": "If you have any questions about our legal documents or policies, please contact us.",
     "privacyPolicy": "Privacy Policy",
     "privacyPolicyDescription": "How we collect, use, and protect your personal information.",
-    "privacyPolicyMeta": "Privacy Policy for Pitonne Stem Cell & IV Therapy services in Tokyo.",
+    "privacyPolicyMeta": "Learn how Pitonne collects, uses, stores, and protects personal information under Japan's APPI, including third-party sharing, data security, and your rights.",
     "termsOfUse": "Terms of Use",
     "termsDescription": "Terms of service for using Pitonne wellness services.",
-    "termsMeta": "Terms and conditions for Pitonne wellness services in Tokyo.",
+    "termsMeta": "Review the terms of use for the Pitonne website in Tokyo, covering intellectual property, prohibited activities, external links, liability, and governing law.",
+    "termsMetaTitle": "Terms of Use",
     "medicalDisclaimer": "Medical Disclaimer",
     "disclaimerDescription": "Important medical and health-related disclaimers.",
-    "disclaimerMeta": "Medical disclaimer for Pitonne wellness services in Tokyo."
+    "disclaimerMeta": "Read the medical disclaimer for Pitonne wellness services in Tokyo: website content is general information and is not a substitute for advice from a physician."
   },
   "languageSwitcher": {
     "en": "English",

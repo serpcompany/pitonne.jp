@@ -2,6 +2,7 @@
 slug: blood-tests-before-regular-iv-therapy-tokyo
 title: "点滴前に血液検査は必要？東京で定期的なIV Therapyを考えるときの確認事項"
 excerpt: "定期的に点滴を受けたいと考える方から、「始める前に血液検査は必要ですか？」という質問を受けることがあります。"
+metaDescription: 定期的に点滴を受ける前に血液検査は必要なのでしょうか。すべての方に必須ではない理由、検査で確認できること、継続中の体調管理への活かし方など、東京でビタミン点滴やエクソソーム点滴を検討する前に確認したいポイントを、Pitonneが解説します。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy

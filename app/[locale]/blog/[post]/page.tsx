@@ -4,7 +4,7 @@ import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getServicesFromSlugs } from "@/lib/data/services"
-import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 
@@ -26,23 +26,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = getBlogPostBySlug(postSlug, typedLocale)
   if (post) {
+    const metaTitle = post.metaTitle ?? post.title
+    const metaDescription = post.metaDescription ?? post.excerpt
+
     return {
-      title: post.title,
-      description: post.excerpt,
+      title: metaTitle,
+      description: metaDescription,
       alternates: localizedHreflangAlternates(`/blog/${post.slug}/`, typedLocale),
       openGraph: {
-        title: post.title,
-        description: post.excerpt,
-        url: localizedCanonicalUrl(`/blog/${post.slug}/`, typedLocale),
+        ...pageOpenGraph({
+          title: metaTitle,
+          description: metaDescription,
+          url: localizedCanonicalUrl(`/blog/${post.slug}/`, typedLocale),
+          locale,
+          images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
+        }),
         type: "article",
         publishedTime: post.publishedAt,
-        images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
-        locale: locale === "ja" ? "ja_JP" : "en_US",
       },
       twitter: {
         card: "summary_large_image",
-        title: post.title,
-        description: post.excerpt,
+        title: metaTitle,
+        description: metaDescription,
         images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
       },
     }

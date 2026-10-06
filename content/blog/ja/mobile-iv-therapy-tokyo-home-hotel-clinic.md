@@ -2,6 +2,7 @@
 slug: mobile-iv-therapy-tokyo-home-hotel-clinic
 title: "東京の訪問点滴とは？自宅・ホテル・院内で受ける場合の違いと流れ"
 excerpt: "東京の訪問点滴について、自宅・ホテル・院内で受ける場合の違い、当日の流れ、事前に準備したい情報、医療機関への相談を優先すべき症状を解説します。"
+metaDescription: 東京の訪問点滴について、自宅・ホテル・院内で受ける場合の違いを解説します。西麻布を拠点とするPitonneの点滴当日の流れ、訪問前に準備したい情報やスペース、所要時間、訪問点滴ではなく医療機関への相談を優先すべき症状など、事前に知っておきたいポイントをまとめました。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy

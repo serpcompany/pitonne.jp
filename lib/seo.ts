@@ -6,7 +6,7 @@ export const SITE_URL = "https://pitonne.jp"
 export const SITE_NAME = "Pitonne"
 export const DEFAULT_TITLE = "Pitonne | Stem Cell & IV Therapy in Tokyo"
 export const DEFAULT_DESCRIPTION =
-  "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in-home or hotel visit care."
+  "Pitonne is a concierge wellness service in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and in-home or hotel visit care."
 export const DEFAULT_OG_IMAGE = "/images/content/sheet/home.jpg"
 export const GTM_CONTAINER_ID = "GTM-TJ94H7LQ"
 
@@ -69,6 +69,34 @@ export function localizedHreflangAlternates(path: string, locale: Locale) {
       ja: `${SITE_URL}/ja${normalizedPath}`,
       "x-default": canonicalUrl(normalizedPath),
     },
+  }
+}
+
+type OpenGraphImages = NonNullable<NonNullable<Metadata["openGraph"]>["images"]>
+
+// Next.js replaces (does not merge) the layout's openGraph when a page sets its own,
+// so every page-level openGraph must carry the full set of tags.
+export function pageOpenGraph({
+  title,
+  description,
+  url,
+  locale,
+  images,
+}: {
+  title: string
+  description: string
+  url: string
+  locale: string
+  images?: OpenGraphImages
+}) {
+  return {
+    title,
+    description,
+    url,
+    siteName: SITE_NAME,
+    locale: locale === "ja" ? "ja_JP" : "en_US",
+    type: "website" as const,
+    images: images ?? [absoluteUrl(DEFAULT_OG_IMAGE)],
   }
 }
 

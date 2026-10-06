@@ -16,6 +16,7 @@ shortDescription: >-
 
   Treatment is provided following an online consultation with a partner
   physician and is tailored to your health condition and wellness goals.
+metaDescription: Physician-guided IV therapy with 300 mg of NMN in Tokyo, tailored to your wellness goals after an online consultation, at home, hotel, or office.
 fullDescription: >-
   Pitonne's NMN IV Therapy contains 300 mg of Nicotinamide Mononucleotide (NMN)
   and is provided as private medical care under physician guidance.

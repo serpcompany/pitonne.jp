@@ -2,8 +2,10 @@
 slug: iv-therapy-for-allergies
 title: >-
   Is IV Therapy Helpful When Allergies Feel Overwhelming? How Pitonne Thinks About Supportive Care and Whole-Body Condition
+metaTitle: 'IV Therapy for Allergies: Supportive Care and What to Know'
 excerpt: >-
   Allergies can be exhausting beyond just the nose and eyes. When seasonal symptoms affect sleep, energy, and overall condition, some patients ask about IV therapy as supportive care for hydration and whole-body balance.
+metaDescription: When allergies affect sleep and energy, some patients ask about IV therapy. Learn how it may support hydration, why it is not a cure, and what to review.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -22,8 +24,6 @@ tags:
   - hydration
   - recovery
 ---
-# Is IV Therapy Helpful When Allergies Feel Overwhelming? How Pitonne Thinks About Supportive Care and Whole-Body Condition
-
 Allergies can be exhausting.  
 Runny nose, congestion, itchy eyes, poor sleep, heaviness, [low energy](/blog/iv-therapy-for-low-energy/), and a general feeling that the body is not functioning at its best. For some people, the most difficult part of allergy season is not only the obvious symptoms, but the way those symptoms begin to affect the whole body.
 

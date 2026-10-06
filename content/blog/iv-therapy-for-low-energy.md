@@ -1,7 +1,9 @@
 ---
 slug: iv-therapy-for-low-energy
 title: 'Do You Need IV Therapy When You Feel Low on Energy? What to Know Before Considering Supportive Care'
+metaTitle: 'IV Therapy for Low Energy: What to Know Before Booking'
 excerpt: '“I slept, but I still don’t feel restored.” “I’ve been so busy that my body feels heavy.” “I’m in Tokyo with a full schedule and want to feel physically better as soon as possible.”'
+metaDescription: Feeling low on energy? Learn when IV therapy may be considered as supportive care, why it is not an instant fix, and when low energy needs medical review.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -20,8 +22,6 @@ tags:
   - 'low energy'
   - 'tokyo'
 ---
-
-# Do You Need IV Therapy When You Feel Low on Energy? What to Know Before Considering Supportive Care
 
 “I slept, but I still don’t feel restored.”  
 “I’ve been so busy that my body feels heavy.”  

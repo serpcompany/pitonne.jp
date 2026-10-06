@@ -4,7 +4,7 @@ import { MapPin } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
 import { wards } from "@/lib/data/areas"
-import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { localizedCanonicalUrl, localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { localizedRoute } from "@/lib/data/routes"
@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dict.areas.metaTitle,
     description: dict.areas.metaDescription,
     alternates: localizedHreflangAlternates("/areas-served/", locale as Locale),
-    openGraph: {
+    openGraph: pageOpenGraph({
       title: dict.areas.metaTitle,
       description: dict.areas.metaDescription,
       url: localizedCanonicalUrl("/areas-served/", locale as Locale),
-      locale: locale === "ja" ? "ja_JP" : "en_US",
-    },
+      locale,
+    }),
   }
 }
 

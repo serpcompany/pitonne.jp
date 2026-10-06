@@ -12,6 +12,7 @@ shortDescription: >-
 
   Each treatment is provided based on your health condition and goals following
   an online medical consultation with a partner physician.
+metaDescription: IV therapy in Tokyo, including Exosome, NMN, Skin Brightening, and High Dose Vitamin C drips, tailored to you after an online physician consultation.
 fullDescription: >-
   Pitonne offers a range of IV therapies tailored to your individual health
   goals, including Exosome IV Therapy, NMN IV Therapy, Skin Brightening

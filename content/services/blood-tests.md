@@ -10,6 +10,7 @@ shortDescription: >-
 
   It is often chosen by busy professionals, frequent travelers, and those who
   may find it difficult to schedule routine health checkups.
+metaDescription: Private blood tests in Tokyo that can be added to your IV therapy appointment, with results in about one week sent by a doctor via email or LINE.
 fullDescription: >-
   Pitonne's blood testing is designed for clients who want to better understand
   their current health status and support their ongoing health management.
