@@ -34,7 +34,8 @@ function walk(dir, files = []) {
   for (const name of fs.readdirSync(dir)) {
     const fullPath = path.join(dir, name)
     if (fs.statSync(fullPath).isDirectory()) {
-      if (name !== "_next") walk(fullPath, files)
+      // _next holds build assets; keystatic is the noindex CMS app, not a site page
+      if (name !== "_next" && fullPath !== path.join(OUT, "keystatic")) walk(fullPath, files)
     } else {
       files.push(fullPath)
     }

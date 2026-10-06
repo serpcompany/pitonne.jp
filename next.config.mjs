@@ -6,9 +6,9 @@ const root = dirname(fileURLToPath(import.meta.url))
 
 /** @type {(phase: string) => import('next').NextConfig} */
 export default function nextConfig(phase) {
-  // The local Keystatic admin (/keystatic) needs a dynamic API route, which static export forbids. Its route
-  // files use the `.keystatic.tsx` / `.keystatic.ts` extension and load only under `pnpm cms`, so `pnpm dev`
-  // keeps static-export checks.
+  // `pnpm cms` (local files) needs Keystatic's API route, which static export forbids. That route file uses the
+  // `.keystatic.ts` extension and loads only under `pnpm cms` / `pnpm cms:cloud`, so `pnpm dev` and builds keep
+  // static-export checks. The /keystatic admin page itself is a static single-page app in every mode.
   const isKeystatic = phase === PHASE_DEVELOPMENT_SERVER && process.env.KEYSTATIC === "1"
 
   return {

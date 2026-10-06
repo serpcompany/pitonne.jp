@@ -11,6 +11,8 @@ export default function robots(): MetadataRoute.Robots {
       rules: {
         userAgent: "*",
         allow: "/",
+        // The blog CMS sign-in page
+        disallow: "/keystatic/",
       },
       sitemap: sitemaps,
     }
