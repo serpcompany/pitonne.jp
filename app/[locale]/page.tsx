@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { localizedRoute } from "@/lib/data/routes"
 import { BookingButton } from "@/components/shared/booking-button"
+import { HomepageHeadTags } from "@/components/shared/homepage-head-tags"
 import { nonDefaultLocales, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getAllBlogPosts } from "@/lib/data/blog-posts"
@@ -53,6 +54,8 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
+      <HomepageHeadTags locale={locale as Locale} />
+
       {/* Hero Section */}
       <section className="relative flex min-h-[calc(100svh-73px)] items-center overflow-hidden bg-[#faf9f7]">
         {/* Decorative Leaf Elements */}

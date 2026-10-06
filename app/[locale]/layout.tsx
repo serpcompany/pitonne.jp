@@ -12,10 +12,8 @@ import {
   SITE_NAME,
   SITE_URL,
   absoluteUrl,
-  canonicalUrl,
   deploymentRobots,
   isProductionDeployment,
-  localizedHreflangAlternates,
 } from "@/lib/seo"
 import { businessJsonLd, websiteJsonLd } from "@/lib/structured-data"
 import { getServiceCategorySections } from "@/lib/data/services"
@@ -59,7 +57,8 @@ export async function generateMetadata({
     description: locale === "ja"
       ? dict.home.heroDescription
       : DEFAULT_DESCRIPTION,
-    alternates: localizedHreflangAlternates("/", locale as Locale),
+    // No alternates or openGraph.url here: with trailingSlash on, the metadata API would write the homepage as
+    // https://pitonne.jp/. Every other page sets its own; the homepage renders its tags itself (HomepageHeadTags).
     openGraph: {
       title: locale === "ja"
         ? "Pitonne | 東京の幹細胞・点滴療法"
@@ -67,7 +66,6 @@ export async function generateMetadata({
       description: locale === "ja"
         ? dict.home.heroDescription
         : DEFAULT_DESCRIPTION,
-      url: canonicalUrl(locale === "ja" ? "/ja/" : "/"),
       siteName: SITE_NAME,
       images: [
         {

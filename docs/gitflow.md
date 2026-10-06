@@ -110,6 +110,9 @@ rather than a failure. The pages.dev hosts are always checked.
   `/images/*`, icons) off the Function; those paths still answer 200 on pages.dev. After each production deploy,
   `scripts/smoke-canonical-host.mjs` checks these redirects, and that `_redirects`, `_headers` and 404s still work
   behind the Function.
+- On every host served as is, a file URL with a trailing slash returns one 308 to the file, query kept
+  (`/sitemap-pages.xml/` → `/sitemap-pages.xml`, issue #92). The slashed form of a path `_routes.json` excludes
+  (`/images/x.jpg/`, `/favicon.ico/`) never reaches the Function and stays 404.
 - https://staging.pitonne.jp is a custom domain of the `pitonne-jp` Pages project that serves the `staging` branch
   alias.
 
