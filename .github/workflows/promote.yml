@@ -6,8 +6,9 @@ name: Promote to Production
 # Production after its test job passes.
 #
 # It refuses when `main` has commits `staging` lacks (Sync staging hasn't caught up, or failed on a conflict), or when
-# the `staging` commit hasn't passed CI's test job. It pushes with the RELEASE_DEPLOY_KEY deploy key, which the `main`
-# ruleset lets bypass the pull-request rule; a push with GITHUB_TOKEN would not start CI on `main`.
+# the `staging` commit hasn't passed CI's test job. It pushes with the RELEASE_DEPLOY_KEY deploy key, a bypass actor on
+# the `main` ruleset, so the ruleset doesn't check this push at all (a bypass skips every rule, including the required
+# test check): the checks above are what protect `main`. A push with GITHUB_TOKEN would not start CI on `main`.
 on:
   workflow_dispatch:
 
@@ -24,13 +25,15 @@ jobs:
     name: Fast-forward main to staging
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # RELEASE_DEPLOY_KEY is a secret of the `release` environment, which only main and staging runs can use
+    environment: release
     steps:
       - name: Check deploy key
         env:
           RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
         run: |
           if [ -z "$RELEASE_DEPLOY_KEY" ]; then
-            echo "::error::Missing RELEASE_DEPLOY_KEY repository secret (a write deploy key; see docs/gitflow.md)."
+            echo "::error::Missing RELEASE_DEPLOY_KEY repository secret (a write deploy key, stored in the release environment; see docs/gitflow.md)."
             exit 1
           fi
 
@@ -69,7 +72,8 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # A fast-forward only: the remote rejects anything else (non_fast_forward rule), and the sha is the one checked
+      # Not forced, so git only ever fast-forwards main (the bypass would let a forced push through); the sha is the one
+      # checked above, and a CMS save landing in between makes the push fail safely
       - name: Fast-forward main
         if: env.STAGING_SHA != ''
         run: git push origin "$STAGING_SHA:refs/heads/main"

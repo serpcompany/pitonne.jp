@@ -28,15 +28,22 @@ standards, with one documented exception: CMS saves go straight to Production.
    Staging. Either:
    - run **Actions → Promote to Production → Run workflow** (`.github/workflows/promote.yml`). It refuses when `main`
      has commits `staging` lacks or when the `staging` commit hasn't passed `test`; or
-   - as an admin: `git fetch origin && git push origin origin/staging:main`.
-6. The push to `main` runs CI, which deploys Production once `test` passes, then smoke-tests it.
+   - as an admin: `git fetch origin && git push origin origin/staging:main`. The admin bypass skips every `main` rule,
+     including the required `test` check, so check first that `staging`'s latest CI run is green.
+6. The push to `main` runs CI. The promoted commit already passed `test` on `staging`, so it deploys to Production
+   right away (no retest wait), then gets smoke-tested.
 
 **Hotfixes** follow the same flow with a PR into `main`. Sync staging (below) merges them back into `staging` right
 away.
 
 **Diverged `main`** (Sync staging failed, so `main` has commits `staging` lacks): resolve the sync first (below), then
-promote. If a promotion must happen anyway, open a `staging` → `main` PR and merge it with a **merge commit** (allowed
-on `main` for this case only), then let Sync staging merge `main` back.
+promote by fast-forward. Merge commits are allowed on `main` for a `staging` → `main` PR, as the standard requires, but
+that PR can't merge until `staging` is up to date with `main` (the `main` ruleset requires up-to-date branches), and
+once it is, a fast-forward promotion works anyway. So don't reach for the merge button: fix the sync, then promote.
+
+**Up-to-date branches:** both rulesets require PR branches to be up to date. Every CMS save reaches `staging` through
+Sync staging, so open PRs fall behind often; use "Update branch" (or `git merge origin/staging`) and let CI run again
+before merging.
 
 ## Content: CMS saves go straight to `main`
 
@@ -62,14 +69,25 @@ live in `.github/workflows/deploy.yml`, which CI calls.
 | Push | Deploys | Waits for `test`? |
 | --- | --- | --- |
 | Only draft blog posts changed | Nothing (the built site is unchanged) | – |
-| Only CMS content changed, and the previous commit passed `test` | Now (`Deploy content` job); the build validates the content | No |
-| Anything else, including content on top of a commit that hasn't passed `test` | After `test` passes (`Deploy` job) | Yes |
+| Only CMS content changed | Now (`Deploy content` job), as soon as the build succeeds | No, never |
+| A commit that already passed `test` (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
+| Any other change | After `test` passes on this run (`Deploy` job) | Yes |
 
-- A code change never reaches Production unless `test` passes on that commit. A content save deploys while `test` runs;
-  if `test` then fails, the run is red and the next push waits for `test` again.
-- Deploys use `concurrency: deploy-pages-<environment>` (`deploy-pages-production`, `deploy-pages-staging`,
-  `deploy-pages-pr-<n>`) with `cancel-in-progress: false`: a running deploy is never cancelled, a newer queued one
-  replaces an older queued one, and a Staging push never cancels a Production deploy.
+- **Content is never blocked by `test`.** A CMS save goes live as soon as it builds, whatever `test` says about it or
+  any earlier commit. A failing `test` on `main` alerts instead: the run is red, and the `alert` job opens (or comments
+  on) an issue titled "CI is failing on main" that mentions @devinschumacher. Close it once `main` is fixed.
+- **Code is gated.** A code commit deploys only after `test` passes, on `main` or (for promotions) on `staging`. Code
+  reaches `main` only through promotion or a hotfix PR, both of which passed `test` first, so a content save on top of
+  code never publishes untested code.
+- **No stale deploys.** Deploys use `concurrency: deploy-pages-<environment>` (`deploy-pages-production`,
+  `deploy-pages-staging`, `deploy-pages-pr-<n>`) with `cancel-in-progress: false`: a running deploy is never cancelled,
+  and a Staging push never cancels a Production deploy. Queued deploys run in the order they were *queued*, not commit
+  order (a code commit queues only after its `test`), and GitHub keeps only the newest queued one. So before building,
+  `scripts/deploy-target.mjs` picks what to upload:
+  - the branch tip instead of the run's commit, when everything newer is CMS content or code that passed `test`;
+  - nothing, when that commit is already live or older than the live one (the newest successful GitHub deployment).
+  An older commit never overwrites a newer live one, and a queued deploy that GitHub replaced is covered by the run
+  that replaced it, which deploys the tip.
 - Production deploys only from `main` and Staging only from `staging`; `deploy.yml` refuses anything else, so no PR can
   reach the `main` or `staging` aliases.
 - **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging` (Staging). It skips the
@@ -85,12 +103,16 @@ live in `.github/workflows/deploy.yml`, which CI calls.
 - Pages have a `noindex, nofollow` meta robots tag (`deploymentRobots()` in `lib/seo.ts`), and analytics are off.
 - `pnpm build` adds `X-Robots-Tag: noindex, nofollow` for every path to `out/_headers`
   (`scripts/environment-headers.mjs`). Cloudflare adds that header on `*.pages.dev` aliases by itself, but not on
-  `staging.pitonne.jp`. `pnpm audit:out` fails when robots.txt and `_headers` disagree.
+  `staging.pitonne.jp`. `pnpm audit:out` fails when robots.txt and `_headers` disagree. That check (and the deploy's
+  verify step) treats any `X-Robots-Tag: noindex` in `_headers` as site-wide, so a future path-scoped noindex rule in
+  `public/_headers` (for example for `/keystatic/*`) needs those checks narrowed first.
 
 ### Smoke tests after each deploy
 
-- **Production:** `scripts/smoke-canonical-host.mjs` (below) and `scripts/smoke-environment.mjs production`: `/` and
-  `/ja/` return 200 without noindex, robots.txt allows crawling and lists the sitemap index, and the sitemap index loads.
+- **Production:** `scripts/smoke-canonical-host.mjs` (below) and `scripts/smoke-environment.mjs production` on
+  `pitonne-jp.pages.dev` (with the smoke-test header) and https://pitonne.jp: `/` and `/ja/` return 200 without
+  noindex, robots.txt allows crawling and lists the sitemap index, and the sitemap index loads. Not on the hash
+  deployment URL: Cloudflare sends `X-Robots-Tag: noindex` on every `<hash>.pitonne-jp.pages.dev`, Production's too.
 - **Staging:** `scripts/smoke-environment.mjs staging` on the `staging` alias, the deployment URL and
   https://staging.pitonne.jp: robots.txt has `Disallow: /`, and `/` and `/ja/` send `X-Robots-Tag: noindex` and a
   noindex meta tag.
@@ -133,12 +155,18 @@ So `main` stays the default branch, and `staging` is the documented PR base (`gh
 - Squash merging for PRs; merge commits allowed on `main` only, for the occasional diverged promotion. Rebase merging
   off. Default squash message: PR title, blank body.
 - `main` and `staging` rulesets: require a PR, the `test` check and up-to-date branches; block deletion and force
-  pushes. Bypass: the Keystatic Cloud app (CMS saves), organization admins (the promotion command and conflict
-  resolution), and deploy keys (`RELEASE_DEPLOY_KEY`, used by Sync staging and Promote to Production).
+  pushes, for everyone except the bypass actors. Bypass actors: the Keystatic Cloud app (CMS saves), organization
+  admins (the promotion command and conflict resolution), and deploy keys (`RELEASE_DEPLOY_KEY`, used by Sync staging
+  and Promote to Production). A bypass skips **every** rule of the ruleset, not just the PR rule: required checks,
+  up-to-date, force-push and deletion protection. The workflows never force-push and check `test` themselves; an admin
+  pushing by hand has to do the same.
 - Secrets:
-  - `CLOUDFLARE_API_TOKEN`: Cloudflare account API token with Account > Cloudflare Pages > Edit permission.
-  - `RELEASE_DEPLOY_KEY`: the private half of a deploy key with write access. Workflows push with it, not with
-    `GITHUB_TOKEN`, because a `GITHUB_TOKEN` push doesn't start CI, so the pushed branch wouldn't deploy.
+  - `CLOUDFLARE_API_TOKEN` (repository secret): Cloudflare account API token with Account > Cloudflare Pages > Edit
+    permission. Deploy jobs and PR previews receive only this secret.
+  - `RELEASE_DEPLOY_KEY` (secret of the `release` environment, whose deployment branches are limited to `main` and
+    `staging`): the private half of a deploy key with write access. Only Sync staging and Promote to Production use
+    that environment. Workflows push with it, not with `GITHUB_TOKEN`, because a `GITHUB_TOKEN` push doesn't start CI,
+    so the pushed branch wouldn't deploy.
 - Cloudflare Pages doesn't run its own Git builds for this project; GitHub Actions direct-uploads `out/`.
 
 Lighthouse CI keeps the best-practices threshold at `0.95`. Collection skips only the accepted `third-party-cookies` best-practices audit caused by the current LeadConnector integration (in addition to the pre-existing color-contrast exclusion); inspector issues, console errors, and all other best-practices audits remain enabled. Removing the underlying cookies is tracked separately in [GitHub issue #51](https://github.com/serpcompany/pitonne.jp/issues/51).

@@ -60,8 +60,10 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - `staging` is the base branch: PRs go into `staging` (`gh pr create --base staging`), which deploys Staging at
   https://staging.pitonne.jp. `main` is Production (https://pitonne.jp) and receives code only by fast-forward promotion
   (`git push origin origin/staging:main` or the Promote to Production workflow), never a squash. See `docs/gitflow.md`.
-- Pushes to `staging` and `main` deploy only after CI's `test` job passes, except CMS content saves, which deploy right
-  away. Each deploy is smoke-tested: Production allows crawling and lists its sitemap; Staging and PR previews send noindex.
+- Code pushes to `staging` and `main` deploy only after CI's `test` job passes (a promoted commit that passed on
+  `staging` deploys at once). CMS content saves deploy as soon as they build and are never blocked by `test`; a failing
+  `test` on `main` opens a "CI is failing on main" alert issue instead. Each deploy is smoke-tested: Production allows
+  crawling and lists its sitemap; Staging and PR previews send noindex.
 - `DEPLOY_ENV` is `production`, `staging` or `preview`. Only `production` is indexable; every other build (and any
   build without `DEPLOY_ENV`) disallows crawling in `robots.txt`, has a noindex meta robots tag, and sends
   `X-Robots-Tag: noindex` (`scripts/environment-headers.mjs`). Test with `isProductionDeployment()` from `lib/seo.ts`,
