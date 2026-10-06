@@ -42,7 +42,7 @@ export async function generateMetadata({
 
   const isJa = locale === "ja"
   const displayTitle = isJa && video.titleJa ? video.titleJa : video.title
-  const metaTitle = (isJa ? video.metaTitleJa : video.metaTitle) ?? displayTitle
+  const metaTitle = isJa ? displayTitle : (video.metaTitle ?? displayTitle)
   const metaDescription = (isJa ? video.metaDescriptionJa : video.metaDescription)
     ?? (isJa && video.descriptionJa ? video.descriptionJa : video.description)
 
