@@ -103,9 +103,10 @@ describe("sitemap URLs", () => {
     const urls = allEntries.flatMap((entry) => [entry.url, ...Object.values(entry.alternates)])
     expect(urls).toContain(SITE_URL)
     for (const url of urls) {
-      expect(url.startsWith(SITE_URL)).toBe(true)
       expect(url).not.toBe(`${SITE_URL}/`)
-      if (url !== SITE_URL) expect(url).toMatch(/\/$/)
+      if (url === SITE_URL) continue
+      expect(new URL(url).origin).toBe(SITE_URL)
+      expect(url).toMatch(/\/$/)
     }
   })
 
