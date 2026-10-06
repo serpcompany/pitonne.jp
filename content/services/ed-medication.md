@@ -9,7 +9,7 @@ shortDescription: >-
   Prescription ED medication such as Viagra or Cialis is available through a
   discreet, physician-guided online consultation for men seeking reliable
   erectile function support in Tokyo.
-metaDescription: Prescription ED medication such as Viagra or Cialis, available in Tokyo through a discreet, physician-guided online consultation when appropriate.
+metaDescription: Prescription ED treatment in Tokyo through a discreet, physician-guided online consultation, with medication prescribed only when medically appropriate.
 fullDescription: >-
   ED Medication at Pitonne is designed for men who want safe, discreet, and
   physician-guided support for erectile function. Prescription options such as

@@ -115,7 +115,7 @@ describe("Pitonne video pages", () => {
     )
     const videosMetadata = await videosGenerateMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(videosMetadata).toMatchObject({
-      title: "Videos",
+      title: "Videos: Mobile IV & Wellness Care in Tokyo",
       alternates: expect.objectContaining({ canonical: `${SITE_URL}/videos/` }),
     })
     expect(videosMarkup).toContain("Videos")

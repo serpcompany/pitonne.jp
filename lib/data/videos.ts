@@ -6,6 +6,7 @@ export interface PitonneVideo {
   descriptionJa?: string
   // SEO overrides for the watch page <title>/meta description (YouTube descriptions are too long)
   metaTitle?: string
+  metaTitleJa?: string
   metaDescription?: string
   metaDescriptionJa?: string
   url: string
@@ -34,8 +35,9 @@ const rawVideos = [
   },
   {
     slug: "tokyo-mobile-iv-hotel-home-office",
-    metaDescription: "Learn how to book a mobile IV in Tokyo, with a registered nurse visiting your hotel, home, or office after an online consultation with a partner physician.",
-    metaDescriptionJa: "東京で訪問点滴を受ける方法をご紹介します。ご予約後、看護師がホテル・ご自宅・オフィスへお伺いし、施術前に医師によるオンライン診療を行います。医師の確認・判断のもとで、安全に点滴を実施します。完全予約制で、来院での点滴には割引料金もご用意しています。",
+    metaTitle: "Mobile IV in Tokyo: Nurse Visits to Hotel, Home, or Office",
+    metaDescription: "Learn how to book a mobile IV in Tokyo, with a nurse visiting your hotel, home, or office and an online medical consultation with a physician before treatment.",
+    metaDescriptionJa: "東京で訪問点滴を受ける方法をご紹介します。ご予約後、看護師がホテル・ご自宅・オフィスへお伺いし、施術前に医師によるオンライン診療を行います。医師の確認・判断のもとで点滴を行います。完全予約制で、ご希望の場所で受けられる訪問点滴の流れをご覧いただけます。",
     title: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
     titleJa: "東京で訪問点滴を受ける方法｜ホテル・ご自宅・オフィスへお伺いします",
     description:
@@ -50,7 +52,8 @@ const rawVideos = [
   },
   {
     slug: "how-to-book-a-mobile-iv-at-your-hotel-home-or-office-in-tokyo-ova",
-    metaTitle: "How to Book a Mobile IV in Tokyo: Hotel, Home, or Office",
+    metaTitle: "Mobile IV Booking in Tokyo, Step by Step",
+    metaTitleJa: "東京の出張点滴、予約から施術までの流れ",
     metaDescription: "Watch a doctor explain how mobile IV booking works in Tokyo, from sharing your details to a nurse visit at your hotel, home, or office and physician approval.",
     metaDescriptionJa: "東京のホテル・ご自宅・オフィスで出張点滴を予約する方法を医師が解説します。ご予約時の情報のご提出から、看護師の訪問、施術前のオンライン診療、医師の確認のもとでの点滴まで、サービスの流れをご紹介します。プライベートで便利な医療サポートをお探しの方へ。",
     title: "How to Book a Mobile IV at Your Hotel, Home, or Office in Tokyo",

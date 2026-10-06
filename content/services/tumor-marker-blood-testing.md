@@ -9,7 +9,7 @@ shortDescription: >-
   A blood test that screens for common tumor markers including CEA, CA19-9, and
   PSA (men) or CA125 (women), combined with standard blood panels for a broader
   health check.
-metaDescription: Blood test in Tokyo screening tumor markers CEA, CA19-9, and PSA (men) or CA125 (women), plus standard blood panels for a broader health check.
+metaDescription: Blood test in Tokyo measuring tumor markers CEA, CA19-9, and PSA (men) or CA125 (women), plus standard blood panels for a broader health check.
 fullDescription: >-
   Tumor Marker Blood Testing at Pitonne adds tumor marker screening to our
   standard blood test panels. It checks CEA, CA19-9, and either PSA (for men)

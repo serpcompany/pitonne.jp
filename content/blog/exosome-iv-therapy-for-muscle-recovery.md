@@ -1,7 +1,7 @@
 ---
 slug: exosome-iv-therapy-for-muscle-recovery
 title: 'Is Exosome IV Therapy a Good Option for Muscle Recovery? How to Think About IV Therapy After Training'
-metaTitle: Exosome IV Therapy for Muscle Recovery After Training
+metaTitle: 'Exosome IV Therapy and Muscle Recovery: What to Know'
 excerpt: 'After intense training, it is common to feel muscle tightness, heaviness, fatigue, or a lingering sense that the body has not fully recovered. For athletes, serious trainees, and people who exercise regularly, the...'
 metaDescription: Considering Exosome IV therapy for muscle recovery? Learn who may be a candidate, why hydration is only part of recovery, and when to see a doctor.
 publishedAt: '2026-05-31'

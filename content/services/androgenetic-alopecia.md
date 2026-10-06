@@ -9,7 +9,7 @@ shortDescription: >-
   A physician guided AGA treatment set combining oral minoxidil 5 mg and
   dutasteride (Zagallo), provided through a discreet online consultation for
   men seeking private and convenient hair loss treatment support in Tokyo.
-metaDescription: Physician-guided AGA treatment for men in Tokyo, combining oral minoxidil 5 mg and dutasteride (Zagallo) through a discreet online consultation.
+metaDescription: Physician-guided AGA (male pattern hair loss) treatment for men in Tokyo through a discreet online consultation, with medication prescribed when appropriate.
 fullDescription: >-
   AGA Medication at Pitonne is designed for men who want physician guided
   support for androgenetic alopecia (male pattern hair loss) in a private and

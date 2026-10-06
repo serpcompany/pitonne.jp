@@ -150,7 +150,7 @@ describe("SEO parity", () => {
 
     const servicesMeta = await servicesMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(servicesMeta).toMatchObject({
-      title: "Our Services",
+      title: "IV Therapy, Medications & Blood Tests in Tokyo",
       alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/` }),
     })
 

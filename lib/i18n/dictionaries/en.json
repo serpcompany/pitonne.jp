@@ -115,7 +115,7 @@
     "relatedPosts": "Related Posts",
     "frequentlyAskedQuestions": "Frequently Asked Questions",
     "metaDescription": "Explore physician-guided medications, premium IV therapy, blood testing, and regenerative wellness services for busy professionals and travelers in Tokyo.",
-    "metaTitle": "Our Services",
+    "metaTitle": "IV Therapy, Medications & Blood Tests in Tokyo",
     "heroDescription": "Explore physician-guided medications, premium IV Therapy, blood testing and regenerative wellness services. Designed for busy professionals, travelers, and health-conscious clients seeking discreet, personalized care in Tokyo.",
     "heroImageAlt": "Pitonne online consultation and wellness service planning",
     "bookThisService": "Book This Service",
@@ -259,7 +259,7 @@
     "contactDescription": "Contact Pitonne to discuss clinician-guided wellness options and whether a service is appropriate for your goals.",
     "relatedPitonneServices": "Related Pitonne Services",
     "categoryDescriptions": {
-      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team, covering hydration, recovery, exosome IV therapy, safety, and booking in Tokyo."
+      "iv-therapy": "Explore IV therapy articles and guides from the Pitonne team, covering hydration, recovery, Exosome IV therapy, safety, and booking in Tokyo."
     },
     "categoryCtaDescriptions": {
       "iv-therapy": "Our team is ready to help you learn more about IV therapy and how it might support your goals."
@@ -380,7 +380,7 @@
     "moreVideos": "More Videos",
     "videosDescription": "Doctor-led videos from Pitonne covering mobile IV therapy, hangover IV support, and private wellness care in Tokyo.",
     "metaDescription": "Watch Pitonne videos about mobile IV therapy, hangover IV support, online ED medication, and booking concierge care at your hotel, home, or office in Tokyo.",
-    "metaTitle": "Videos"
+    "metaTitle": "Videos: Mobile IV & Wellness Care in Tokyo"
   },
   "legal": {
     "legal": "Legal",
@@ -396,7 +396,7 @@
     "privacyPolicyMeta": "Learn how Pitonne collects, uses, stores, and protects personal information under Japan's APPI, including third-party sharing, data security, and your rights.",
     "termsOfUse": "Terms of Use",
     "termsDescription": "Terms of service for using Pitonne wellness services.",
-    "termsMeta": "Review the terms of use for the Pitonne website in Tokyo, covering intellectual property, prohibited activities, external links, liability, and governing law.",
+    "termsMeta": "Review the terms of use for the Pitonne website, covering intellectual property, prohibited activities, external links, liability, and governing law.",
     "termsMetaTitle": "Terms of Use",
     "medicalDisclaimer": "Medical Disclaimer",
     "disclaimerDescription": "Important medical and health-related disclaimers.",
