@@ -69,38 +69,38 @@ export function canonicalRedirectLocation(requestUrl: string | URL, headers: Hea
 // in `_redirects` must not become permanent, so those keep the plain host redirect.
 const FOLDED_STATUSES = new Set([301, 308])
 
+/** The static asset server (`context.next`): with no argument it serves the request itself, or the request it's given. */
+export type AssetServer = (request?: Request) => Promise<Response>
+
 /**
- * A 308 to the canonical host, or `null` when the request should pass through to static assets.
- *
- * `next` is the static asset server, which applies `public/_redirects` and Pages' own trailing-slash redirects. For a
- * non-canonical host it is asked first, so a legacy URL (`/en/`, `/services/medications`) lands on its final
- * `pitonne.jp` URL in one hop instead of two, with `_redirects` staying the only list of those rules.
+ * Where the asset server permanently redirects `url`, or `null`. It applies `public/_redirects` and Pages' own
+ * trailing-slash redirects, so folding its answer in keeps `_redirects` the only list of legacy URLs while a visitor
+ * still reaches the final URL in one hop. Only a same-host 301/308 is folded; a temporary 302/307 (or a 303's
+ * POST -> GET) must not become a permanent 308, and a target on another host is never followed.
  */
-export async function canonicalHostRedirect(
-  request: Request,
-  next: () => Promise<Response>,
-): Promise<Response | null> {
-  let location = canonicalRedirectLocation(request.url, request.headers)
-  if (!location) return null
-
-  let asset: Response | undefined
+async function assetRedirectTarget(url: URL, ask: () => Promise<Response>): Promise<URL | null> {
+  let asset: Response
   try {
-    asset = await next()
+    asset = await ask()
   } catch {
-    // Folding is an optimization: if the asset server fails, still send the plain host redirect.
+    // Folding is an optimization: if the asset server fails, the plain redirect still goes out.
+    return null
   }
-  const assetLocation = asset?.headers.get("location")
-  await asset?.body?.cancel().catch(() => undefined)
-  if (asset && FOLDED_STATUSES.has(asset.status) && assetLocation) {
-    const url = new URL(request.url)
-    const target = new URL(assetLocation, url)
-    // Only same-host targets are folded in; anything else keeps the plain host redirect.
-    if (target.host === url.host) {
-      location = `${CANONICAL_ORIGIN}${canonicalPath(target.pathname)}${target.search || url.search}`
-    }
-  }
+  const location = asset.headers.get("location")
+  await asset.body?.cancel().catch(() => undefined)
+  if (!FOLDED_STATUSES.has(asset.status) || !location) return null
+  const target = new URL(location, url)
+  return target.host === url.host ? target : null
+}
 
-  return new Response(null, {
+/** Asks the asset server about `url` instead of the request's own URL (`/robots.txt` for `/robots.txt/`). */
+function askFor(url: URL, request: Request, next: AssetServer): () => Promise<Response> {
+  // GET, never the original body: only the status and Location matter, and the body is discarded.
+  return () => next(new Request(url, { method: "GET", headers: request.headers }))
+}
+
+const redirect308 = (location: string) =>
+  new Response(null, {
     status: 308,
     headers: {
       Location: location,
@@ -108,6 +108,24 @@ export async function canonicalHostRedirect(
       "Cache-Control": "public, max-age=86400",
     },
   })
+
+/**
+ * A 308 to the canonical host, or `null` when the request should pass through to static assets.
+ *
+ * For a non-canonical host the asset server is asked first, so a legacy URL (`/en/`, `/services/medications`) lands on
+ * its final `pitonne.jp` URL in one hop instead of two. For a slashed file it is asked about the unslashed file, the
+ * URL `_redirects` lists (`/videos-sitemap.xml/` -> `https://pitonne.jp/sitemap-videos.xml`).
+ */
+export async function canonicalHostRedirect(request: Request, next: AssetServer): Promise<Response | null> {
+  const location = canonicalRedirectLocation(request.url, request.headers)
+  if (!location) return null
+
+  const url = new URL(request.url)
+  const file = slashedFileLocation(url)
+  const fileUrl = file ? new URL(file) : null
+  const target = await assetRedirectTarget(fileUrl ?? url, fileUrl ? askFor(fileUrl, request, next) : () => next())
+  if (!target) return redirect308(location)
+  return redirect308(`${CANONICAL_ORIGIN}${canonicalPath(target.pathname)}${target.search || url.search}`)
 }
 
 /**
@@ -127,12 +145,19 @@ export function slashedFileLocation(requestUrl: string | URL): string | null {
   return `${url.origin}${path}${url.search}`
 }
 
-/** One 308 from a slashed file URL to the file on the same host, or `null` to pass the request through. */
-export function slashedFileRedirect(request: Request): Response | null {
-  const location = slashedFileLocation(request.url)
-  if (!location) return null
-  return new Response(null, {
-    status: 308,
-    headers: { Location: location, "Cache-Control": "public, max-age=86400" },
-  })
+/**
+ * One 308 from a slashed file URL to its final URL on the same host, or `null` to pass the request through.
+ *
+ * The asset server is asked about the unslashed file, so a `_redirects` rule on it is folded into the same hop:
+ * `/videos-sitemap.xml/` -> `/sitemap-videos.xml`, `/en/robots.txt/` -> `/robots.txt`.
+ */
+export async function slashedFileRedirect(request: Request, next: AssetServer): Promise<Response | null> {
+  const file = slashedFileLocation(request.url)
+  if (!file) return null
+  const fileUrl = new URL(file)
+  const target = await assetRedirectTarget(fileUrl, askFor(fileUrl, request, next))
+  if (!target) return redirect308(file)
+  const location = `${fileUrl.origin}${canonicalPath(target.pathname)}${target.search || fileUrl.search}`
+  // Never answer with the URL that was asked for (a `_redirects` rule that re-adds the slash).
+  return redirect308(location === request.url ? file : location)
 }

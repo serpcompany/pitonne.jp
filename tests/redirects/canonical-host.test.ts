@@ -232,11 +232,79 @@ describe("slashed file redirect", () => {
     expect(slashedFileLocation(url)).toBeNull()
   })
 
-  it("answers with a single 308", () => {
-    const response = slashedFileRedirect(new Request("https://pitonne.jp/sitemap-pages.xml/?a=1", { method: "HEAD" }))
-    expect(response?.status).toBe(308)
-    expect(response?.headers.get("location")).toBe("https://pitonne.jp/sitemap-pages.xml?a=1")
-    expect(slashedFileRedirect(new Request("https://pitonne.jp/sitemap-pages.xml"))).toBeNull()
+  // A stand-in for the asset server: `_redirects` rules keyed by the path it is asked about, else 200.
+  const rules: Record<string, [number, string]> = {
+    "/videos-sitemap.xml": [301, "/sitemap-videos.xml"],
+    "/en/robots.txt": [301, "/robots.txt"],
+    "/about/index.html": [308, "/about/"],
+    "/temporary.xml": [302, "/elsewhere.xml"],
+    "/offsite.xml": [301, "https://example.com/x.xml"],
+    "/query.xml": [301, "/target.xml?b=2"],
+    "/reslash.xml": [301, "/reslash.xml/"],
+  }
+  const assetServer = (asked: string[] = []) => async (request?: Request) => {
+    const { pathname } = new URL(request!.url)
+    asked.push(`${request!.method} ${pathname}`)
+    const rule = rules[pathname]
+    return rule
+      ? new Response(null, { status: rule[0], headers: { location: rule[1] } })
+      : new Response("static asset")
+  }
+  const fileRedirect = async (url: string, next = assetServer()) => {
+    const response = await slashedFileRedirect(new Request(url, { method: "HEAD" }), next)
+    return response && [response.status, response.headers.get("location")]
+  }
+
+  it("answers with a single 308, asking the asset server about the unslashed file", async () => {
+    const asked: string[] = []
+    expect(await fileRedirect("https://pitonne.jp/sitemap-pages.xml/?a=1", assetServer(asked))).toEqual([
+      308,
+      "https://pitonne.jp/sitemap-pages.xml?a=1",
+    ])
+    expect(asked).toEqual(["GET /sitemap-pages.xml"])
+    expect(await fileRedirect("https://pitonne.jp/sitemap-pages.xml")).toBeNull()
+  })
+
+  it.each([
+    ["https://pitonne.jp/videos-sitemap.xml/", "https://pitonne.jp/sitemap-videos.xml"],
+    ["https://pitonne.jp/videos-sitemap.xml/?a=1", "https://pitonne.jp/sitemap-videos.xml?a=1"],
+    ["https://pitonne.jp/en/robots.txt/", "https://pitonne.jp/robots.txt"],
+    ["https://pitonne.jp/about/index.html/", "https://pitonne.jp/about/"],
+    ["https://pitonne.jp/query.xml/?a=1", "https://pitonne.jp/target.xml?b=2"],
+    ["https://pr-92.pitonne-jp.pages.dev/en/robots.txt/", "https://pr-92.pitonne-jp.pages.dev/robots.txt"],
+  ])("folds a permanent _redirects rule into the same hop: %s -> %s", async (url, expected) => {
+    expect(await fileRedirect(url)).toEqual([308, expected])
+  })
+
+  it.each([
+    // Temporary rules stay temporary, other hosts aren't followed, and a rule that re-adds the slash can't loop
+    ["https://pitonne.jp/temporary.xml/", "https://pitonne.jp/temporary.xml"],
+    ["https://pitonne.jp/offsite.xml/", "https://pitonne.jp/offsite.xml"],
+    ["https://pitonne.jp/reslash.xml/", "https://pitonne.jp/reslash.xml"],
+  ])("keeps the plain file redirect for %s", async (url, expected) => {
+    expect(await fileRedirect(url)).toEqual([308, expected])
+  })
+
+  it("keeps the plain file redirect when the asset server fails", async () => {
+    const failing = async () => {
+      throw new Error("asset server unavailable")
+    }
+    expect(await fileRedirect("https://pitonne.jp/robots.txt/?a=1", failing)).toEqual([
+      308,
+      "https://pitonne.jp/robots.txt?a=1",
+    ])
+  })
+
+  it("folds _redirects for a slashed file on a non-canonical host too, in one hop", async () => {
+    const hostRedirect = async (url: string) => {
+      const response = await canonicalHostRedirect(new Request(url), assetServer())
+      return response?.headers.get("location")
+    }
+    expect(await hostRedirect("https://pitonne-jp.pages.dev/videos-sitemap.xml/?a=1")).toBe(
+      "https://pitonne.jp/sitemap-videos.xml?a=1",
+    )
+    expect(await hostRedirect("https://pitonne-jp.pages.dev/en/robots.txt/")).toBe("https://pitonne.jp/robots.txt")
+    expect(await hostRedirect("https://pitonne-jp.pages.dev/robots.txt/")).toBe("https://pitonne.jp/robots.txt")
   })
 })
 
@@ -258,23 +326,27 @@ describe("Pages middleware", () => {
     expect(await onRequest({ request: smoke, next })).toBe(passthrough)
   })
 
-  it("redirects slashed file URLs on hosts it serves as is, without asking the asset server", async () => {
-    let calls = 0
-    const counted = async () => {
-      calls++
-      return passthrough
-    }
+  it("redirects slashed file URLs on hosts it serves as is", async () => {
     const smoke = { [SMOKE_TEST_HEADER]: "1" }
     for (const [url, headers, expected] of [
       ["https://pitonne.jp/sitemap.xml/?a=1", {}, "https://pitonne.jp/sitemap.xml?a=1"],
       ["https://pr-92.pitonne-jp.pages.dev/robots.txt/", {}, "https://pr-92.pitonne-jp.pages.dev/robots.txt"],
       ["https://pitonne-jp.pages.dev/robots.txt/", smoke, "https://pitonne-jp.pages.dev/robots.txt"],
     ] as const) {
-      const response = await onRequest({ request: new Request(url, { headers }), next: counted })
+      const response = await onRequest({ request: new Request(url, { headers }), next })
       expect(response.status).toBe(308)
       expect(response.headers.get("location")).toBe(expected)
     }
-    expect(calls).toBe(0)
+  })
+
+  it("folds a legacy file rule into the slashed-file 308 on pitonne.jp", async () => {
+    const legacy = async (request?: Request) =>
+      new URL(request!.url).pathname === "/videos-sitemap.xml"
+        ? new Response(null, { status: 301, headers: { location: "/sitemap-videos.xml" } })
+        : new Response("static asset")
+    const response = await onRequest({ request: new Request("https://pitonne.jp/videos-sitemap.xml/"), next: legacy })
+    expect(response.status).toBe(308)
+    expect(response.headers.get("location")).toBe("https://pitonne.jp/sitemap-videos.xml")
   })
 
   it("sends a slashed file on a non-canonical host to the canonical file in one hop", async () => {
