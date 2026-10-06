@@ -21,7 +21,9 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
   the filename; don't add a `slug:` key. `readingTime` is computed at build; don't add it to new posts.
 - Blog posts are edited in Keystatic (`keystatic.config.ts`, guide in `docs/cms.md`) at `/keystatic`, a static
   single-page app served for every `/keystatic/*` path by `public/_redirects`. CMS saves commit straight to `main` (the
-  Keystatic Cloud app bypasses the ruleset) and deploy; editors use the Draft checkbox, not branches. Locally, `pnpm cms`
+  Keystatic Cloud app bypasses the ruleset) and deploy to Production without waiting for a promotion, the one exception
+  to the staging → main flow; the Sync staging workflow then merges `main` back into `staging`. Editors use the Draft
+  checkbox, not branches. Locally, `pnpm cms`
   edits files and `pnpm cms:cloud` uses Keystatic Cloud. Feature images live in `public/images/content/blog/<slug>/`
   (English) and `public/images/content/blog/ja/<slug>/` (Japanese).
 - Blog markdown links to internal pages use locale-neutral relative paths (`/blog/<slug>/`, `/contact/`), never
@@ -52,6 +54,18 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
   `/sitemap-videos.xml`. The English homepage is listed as `https://pitonne.jp` (no slash); every other URL ends in `/`.
   A new route type goes in an existing group or a new group (add it to `sitemapGroups`, a route file and `public/_headers`).
 - **i18n docs**: `docs/i18n.md`
+
+## Git flow and environments
+
+- `staging` is the base branch: PRs go into `staging` (`gh pr create --base staging`), which deploys Staging at
+  https://staging.pitonne.jp. `main` is Production (https://pitonne.jp) and receives code only by fast-forward promotion
+  (`git push origin origin/staging:main` or the Promote to Production workflow), never a squash. See `docs/gitflow.md`.
+- Pushes to `staging` and `main` deploy only after CI's `test` job passes, except CMS content saves, which deploy right
+  away. Each deploy is smoke-tested: Production allows crawling and lists its sitemap; Staging and PR previews send noindex.
+- `DEPLOY_ENV` is `production`, `staging` or `preview`. Only `production` is indexable; every other build (and any
+  build without `DEPLOY_ENV`) disallows crawling in `robots.txt`, has a noindex meta robots tag, and sends
+  `X-Robots-Tag: noindex` (`scripts/environment-headers.mjs`). Test with `isProductionDeployment()` from `lib/seo.ts`,
+  never for a specific non-production value.
 
 ## Audits and parity tests
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { isDraft, isDraftOnlyChange } from "../../scripts/draft-only-change.mjs"
+import { isContentOnlyChange, isDraft, isDraftOnlyChange } from "../../scripts/draft-only-change.mjs"
 
 const draft = "---\ntitle: A\ndraft: true\n---\nBody"
 const published = "---\ntitle: A\ndraft: false\n---\nBody"
@@ -29,5 +29,29 @@ describe("draft-only change detection", () => {
       ])
     ).toBe(false)
     expect(isDraftOnlyChange([])).toBe(false)
+  })
+})
+
+describe("CMS content-only change detection", () => {
+  it("treats blog posts, categories and blog images as content", () => {
+    expect(
+      isContentOnlyChange([
+        "content/blog/post.md",
+        "content/blog/ja/post.md",
+        "content/blog-categories/iv-therapy.json",
+        "public/images/content/blog/post/featureImage.jpg",
+        "public/images/content/blog/ja/post/featureImage.jpg",
+      ])
+    ).toBe(true)
+  })
+
+  it("treats anything else as a code change", () => {
+    expect(isContentOnlyChange([])).toBe(false)
+    expect(isContentOnlyChange(["content/blog/post.md", "lib/blog-rules.ts"])).toBe(false)
+    expect(isContentOnlyChange(["content/services/iv-therapy.md"])).toBe(false)
+    expect(isContentOnlyChange(["content/pages/about.md"])).toBe(false)
+    expect(isContentOnlyChange(["public/images/content/sheet/home.jpg"])).toBe(false)
+    expect(isContentOnlyChange(["keystatic.config.ts"])).toBe(false)
+    expect(isContentOnlyChange(["content/blogs/post.md"])).toBe(false)
   })
 })

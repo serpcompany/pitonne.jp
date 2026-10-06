@@ -1,0 +1,77 @@
+name: Sync staging
+
+# Keeps `staging` from falling behind `main`. CMS saves (Keystatic Cloud) and hotfixes land on `main` directly, so after
+# every push to `main` this merges `main` into `staging`: a fast-forward when `staging` has nothing new, a merge commit
+# otherwise. Promotions (`staging` -> `main`) then stay fast-forwards.
+#
+# No loops and no extra production deploy: this runs only on pushes to `main` and only ever pushes `staging`. The push
+# to `staging` runs CI there, which deploys Staging. A promotion pushes `main` to a commit `staging` already contains,
+# so the run after it finds nothing to do.
+#
+# It pushes with the RELEASE_DEPLOY_KEY deploy key, which the `staging` ruleset lets bypass the pull-request rule. A
+# push with GITHUB_TOKEN would not start CI on `staging`, so Staging would not redeploy.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: sync-staging
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Merge main into staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check deploy key
+        env:
+          RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
+        run: |
+          if [ -z "$RELEASE_DEPLOY_KEY" ]; then
+            echo "::error::Missing RELEASE_DEPLOY_KEY repository secret (a write deploy key; see docs/gitflow.md)."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+
+      - name: Merge main into staging
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Retry when someone pushes to staging between the fetch and the push
+          for attempt in 1 2 3; do
+            git fetch --prune origin
+            if ! git rev-parse -q --verify refs/remotes/origin/staging > /dev/null; then
+              echo "::notice::There is no staging branch; nothing to sync."
+              exit 0
+            fi
+            if git merge-base --is-ancestor origin/main origin/staging; then
+              echo "staging already contains main."
+              exit 0
+            fi
+            if git merge-base --is-ancestor origin/staging origin/main; then
+              git push origin origin/main:refs/heads/staging && { echo "Fast-forwarded staging to main ($(git rev-parse --short origin/main))." >> "$GITHUB_STEP_SUMMARY"; exit 0; }
+            else
+              git checkout -B staging origin/staging
+              if ! git merge --no-ff --no-edit -m "chore: merge main into staging" origin/main; then
+                conflicts=$(git diff --name-only --diff-filter=U | tr '\n' ' ')
+                git merge --abort
+                echo "::error::main doesn't merge cleanly into staging (conflicts: $conflicts). An admin resolves it locally: git fetch origin && git switch -C staging origin/staging && git merge origin/main && pnpm check && git push origin staging"
+                exit 1
+              fi
+              git push origin staging && { echo "Merged main ($(git rev-parse --short origin/main)) into staging." >> "$GITHUB_STEP_SUMMARY"; exit 0; }
+            fi
+            echo "Push to staging was rejected (attempt $attempt); retrying."
+            sleep 10
+          done
+          echo "::error::Couldn't update staging after 3 attempts."
+          exit 1

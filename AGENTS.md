@@ -51,33 +51,39 @@ Report evidence levels separately in the PR (local checks, CI, preview/deploy). 
 | --- | --- |
 | Every change | `pnpm check` before pushing; CI on the final commit is the record |
 | Visible UI | One local run with `pnpm dev` in both `/` and `/ja/`, with a screenshot |
-| Redirects or headers (`public/_redirects`, `public/_headers`), trailing slashes, the `/keystatic/*` fallback | Before merge, a production-like preview: `DEPLOY_ENV=production pnpm build`, then `pnpm dlx wrangler@4.103.0 pages dev out` and `curl -I` the affected URLs (`pnpm start` does not apply `_redirects` or `_headers`). This is routing on a Ship site, so also `curl -I` the same URLs on https://pitonne.jp before the change and again after the Deploy run, and put both in the PR. |
+| Redirects or headers (`public/_redirects`, `public/_headers`), trailing slashes, the `/keystatic/*` fallback | Before merge, a production-like preview: `DEPLOY_ENV=production pnpm build`, then `pnpm dlx wrangler@4.103.0 pages dev out` and `curl -I` the affected URLs (`pnpm start` does not apply `_redirects` or `_headers`). This is routing on a Ship site, so also `curl -I` the same URLs on https://pitonne.jp before the change and again after the Production deploy, and put both in the PR. |
 | CMS (`keystatic.config.ts`, `lib/blog-rules.ts`, `patches/@keystatic__core*`, blog/category schemas) | A local run of the affected editor flow with `pnpm cms`; after the deploy, https://pitonne.jp/keystatic loads |
-| Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `DEPLOY_ENV` handling, robots or sitemaps) | The production-like preview above, then wait for the Deploy run after merge and smoke-test https://pitonne.jp (pages return 200, `robots.txt` allows crawling and lists the sitemap) |
+| Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `scripts/environment-headers.mjs`, the smoke scripts, `DEPLOY_ENV` handling, robots or sitemaps) | The production-like preview above and the PR preview; after merge, the Staging deploy and its smoke test (https://staging.pitonne.jp sends noindex), then after promotion the Production deploy and its smoke test (https://pitonne.jp returns 200, `robots.txt` allows crawling and lists the sitemap) |
 
-PR previews don't deploy right now: the `preview` job in `ci.yml` only runs for PRs into `staging`, which doesn't
-exist until #78. Use the local production-like preview instead.
+Same-repository PRs into `staging` (or `main`, for hotfixes) get a preview at `https://pr-<n>.pitonne-jp.pages.dev`
+once the `test` job passes (the `preview` job in `ci.yml`). It is non-indexable, so it's evidence for behaviour, not
+for production SEO output; use the production-like preview for that.
 
 ## Git workflow
 
-The base branch is `main`. Staging was removed on 2026-10-06 and comes back in #78, which makes `staging` the base
-branch again; until then `docs/gitflow.md` describes a flow that isn't active.
+The base branch is `staging`; `main` is Production and receives code only by promotion. The full flow, including what
+CI deploys and the repository settings, is in [docs/gitflow.md](docs/gitflow.md).
 
 1. Every change starts from a GitHub issue.
-2. Branch from `origin/main` as `issue-<n>-<slug>`, in its own worktree
-   (`git worktree add -b issue-<n>-<slug> ../pitonne.jp-worktrees/issue-<n>-<slug> origin/main`), not in the owner's
+2. Branch from `origin/staging` as `issue-<n>-<slug>`, in its own worktree
+   (`git worktree add -b issue-<n>-<slug> ../pitonne.jp-worktrees/issue-<n>-<slug> origin/staging`), not in the owner's
    checkout.
-3. Open a PR into `main` with a Conventional Commit title. The body starts with `Closes #<n>`, says what changed and
-   what was left out, and reports evidence levels separately.
+3. Open a PR into `staging` (`gh pr create --base staging`; GitHub's default branch is still `main`) with a
+   Conventional Commit title. The body starts with `Closes #<n>`, says what changed and what was left out, and reports
+   evidence levels separately. Hotfixes are the only PRs into `main`.
 4. Once CI is green, a fresh agent reviews the PR. Reply to every finding as fixed (with the commit) or declined
    (with the reason). Only blocking findings start another round.
 5. Record the review outcome in the PR, for example "Review: 1 round, clean".
-6. The owner merges (squash), one PR at a time, each up to date with `main`.
+6. The owner merges (squash), one PR at a time, each up to date with `staging`. Merging deploys Staging
+   (https://staging.pitonne.jp).
+7. The owner promotes Staging to Production by fast-forward, never by squashing: Actions → Promote to Production, or
+   `git fetch origin && git push origin origin/staging:main`. Agents never promote.
 
-Keystatic Cloud commits CMS saves straight to `main`, bypassing the ruleset, so branches fall behind often. Bring a
-branch up to date with `git fetch origin && git merge origin/main` (don't rebase a pushed branch). Check the latest `main`
-runs (`gh run list --branch main --limit 5`) before starting work and again when handing back. If CI or Deploy failed,
-fixing it comes first.
+Keystatic Cloud commits CMS saves straight to `main` (a documented exception: content goes live immediately), and the
+Sync staging workflow merges `main` back into `staging` after every push to `main`. Branches still fall behind often;
+bring one up to date with `git fetch origin && git merge origin/staging` (don't rebase a pushed branch). Check the
+latest runs (`gh run list --branch staging --limit 5` and `gh run list --branch main --limit 5`) before starting work
+and again when handing back. If CI, a deploy or Sync staging failed, fixing it comes first.
 
 ## Rules
 
