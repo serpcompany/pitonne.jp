@@ -94,7 +94,8 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
       content: fields.markdoc({
         label: "Content",
         extension: "md",
-        description: "Don't repeat the title here; it's already shown above the post.",
+        description:
+          "Start with your first paragraph; don't repeat the title (it's already the page's main heading). Use Heading 2 for sections and Heading 3–4 inside them.",
         // The post title is the page's only H1
         options: { heading: [2, 3, 4] },
       }),
