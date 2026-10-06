@@ -1,5 +1,15 @@
 {
   "version": 1,
   "include": ["/*"],
-  "exclude": ["/_next/static/*"]
+  "exclude": [
+    "/_next/*",
+    "/images/*",
+    "/screenshots/*",
+    "/apple-icon.png",
+    "/favicon.ico",
+    "/icon-dark-32x32.png",
+    "/icon-light-32x32.png",
+    "/icon.svg",
+    "/sitemap.xsl"
+  ]
 }

@@ -4,7 +4,8 @@ import fs from "node:fs"
 import path from "node:path"
 
 const OUT = path.join(process.cwd(), "out")
-const required = ["index.html", "ja/index.html", "robots.txt", "_headers", "_redirects"]
+// _routes.json keeps static files off the canonical-host Function (functions/_middleware.ts)
+const required = ["index.html", "ja/index.html", "robots.txt", "_headers", "_redirects", "_routes.json"]
 // English is the default locale and is served without a prefix; an out/en/ folder means a duplicate site.
 const forbidden = ["en"]
 

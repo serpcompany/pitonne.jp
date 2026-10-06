@@ -31,8 +31,11 @@
     - www.pitonne.jp redirects to apex (a Cloudflare zone redirect rule, which should answer 308).
     - `pitonne-jp.pages.dev`, its branch aliases and its deployment URLs return 308 to the same path and query on
       `https://pitonne.jp` (`functions/_middleware.ts`). The `pr-<n>` and `staging` aliases, and requests with the
-      `x-pitonne-smoke-test` header, are served as is. After each production deploy,
-      `scripts/smoke-canonical-host.mjs` checks these redirects.
+      `x-pitonne-smoke-test` header, are served as is. A `_redirects` rule is folded into the same hop
+      (`pitonne-jp.pages.dev/en/` → `https://pitonne.jp/`). `public/_routes.json` keeps static files (`/_next/*`,
+      `/images/*`, icons) off the Function; those paths still answer 200 on pages.dev. After each production deploy,
+      `scripts/smoke-canonical-host.mjs` checks these redirects, and that `_redirects`, `_headers` and 404s still work
+      behind the Function.
 
 Deployment source of truth:
 - Push/manual build and deploy commands live in `.github/workflows/deploy.yml`; validated PR preview deployment lives in `.github/workflows/ci.yml`.

@@ -1,97 +1,144 @@
 #!/usr/bin/env node
 // Post-deploy smoke test for the canonical-host redirects (issue #79, functions/_middleware.ts).
 // Asserts that each non-canonical host returns one 308 to the same path and query on https://pitonne.jp, and that
-// the smoke-test header still reaches the deployment. Run after a production deploy:
-// Usage: node scripts/smoke-canonical-host.mjs [deployment-url]   (for example https://d49a67b6.pitonne-jp.pages.dev)
+// requests the Function passes through still get `_redirects`, `_headers` and 404s from the static asset server.
+// Run after a production deploy:
+// Usage: node scripts/smoke-canonical-host.mjs <deployment-url>   (for example https://d49a67b6.pitonne-jp.pages.dev)
 import { pathToFileURL } from "node:url"
 
 export const CANONICAL_ORIGIN = "https://pitonne.jp"
 export const PAGES_ORIGIN = "https://pitonne-jp.pages.dev"
 export const WWW_ORIGIN = "https://www.pitonne.jp"
 export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
+export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
 
 // A new deployment can take a few seconds to replace the previous one at the edge.
 const ATTEMPTS = 12
 const RETRY_DELAY_MS = 5000
+const REQUEST_TIMEOUT_MS = 10_000
+
+const redirect = (url, location, extra = {}) => ({ url, expect: { status: 308, location }, ...extra })
+
+/** One 308 from a non-canonical origin (pages.dev, a deployment URL) to the matching pitonne.jp URL. */
+export function redirectChecks(origin, marker) {
+  const query = `?smoke=${encodeURIComponent(marker)}`
+  return [
+    redirect(`${origin}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`),
+    redirect(`${origin}/contact`, `${CANONICAL_ORIGIN}/contact/`),
+    redirect(`${origin}/robots.txt`, `${CANONICAL_ORIGIN}/robots.txt`),
+    // A `_redirects` rule is folded into the same hop: /en/ -> / on the canonical host
+    redirect(`${origin}/en/`, `${CANONICAL_ORIGIN}/`),
+  ]
+}
 
 /**
- * The checks to run. `redirect` checks expect one 308 to `location`; `serve` checks expect a 200.
- * `zone: true` marks www, which a Cloudflare zone rule (not the Function) redirects.
+ * What the Function passes through must still reach the static asset server unchanged. On a non-canonical host this
+ * needs the smoke-test header (`headers`); it is the same `next()` path every pitonne.jp request takes.
  */
+export function passThroughChecks(origin, headers = SMOKE_HEADERS) {
+  return [
+    { url: `${origin}/ja/`, headers, expect: { status: 200, contentType: "text/html" } },
+    // `_redirects`: the Keystatic single-page-app rewrite and a legacy 301
+    { url: `${origin}/keystatic/branch/main`, headers, expect: { status: 200, contentType: "text/html" } },
+    { url: `${origin}/en/`, headers, expect: { status: 301, location: "/" } },
+    // `_headers`
+    { url: `${origin}/sitemap.xml`, headers, expect: { status: 200, contentType: "application/xml" } },
+    { url: `${origin}/no-such-page-smoke-test/`, headers, expect: { status: 404 } },
+  ]
+}
+
+/** The production checks run after each deploy to main. `zone: true` marks www, which a zone rule redirects. */
 export function smokeChecks({ deploymentUrl, marker }) {
   const query = `?smoke=${encodeURIComponent(marker)}`
   const checks = [
-    { kind: "redirect", url: `${PAGES_ORIGIN}/ja/services/${query}`, location: `${CANONICAL_ORIGIN}/ja/services/${query}` },
-    { kind: "redirect", url: `${PAGES_ORIGIN}/contact`, location: `${CANONICAL_ORIGIN}/contact/` },
-    { kind: "redirect", url: `${PAGES_ORIGIN}/robots.txt`, location: `${CANONICAL_ORIGIN}/robots.txt` },
-    { kind: "serve", url: `${PAGES_ORIGIN}/`, headers: { [SMOKE_TEST_HEADER]: "1" } },
-    { kind: "redirect", url: `${WWW_ORIGIN}/ja/services/${query}`, location: `${CANONICAL_ORIGIN}/ja/services/${query}`, zone: true },
+    ...redirectChecks(PAGES_ORIGIN, marker),
+    ...passThroughChecks(PAGES_ORIGIN),
+    redirect(`${WWW_ORIGIN}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`, { zone: true }),
   ]
   if (deploymentUrl) {
     const origin = new URL(deploymentUrl).origin
-    checks.push(
-      { kind: "redirect", url: `${origin}/ja/${query}`, location: `${CANONICAL_ORIGIN}/ja/${query}` },
-      { kind: "serve", url: `${origin}/ja/`, headers: { [SMOKE_TEST_HEADER]: "1" } },
-    )
+    checks.push(...redirectChecks(origin, marker), ...passThroughChecks(origin))
   }
   return checks
 }
 
 /** Compares one response with its check. Returns { ok, warning?, message }. */
-export function evaluate(check, { status, location, mitigated }) {
-  const got = `${status}${location ? ` -> ${location}` : ""}`
-  if (check.kind === "serve") {
-    return { ok: status === 200, message: `${check.url} (with ${SMOKE_TEST_HEADER}): ${got}, expected 200` }
-  }
-  const expected = `308 -> ${check.location}`
-  if (status === 308 && location === check.location) return { ok: true, message: `${check.url}: ${got}` }
-  if (check.zone && status === 301 && location === check.location) {
+export function evaluate(check, { status, location, contentType, mitigated }) {
+  const { expect } = check
+  const label = `${check.url}${check.headers ? ` (with ${Object.keys(check.headers).join(", ")})` : ""}`
+  const got = `${status}${location ? ` -> ${location}` : ""}${contentType ? ` [${contentType}]` : ""}`
+  const wanted = `${expect.status}${expect.location ? ` -> ${expect.location}` : ""}${
+    expect.contentType ? ` [${expect.contentType}]` : ""
+  }`
+  const matches =
+    status === expect.status &&
+    (expect.location === undefined || location === expect.location) &&
+    (expect.contentType === undefined || (contentType ?? "").startsWith(expect.contentType))
+  if (matches) return { ok: true, message: `${label}: ${got}` }
+  if (check.zone && status === 301 && location === expect.location) {
     return {
       ok: true,
       warning: true,
-      message: `${check.url}: ${got}, expected ${expected}. Change the www zone redirect rule's status code to 308.`,
+      message: `${label}: ${got}, expected ${wanted}. Change the www zone redirect rule's status code to 308.`,
     }
   }
   if (check.zone && mitigated) {
-    return { ok: true, warning: true, message: `${check.url}: Cloudflare challenged the CI runner (${status}); not checked.` }
+    return { ok: true, warning: true, message: `${label}: Cloudflare challenged the CI runner (${status}); not checked.` }
   }
-  return { ok: false, message: `${check.url}: ${got}, expected ${expected}` }
+  return { ok: false, message: `${label}: ${got}, expected ${wanted}` }
 }
 
-async function probe(check) {
-  const response = await fetch(check.url, { redirect: "manual", headers: check.headers ?? {} })
+export async function probe(check) {
+  const response = await fetch(check.url, {
+    redirect: "manual",
+    headers: check.headers ?? {},
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  })
   await response.body?.cancel()
   return {
     status: response.status,
     location: response.headers.get("location"),
+    contentType: response.headers.get("content-type"),
     mitigated: response.headers.has("cf-mitigated"),
   }
 }
 
-async function run(check) {
+/** Runs one check, retrying while it fails. */
+export async function run(check, { attempts = ATTEMPTS, delayMs = RETRY_DELAY_MS, probeFn = probe } = {}) {
   let result
-  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
-      result = evaluate(check, await probe(check))
+      result = evaluate(check, await probeFn(check))
     } catch (error) {
       result = { ok: false, message: `${check.url}: ${error.message}` }
     }
     if (result.ok) return result
-    if (attempt < ATTEMPTS) await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS))
+    if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs))
   }
   return result
 }
 
-async function main([deploymentUrl]) {
-  const marker = process.env.GITHUB_SHA?.slice(0, 7) || String(Date.now())
-  let failed = false
-  for (const check of smokeChecks({ deploymentUrl, marker })) {
-    const result = await run(check)
-    if (!result.ok) failed = true
+/** Runs every check, prints GitHub annotations for warnings and failures, and returns true when all passed. */
+export async function runChecks(checks, options) {
+  let passed = true
+  for (const check of checks) {
+    const result = await run(check, options)
+    if (!result.ok) passed = false
     const prefix = result.ok ? (result.warning ? "::warning::" : "ok ") : "::error::"
     console.log(`${prefix}${result.message}`)
   }
-  if (failed) process.exit(1)
+  return passed
+}
+
+async function main([deploymentUrl]) {
+  if (!deploymentUrl) {
+    console.log(
+      "::warning::No deployment URL given (wrangler-action's deployment-url output was empty); " +
+        "checking pitonne-jp.pages.dev and www only.",
+    )
+  }
+  const marker = process.env.GITHUB_SHA?.slice(0, 7) || String(Date.now())
+  if (!(await runChecks(smokeChecks({ deploymentUrl, marker })))) process.exit(1)
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

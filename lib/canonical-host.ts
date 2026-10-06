@@ -63,10 +63,34 @@ export function canonicalRedirectLocation(requestUrl: string | URL, headers: Hea
   return `${CANONICAL_ORIGIN}${canonicalPath(url.pathname)}${url.search}`
 }
 
-/** A 308 to the canonical host, or `null` when the request should pass through. */
-export function canonicalHostRedirect(request: Request): Response | null {
-  const location = canonicalRedirectLocation(request.url, request.headers)
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308])
+
+/**
+ * A 308 to the canonical host, or `null` when the request should pass through to static assets.
+ *
+ * `next` is the static asset server, which applies `public/_redirects` and Pages' own trailing-slash redirects. For a
+ * non-canonical host it is asked first, so a legacy URL (`/en/`, `/services/medications`) lands on its final
+ * `pitonne.jp` URL in one hop instead of two, with `_redirects` staying the only list of those rules.
+ */
+export async function canonicalHostRedirect(
+  request: Request,
+  next: () => Promise<Response>,
+): Promise<Response | null> {
+  let location = canonicalRedirectLocation(request.url, request.headers)
   if (!location) return null
+
+  const asset = await next()
+  const assetLocation = asset.headers.get("location")
+  await asset.body?.cancel()
+  if (REDIRECT_STATUSES.has(asset.status) && assetLocation) {
+    const url = new URL(request.url)
+    const target = new URL(assetLocation, url)
+    // Only same-host targets are folded in; anything else keeps the plain host redirect.
+    if (target.host === url.host) {
+      location = `${CANONICAL_ORIGIN}${canonicalPath(target.pathname)}${target.search || url.search}`
+    }
+  }
+
   return new Response(null, {
     status: 308,
     headers: {

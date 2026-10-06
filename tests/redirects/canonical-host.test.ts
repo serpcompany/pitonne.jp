@@ -71,6 +71,8 @@ describe("canonical path", () => {
     ["/.well-known/security.txt", "/.well-known/security.txt"],
     ["/keystatic/cloud/oauth/callback", "/keystatic/cloud/oauth/callback"],
     ["/keystatic", "/keystatic"],
+    ["/keystatic/", "/keystatic/"],
+    ["/API/x", "/API/x"],
     // Only the first segment exempts a path
     ["/docs/api", "/docs/api/"],
   ])("%s -> %s", (input, expected) => {
@@ -94,6 +96,11 @@ describe("canonical host redirect", () => {
     )
   })
 
+  it("keeps a protocol-relative-looking path on the canonical host", () => {
+    expect(location("https://pitonne-jp.pages.dev//evil.com")).toBe("https://pitonne.jp//evil.com")
+    expect(location("https://pitonne-jp.pages.dev//evil.com/x.js")).toBe("https://pitonne.jp//evil.com/x.js")
+  })
+
   it("exempts requests with the smoke-test header, whatever its value", () => {
     expect(location("https://pitonne-jp.pages.dev/", { [SMOKE_TEST_HEADER]: "1" })).toBeNull()
     expect(location("https://www.pitonne.jp/", { "X-Pitonne-Smoke-Test": "" })).toBeNull()
@@ -105,11 +112,56 @@ describe("canonical host redirect", () => {
     expect(location("https://pitonne.jp/about")).toBeNull()
   })
 
-  it("answers with a single 308", () => {
-    const response = canonicalHostRedirect(new Request("https://pitonne-jp.pages.dev/faq/?q=1"))
+  const asset = (status = 200, headers: Record<string, string> = {}) => async () =>
+    new Response(status === 200 ? "static asset" : null, { status, headers })
+
+  it("answers with a single 308", async () => {
+    const response = await canonicalHostRedirect(new Request("https://pitonne-jp.pages.dev/faq/?q=1"), asset())
     expect(response?.status).toBe(308)
     expect(response?.headers.get("location")).toBe("https://pitonne.jp/faq/?q=1")
-    expect(canonicalHostRedirect(new Request("https://pitonne.jp/faq/"))).toBeNull()
+    expect(await canonicalHostRedirect(new Request("https://pitonne.jp/faq/"), asset())).toBeNull()
+  })
+
+  it.each(["GET", "HEAD", "POST"])("redirects %s requests the same way", async (method) => {
+    const response = await canonicalHostRedirect(
+      new Request("https://pitonne-jp.pages.dev/contact", { method }),
+      asset(method === "POST" ? 405 : 308, method === "POST" ? {} : { location: "/contact/" }),
+    )
+    expect(response?.status).toBe(308)
+    expect(response?.headers.get("location")).toBe("https://pitonne.jp/contact/")
+  })
+
+  it("folds a _redirects rule into the same hop", async () => {
+    const legacy = (url: string, location: string, status = 301) =>
+      canonicalHostRedirect(new Request(url), asset(status, { location })).then((r) => r?.headers.get("location"))
+    expect(await legacy("https://pitonne-jp.pages.dev/en/", "/")).toBe("https://pitonne.jp/")
+    expect(await legacy("https://pitonne-jp.pages.dev/en/blog/?a=1", "/blog/")).toBe("https://pitonne.jp/blog/?a=1")
+    expect(await legacy("https://pitonne-jp.pages.dev/services/medications", "/services/medication/")).toBe(
+      "https://pitonne.jp/services/medication/",
+    )
+    expect(await legacy("https://main.pitonne-jp.pages.dev/old/?a=1", "/new/?b=2", 302)).toBe(
+      "https://pitonne.jp/new/?b=2",
+    )
+    // Relative targets resolve against the request; a target on another host isn't followed.
+    expect(await legacy("https://pitonne-jp.pages.dev/x/y", "z")).toBe("https://pitonne.jp/x/z/")
+    expect(await legacy("https://pitonne-jp.pages.dev/out/", "https://example.com/")).toBe("https://pitonne.jp/out/")
+  })
+
+  it("ignores asset responses that aren't redirects", async () => {
+    for (const status of [200, 404, 405]) {
+      const response = await canonicalHostRedirect(new Request("https://pitonne-jp.pages.dev/about"), asset(status))
+      expect(response?.headers.get("location")).toBe("https://pitonne.jp/about/")
+    }
+  })
+
+  it("doesn't call the asset server for requests it passes through", async () => {
+    let calls = 0
+    const next = async () => {
+      calls++
+      return new Response("static asset")
+    }
+    expect(await canonicalHostRedirect(new Request("https://pitonne.jp/"), next)).toBeNull()
+    expect(calls).toBe(0)
   })
 })
 
@@ -117,8 +169,9 @@ describe("Pages middleware", () => {
   const passthrough = new Response("static asset")
   const next = async () => passthrough
 
-  it("redirects non-canonical hosts without reaching static assets", async () => {
-    const response = await onRequest({ request: new Request("https://pitonne-jp.pages.dev/ja/"), next })
+  it("redirects non-canonical hosts with one 308", async () => {
+    const request = new Request("https://pitonne-jp.pages.dev/ja/")
+    const response = await onRequest({ request, next: async () => new Response("static asset") })
     expect(response.status).toBe(308)
     expect(response.headers.get("location")).toBe("https://pitonne.jp/ja/")
   })
@@ -130,8 +183,37 @@ describe("Pages middleware", () => {
     expect(await onRequest({ request: smoke, next })).toBe(passthrough)
   })
 
-  it("keeps hashed build assets off the Function", () => {
-    const routes = JSON.parse(fs.readFileSync(path.join(process.cwd(), "public", "_routes.json"), "utf8"))
-    expect(routes).toEqual({ version: 1, include: ["/*"], exclude: ["/_next/static/*"] })
+  it("passes the asset server's response through unchanged", async () => {
+    const legacy = new Response(null, { status: 301, headers: { location: "/" } })
+    expect(await onRequest({ request: new Request("https://pitonne.jp/en/"), next: async () => legacy })).toBe(legacy)
+  })
+})
+
+describe("_routes.json", () => {
+  const routes = JSON.parse(fs.readFileSync(path.join(process.cwd(), "public", "_routes.json"), "utf8"))
+
+  it("runs the Function on every path that isn't excluded", () => {
+    expect(routes.version).toBe(1)
+    expect(routes.include).toEqual(["/*"])
+    // Cloudflare's limit is 100 include + exclude rules
+    expect(routes.include.length + routes.exclude.length).toBeLessThanOrEqual(100)
+  })
+
+  it("excludes only static files, never a page or the files the smoke test checks", () => {
+    for (const rule of routes.exclude as string[]) {
+      expect(rule).toMatch(/^\/(?:_next\/\*|[a-z-]+\/\*|[^/]+\.[a-z]+)$/)
+      if (rule.startsWith("/_next/")) continue
+      expect(fs.existsSync(path.join(process.cwd(), "public", rule.replace(/\*$/, "")))).toBe(true)
+    }
+    for (const kept of ["/", "/ja/", "/blog/", "/keystatic/", "/robots.txt", "/sitemap.xml", "/en/"]) {
+      const excluded = (routes.exclude as string[]).some(
+        (rule) => kept === rule || (rule.endsWith("*") && kept.startsWith(rule.slice(0, -1))),
+      )
+      expect(excluded).toBe(false)
+    }
+  })
+
+  it("keeps build assets and images off the Function", () => {
+    expect(routes.exclude).toEqual(expect.arrayContaining(["/_next/*", "/images/*"]))
   })
 })
