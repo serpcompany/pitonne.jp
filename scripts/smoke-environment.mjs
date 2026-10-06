@@ -13,8 +13,10 @@ import { SMOKE_HEADERS } from "./smoke-canonical-host.mjs"
 export const SITEMAP_LINE = "Sitemap: https://pitonne.jp/sitemap-index.xml"
 const ENVIRONMENTS = new Set(["production", "staging", "preview"])
 
-// Same retry budget as the canonical-host smoke test: the first check waits for the new deployment to reach the edge.
-const ATTEMPTS = 12
+// The first check waits for the new deployment to reach the edge; later checks get a short budget.
+// A brand-new deployment URL can answer 404 for over a minute (seen 2026-10-06 on Staging), so the first check
+// waits about two minutes.
+const ATTEMPTS = 24
 const LATER_ATTEMPTS = 2
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
