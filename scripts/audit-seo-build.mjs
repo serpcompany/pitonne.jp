@@ -42,13 +42,25 @@ function walk(dir, files = []) {
   return files
 }
 
-const decode = (value) =>
-  value
-    .replace(/&amp;/g, "&")
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;|&#39;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
+const HTML_ENTITIES = { amp: "&", quot: '"', "#x27": "'", "#39": "'", lt: "<", gt: ">" }
+// Single pass so "&amp;quot;" decodes to "&quot;", not '"'
+const decode = (value) => value.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, entity) => HTML_ENTITIES[entity])
+
+const SITE = new URL(SITE_URL)
+const SITE_HOSTS = new Set([SITE.hostname, `www.${SITE.hostname}`])
+
+// Parse a link against the page it appears on and compare hosts exactly (not by string prefix).
+function classifyLink(href, baseUrl) {
+  let url
+  try {
+    url = new URL(href, baseUrl)
+  } catch {
+    return { kind: "external" }
+  }
+  if (!SITE_HOSTS.has(url.hostname)) return { kind: "external" }
+  if (url.protocol !== SITE.protocol || url.hostname !== SITE.hostname) return { kind: "non-canonical" }
+  return { kind: "internal", path: url.pathname }
+}
 
 function attribute(tag, name) {
   const match = tag.match(new RegExp(`\\s${name}="([^"]*)"`))
@@ -115,14 +127,14 @@ for (const file of pages) {
   if (ogUrl && canonical && ogUrl !== canonical) report(urlPath, `og:url ${ogUrl} does not match canonical ${canonical}`)
 
   for (const tag of html.match(/<a\s[^>]*href="[^"]*"/g) || []) {
-    let href = attribute(tag, "href")
-    if (href.startsWith(SITE_URL)) href = href.slice(SITE_URL.length) || "/"
-    if (href.startsWith("http://pitonne.jp") || href.startsWith("http://www.pitonne.jp")) {
-      report(urlPath, `links to non-HTTPS URL ${href}`)
+    const href = attribute(tag, "href")
+    const link = classifyLink(href, SITE_URL + urlPath)
+    if (link.kind === "non-canonical") {
+      report(urlPath, `links to non-canonical URL ${href} (use ${SITE_URL})`)
       continue
     }
-    if (!href.startsWith("/") || href.startsWith("//")) continue
-    const status = resolveInternal(href)
+    if (link.kind !== "internal") continue
+    const status = resolveInternal(link.path)
     if (status === "broken") report(urlPath, `broken internal link ${href}`)
     if (status === "redirect") report(urlPath, `internal link redirects: ${href}`)
   }
@@ -134,7 +146,8 @@ for (const sitemap of SITEMAPS) {
   for (const [, loc] of xml.matchAll(/<loc>([^<]*)<\/loc>/g)) {
     const url = decode(loc)
     sitemapOwners.set(url, [...(sitemapOwners.get(url) || []), sitemap])
-    if (url.startsWith(SITE_URL) && resolveInternal(url.slice(SITE_URL.length) || "/") !== "ok") {
+    const link = classifyLink(url, SITE_URL)
+    if (link.kind === "internal" && resolveInternal(link.path) !== "ok") {
       report(sitemap, `lists URL that is not a page: ${url}`)
     }
   }
