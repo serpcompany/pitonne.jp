@@ -77,11 +77,11 @@ describe("canonical-host smoke test", () => {
     expect(evaluate(missing, { status: 200 }).ok).toBe(false)
   })
 
-  it("only warns while the www zone rule still answers 301 or challenges the runner", () => {
+  it("requires a 308 from www, and only warns when Cloudflare challenges the runner", () => {
     const www = checks.find((check) => check.zone)
     const { location } = www.expect
     expect(evaluate(www, { status: 308, location })).toMatchObject({ ok: true })
-    expect(evaluate(www, { status: 301, location })).toMatchObject({ ok: true, warning: true })
+    expect(evaluate(www, { status: 301, location }).ok).toBe(false)
     expect(evaluate(www, { status: 403, location: null, mitigated: true })).toMatchObject({ ok: true, warning: true })
     expect(evaluate(www, { status: 301, location: "https://pitonne.jp/" }).ok).toBe(false)
   })
