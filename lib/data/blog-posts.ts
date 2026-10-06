@@ -3,6 +3,7 @@ import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
 import { locales, type Locale } from "@/lib/i18n/config"
+import seoLimits from "@/lib/seo-limits.json"
 
 function blogContentDirectory(locale: Locale): string {
   if (locale === "ja") {
@@ -15,14 +16,20 @@ function blogContentDirectory(locale: Locale): string {
 export const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 export const EXCERPT_MIN_LENGTH = 70
 export const EXCERPT_MAX_LENGTH = 160
+// The rendered meta description (metaDescription ?? excerpt) and title must fit the audit:meta ranges;
+// metaTitle is rendered with the " | Pitonne" suffix, which counts toward the title range.
+const META_DESCRIPTION_MIN_LENGTH = seoLimits.description.min
+const META_DESCRIPTION_MAX_LENGTH = seoLimits.description.max
+const META_TITLE_MIN_LENGTH = seoLimits.title.min - seoLimits.titleSuffix.length
+const META_TITLE_MAX_LENGTH = seoLimits.title.max - seoLimits.titleSuffix.length
 
 export const blogPostFrontmatterSchema = z
   .object({
     slug: z.string().regex(BLOG_SLUG_PATTERN, "slug must be lowercase kebab-case"),
     title: z.string().min(1),
     // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
-    metaTitle: z.string().min(1).optional(),
-    metaDescription: z.string().min(1).optional(),
+    metaTitle: z.string().trim().min(META_TITLE_MIN_LENGTH).max(META_TITLE_MAX_LENGTH).optional(),
+    metaDescription: z.string().trim().min(META_DESCRIPTION_MIN_LENGTH).max(META_DESCRIPTION_MAX_LENGTH).optional(),
     // Also the default meta/OG/Twitter description
     excerpt: z.string().trim().min(EXCERPT_MIN_LENGTH).max(EXCERPT_MAX_LENGTH),
     publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -45,6 +52,10 @@ export const blogPostFrontmatterSchema = z
   .refine((data) => !data.featureImage || data.featureImageAlt, {
     message: "featureImageAlt is required when featureImage is set",
     path: ["featureImageAlt"],
+  })
+  .refine((data) => data.metaDescription || data.excerpt.length >= META_DESCRIPTION_MIN_LENGTH, {
+    message: `excerpt is the meta description, so it needs ${META_DESCRIPTION_MIN_LENGTH}+ characters unless metaDescription is set`,
+    path: ["excerpt"],
   })
 
 export interface BlogPost {
@@ -165,9 +176,14 @@ export function getBlogPostLocales(slug: string): Locale[] {
   return locales.filter((locale) => blogPostsByLocale[locale].some((post) => post.slug === slug))
 }
 
-// Posts published in this locale that have no translation in another locale
-export function getUntranslatedBlogPostSlugs(locale: Locale): string[] {
-  return blogPostsByLocale[locale].map((post) => post.slug).filter((slug) => getBlogPostLocales(slug).length !== locales.length)
+// Blog post and category paths published in this locale that are missing in another locale
+export function getUntranslatedBlogPaths(locale: Locale): string[] {
+  const posts = blogPostsByLocale[locale]
+  const untranslatedPosts = posts.filter((post) => getBlogPostLocales(post.slug).length !== locales.length).map((post) => `/blog/${post.slug}/`)
+  const untranslatedCategories = Array.from(new Set(posts.map((post) => post.categorySlug)))
+    .filter((categorySlug) => getBlogCategoryLocales(categorySlug).length !== locales.length)
+    .map((categorySlug) => `/blog/category/${categorySlug}/`)
+  return [...untranslatedPosts, ...untranslatedCategories]
 }
 
 export function getAllBlogPostSlugs(): string[] {

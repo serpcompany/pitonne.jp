@@ -17,6 +17,7 @@ featured: false
 relatedServiceSlugs:
   - stem-cell-therapy
   - exosome-iv-drip
+  - iv-therapy
 tags:
   - stem cell therapy
   - exosome iv

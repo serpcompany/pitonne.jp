@@ -8,18 +8,15 @@ import { canonicalRoutes, localizedRoute, getAreaNavigation, type ServiceNavCate
 import { businessInfo } from "@/lib/data/site"
 import { ContactButton } from "@/components/shared/contact-button"
 import type { Locale } from "@/lib/i18n/config"
+import { normalizePath } from "@/lib/seo"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
 
-function LanguageSwitcher({ locale, untranslatedBlogSlugs }: { locale: Locale; untranslatedBlogSlugs: string[] }) {
+function LanguageSwitcher({ locale, untranslatedPaths }: { locale: Locale; untranslatedPaths: string[] }) {
   const pathname = usePathname() ?? "/"
   const targetLocale: Locale = locale === "en" ? "ja" : "en"
-  const neutralPath = pathname.replace(/^\/ja(?=\/|$)/, "") || "/"
-  const blogSlug = neutralPath.match(/^\/blog\/([^/]+)\/?$/)?.[1]
-  // Single-locale posts have no page in the other locale, so switch to that locale's blog index instead
-  const targetPath = localizedRoute(
-    blogSlug && untranslatedBlogSlugs.includes(blogSlug) ? canonicalRoutes.blog : neutralPath,
-    targetLocale
-  )
+  const neutralPath = normalizePath(pathname.replace(/^\/ja(?=\/|$)/, "") || "/")
+  // Single-locale blog posts and categories have no page in the other locale, so switch to that locale's blog index
+  const targetPath = localizedRoute(untranslatedPaths.includes(neutralPath) ? canonicalRoutes.blog : neutralPath, targetLocale)
 
   return (
     <Link
@@ -35,13 +32,13 @@ export function Header({
   locale,
   dict,
   serviceNavigation,
-  untranslatedBlogSlugs = [],
+  untranslatedPaths = [],
 }: {
   locale: Locale
   dict: Dictionary
   serviceNavigation: ServiceNavCategory[]
-  // Blog posts in this locale that have no translation in the other locale
-  untranslatedBlogSlugs?: string[]
+  // Paths in this locale that have no translation in the other locale
+  untranslatedPaths?: string[]
 }) {
   const servicesMenu = { categories: serviceNavigation }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -213,7 +210,7 @@ export function Header({
 
         {/* Language Switcher & Phone & CTA */}
         <div className="hidden lg:flex items-center gap-6">
-          <LanguageSwitcher locale={locale} untranslatedBlogSlugs={untranslatedBlogSlugs} />
+          <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
           <div
             className="relative"
             onMouseEnter={() => setActiveDropdown("phone")}
@@ -274,7 +271,7 @@ export function Header({
           <div className="container mx-auto px-4 py-4 space-y-1">
             {/* Language Switcher - Mobile */}
             <div className="pb-3 mb-1 border-b border-border">
-              <LanguageSwitcher locale={locale} untranslatedBlogSlugs={untranslatedBlogSlugs} />
+              <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
             </div>
 
             {navigation.map((item) => (
