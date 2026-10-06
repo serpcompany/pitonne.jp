@@ -7,13 +7,29 @@ on:
       - main
   workflow_dispatch:
 
-concurrency:
-  group: cloudflare-pages-${{ github.ref_name }}
-  cancel-in-progress: true
-
 jobs:
+  # Draft saves from the CMS don't change the built site. This check is a separate job so a skipped run never joins
+  # the deploy concurrency group, where it would cancel a real deploy still in progress.
+  changes:
+    name: Check for draft-only changes
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.drafts.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: drafts
+        if: github.event_name == 'push'
+        run: node scripts/draft-only-change.mjs "${{ github.event.before }}" "${{ github.sha }}"
+
   deploy:
     name: Deploy to Cloudflare Pages
+    needs: changes
+    if: needs.changes.outputs.skip != 'true'
+    concurrency:
+      group: cloudflare-pages-${{ github.ref_name }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
