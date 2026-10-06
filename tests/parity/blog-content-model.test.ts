@@ -95,12 +95,16 @@ describe("blog content model", () => {
     ["excerpt shorter than 70 characters", { excerpt: "Too short." }, "excerpt"],
     ["excerpt longer than 160 characters", { excerpt: "x".repeat(161) }, "excerpt"],
     ["non-kebab-case slug", { slug: "Example_Post" }, "slug"],
-    ["excerpt under 110 characters without a metaDescription", { excerpt: "x".repeat(90) }, "excerpt"],
     ["metaDescription shorter than 110 characters", { metaDescription: "Too short for search results." }, "metaDescription"],
     ["metaTitle longer than 60 characters", { metaTitle: "x".repeat(61) }, "metaTitle"],
   ])("rejects %s", (_label, override, field) => {
     const dir = writePosts({ "example-post.md": { ...validFrontmatter, ...override } })
     expect(() => loadBlogPostsFromDirectory(dir, "en", "content/blog")).toThrow(field)
+  })
+
+  it("publishes a short excerpt without a metaDescription instead of failing the build", () => {
+    const dir = writePosts({ "example-post.md": { ...validFrontmatter, excerpt: "x".repeat(90) } })
+    expect(loadBlogPostsFromDirectory(dir, "en", "content/blog")[0].excerpt).toHaveLength(90)
   })
 
   it("allows a short excerpt when metaDescription covers the meta description", () => {

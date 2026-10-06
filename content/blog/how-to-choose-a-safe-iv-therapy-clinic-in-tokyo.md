@@ -20,7 +20,7 @@ When searching for a safe IV therapy clinic in Tokyo, it is important to look be
 
 IV therapy is not suitable for every person or every symptom. Before booking, consider how the clinic handles medical review, treatment explanations, nurse administration, monitoring, aftercare, and emergency concerns.
 
-## Quick Answer: What Makes an IV Therapy Clinic Safe?
+## What Makes an IV Therapy Clinic Safe?
 
 Before booking, check whether the clinic:
 
