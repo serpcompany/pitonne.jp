@@ -1,5 +1,8 @@
 # Pitonne.jp — Project Instructions
 
+Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/deploy evidence, git workflow) is in
+[AGENTS.md](AGENTS.md). This file holds the project rules.
+
 ## i18n Rules
 
 - Every user-visible string in JSX must come from `getDictionary(locale)`, never hardcoded.
@@ -45,11 +48,9 @@
 - **Area data**: `lib/data/areas.ts` (co-located en/ja fields)
 - **i18n docs**: `docs/i18n.md`
 
-## CI Pipeline
+## SEO audits
 
-Tests run on every PR: `pnpm lint` → `pnpm test` → `pnpm audit:strings` → `pnpm audit:meta` → `pnpm build` → `pnpm audit:seo` → `pnpm test:lighthouse`
-
-SEO audits (mirror the Ahrefs Site Audit checks):
+These mirror the Ahrefs Site Audit checks; `pnpm check` and CI run them (see [AGENTS.md](AGENTS.md)):
 - `pnpm audit:meta` — blog/service `<title>` 15–70 chars (incl. " | Pitonne") and meta description 110–160 chars.
   Use the optional `metaTitle` / `metaDescription` frontmatter instead of editing the visible title/excerpt.
 - `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`
