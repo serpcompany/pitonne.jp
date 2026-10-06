@@ -91,8 +91,9 @@ describe("Pitonne video pages", () => {
       "@type": "ItemList",
       name: "Pitonne Videos",
     })
-    expect(listSchema.itemListElement).toHaveLength(6)
-    expect(listSchema.itemListElement[0]).toMatchObject({
+    const listItems = (listSchema as { itemListElement: readonly unknown[] }).itemListElement
+    expect(listItems).toHaveLength(6)
+    expect(listItems[0]).toMatchObject({
       "@type": "ListItem",
       position: 1,
       url: `${SITE_URL}/watch/${video.slug}/`,

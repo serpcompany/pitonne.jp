@@ -4,11 +4,21 @@ import type { Service } from "@/lib/data/services"
 import type { PitonneVideo } from "@/lib/data/videos"
 import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
+import type {
+  BlogPosting,
+  BreadcrumbList,
+  ItemList,
+  MedicalBusiness,
+  Service as ServiceSchema,
+  VideoObject,
+  WebSite,
+  WithContext,
+} from "schema-dts"
 
 const businessId = `${SITE_URL}/#business`
 const websiteId = `${SITE_URL}/#website`
 
-export function businessJsonLd(locale: Locale = "en") {
+export function businessJsonLd(locale: Locale = "en"): WithContext<MedicalBusiness> {
   const info = getBusinessInfo(locale)
   return {
     "@context": "https://schema.org",
@@ -39,7 +49,7 @@ export function businessJsonLd(locale: Locale = "en") {
   }
 }
 
-export function websiteJsonLd(locale: Locale = "en") {
+export function websiteJsonLd(locale: Locale = "en"): WithContext<WebSite> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -51,7 +61,7 @@ export function websiteJsonLd(locale: Locale = "en") {
   }
 }
 
-export function serviceJsonLd(service: Service, locale: Locale = "en") {
+export function serviceJsonLd(service: Service, locale: Locale = "en"): WithContext<ServiceSchema> {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -72,7 +82,7 @@ export function serviceJsonLd(service: Service, locale: Locale = "en") {
 export function blogPostingJsonLd(
   post: Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt" | "author" | "featureImage">,
   locale: Locale = "en",
-) {
+): WithContext<BlogPosting> {
   const enUrl = canonicalUrl(`/blog/${post.slug}/`)
   const jaUrl = `${SITE_URL}/ja/blog/${post.slug}/`
 
@@ -100,7 +110,7 @@ export function blogPostingJsonLd(
   }
 }
 
-export function videoObjectJsonLd(video: PitonneVideo) {
+export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject> {
   const watchUrl = canonicalUrl(video.watchPath)
 
   return {
@@ -126,7 +136,7 @@ export function videoObjectJsonLd(video: PitonneVideo) {
   }
 }
 
-export function videoListJsonLd(videos: PitonneVideo[]) {
+export function videoListJsonLd(videos: PitonneVideo[]): WithContext<ItemList> {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -140,7 +150,7 @@ export function videoListJsonLd(videos: PitonneVideo[]) {
   }
 }
 
-export function videoBreadcrumbJsonLd(video: PitonneVideo) {
+export function videoBreadcrumbJsonLd(video: PitonneVideo): WithContext<BreadcrumbList> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

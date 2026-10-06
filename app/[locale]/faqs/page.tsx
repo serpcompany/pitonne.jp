@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import type { FAQPage, WithContext } from "schema-dts"
 import { JsonLd } from "@/components/shared/json-ld"
 import { PageHero } from "@/components/shared/page-hero"
 import { localizedHreflangAlternates, pageOpenGraph } from "@/lib/seo"
@@ -42,7 +43,7 @@ export default async function FaqsPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
-  const faqJsonLd = {
+  const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: dict.faqs.items.map((faq) => ({
