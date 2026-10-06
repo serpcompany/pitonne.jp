@@ -1,5 +1,4 @@
 ---
-slug: exosome-iv-therapy-tokyo-price-range
 title: >-
   What Is the Price Range for Exosome IV Therapy in Tokyo? What to Check Before
   Comparing Lower-Priced Options
@@ -9,7 +8,6 @@ excerpt: >-
   listings and what to check on source, volume, and storage before comparing
   options.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -22,7 +20,7 @@ tags:
   - pricing
   - tokyo
   - private care
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/exosome-iv-therapy-tokyo-price-range/featureImage.jpg
 featureImageAlt: >-
   Exosome IV bag on a drip stand in a high-rise room with Tokyo Tower in the
   background

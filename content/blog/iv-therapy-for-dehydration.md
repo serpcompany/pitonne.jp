@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-dehydration
 title: 'IV Therapy for Dehydration: When Hydration Support May Make Sense'
 metaTitle: 'IV Therapy for Dehydration: When It May Make Sense'
 excerpt: >-
   IV therapy for dehydration may help support hydration in the right situation,
   but it is not the answer for every case. Here is how to think about it safely.
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/iv-therapy-for-dehydration/featureImage.jpg
 featureImageAlt: >-
   Clinician in blue gloves placing an IV line in a patient's arm resting on a
   striped cushion

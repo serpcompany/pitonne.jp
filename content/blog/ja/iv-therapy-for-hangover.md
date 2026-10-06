@@ -1,15 +1,13 @@
 ---
-slug: iv-therapy-for-hangover
 title: 二日酔いへの点滴療法：期待できる効果と限界
 excerpt: >-
   二日酔いに対する点滴療法は、医師によるスクリーニングを経て、状況によっては水分補給や回復のサポートに役立つ可能性があります。ただし万能薬ではなく、緊急時には適していません。点滴でできること・できないこと、医療機関に相談すべき症状をPitonneが解説します。
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/sheet/blog/iv-therapy-for-hangover.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-hangover/featureImage.jpg
 featureImageAlt: 東京タワーを背景に、点滴スタンドに吊るされた「Hangover」と手書きされた点滴バッグ
 featured: true
 relatedServiceSlugs:

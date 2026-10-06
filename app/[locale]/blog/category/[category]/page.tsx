@@ -29,8 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
   if (!category) return { title: dict.common.notFoundCategory }
-  const categoryDescriptions = dict.blog.categoryDescriptions as Record<string, string>
-  const categoryDescription = categoryDescriptions[category.slug] ?? dict.blog.heroDescription
+  const categoryDescription = category.description
 
   return {
     title: `${category.name} ${dict.blog.articles}`,
@@ -57,10 +56,8 @@ export default async function BlogCategoryPage({ params }: Props) {
     notFound()
   }
 
-  const categoryDescriptions = dict.blog.categoryDescriptions as Record<string, string>
-  const categoryCtaDescriptions = dict.blog.categoryCtaDescriptions as Record<string, string>
-  const categoryDescription = categoryDescriptions[category.slug] ?? dict.blog.heroDescription
-  const categoryCtaDescription = categoryCtaDescriptions[category.slug] ?? dict.blog.contactDescription
+  const categoryDescription = category.description
+  const categoryCtaDescription = category.ctaDescription ?? dict.blog.contactDescription
   const categoryPosts = getBlogPostsByCategory(categorySlug, typedLocale)
 
   return (

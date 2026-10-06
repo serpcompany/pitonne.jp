@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-gut-health
 title: 点滴療法は腸の健康に良いのか？ピトンが考える水分補給、栄養、そして全身のコンディション
 excerpt: >-
   消化器系の健康は、日常生活と密接に関わっています。ピトンヌでは、点滴療法を腸を直接治療する手段としてではなく、水分補給や栄養バランスの維持、そして全身のコンディション管理をサポートするものとして捉えています。
 metaDescription: 消化器系の健康は、日常生活と密接に関わっています。ピトンヌでは、点滴療法を腸を直接治療する手段としてではなく、水分補給や栄養バランスの維持、そして全身のコンディション管理をサポートするものとして捉えています。食事や断食の相談、まず医師の診察を受けるべき場合についても解説します。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-gut-health.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-gut-health/featureImage.jpg
 featureImageAlt: ベッドの端に腰かけ、つらそうにお腹を押さえる女性
 relatedServiceSlugs:
   - iv-vitamin-therapy

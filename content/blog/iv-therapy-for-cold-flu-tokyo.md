@@ -1,18 +1,16 @@
 ---
-slug: iv-therapy-for-cold-flu-tokyo
 title: 'Do You Need IV Therapy for a Cold or the Flu? What to Know Before Considering Supportive Care'
 metaTitle: 'IV Therapy for a Cold or Flu in Tokyo: What to Know First'
 excerpt: >-
   Considering IV therapy for a cold or flu? Learn when supportive hydration care
   may be considered, why it is not a cure, and when to see a doctor first.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImage: /images/content/blog/iv-therapy-for-cold-flu-tokyo/featureImage.jpg
 featureImageAlt: >-
   Immune Boost IV bag on a drip stand, with the Tokyo skyline and Tokyo Tower
   blurred behind it

@@ -1,15 +1,13 @@
 ---
-slug: iv-therapy-side-effects-safety-guide
 title: "点滴の副反応・注意点とは？受ける前、点滴中、終了後に確認したいこと"
 excerpt: "点滴で起こり得る副反応や注意点を、受ける前・点滴中・終了後に分けて解説。訪問点滴を検討している方に向けて、相談すべき症状や緊急時の対応も紹介します。"
 metaDescription: 点滴で起こり得る副反応や注意点を、受ける前・点滴中・終了後に分けて解説。訪問点滴を検討している方に向けて、相談すべき症状や緊急時の対応も紹介します。針を刺した部位の痛みや内出血、事前に伝えたい既往歴や服用中の薬、すぐに医療機関へ相談すべき症状などをまとめています。
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
+featureImage: /images/content/blog/ja/iv-therapy-side-effects-safety-guide/featureImage.jpg
 featureImageAlt: "座って点滴を受ける患者のそばで輸液ポンプを確認する医療従事者"
 featured: false
 relatedServiceSlugs:

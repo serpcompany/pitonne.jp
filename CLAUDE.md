@@ -13,10 +13,17 @@
 - Blog posts may exist in one locale only (see `docs/adr/0001-blog-cms.md`). Translations pair by identical filename/slug;
   a missing translation gets no page, index/category entry, hreflang, or sitemap URL in that locale.
 - `draft: true` blog posts are excluded from every build (production, staging, PR previews). Don't link to drafts.
-- Blog frontmatter rules (zod in `lib/data/blog-posts.ts`): excerpt 70–160 chars, kebab-case slug matching the filename,
-  `featureImageAlt` required with `featureImage`. `readingTime` is computed at build; don't add it to new posts.
+- Blog frontmatter rules (zod in `lib/data/blog-posts.ts`, limits in `lib/blog-rules.ts`): excerpt 70–160 chars (110+
+  unless `metaDescription` is set), `featureImageAlt` required with `featureImage`. The slug is the filename; don't add a
+  `slug:` key. `readingTime` is computed at build; don't add it to new posts.
+- Blog posts are edited in Keystatic (`keystatic.config.ts`): `pnpm cms` edits local files, `pnpm cms:cloud` signs in
+  through Keystatic Cloud and commits to GitHub. Feature images live in `public/images/content/blog/<slug>/` (English)
+  and `public/images/content/blog/ja/<slug>/` (Japanese), one folder per post and locale.
 - Blog markdown links to internal pages use locale-neutral relative paths (`/blog/<slug>/`, `/contact/`), never
   `https://pitonne.jp/...` or `/ja/...`; Japanese posts resolve them to `/ja/...` at render time.
+- Blog categories live in `content/blog-categories/<slug>.json` (bilingual `name`/`nameJa`, `description`/`descriptionJa`,
+  optional `ctaDescription`/`ctaDescriptionJa`, editable in the CMS); posts store only `categorySlug`. Deleting or renaming a category still used by posts fails the
+  build until those posts are moved to another category.
 - The area data model uses co-located fields (`name`/`nameJa`, `description`/`descriptionJa`).
   When adding a new area, provide both English and Japanese values inline.
 - Metadata (`title`, `description`, `openGraph`) must use dictionary values or locale-aware

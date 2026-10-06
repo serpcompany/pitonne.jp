@@ -1,5 +1,4 @@
 ---
-slug: skin-iv-exosome-iv-therapy-beauty
 title: >-
   Is IV Therapy Good for Beauty? How Pitonne Thinks About Skin IV and Exosome IV
   Therapy
@@ -8,7 +7,6 @@ excerpt: >-
   Is IV therapy good for beauty? Learn how Pitonne approaches Skin IV with
   hydration, vitamins, and glutathione, and why beauty IVs are not a shortcut.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -23,7 +21,7 @@ tags:
   - beauty
   - glutathione
   - exosome iv
-featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
+featureImage: /images/content/blog/skin-iv-exosome-iv-therapy-beauty/featureImage.jpg
 featureImageAlt: >-
   IV bag hand-labeled Skin Brightening on a drip stand, with Tokyo Tower in the
   background

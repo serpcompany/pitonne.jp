@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-relaxation
 title: >-
   Is IV Therapy Good for Relaxation? How Pitonne Thinks About Hydration, Vitamin IVs, and Exosome IV Therapy
 metaTitle: Is IV Therapy Good for Relaxation? Hydration and Vitamin IVs
@@ -7,13 +6,12 @@ excerpt: >-
   Struggling to unwind is often more physical than expected. Learn how Pitonne
   approaches hydration, vitamin IVs, and Exosome IV therapy for relaxation.
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-relaxation.jpg
+featureImage: /images/content/blog/iv-therapy-for-relaxation/featureImage.jpg
 featureImageAlt: Man stretching his arms happily in bed after a restful night's sleep
 relatedServiceSlugs:
   - iv-vitamin-therapy

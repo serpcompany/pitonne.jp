@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-nausea
 title: 吐き気を感じたとき、点滴療法は必要ですか？ 支持療法を検討する前に知っておくべきこと
 excerpt: >-
   吐き気は症状であり、診断名ではありません。ピトンヌでは、吐き気のために水分摂取が困難な場合、点滴療法を水分補給や全身状態の改善を目的とした支持療法として行っています。
 metaDescription: 吐き気は症状であり、診断名ではありません。ピトンヌでは、吐き気のために水分摂取が困難な場合、点滴療法を水分補給や全身状態の改善を目的とした支持療法として行っています。吐き気のさまざまな原因、点滴療法の役割、まず医師の診察を受けるべき場合、予約前に確認すべきことを解説します。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-nausea.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-nausea/featureImage.jpg
 featureImageAlt: 食べかけの料理がのった皿を持ちながら、お腹に手を当てる人
 relatedServiceSlugs:
   - iv-vitamin-therapy

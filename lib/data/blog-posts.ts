@@ -3,7 +3,16 @@ import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
 import { locales, type Locale } from "@/lib/i18n/config"
-import seoLimits from "@/lib/seo-limits.json"
+import {
+  BLOG_SLUG_PATTERN,
+  EXCERPT_MAX_LENGTH,
+  EXCERPT_MIN_LENGTH,
+  META_DESCRIPTION_MAX_LENGTH,
+  META_DESCRIPTION_MIN_LENGTH,
+  META_TITLE_MAX_LENGTH,
+  META_TITLE_MIN_LENGTH,
+} from "@/lib/blog-rules"
+import { blogCategories, BLOG_CATEGORIES_SUBDIR, getBlogCategory, type BlogCategory } from "@/lib/data/blog-categories"
 
 function blogContentDirectory(locale: Locale): string {
   if (locale === "ja") {
@@ -12,28 +21,25 @@ function blogContentDirectory(locale: Locale): string {
   return path.join(process.cwd(), "content", "blog")
 }
 
-// Rules mirror the CMS field validation planned in GitHub issue #64.
-export const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
-export const EXCERPT_MIN_LENGTH = 70
-export const EXCERPT_MAX_LENGTH = 160
-// The rendered meta description (metaDescription ?? excerpt) and title must fit the audit:meta ranges;
-// metaTitle is rendered with the " | Pitonne" suffix, which counts toward the title range.
-const META_DESCRIPTION_MIN_LENGTH = seoLimits.description.min
-const META_DESCRIPTION_MAX_LENGTH = seoLimits.description.max
-const META_TITLE_MIN_LENGTH = seoLimits.title.min - seoLimits.titleSuffix.length
-const META_TITLE_MAX_LENGTH = seoLimits.title.max - seoLimits.titleSuffix.length
 
 export const blogPostFrontmatterSchema = z
   .object({
-    slug: z.string().regex(BLOG_SLUG_PATTERN, "slug must be lowercase kebab-case"),
+    // Defaults to the filename (Keystatic stores the slug only as the filename)
+    slug: z.string().regex(BLOG_SLUG_PATTERN, "slug must be lowercase kebab-case").optional(),
     title: z.string().min(1),
     // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
     metaTitle: z.string().trim().min(META_TITLE_MIN_LENGTH).max(META_TITLE_MAX_LENGTH).optional(),
     metaDescription: z.string().trim().min(META_DESCRIPTION_MIN_LENGTH).max(META_DESCRIPTION_MAX_LENGTH).optional(),
     // Also the default meta/OG/Twitter description
     excerpt: z.string().trim().min(EXCERPT_MIN_LENGTH).max(EXCERPT_MAX_LENGTH),
-    publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-    category: z.string().min(1),
+    // Keystatic writes unquoted YAML dates, which gray-matter parses as Date objects at UTC midnight. A timestamp
+    // with a time or timezone is rejected rather than converted, since converting could shift it to another day.
+    publishedAt: z.preprocess(
+      (value) =>
+        value instanceof Date && value.toISOString().endsWith("T00:00:00.000Z") ? value.toISOString().slice(0, 10) : value,
+      z.string({ message: "publishedAt must be a date (YYYY-MM-DD) without a time" }).regex(/^\d{4}-\d{2}-\d{2}$/)
+    ),
+    // Must match a category file in content/blog-categories (checked when the post is loaded)
     categorySlug: z.string().regex(BLOG_SLUG_PATTERN, "categorySlug must be lowercase kebab-case"),
     author: z.object({
       name: z.string().min(1),
@@ -104,7 +110,12 @@ export function estimateReadingTime(markdown: string, locale: Locale): number {
   return Math.max(1, Math.ceil(minutes))
 }
 
-export function loadBlogPostsFromDirectory(directory: string, locale: Locale, contentSubdir: string): BlogPost[] {
+export function loadBlogPostsFromDirectory(
+  directory: string,
+  locale: Locale,
+  contentSubdir: string,
+  categories: BlogCategory[] = blogCategories
+): BlogPost[] {
   if (!fs.existsSync(directory)) {
     return []
   }
@@ -116,17 +127,25 @@ export function loadBlogPostsFromDirectory(directory: string, locale: Locale, co
       const absolutePath = path.join(directory, fileName)
       const raw = fs.readFileSync(absolutePath, "utf8")
       const parsed = matter(raw)
-      const result = blogPostFrontmatterSchema.safeParse(parsed.data)
+      const result = blogPostFrontmatterSchema.safeParse({ slug: fileName.replace(/\.md$/, ""), ...parsed.data })
 
       if (!result.success) {
         const issues = result.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`).join("\n")
         throw new Error(`Invalid frontmatter in ${contentSubdir}/${fileName}:\n${issues}`)
       }
 
-      const { draft, readingTime, ...frontmatter } = result.data
+      const { draft, readingTime, slug, ...frontmatter } = result.data
 
-      if (`${frontmatter.slug}.md` !== fileName) {
-        throw new Error(`Blog post slug "${frontmatter.slug}" must match its filename (${contentSubdir}/${fileName})`)
+      if (`${slug}.md` !== fileName) {
+        throw new Error(`Blog post slug "${slug}" must match its filename (${contentSubdir}/${fileName})`)
+      }
+
+      // Checked for drafts too, so deleting or renaming a category in the CMS can't silently orphan any post
+      const category = categories.find((candidate) => candidate.slug === frontmatter.categorySlug)
+      if (!category) {
+        throw new Error(
+          `Blog post ${contentSubdir}/${fileName} has categorySlug "${frontmatter.categorySlug}", but ${BLOG_CATEGORIES_SUBDIR}/${frontmatter.categorySlug}.json does not exist. Create that category or move the post to an existing one.`
+        )
       }
 
       if (draft) {
@@ -138,6 +157,8 @@ export function loadBlogPostsFromDirectory(directory: string, locale: Locale, co
       return [
         {
           ...frontmatter,
+          slug: slug!,
+          category: category.name[locale],
           readingTime: readingTime ?? estimateReadingTime(content, locale),
           featureImage: frontmatter.featureImage || undefined,
           featureImageAlt: frontmatter.featureImageAlt || undefined,
@@ -242,17 +263,27 @@ export function getBlogPostsForService(serviceSlug: string, limit: number = 3, l
   return matchingPosts.length > 0 ? matchingPosts : getAllBlogPosts(locale).slice(0, limit)
 }
 
-export function getAllCategories(locale: Locale = "en"): { name: string; slug: string; count: number }[] {
+// Categories that have at least one post in this locale (only those get a category page), with names and
+// descriptions from content/blog-categories
+export function getAllCategories(
+  locale: Locale = "en"
+): { name: string; description: string; ctaDescription?: string; slug: string; count: number }[] {
   const posts = getPostsForLocale(locale)
-  const categoryMap = new Map<string, { name: string; slug: string; count: number }>()
+  const categoryMap = new Map<string, { name: string; description: string; ctaDescription?: string; slug: string; count: number }>()
 
   for (const post of posts) {
     const existing = categoryMap.get(post.categorySlug)
     if (existing) {
       existing.count++
     } else {
+      const category = getBlogCategory(post.categorySlug)
+      if (!category) {
+        throw new Error(`${post.sourcePath} has categorySlug "${post.categorySlug}", but ${BLOG_CATEGORIES_SUBDIR}/${post.categorySlug}.json does not exist`)
+      }
       categoryMap.set(post.categorySlug, {
-        name: post.category,
+        name: category.name[locale],
+        description: category.description[locale],
+        ctaDescription: category.ctaDescription[locale],
         slug: post.categorySlug,
         count: 1,
       })

@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-immune-health
 title: 免疫の健康を考える際、点滴療法は有効なのでしょうか？ピトンが提唱する全身のコンディションサポートへのアプローチ
 excerpt: >-
   免疫力を高めるというのは、一朝一夕でできるものではありません。ピトンヌでは、点滴療法を、全身の健康状態を支える身体的な基盤をサポートする手段として捉えており、免疫力を直接的に高める治療法として位置づけてはいません。
 metaDescription: 免疫力を高めるというのは、一朝一夕でできるものではありません。ピトンヌでは、点滴療法を、全身の健康状態を支える身体的な基盤をサポートする手段として捉えており、免疫力を直接的に高める治療法として位置づけてはいません。点滴療法を検討すべき場合や、予約前に確認すべきことも解説します。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-immune-health.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-immune-health/featureImage.jpg
 featureImageAlt: 毛布にくるまってソファに座る体調のすぐれない女性と、テーブルの上の水や薬
 relatedServiceSlugs:
   - immune-boost-iv-therapy

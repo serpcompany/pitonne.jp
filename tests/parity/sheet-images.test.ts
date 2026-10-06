@@ -84,17 +84,17 @@ describe("sheet image integration", () => {
     expect(publicAssetExists(medicationImage!)).toBe(true)
   })
 
-  it("uses local sheet images for static blog entries", () => {
+  it("stores blog feature images in Keystatic's per-slug folders", () => {
     const postsBySlug = new Map(blogPosts.map((post) => [post.slug, post]))
 
     expect(postsBySlug.get("iv-therapy-for-dehydration")?.featureImage).toBe(
-      "/images/content/sheet/blog/iv-therapy-for-dehydration.jpg",
+      "/images/content/blog/iv-therapy-for-dehydration/featureImage.jpg",
     )
     expect(postsBySlug.get("iv-therapy-for-fatigue")?.featureImage).toBe(
-      "/images/content/sheet/blog/iv-therapy-for-fatigue.jpg",
+      "/images/content/blog/iv-therapy-for-fatigue/featureImage.jpg",
     )
     expect(postsBySlug.get("iv-therapy-for-hangover")?.featureImage).toBe(
-      "/images/content/sheet/blog/iv-therapy-for-hangover.jpg",
+      "/images/content/blog/iv-therapy-for-hangover/featureImage.jpg",
     )
   })
 

@@ -2,7 +2,17 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
-import { estimateReadingTime, loadBlogPostsFromDirectory, localizeBlogContentHref } from "@/lib/data/blog-posts"
+import matter from "gray-matter"
+import {
+  blogPosts,
+  estimateReadingTime,
+  getAllBlogPosts,
+  getAllCategories,
+  loadBlogPostsFromDirectory,
+  localizeBlogContentHref,
+} from "@/lib/data/blog-posts"
+import { BLOG_RELATED_SERVICE_OPTIONS } from "@/lib/blog-rules"
+import { blogCategories, loadBlogCategoriesFromDirectory } from "@/lib/data/blog-categories"
 import { localizedHreflangAlternates } from "@/lib/seo"
 import { sitemapEntriesForPath } from "@/app/sitemap.xml/route"
 
@@ -14,7 +24,6 @@ const validFrontmatter = {
   excerpt:
     "An example excerpt that is long enough to work as the meta description, which needs one hundred and ten characters.",
   publishedAt: "2026-10-01",
-  category: "IV Therapy",
   categorySlug: "iv-therapy",
   author: "\n  name: Pitonne Medical Team\n  role: Wellness Experts",
   featureImage: "/images/example.jpg",
@@ -34,6 +43,22 @@ function writePosts(posts: Record<string, Record<string, unknown>>, body = "Body
     fs.writeFileSync(path.join(dir, fileName), `---\n${yaml}\n---\n${body}\n`)
   }
   return dir
+}
+
+function writeCategories(categories: Record<string, unknown>): string {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "blog-categories-"))
+  tempDirs.push(dir)
+  for (const [fileName, data] of Object.entries(categories)) {
+    fs.writeFileSync(path.join(dir, fileName), typeof data === "string" ? data : JSON.stringify(data, null, 2))
+  }
+  return dir
+}
+
+const validCategory = {
+  name: "Nutrition",
+  nameJa: "栄養",
+  description: "x".repeat(110),
+  descriptionJa: "あ".repeat(110),
 }
 
 afterEach(() => {
@@ -81,6 +106,116 @@ describe("blog content model", () => {
   it("allows a short excerpt when metaDescription covers the meta description", () => {
     const dir = writePosts({ "example-post.md": { ...validFrontmatter, excerpt: "x".repeat(90), metaDescription: "y".repeat(120) } })
     expect(loadBlogPostsFromDirectory(dir, "en", "content/blog")[0].excerpt).toHaveLength(90)
+  })
+
+  it("keeps every feature image file in place, with a separate folder per locale", () => {
+    for (const locale of ["en", "ja"] as const) {
+      const folder = locale === "ja" ? "/images/content/blog/ja/" : "/images/content/blog/"
+      for (const post of getAllBlogPosts(locale)) {
+        if (!post.featureImage) continue
+        expect(post.featureImage, post.sourcePath).toMatch(new RegExp(`^${folder}${post.slug}/`))
+        expect(fs.existsSync(path.join(process.cwd(), "public", post.featureImage)), post.featureImage).toBe(true)
+      }
+    }
+  })
+
+  it("keeps every category file valid and every post's categorySlug pointing at one, in both locales", () => {
+    const categoryDir = path.join(process.cwd(), "content/blog-categories")
+    const categoryFiles = fs.readdirSync(categoryDir).filter((file) => file.endsWith(".json"))
+    expect(categoryFiles.length).toBeGreaterThan(0)
+    expect(blogCategories.map((category) => `${category.slug}.json`)).toEqual(categoryFiles.sort())
+
+    const categorySlugs = blogCategories.map((category) => category.slug)
+    // Read the raw frontmatter so drafts are covered too
+    for (const dir of ["content/blog", "content/blog/ja"]) {
+      for (const file of fs.readdirSync(path.join(process.cwd(), dir)).filter((name) => name.endsWith(".md"))) {
+        const { data } = matter(fs.readFileSync(path.join(process.cwd(), dir, file), "utf8"))
+        expect(categorySlugs, `${dir}/${file} categorySlug`).toContain(data.categorySlug)
+      }
+    }
+  })
+
+  it("localizes category names and descriptions from the category file", () => {
+    const iv = blogCategories.find((category) => category.slug === "iv-therapy")!
+    expect(iv.name).toEqual({ en: "IV Therapy", ja: "点滴療法" })
+    expect(iv.description.en).toMatch(/^Explore IV therapy articles/)
+    expect(iv.description.ja).toMatch(/^点滴療法に関する情報/)
+
+    for (const locale of ["en", "ja"] as const) {
+      const listed = getAllCategories(locale).find((category) => category.slug === "iv-therapy")!
+      expect(listed).toMatchObject({ name: iv.name[locale], description: iv.description[locale], ctaDescription: iv.ctaDescription[locale] })
+      expect(listed.ctaDescription).toBeTruthy()
+      for (const post of getAllBlogPosts(locale)) {
+        expect(post.category, post.sourcePath).toBe(blogCategories.find((category) => category.slug === post.categorySlug)!.name[locale])
+      }
+    }
+
+    const dir = writeCategories({ "nutrition.json": validCategory })
+    expect(loadBlogCategoriesFromDirectory(dir)).toEqual([
+      {
+        slug: "nutrition",
+        name: { en: "Nutrition", ja: "栄養" },
+        description: { en: validCategory.description, ja: validCategory.descriptionJa },
+        ctaDescription: { en: undefined, ja: undefined },
+        sourcePath: "content/blog-categories/nutrition.json",
+      },
+    ])
+  })
+
+  it("rejects a publishedAt timestamp instead of shifting it to another day", () => {
+    const dir = writePosts({ "example-post.md": { ...validFrontmatter, publishedAt: "PLACEHOLDER" } })
+    const file = path.join(dir, "example-post.md")
+    fs.writeFileSync(file, fs.readFileSync(file, "utf8").replace('"PLACEHOLDER"', "2026-03-16T08:00:00+09:00"))
+    expect(() => loadBlogPostsFromDirectory(dir, "en", "content/blog")).toThrow("publishedAt")
+
+    fs.writeFileSync(file, fs.readFileSync(file, "utf8").replace("2026-03-16T08:00:00+09:00", "2026-03-16"))
+    expect(loadBlogPostsFromDirectory(dir, "en", "content/blog")[0].publishedAt).toBe("2026-03-16")
+  })
+
+  it.each([
+    ["a missing Japanese name", { nameJa: undefined }, "nameJa"],
+    ["a description shorter than 110 characters", { description: "Too short." }, "description"],
+    ["a Japanese description longer than 160 characters", { descriptionJa: "あ".repeat(161) }, "descriptionJa"],
+  ])("rejects a category file with %s", (_label, override, field) => {
+    const dir = writeCategories({ "nutrition.json": { ...validCategory, ...override } })
+    expect(() => loadBlogCategoriesFromDirectory(dir)).toThrow(field)
+  })
+
+  it("rejects a category file that is not valid JSON or not named by a kebab-case slug", () => {
+    expect(() => loadBlogCategoriesFromDirectory(writeCategories({ "nutrition.json": "{ name: " }))).toThrow("Invalid JSON")
+    expect(() => loadBlogCategoriesFromDirectory(writeCategories({ "Nutrition_Tips.json": validCategory }))).toThrow("kebab-case")
+  })
+
+  it("localizes the category name from categorySlug and rejects unknown categories", () => {
+    const dir = writePosts({ "example-post.md": { ...validFrontmatter, categorySlug: "blood-tests" } })
+    expect(loadBlogPostsFromDirectory(dir, "ja", "content/blog/ja")[0].category).toBe("血液検査")
+
+    // A category created in the CMS works without any code change
+    const categories = loadBlogCategoriesFromDirectory(writeCategories({ "nutrition.json": validCategory }))
+    const nutrition = writePosts({ "example-post.md": { ...validFrontmatter, categorySlug: "nutrition" } })
+    expect(loadBlogPostsFromDirectory(nutrition, "ja", "content/blog/ja", categories)[0].category).toBe("栄養")
+
+    // Unknown categories fail the build, drafts included, naming the post and the slug
+    expect(() => loadBlogPostsFromDirectory(nutrition, "en", "content/blog")).toThrow(
+      'content/blog/example-post.md has categorySlug "nutrition", but content/blog-categories/nutrition.json does not exist'
+    )
+    const draft = writePosts({ "example-post.md": { ...validFrontmatter, categorySlug: "nutrition", draft: true } })
+    expect(() => loadBlogPostsFromDirectory(draft, "en", "content/blog")).toThrow("categorySlug")
+  })
+
+  it("offers every service as a CMS related-service option and only links existing services", () => {
+    const serviceSlugs = fs
+      .readdirSync(path.join(process.cwd(), "content/services"))
+      .filter((file) => file.endsWith(".md"))
+      .map((file) => file.replace(/\.md$/, ""))
+      .sort()
+    expect(BLOG_RELATED_SERVICE_OPTIONS.map((option) => option.value).sort()).toEqual(serviceSlugs)
+
+    for (const post of [...blogPosts, ...getAllBlogPosts("ja")]) {
+      for (const slug of post.relatedServiceSlugs) {
+        expect(serviceSlugs, `${post.sourcePath} relatedServiceSlugs`).toContain(slug)
+      }
+    }
   })
 
   it("allows a post without a feature image or alt text", () => {

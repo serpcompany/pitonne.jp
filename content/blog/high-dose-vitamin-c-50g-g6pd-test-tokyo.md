@@ -1,15 +1,13 @@
 ---
-slug: high-dose-vitamin-c-50g-g6pd-test-tokyo
 title: "Is G6PD Testing Required Before a 50 g High-Dose Vitamin C IV? Hemolysis Risk and Safety"
 metaTitle: 'G6PD Testing Before a 50 g Vitamin C IV: Hemolysis Risk'
 excerpt: "Learn why G6PD testing is required before a 50 g high-dose vitamin C IV at Pitonne, including hemolysis risk, kidney function, and pre-treatment safety checks."
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg
+featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo/featureImage.jpg
 featureImageAlt: "Clinician examining a blood sample beside a microscope and IV bag"
 featured: false
 relatedServiceSlugs:

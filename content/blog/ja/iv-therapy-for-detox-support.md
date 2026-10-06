@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-detox-support
 title: 点滴療法はデトックスに効果的か？ ピトンが考える水分補給、ビタミン、そしてエクソソーム点滴療法
 excerpt: >-
   デトックス点滴は効果的なのでしょうか。Pitonneでは「体内を一気に洗い流す」ものではなく、水分補給やビタミン補給、肝臓に関わる代謝、睡眠や食事を含めた全身のコンディションを支えるものと考えています。エクソソーム点滴や食事・断食の相談についても解説します。
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/wellness-consultation.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-detox-support/featureImage.jpg
 featureImageAlt: ホテルの客室で、白いバスローブ姿の女性と施術前の相談をする医療従事者
 relatedServiceSlugs:
   - iv-vitamin-therapy

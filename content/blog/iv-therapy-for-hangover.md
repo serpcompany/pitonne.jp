@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-hangover
 title: 'IV Therapy for Hangover: What It May Help With and What It Cannot Do'
 metaTitle: 'IV Therapy for Hangover: What It Can and Cannot Do'
 excerpt: >-
   IV therapy for hangover may help support hydration and recovery comfort in the
   right situation, but it is not a cure-all and it is not right for emergencies.
 publishedAt: '2026-03-16'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/sheet/blog/iv-therapy-for-hangover.jpg
+featureImage: /images/content/blog/iv-therapy-for-hangover/featureImage.jpg
 featureImageAlt: >-
   IV bag hand-labeled Hangover on a drip stand, with Tokyo Tower in the
   background

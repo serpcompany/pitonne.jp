@@ -1,5 +1,4 @@
 ---
-slug: exosome-iv-tokyo-mobile-in-clinic-booking
 title: >-
   How to Get an Exosome IV in Tokyo: Mobile IV Flow and In-Clinic Booking at
   Pitonne
@@ -8,7 +7,6 @@ excerpt: >-
   How to book an Exosome IV in Tokyo: compare in-clinic appointments with mobile
   IV visits at your home, hotel, or office, and what to prepare beforehand.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -22,7 +20,7 @@ tags:
   - mobile iv therapy
   - tokyo
   - booking
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/exosome-iv-tokyo-mobile-in-clinic-booking/featureImage.jpg
 featureImageAlt: Exosome IV drip set up beside a window with a view of Tokyo Tower
 ---
 When considering an Exosome IV in Tokyo, many patients want to know whether they need to visit a clinic, whether treatment can be arranged at a hotel or residence, and what information is required before booking. For international travelers, foreign residents in Japan, and busy professionals, the treatment itself is only one part of the decision. Just as important is understanding how the experience is arranged.

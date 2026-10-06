@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-focus-clarity
 title: 集中力が続かないとき、点滴療法は効果があるのでしょうか？ピトンが考える「頭脳の明晰さ」「水分補給」、そして「全身のコンディション」について
 metaTitle: 集中力が続かないとき、点滴療法は効果があるのでしょうか？
 excerpt: >-
   集中力の低下は、脱水症状、睡眠不足、時差ぼけ、あるいは蓄積された疲労と関連していることがよくあります。ピトンヌでは、点滴療法を全身のコンディションを整えるためのサポートと位置付けており、患者様によっては、頭がすっきりし、体が軽くなったと感じる助けとなる場合があります。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-focus-clarity.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-focus-clarity/featureImage.jpg
 featureImageAlt: 観葉植物のある明るいオフィスで、頬杖をつきながらノートパソコンに集中する女性
 relatedServiceSlugs:
   - iv-vitamin-therapy

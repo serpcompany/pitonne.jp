@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-weight-management-pitonne
 title: >-
   Is There an IV for Weight Loss? What Pitonne Wants Patients to Understand
   About Weight Management
@@ -8,7 +7,6 @@ excerpt: >-
   Is there an IV for weight loss? Learn why Pitonne does not position IV therapy
   as a standalone solution, and how nutrition fits into weight management.
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
@@ -22,7 +20,7 @@ tags:
   - weight management
   - nutrition
   - wellness
-featureImage: /images/content/sheet/services/iv-vitamin-therapy.jpg
+featureImage: /images/content/blog/iv-therapy-weight-management-pitonne/featureImage.jpg
 featureImageAlt: >-
   Gloved clinician injecting from a syringe into an IV line taped to a patient's
   forearm

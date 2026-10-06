@@ -257,13 +257,7 @@
     "consultationDescription": "詳しくお知りになりたいですか？私たちのサービスがお客様のウェルネス目標をどのようにサポートできるか、ご相談をご予約ください。",
     "contactPitonne": "Pitonneに問い合わせる",
     "contactDescription": "臨床ガイド付きウェルネスオプションと、サービスがお客様の目標に適しているかについて、Pitonneにご相談ください。",
-    "relatedPitonneServices": "関連するPitonneサービス",
-    "categoryDescriptions": {
-      "iv-therapy": "点滴療法に関する情報や読みものをお届けしています。水分補給や疲労回復、エクソソーム点滴、施術前の注意点、東京での訪問点滴の流れなど、点滴療法をご検討中の方に役立つ情報を医療チームがわかりやすく解説します。ぜひご覧ください。"
-    },
-    "categoryCtaDescriptions": {
-      "iv-therapy": "点滴療法についてもっと知りたい方は、お気軽にお問い合わせください。"
-    }
+    "relatedPitonneServices": "関連するPitonneサービス"
   },
   "contact": {
     "contactUs": "お問い合わせ",

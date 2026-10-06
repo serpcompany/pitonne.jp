@@ -19,7 +19,7 @@ describe("blog index page", () => {
     const postsWithNewImages = getAllBlogPosts().filter((post) =>
       post.featureImage?.startsWith("/images/content/blog/"),
     )
-    expect(postsWithNewImages).toHaveLength(7)
+    expect(postsWithNewImages.map((post) => post.slug)).toEqual(getAllBlogPosts().map((post) => post.slug))
     for (const post of postsWithNewImages) {
       expect(post.featureImageAlt).toBeTruthy()
       expect(screen.getByRole("img", { name: post.featureImageAlt }).getAttribute("src")).toContain(

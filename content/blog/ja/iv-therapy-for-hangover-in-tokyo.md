@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-hangover-in-tokyo
 title: 二日酔いへの点滴療法：水分補給と回復をサポートするプライベートな選択肢
 excerpt: >-
   長い夜を酒に明け暮れた後、多くの人が喉の渇き、頭痛、吐き気、疲労感、そして全身の不快感を抱えて目覚めます。東京を訪れる旅行者や多忙なビジネスパーソン、スケジュールがぎっしり詰まったゲストにとって、……
 metaDescription: 長い夜を酒に明け暮れた後、多くの人が喉の渇き、頭痛、吐き気、疲労感、そして全身の不快感を抱えて目覚めます。東京を訪れる旅行者や多忙なビジネスパーソン、スケジュールがぎっしり詰まったゲストにとって、……点滴療法が適さない場合や、予約前に確認すべきことをPitonneが解説します。
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-hangover-in-tokyo/featureImage.jpg
 featureImageAlt: 自宅でバスローブ姿のまま休む患者の腕に点滴を始める医療従事者
 relatedServiceSlugs:
   - hangover-iv-drip

@@ -1,10 +1,8 @@
 ---
-slug: stem-cell-therapy-vs-exosome-iv-therapy
 title: 幹細胞療法とエクソソーム点滴療法の違いとは？幹細胞培養上清液点滴療法との関連性と、選ぶ際のポイント
 excerpt: >-
   幹細胞治療、エクソソーム点滴療法、および幹細胞培養上清液の点滴療法は、しばしば密接に関連した概念として紹介されます。しかし、これらは厳密には同じものではなく、多くの患者さんにとって、その違いは当初は分かりにくいと感じられるかもしれません。
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -18,7 +16,7 @@ tags:
   - エクソソーム IV
   - 調製培地
   - 再生医療
-featureImage: /images/content/sheet/services/stem-cell-therapy.jpg
+featureImage: /images/content/blog/ja/stem-cell-therapy-vs-exosome-iv-therapy/featureImage.jpg
 featureImageAlt: スクラブ姿で聴診器を下げた医師が、テーブル越しに患者へ治療の選択肢を説明する場面
 ---
 幹細胞療法、エクソソーム点滴療法、そして幹細胞培養上清点滴は、しばしば密接に関連した概念として紹介されます。しかし、これらは厳密には同じものではなく、多くの患者にとって、その違いは当初は曖昧に感じられるかもしれません。

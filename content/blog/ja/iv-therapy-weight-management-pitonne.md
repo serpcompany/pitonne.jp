@@ -1,11 +1,9 @@
 ---
-slug: iv-therapy-weight-management-pitonne
 title: 「減量のための点滴」は存在するのか？　ピトン医師が患者に理解してほしい体重管理について
 excerpt: >-
   「減量のための点滴治療はありますか？」　これは、東京で点滴療法を検討されている患者さんから時々寄せられる質問です。「減量のための点滴療法」といった表現がネット上でよく見られるため、当然ながら、点滴治療が……
 metaDescription: '「減量のための点滴治療はありますか？」これは、東京で点滴療法を検討されている患者さんから時々寄せられる質問です。「減量のための点滴療法」といった表現がネット上でよく見られるため、当然ながら、点滴治療が……Pitonneの考え方や、栄養の重要性、話題の減量注射について解説します。'
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -19,7 +17,7 @@ tags:
   - 体重管理
   - 栄養
   - ウェルネス
-featureImage: /images/content/sheet/services/iv-vitamin-therapy.jpg
+featureImage: /images/content/blog/ja/iv-therapy-weight-management-pitonne/featureImage.jpg
 featureImageAlt: 患者の前腕に固定した点滴ラインへシリンジで薬剤を注入する、手袋をした医療従事者
 ---
 「減量のための点滴治療はありますか？」  

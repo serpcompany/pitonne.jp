@@ -1,18 +1,16 @@
 ---
-slug: exosome-iv-therapy-for-muscle-recovery
 title: 'Is Exosome IV Therapy a Good Option for Muscle Recovery? How to Think About IV Therapy After Training'
 metaTitle: 'Exosome IV Therapy and Muscle Recovery: What to Know'
 excerpt: >-
   Considering Exosome IV therapy for muscle recovery? Learn who may be a
   candidate, why hydration is only part of recovery, and when to see a doctor.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/exosome-iv-therapy-for-muscle-recovery/featureImage.jpg
 featureImageAlt: >-
   IV bag labeled Exosome hanging on a drip stand, with Tokyo Tower blurred in
   the background

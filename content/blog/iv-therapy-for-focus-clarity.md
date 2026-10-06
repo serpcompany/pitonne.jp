@@ -1,5 +1,4 @@
 ---
-slug: iv-therapy-for-focus-clarity
 title: >-
   Is IV Therapy Helpful When You Struggle to Focus? How Pitonne Thinks About Clarity, Hydration, and Whole-Body Condition
 metaTitle: 'IV Therapy for Focus and Clarity: What to Know'
@@ -7,13 +6,12 @@ excerpt: >-
   Difficulty focusing is often tied to dehydration, poor sleep, or jet lag.
   Learn how Pitonne approaches IV therapy as support for whole-body condition.
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-focus-clarity.jpg
+featureImage: /images/content/blog/iv-therapy-for-focus-clarity/featureImage.jpg
 featureImageAlt: >-
   Woman resting her chin on her hand while concentrating on a laptop in a bright
   office with plants

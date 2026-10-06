@@ -1,18 +1,16 @@
 ---
-slug: iv-therapy-for-low-energy
 title: 'Do You Need IV Therapy When You Feel Low on Energy? What to Know Before Considering Supportive Care'
 metaTitle: 'IV Therapy for Low Energy: What to Know Before Booking'
 excerpt: >-
   Feeling low on energy? Learn when IV therapy may be considered as supportive
   care, why it is not an instant fix, and when low energy needs medical review.
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
 featured: false
-featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImage: /images/content/blog/iv-therapy-for-low-energy/featureImage.jpg
 featureImageAlt: >-
   Energy & Fatigue Recovery IV bag on a drip stand in a bright room overlooking
   Tokyo

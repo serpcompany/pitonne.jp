@@ -1,12 +1,10 @@
 ---
-slug: iv-therapy-for-athletes-training-recovery
 title: アスリートや本格的なトレーニングを行う人は、点滴療法の恩恵を受けられるのか？　日々の回復サポートと、試合前に確認すべきこと
 metaTitle: アスリートや本格的なトレーニングを行う人は、点滴療法の恩恵を受けられるのか？
 excerpt: >-
   アスリートや日常的に激しいトレーニングを行う人々は、日常生活をはるかに超える身体的負荷を体に課すことがよくあります。トレーニング量が増えるにつれ、……の変動に気づくことが多くなります。
 metaDescription: アスリートや日常的に激しいトレーニングを行う人々は、日常生活をはるかに超える身体的負荷を体に課すことがよくあります。トレーニング量が増えるにつれ、……の変動に気づくことが多くなります。競技アスリートが競技前に規則を確認すべき理由や、Pitonneが重視することも解説します。
 publishedAt: '2026-05-03'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
@@ -20,7 +18,7 @@ tags:
   - 選手
   - トレーニング後の回復
   - 競技会
-featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-athletes-training-recovery/featureImage.jpg
 featureImageAlt: 東京タワーを望む窓辺に吊るされた「Energy & Fatigue Recovery」と手書きされた点滴バッグ
 ---
 アスリートや定期的に激しいトレーニングを行う人々は、日常生活をはるかに超える身体的負荷を体に課していることがよくあります。 トレーニング量が増えるにつれ、回復状態、疲労、水分補給、そして全体的なコンディションの変動に気づくことが多くなります。睡眠不足、移動、仕事によるストレス、そして繰り返されるハードなトレーニングセッションは、こうした症状をさらに顕著にする可能性があります。

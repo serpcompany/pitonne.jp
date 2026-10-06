@@ -1,17 +1,15 @@
 ---
-slug: iv-therapy-for-jet-lag
 title: 点滴療法は時差ぼけに効果がある？ 東京でサポートケアを検討する前に知っておくべきこと
 excerpt: >-
   時差ぼけは、単なる眠気だけではありません。ピトンヌでは、時差ぼけに対する点滴療法を、時差そのものを治す治療法ではなく、水分補給やフライト後の体調管理を目的とした補助的なケアとして位置づけています。
 metaDescription: 時差ぼけは、単なる眠気だけではありません。ピトンヌでは、時差ぼけに対する点滴療法を、時差そのものを治す治療法ではなく、水分補給やフライト後の体調管理を目的とした補助的なケアとして位置づけています。Pitonneがサービス提供エリア内で行う出張点滴ケアや、予約前に確認すべきことも解説します。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-jet-lag.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-jet-lag/featureImage.jpg
 featureImageAlt: 雲の広がる青空を飛ぶ旅客機を真下から見上げた写真
 relatedServiceSlugs:
   - iv-vitamin-therapy

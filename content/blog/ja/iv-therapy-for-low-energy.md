@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-low-energy
 title: 元気がないときは点滴療法が必要ですか？ サポートケアを検討する前に知っておくべきこと
 excerpt: 「寝たのに、まだ疲れが取れていない。」「忙しすぎて体が重だるい。」「東京に来てスケジュールがぎっしり詰まっているから、一刻も早く体調を回復させたい。」
 metaDescription: '「寝たのに、まだ疲れが取れていない。」「忙しすぎて体が重だるい。」「東京に来てスケジュールがぎっしり詰まっているから、一刻も早く体調を回復させたい。」エネルギー不足の原因や、点滴療法を検討すべき場合、点滴以上の対応が必要な場合について、Pitonneの考え方を解説します。'
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-low-energy/featureImage.jpg
 featureImageAlt: 東京を見渡す明るい部屋で、点滴スタンドに吊るされた「Energy & Fatigue Recovery」の点滴バッグ
 relatedServiceSlugs:
   - energy-fatigue-recovery-iv

@@ -1,5 +1,4 @@
 ---
-slug: stem-cell-therapy-vs-exosome-iv-therapy
 title: >-
   What Is the Difference Between Stem Cell Therapy and Exosome IV Therapy? How
   Stem Cell Conditioned Media IV Relates and What to Look For
@@ -7,12 +6,15 @@ metaTitle: 'Stem Cell Therapy vs. Exosome IV Therapy: Key Differences'
 excerpt: >-
   Stem cell therapy, Exosome IV therapy, and stem cell conditioned media IV are
   not the same. Learn how they differ and what to review when comparing.
-publishedAt: '2026-05-03'
-category: IV Therapy
+publishedAt: 2026-05-03
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
+featureImage: /images/content/blog/stem-cell-therapy-vs-exosome-iv-therapy/featureImage.jpg
+featureImageAlt: >-
+  Doctor in scrubs with a stethoscope explaining treatment options to a patient
+  across a table
 featured: false
 relatedServiceSlugs:
   - stem-cell-therapy
@@ -23,10 +25,7 @@ tags:
   - exosome iv
   - conditioned media
   - regenerative medicine
-featureImage: /images/content/sheet/services/stem-cell-therapy.jpg
-featureImageAlt: >-
-  Doctor in scrubs with a stethoscope explaining treatment options to a patient
-  across a table
+draft: false
 ---
 Stem cell therapy, exosome IV therapy, and stem cell conditioned media IV are often presented as closely related concepts. However, they are not exactly the same, and for many patients, the differences can feel unclear at first.
 
@@ -38,11 +37,11 @@ At Pitonne | Stem Cell & IV Therapy, we believe patients should understand these
 
 These terms are related, but they do not mean the same thing.
 
-* **Stem cell therapy**  
-  Uses stem cells themselves  
-* **Stem cell conditioned media IV**  
-  Uses the supernatant collected during the stem cell culture process  
-* **Exosome IV therapy**  
+- **Stem cell therapy**\
+  Uses stem cells themselves
+- **Stem cell conditioned media IV**\
+  Uses the supernatant collected during the stem cell culture process
+- **Exosome IV therapy**\
   A term often used to describe stem cell conditioned media IV in clinical marketing
 
 The first major distinction is this: **are actual cells being used, or are cell-derived components being used?**
@@ -73,9 +72,9 @@ The confusion usually comes from the fact that **the name of a component** and *
 
 A simple way to organize it is:
 
-* **Stem cell therapy** uses the cells themselves  
-* **Stem cell conditioned media** refers to the broader supernatant collected from stem cell culture  
-* **Exosomes** may be described as one of the components contained within that conditioned media
+- **Stem cell therapy** uses the cells themselves
+- **Stem cell conditioned media** refers to the broader supernatant collected from stem cell culture
+- **Exosomes** may be described as one of the components contained within that conditioned media
 
 Once this relationship is understood, clinic descriptions and treatment comparisons become much easier to read.
 
@@ -105,10 +104,10 @@ Frozen storage often feels easier to understand and may give patients a stronger
 
 A practical comparison should include:
 
-* What the source is  
-* How it is cultured  
-* How it is stored and handled  
-* How clearly the clinic explains its process
+- What the source is
+- How it is cultured
+- How it is stored and handled
+- How clearly the clinic explains its process
 
 ## What Pitonne Values
 
@@ -116,10 +115,10 @@ At Pitonne, we believe patients should not be expected to choose based on a trea
 
 This includes:
 
-* Explaining the treatment concept, not just the label  
-* Providing clarity around source material, management, and treatment flow  
-* Reviewing medical history, current medications, allergies, and present condition in advance  
-* Guiding treatment based on appropriate medical review when needed
+- Explaining the treatment concept, not just the label
+- Providing clarity around source material, management, and treatment flow
+- Reviewing medical history, current medications, allergies, and present condition in advance
+- Guiding treatment based on appropriate medical review when needed
 
 We receive inquiries from international travelers visiting Tokyo, foreign residents living in Japan, and busy executives and professionals who value privacy, convenience, and clear medical guidance. In addition to in-clinic care, we also offer [mobile IV service](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/) within our coverage area.
 
@@ -127,23 +126,23 @@ We receive inquiries from international travelers visiting Tokyo, foreign reside
 
 A useful way to compare options is to go step by step.
 
-### 1\. Are actual cells being used, or cell-derived components?
+### 1. Are actual cells being used, or cell-derived components?
 
 This is the first major distinction. Stem cell therapy and stem cell conditioned media IV are not the same concept.
 
-### 2\. What does "Exosome IV" actually refer to?
+### 2. What does "Exosome IV" actually refer to?
 
 In many cases, Exosome IV is being used as a patient-facing name for stem cell conditioned media IV. It is important to check the underlying explanation.
 
-### 3\. What is the source?
+### 3. What is the source?
 
 Dental pulp, umbilical cord, adipose-derived, and other sources may be used. At minimum, the clinic should explain what the source is.
 
-### 4\. How are culture and quality management explained?
+### 4. How are culture and quality management explained?
 
 The source alone is not enough. The broader management process matters as well.
 
-### 5\. Are cost, risks, and screening clearly explained?
+### 5. Are cost, risks, and screening clearly explained?
 
 With private medical care, patients should review not only the fee, but also the [precautions, risks, and the clinic's screening process](/blog/exosome-iv-therapy-risks-precautions/).
 
@@ -151,11 +150,11 @@ With private medical care, patients should review not only the fee, but also the
 
 A consultation-based approach is often especially helpful for patients who:
 
-* Want to understand the difference between stem cell therapy and Exosome IV therapy  
-* Want clarity on how stem cell conditioned media IV relates to Exosome IV  
-* Are comparing different source materials such as dental pulp, umbilical cord, or adipose-derived options  
-* Want to understand storage and quality management more carefully  
-* Prefer to compare not only price, but also treatment content and medical guidance
+- Want to understand the difference between stem cell therapy and Exosome IV therapy
+- Want clarity on how stem cell conditioned media IV relates to Exosome IV
+- Are comparing different source materials such as dental pulp, umbilical cord, or adipose-derived options
+- Want to understand storage and quality management more carefully
+- Prefer to compare not only price, but also treatment content and medical guidance
 
 ## Frequently Asked Questions
 

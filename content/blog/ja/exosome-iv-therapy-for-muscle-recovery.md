@@ -1,17 +1,15 @@
 ---
-slug: exosome-iv-therapy-for-muscle-recovery
 title: エクソソーム点滴療法は筋肉の回復に有効な選択肢か？ トレーニング後の点滴療法についてどう考えるべきか
 excerpt: >-
   激しいトレーニングの後、筋肉の張りや重だるさ、疲労感、あるいは体がまだ完全に回復していないという感覚が長く続くことはよくあります。アスリートや本格的なトレーニングを行う人、そして定期的に運動する人にとって、……
 metaDescription: 激しいトレーニングの後、筋肉の張りや重だるさ、疲労感、あるいは体がまだ完全に回復していないという感覚が長く続くことはよくあります。アスリートや本格的なトレーニングを行う人、そして定期的に運動する人にとって、……医師の診察を優先すべき場合や、予約前に確認すべきことも解説します。
 publishedAt: '2026-05-31'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImage: /images/content/blog/ja/exosome-iv-therapy-for-muscle-recovery/featureImage.jpg
 featureImageAlt: 東京タワーを背景に、点滴スタンドに吊るされた「Exosome」と書かれた点滴バッグ
 relatedServiceSlugs:
   - exosome-iv-drip

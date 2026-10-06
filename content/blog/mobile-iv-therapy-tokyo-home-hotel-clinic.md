@@ -1,15 +1,13 @@
 ---
-slug: mobile-iv-therapy-tokyo-home-hotel-clinic
 title: "Mobile IV Therapy in Tokyo: Home, Hotel, and In-Clinic Visits Explained"
 metaTitle: 'Mobile IV Therapy in Tokyo: Home, Hotel, and Clinic Visits'
 excerpt: "Learn how mobile IV therapy in Tokyo works, including home, hotel, and in-clinic visits, what to prepare, and when medical consultation should come first."
 publishedAt: '2026-08-27'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg
+featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic/featureImage.jpg
 featureImageAlt: "Clinician carrying medical equipment into a hotel room"
 featured: false
 relatedServiceSlugs:

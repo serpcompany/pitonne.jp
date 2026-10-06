@@ -1,16 +1,14 @@
 ---
-slug: iv-therapy-for-allergies
 title: アレルギー症状がひどく辛い時、点滴療法は効果があるのでしょうか？ピトンが考える支持療法と全身状態について
 excerpt: >-
   アレルギーは、鼻や目だけでなく、体全体に大きな負担をかけることがあります。季節性の症状が睡眠や体力、全身のコンディションに影響を及ぼす場合、水分補給や全身のバランスを整えるための補助療法として、点滴療法について相談される患者さんもいらっしゃいます。
 publishedAt: '2026-06-13'
-category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
 featured: false
-featureImage: /images/content/sheet/blog/iv-therapy-for-allergies.jpg
+featureImage: /images/content/blog/ja/iv-therapy-for-allergies/featureImage.jpg
 featureImageAlt: みずみずしい緑の葉を背景にした点滴の滴下筒とチューブ
 relatedServiceSlugs:
   - iv-vitamin-therapy
