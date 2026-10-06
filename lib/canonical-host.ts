@@ -1,4 +1,5 @@
-// Canonical-host redirect for the Cloudflare Pages Function in `functions/_middleware.ts` (issue #79).
+// Canonical-host redirect for the Cloudflare Pages Function in `functions/_middleware.ts` (issue #79), and the
+// slashed-file redirect on every host the Function serves as is (issue #92).
 //
 // Every non-canonical host that serves this Pages project returns one 308 to the same path and query on
 // https://pitonne.jp, as the SERP environment-configuration standard requires. Exempt:
@@ -106,5 +107,32 @@ export async function canonicalHostRedirect(
       // Preview and deployment hosts change often; let the 308 be cached for a day, not forever.
       "Cache-Control": "public, max-age=86400",
     },
+  })
+}
+
+/**
+ * The `Location` for a file URL requested with a trailing slash (`/robots.txt/`, `/sitemap-pages.xml/?a=1`), or `null`.
+ *
+ * Only a path whose last segment ends in a known file extension and that ends in `/` qualifies; pages, dotted page
+ * slugs, `/api`, `/_*`, `/.well-known/` and `/keystatic/*` never do. Pages' asset server doesn't strip a file's slash
+ * (it answers 404), and `_redirects` can't match "any path ending in `.xml/`", so the Function does it. The Location is
+ * absolute on the request's own origin, so a path such as `//evil.com/x.js/` can never become a protocol-relative URL.
+ */
+export function slashedFileLocation(requestUrl: string | URL): string | null {
+  const url = new URL(requestUrl)
+  if (!url.pathname.endsWith("/")) return null
+  const path = canonicalPath(url.pathname)
+  // Unchanged (exempt or unknown dotted segment) or still slashed (a page): not a slashed file.
+  if (path === url.pathname || path.endsWith("/")) return null
+  return `${url.origin}${path}${url.search}`
+}
+
+/** One 308 from a slashed file URL to the file on the same host, or `null` to pass the request through. */
+export function slashedFileRedirect(request: Request): Response | null {
+  const location = slashedFileLocation(request.url)
+  if (!location) return null
+  return new Response(null, {
+    status: 308,
+    headers: { Location: location, "Cache-Control": "public, max-age=86400" },
   })
 }

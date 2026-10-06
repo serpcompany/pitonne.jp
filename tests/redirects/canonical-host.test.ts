@@ -9,6 +9,8 @@ import {
   canonicalPath,
   canonicalRedirectLocation,
   isNonCanonicalHost,
+  slashedFileLocation,
+  slashedFileRedirect,
 } from "@/lib/canonical-host"
 import { SITE_URL } from "@/lib/seo"
 
@@ -186,6 +188,58 @@ describe("canonical host redirect", () => {
   })
 })
 
+describe("slashed file redirect", () => {
+  it.each([
+    ["https://pitonne.jp/sitemap.xml/", "https://pitonne.jp/sitemap.xml"],
+    ["https://pitonne.jp/sitemap-index.xml/", "https://pitonne.jp/sitemap-index.xml"],
+    ["https://pitonne.jp/sitemap-pages.xml/", "https://pitonne.jp/sitemap-pages.xml"],
+    ["https://pitonne.jp/sitemap-blog-ja.xml/", "https://pitonne.jp/sitemap-blog-ja.xml"],
+    ["https://pitonne.jp/robots.txt/", "https://pitonne.jp/robots.txt"],
+    ["https://pitonne.jp/robots.txt//", "https://pitonne.jp/robots.txt"],
+    ["https://pitonne.jp/sitemap.xml/?a=1&b=%E3%83%86", "https://pitonne.jp/sitemap.xml?a=1&b=%E3%83%86"],
+    ["https://pitonne.jp/ja/index.TXT/", "https://pitonne.jp/ja/index.TXT"],
+    // The rule itself; on Pages `_routes.json` keeps `/favicon.ico/` off the Function, so it stays a 404 there
+    ["https://pitonne.jp/favicon.ico/", "https://pitonne.jp/favicon.ico"],
+    // Preview aliases keep their own host
+    ["https://pr-92.pitonne-jp.pages.dev/robots.txt/", "https://pr-92.pitonne-jp.pages.dev/robots.txt"],
+    ["http://localhost:8788/robots.txt/", "http://localhost:8788/robots.txt"],
+    // Stays on the request's host: never a protocol-relative Location
+    ["https://pitonne.jp//evil.com/x.js/", "https://pitonne.jp//evil.com/x.js"],
+  ])("%s -> %s", (url, expected) => {
+    expect(slashedFileLocation(url)).toBe(expected)
+  })
+
+  it.each([
+    // Files without a slash and pages, slashed or not
+    "https://pitonne.jp/robots.txt",
+    "https://pitonne.jp/sitemap.xml?a=1",
+    "https://pitonne.jp/",
+    "https://pitonne.jp/about/",
+    "https://pitonne.jp/about",
+    "https://pitonne.jp/about//",
+    "https://pitonne.jp/ja/blog/iv-therapy-for-jet-lag/",
+    // A dotted segment that isn't a known file is a page
+    "https://pitonne.jp/products/aws.amazon.com/",
+    "https://pitonne.jp/blog/v1.2/",
+    // Paths whose form the Function never changes
+    "https://pitonne.jp/api/x.json/",
+    "https://pitonne.jp/api/",
+    "https://pitonne.jp/_next/static/chunks/app.js/",
+    "https://pitonne.jp/.well-known/security.txt/",
+    "https://pitonne.jp/keystatic/",
+    "https://pitonne.jp/keystatic/branch/main/robots.txt/",
+  ])("passes %s through", (url) => {
+    expect(slashedFileLocation(url)).toBeNull()
+  })
+
+  it("answers with a single 308", () => {
+    const response = slashedFileRedirect(new Request("https://pitonne.jp/sitemap-pages.xml/?a=1", { method: "HEAD" }))
+    expect(response?.status).toBe(308)
+    expect(response?.headers.get("location")).toBe("https://pitonne.jp/sitemap-pages.xml?a=1")
+    expect(slashedFileRedirect(new Request("https://pitonne.jp/sitemap-pages.xml"))).toBeNull()
+  })
+})
+
 describe("Pages middleware", () => {
   const passthrough = new Response("static asset")
   const next = async () => passthrough
@@ -203,6 +257,39 @@ describe("Pages middleware", () => {
     const smoke = new Request("https://pitonne-jp.pages.dev/", { headers: { [SMOKE_TEST_HEADER]: "1" } })
     expect(await onRequest({ request: smoke, next })).toBe(passthrough)
   })
+
+  it("redirects slashed file URLs on hosts it serves as is, without asking the asset server", async () => {
+    let calls = 0
+    const counted = async () => {
+      calls++
+      return passthrough
+    }
+    const smoke = { [SMOKE_TEST_HEADER]: "1" }
+    for (const [url, headers, expected] of [
+      ["https://pitonne.jp/sitemap.xml/?a=1", {}, "https://pitonne.jp/sitemap.xml?a=1"],
+      ["https://pr-92.pitonne-jp.pages.dev/robots.txt/", {}, "https://pr-92.pitonne-jp.pages.dev/robots.txt"],
+      ["https://pitonne-jp.pages.dev/robots.txt/", smoke, "https://pitonne-jp.pages.dev/robots.txt"],
+    ] as const) {
+      const response = await onRequest({ request: new Request(url, { headers }), next: counted })
+      expect(response.status).toBe(308)
+      expect(response.headers.get("location")).toBe(expected)
+    }
+    expect(calls).toBe(0)
+  })
+
+  it("sends a slashed file on a non-canonical host to the canonical file in one hop", async () => {
+    const request = new Request("https://pitonne-jp.pages.dev/sitemap-pages.xml/?a=1")
+    const response = await onRequest({ request, next: async () => new Response(null, { status: 404 }) })
+    expect(response.status).toBe(308)
+    expect(response.headers.get("location")).toBe("https://pitonne.jp/sitemap-pages.xml?a=1")
+  })
+
+  it.each(["/about/", "/keystatic/", "/keystatic/branch/main", "/api/x.json/", "/products/aws.amazon.com/"])(
+    "passes %s on pitonne.jp through untouched",
+    async (pathname) => {
+      expect(await onRequest({ request: new Request(`https://pitonne.jp${pathname}`), next })).toBe(passthrough)
+    },
+  )
 
   it("passes the asset server's response through unchanged", async () => {
     const legacy = new Response(null, { status: 301, headers: { location: "/" } })
