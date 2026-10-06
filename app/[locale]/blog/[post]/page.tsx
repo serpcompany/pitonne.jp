@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog-post-template"
-import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getAllBlogPosts, getBlogPostBySlug, getBlogPostLocales, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getServicesFromSlugs } from "@/lib/data/services"
 import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: metaTitle,
       description: metaDescription,
-      alternates: localizedHreflangAlternates(`/blog/${post.slug}/`, typedLocale),
+      alternates: localizedHreflangAlternates(`/blog/${post.slug}/`, typedLocale, getBlogPostLocales(post.slug)),
       openGraph: {
         ...social.openGraph,
         type: "article",

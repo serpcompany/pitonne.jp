@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 10
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-jet-lag.jpg
+featureImageAlt: 雲の広がる青空を飛ぶ旅客機を真下から見上げた写真
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv

@@ -1,5 +1,6 @@
 import fs from "node:fs"
 import path from "node:path"
+import matter from "gray-matter"
 import { describe, expect, it } from "vitest"
 
 const root = process.cwd()
@@ -14,17 +15,18 @@ function getMdFiles(dir: string): string[] {
 }
 
 describe("i18n content file parity", () => {
-  it("every English blog post has a Japanese counterpart", () => {
+  // Blog posts may be published in one locale only (GitHub issue #64): the missing locale gets no page,
+  // index entry, or hreflang. Services and legal pages stay strictly paired.
+  it("pairs blog translations by identical filename and slug", () => {
     const en = getMdFiles("content/blog")
     const ja = getMdFiles("content/blog/ja")
-    const missingInJa = en.filter((f) => !ja.includes(f))
-    const missingInEn = ja.filter((f) => !en.includes(f))
 
-    if (missingInJa.length > 0) {
-      throw new Error(`Blog posts missing Japanese version:\n  ${missingInJa.join("\n  ")}`)
-    }
-    if (missingInEn.length > 0) {
-      throw new Error(`Japanese blog posts missing English version:\n  ${missingInEn.join("\n  ")}`)
+    expect(en.length + ja.length).toBeGreaterThan(0)
+    for (const [dir, files] of [["content/blog", en], ["content/blog/ja", ja]] as const) {
+      for (const file of files) {
+        const { data } = matter(fs.readFileSync(path.join(root, dir, file), "utf8"))
+        expect(`${data.slug}.md`, `${dir}/${file}`).toBe(file)
+      }
     }
   })
 

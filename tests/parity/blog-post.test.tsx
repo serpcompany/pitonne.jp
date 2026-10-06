@@ -220,7 +220,8 @@ describe("blog post parity", () => {
       expect(ja, `Japanese post ${slug}`).toBeDefined()
       expect(en?.sourcePath).toBe(`content/blog/${slug}.md`)
       expect(ja?.sourcePath).toBe(`content/blog/ja/${slug}.md`)
-      expect(en?.readingTime).toBe(ja?.readingTime)
+      expect(en?.readingTime).toBeGreaterThan(0)
+      expect(ja?.readingTime).toBeGreaterThan(0)
       expect(en).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
       expect(ja).toMatchObject({ category: "IV Therapy", categorySlug: "iv-therapy", featured: false })
       const expectedImage = `/images/content/blog/${slug}.jpg`
@@ -263,6 +264,35 @@ describe("blog post parity", () => {
       "src",
       post!.featureImage,
     )
+  })
+
+  it("links internal pages with locale-neutral relative paths in both locales", () => {
+    for (const locale of ["en", "ja"] as const) {
+      for (const post of getAllBlogPosts(locale)) {
+        expect(post.content, post.sourcePath).not.toMatch(/\]\(https?:\/\/(www\.)?pitonne\.jp/)
+        expect(post.content, post.sourcePath).not.toMatch(/\]\(\/ja\//)
+      }
+    }
+  })
+
+  it("resolves relative links in Japanese posts to Japanese pages", () => {
+    const post = getBlogPostBySlug("mobile-iv-therapy-tokyo-home-hotel-clinic", "ja")
+    expect(post).toBeDefined()
+
+    const { container } = render(
+      <BlogPostTemplate
+        post={{ ...post!, date: post!.publishedAt }}
+        relatedPosts={[]}
+        relatedServices={[]}
+        latestPosts={[]}
+        locale="ja"
+      />,
+    )
+    const hrefs = Array.from(container.querySelectorAll(".blog-prose a")).map((link) => link.getAttribute("href"))
+
+    expect(hrefs).toContain("/ja/blog/how-long-does-iv-therapy-take-tokyo/")
+    expect(hrefs).toContain("/ja/services/")
+    expect(hrefs).toContain("https://medlineplus.gov/ency/patientinstructions/000496.htm")
   })
 
   it("keeps all blog markdown filenames, language, and discovery metadata linted", () => {

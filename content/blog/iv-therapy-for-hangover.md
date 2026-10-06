@@ -11,8 +11,10 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 8
 featureImage: /images/content/sheet/blog/iv-therapy-for-hangover.jpg
+featureImageAlt: >-
+  IV bag hand-labeled Hangover on a drip stand, with Tokyo Tower in the
+  background
 featured: true
 relatedServiceSlugs:
   - hangover-iv-drip

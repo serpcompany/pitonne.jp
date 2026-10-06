@@ -26,6 +26,7 @@ const problems = []
 for (const { dir, titleKey, descKey } of sources) {
   for (const file of fs.readdirSync(dir).filter((name) => name.endsWith(".md"))) {
     const { data } = matter(fs.readFileSync(path.join(dir, file), "utf8"))
+    if (data.draft) continue // drafts are never built
     const title = normalize(data.metaTitle ?? data[titleKey]) + TITLE_SUFFIX
     const description = normalize(data.metaDescription ?? data[descKey])
     const where = `${dir}/${file}`

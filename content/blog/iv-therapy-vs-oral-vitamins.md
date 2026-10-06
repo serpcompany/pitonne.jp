@@ -1,15 +1,15 @@
 ---
 slug: iv-therapy-vs-oral-vitamins
 title: "IV Therapy vs. Oral Vitamins: What Is the Difference?"
-excerpt: "People considering IV therapy often ask, “Which is better: oral vitamins or an IV?” Both methods introduce substances into the body, but the route, amount, safety checks, and potential risks can differ."
-metaDescription: 'IV therapy vs. oral vitamins: learn how the route, amount, safety checks, and risks differ, and what to ask before choosing an IV or supplements.'
+excerpt: >-
+  IV therapy vs. oral vitamins: learn how the route, amount, safety checks, and
+  risks differ, and what to ask before choosing an IV or supplements.
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
 featureImageAlt: "IV bag and oral supplements arranged side by side for comparison"
 featured: false
@@ -109,11 +109,11 @@ If you are considering IV therapy in Tokyo, Pitonne can discuss the IV contents,
 
 ## Related Reading
 
-[IV Therapy Side Effects and Safety](https://pitonne.jp/blog/iv-therapy-side-effects-safety-guide/)
+[IV Therapy Side Effects and Safety](/blog/iv-therapy-side-effects-safety-guide/)
 
-[What Is Exosome IV Therapy?](https://pitonne.jp/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[What Is Exosome IV Therapy?](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[IV Therapy for Dehydration](https://pitonne.jp/blog/iv-therapy-for-dehydration-in-tokyo/)
+[IV Therapy for Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
 ## References
 

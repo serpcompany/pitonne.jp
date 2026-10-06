@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 5
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImageAlt: 自宅でバスローブ姿のまま休む患者の腕に点滴を始める医療従事者
 relatedServiceSlugs:
   - hangover-iv-drip
   - iv-therapy
@@ -141,7 +141,7 @@ MedlinePlusによると、重度の脱水症状は生命を脅かす可能性が
 
 二日酔いに対する点滴療法は、**水分補給と回復をサポートするケア**の一形態として捉えるのが適切であり、奇跡的な解決策ではありません。適切な患者様にとって、休息や経口での水分補給だけでは困難な状況において、より快適で医学的指導のもとで行われる選択肢となり得ます。
 
-Pitonne | Stem Cell & IV Therapyでは、プライバシー、臨床的な慎重さ、そして患者様の快適さを第一に考え、二日酔いに対する点滴ケアに取り組んでいます。東京で、出張型またはクリニックでの点滴サポートがご自身に適しているかどうかご相談をご希望の場合は、こちらからお問い合わせください： [予約・相談](https://pitonne.jp/contact/)
+Pitonne | Stem Cell & IV Therapyでは、プライバシー、臨床的な慎重さ、そして患者様の快適さを第一に考え、二日酔いに対する点滴ケアに取り組んでいます。東京で、出張型またはクリニックでの点滴サポートがご自身に適しているかどうかご相談をご希望の場合は、こちらからお問い合わせください： [予約・相談](/contact/)
 
 **参考文献**
 

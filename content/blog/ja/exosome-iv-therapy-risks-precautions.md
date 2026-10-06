@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 6
 featured: false
 featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImageAlt: 東京タワーが見える窓辺で、点滴スタンドに吊るされた「Immune Boost」と手書きされた点滴バッグ
 relatedServiceSlugs:
   - exosome-iv-drip
   - iv-therapy
@@ -134,4 +134,4 @@ tags:
 
 エクソソーム点滴療法を検討する際は、治療そのものの魅力だけでなく、より広範な安全性の全体像を理解することが重要です。これには、点滴治療全般のリスク、ヒト由来物質の慎重な取り扱い、医学的スクリーニングの重要性、そして緊急時のケアが必要になった場合にクリニックが適切に対応できる体制が整っているかどうかも含まれます。
 
-Pitonne | Stem Cell & IV Therapyでは、患者様が明確かつ自信を持ってこれらの判断を下せるべきだと考えています。そのため、当院では、院内および訪問診療の両方において、丁寧な説明、入念なスクリーニング、そして医学的指針に基づいたケアを重視しています。 ご自身にこの治療が適しているかどうかについてご相談をご希望の場合は、こちらからお問い合わせください：[予約・相談](https://pitonne.jp/contact/)
+Pitonne | Stem Cell & IV Therapyでは、患者様が明確かつ自信を持ってこれらの判断を下せるべきだと考えています。そのため、当院では、院内および訪問診療の両方において、丁寧な説明、入念なスクリーニング、そして医学的指針に基づいたケアを重視しています。 ご自身にこの治療が適しているかどうかについてご相談をご希望の場合は、こちらからお問い合わせください：[予約・相談](/contact/)

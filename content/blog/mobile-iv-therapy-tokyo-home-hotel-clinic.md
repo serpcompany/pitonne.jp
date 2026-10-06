@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg
 featureImageAlt: "Clinician carrying medical equipment into a hotel room"
 featured: false
@@ -60,7 +59,7 @@ A clinic visit may also make it easier to review treatment options, ask question
 
 The most suitable setting depends on the treatment being considered, your current condition, and the healthcare provider’s recommendation.
 
-Pitonne’s clinic is located in Nishi-Azabu, Minato City, Tokyo. Current service details, locations, and pricing should be checked on the [official Pitonne Services page](https://pitonne.jp/services/) before making plans.
+Pitonne’s clinic is located in Nishi-Azabu, Minato City, Tokyo. Current service details, locations, and pricing should be checked on the [official Pitonne Services page](/services/) before making plans.
 
 ## What Happens During a Mobile IV Visit?
 
@@ -148,18 +147,18 @@ For mobile or in-clinic IV therapy in Tokyo, review the current Pitonne service 
 
 ## Related Reading
 
-[How Long Does IV Therapy Take in Tokyo?](https://pitonne.jp/blog/how-long-does-iv-therapy-take-tokyo/)
+[How Long Does IV Therapy Take in Tokyo?](/blog/how-long-does-iv-therapy-take-tokyo/)
 
-[How to Get an Exosome IV in Tokyo](https://pitonne.jp/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
+[How to Get an Exosome IV in Tokyo](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
 
-[IV Therapy for Dehydration](https://pitonne.jp/blog/iv-therapy-for-dehydration-in-tokyo/)
+[IV Therapy for Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[Pitonne Services](https://pitonne.jp/services/)
+[Pitonne Services](/services/)
 
 ## References
 
-[Pitonne Official Website](https://pitonne.jp/)
+[Pitonne Official Website](/)
 
-[Pitonne Services](https://pitonne.jp/services/)
+[Pitonne Services](/services/)
 
 [MedlinePlus: IV treatment at home](https://medlineplus.gov/ency/patientinstructions/000496.htm)

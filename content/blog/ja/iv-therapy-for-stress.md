@@ -9,9 +9,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-stress.jpg
+featureImageAlt: オフィスのデスクで眉間に指を当て、ストレスを感じている女性
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - exosome-iv-drip

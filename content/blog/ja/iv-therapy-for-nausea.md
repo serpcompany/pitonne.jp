@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 10
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-nausea.jpg
+featureImageAlt: 食べかけの料理がのった皿を持ちながら、お腹に手を当てる人
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - hangover-iv-drip

@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 6
 featured: false
 featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImageAlt: 東京タワーを背景に、点滴スタンドに吊るされた「Exosome」と書かれた点滴バッグ
 relatedServiceSlugs:
   - exosome-iv-drip
   - iv-therapy
@@ -153,4 +153,4 @@ Pitoneでは、エクソソーム点滴療法を劇的な近道や、直接的�
 
 とはいえ、点滴療法だけでは回復の基盤にはなりません。回復は依然として、睡眠、食事、水分補給、休息、そしてトレーニングのバランスに第一に依存します。トレーニング負荷が高い方、慢性的な疲労を抱えている方、あるいは日々のパフォーマンス維持に強い関心をお持ちの方にとって、より重要な問いは、単に筋肉をどのように回復させるかだけでなく、身体全体をどのようにサポートするかということです。
 
-東京で、落ち着いたプライベートな空間にてエクソソーム点滴療法や点滴サポートについてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](https://pitonne.jp/contact/)
+東京で、落ち着いたプライベートな空間にてエクソソーム点滴療法や点滴サポートについてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](/contact/)

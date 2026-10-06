@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 20
 featured: false
 relatedServiceSlugs:
   - stem-cell-therapy
@@ -20,6 +19,7 @@ tags:
   - 調製培地
   - 再生医療
 featureImage: /images/content/sheet/services/stem-cell-therapy.jpg
+featureImageAlt: スクラブ姿で聴診器を下げた医師が、テーブル越しに患者へ治療の選択肢を説明する場面
 ---
 幹細胞療法、エクソソーム点滴療法、そして幹細胞培養上清点滴は、しばしば密接に関連した概念として紹介されます。しかし、これらは厳密には同じものではなく、多くの患者にとって、その違いは当初は曖昧に感じられるかもしれません。
 
@@ -174,4 +174,4 @@ Pitonne | Stem Cell & IV Therapyでは、患者様が判断を下す前に、こ
 
 最も重要なのは、名称だけで選択しないことです。原料、培養方法、保存方法、品質管理、価格、および医療スクリーニングについて、すべて慎重に確認する必要があります。
 
-Pitonne | Stem Cell & IV Therapyでは、患者様が自信を持って適切な判断を下せるよう、これらの違いを丁寧に説明しております。東京でのクリニックまたは出張IV療法についてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](https://pitonne.jp/contact/)
+Pitonne | Stem Cell & IV Therapyでは、患者様が自信を持って適切な判断を下せるよう、これらの違いを丁寧に説明しております。東京でのクリニックまたは出張IV療法についてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](/contact/)

@@ -2,17 +2,20 @@
 slug: exosome-iv-therapy-risks-precautions
 title: 'What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment'
 metaTitle: 'Exosome IV Therapy Risks and Precautions: Safety Guide'
-excerpt: 'When considering Exosome IV therapy, many patients naturally focus on what the treatment is and how it works. Just as important, however, is understanding how to think about safety, what precautions should be...'
-metaDescription: Learn the key risks and precautions of Exosome IV therapy, from general IV risks and pre-treatment screening to what to review before booking.
+excerpt: >-
+  Learn the key risks and precautions of Exosome IV therapy, from general IV
+  risks and pre-treatment screening to what to review before booking.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featured: false
 featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImageAlt: >-
+  IV bag hand-labeled Immune Boost on a drip stand by a window overlooking Tokyo
+  Tower
 relatedServiceSlugs:
   - 'exosome-iv-drip'
   - 'iv-therapy'
@@ -135,4 +138,4 @@ It is important to confirm that the clinic explains the treatment clearly, inclu
 
 When considering Exosome IV therapy, it is important to look beyond the appeal of the treatment itself and also understand the broader safety picture. That includes the general risks of IV treatment, the careful handling of human-derived materials, the importance of medical screening, and the clinic’s readiness to respond if urgent care is needed.
 
-At Pitonne | Stem Cell & IV Therapy, we believe patients should be able to make these decisions with clarity and confidence. That is why we place emphasis on careful explanation, thoughtful screening, and medically guided care in both in-clinic and mobile settings. If you would like to discuss whether treatment may be appropriate for you, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we believe patients should be able to make these decisions with clarity and confidence. That is why we place emphasis on careful explanation, thoughtful screening, and medically guided care in both in-clinic and mobile settings. If you would like to discuss whether treatment may be appropriate for you, please contact us here: [Booking & Consultation](/contact/)

@@ -9,9 +9,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 10
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-allergies.jpg
+featureImageAlt: みずみずしい緑の葉を背景にした点滴の滴下筒とチューブ
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - immune-boost-iv-therapy

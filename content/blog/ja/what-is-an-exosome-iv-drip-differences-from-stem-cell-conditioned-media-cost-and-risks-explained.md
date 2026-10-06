@@ -10,8 +10,8 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 12
 featureImage: /images/content/services/Exosome_H.jpg
+featureImageAlt: 窓の向こうにぼんやりと東京タワーが見える、点滴スタンドに吊るされた「Exosome」と書かれた点滴バッグ
 featured: true
 relatedServiceSlugs:
   - exosome-iv-drip

@@ -8,8 +8,15 @@
   `lib/i18n/dictionaries/ja.json` in the same commit. Never add a key to only one file.
 - Components receive `locale` as a prop. Call `getDictionary(locale)` at the component level.
 - All `<Link href>` values must use `localizedRoute(path, locale)`.
-- All content files (blog, services, legal) must exist in both `content/*/` and `content/*/ja/`.
-  When creating a new English content file, always create the Japanese counterpart.
+- Services and legal content files must exist in both `content/*/` and `content/*/ja/`.
+  When creating a new English service or legal file, always create the Japanese counterpart.
+- Blog posts may exist in one locale only (see `docs/adr/0001-blog-cms.md`). Translations pair by identical filename/slug;
+  a missing translation gets no page, index/category entry, hreflang, or sitemap URL in that locale.
+- `draft: true` blog posts are excluded from every build (production, staging, PR previews). Don't link to drafts.
+- Blog frontmatter rules (zod in `lib/data/blog-posts.ts`): excerpt 70–160 chars, kebab-case slug matching the filename,
+  `featureImageAlt` required with `featureImage`. `readingTime` is computed at build; don't add it to new posts.
+- Blog markdown links to internal pages use locale-neutral relative paths (`/blog/<slug>/`, `/contact/`), never
+  `https://pitonne.jp/...` or `/ja/...`; Japanese posts resolve them to `/ja/...` at render time.
 - The area data model uses co-located fields (`name`/`nameJa`, `description`/`descriptionJa`).
   When adding a new area, provide both English and Japanese values inline.
 - Metadata (`title`, `description`, `openGraph`) must use dictionary values or locale-aware
@@ -44,7 +51,7 @@ SEO audits (mirror the Ahrefs Site Audit checks):
 
 Key parity tests in `tests/parity/`:
 - `i18n-dictionaries.test.ts` — en.json and ja.json must have identical keys
-- `i18n-content-parity.test.ts` — blog, services, legal must exist in both locales
+- `i18n-content-parity.test.ts` — services and legal must exist in both locales; blog translations pair by filename/slug
 
 ## Conventions
 

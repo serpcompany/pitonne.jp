@@ -1,15 +1,14 @@
 ---
 slug: how-long-does-iv-therapy-take-tokyo
 title: "点滴の所要時間はどれくらい？東京の訪問点滴の流れを解説"
-excerpt: "点滴の所要時間や当日の流れを知りたい方へ。東京・Pitonneの訪問点滴について、予約から問診、点滴、終了後の案内まで詳しく解説します。"
-metaDescription: 点滴の所要時間や当日の流れを知りたい方へ。東京・Pitonneの訪問点滴について、予約から問診、点滴、終了後の案内まで詳しく解説します。Pitonneでは、点滴そのものの所要時間は約30〜60分が目安です。所要時間が変わる主な理由や、事前に準備しておきたい情報も紹介します。
+excerpt: >-
+  Pitonneでは、点滴そのものの所要時間は約30〜60分、初回は問診や説明を含めて約1時間が目安です。東京の訪問点滴について、所要時間が変わる理由、予約から問診、点滴、終了後の案内までの当日の流れ、予約前に準備したい情報を解説します。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 6
 featureImage: /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg
 featureImageAlt: "医療従事者が点滴を確認する中で点滴を受ける患者"
 featured: false
@@ -124,13 +123,13 @@ Pitonneでは、点滴そのものは約30〜60分が目安です。初めての
 
 ## 関連記事
 
-[エクソソーム点滴とは？](https://pitonne.jp/ja/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[エクソソーム点滴とは？](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[東京でエクソソーム点滴を受ける流れ](https://pitonne.jp/ja/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
+[東京でエクソソーム点滴を受ける流れ](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[Pitonneのサービス一覧](https://pitonne.jp/ja/services/)
+[Pitonneのサービス一覧](/services/)
 
 ## 参考情報
 

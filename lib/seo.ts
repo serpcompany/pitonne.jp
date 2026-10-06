@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import type { Locale } from "@/lib/i18n/config"
-import { defaultLocale } from "@/lib/i18n/config"
+import { defaultLocale, locales } from "@/lib/i18n/config"
 import seoLimits from "@/lib/seo-limits.json"
 
 export const SITE_URL = "https://pitonne.jp"
@@ -61,15 +61,19 @@ export function hreflangAlternates(path: string) {
   }
 }
 
-export function localizedHreflangAlternates(path: string, locale: Locale) {
+// availableLocales limits hreflang to the locales the page exists in (e.g. a blog post with no translation).
+export function localizedHreflangAlternates(path: string, locale: Locale, availableLocales: readonly Locale[] = locales) {
   const normalizedPath = normalizePath(path)
+  const languages: Record<string, string> = {}
+  for (const availableLocale of availableLocales) {
+    languages[availableLocale] = localizedCanonicalUrl(normalizedPath, availableLocale)
+  }
+  const xDefaultLocale = availableLocales.includes(defaultLocale) ? defaultLocale : (availableLocales[0] ?? locale)
+  languages["x-default"] = localizedCanonicalUrl(normalizedPath, xDefaultLocale)
+
   return {
     canonical: localizedCanonicalUrl(normalizedPath, locale),
-    languages: {
-      en: canonicalUrl(normalizedPath),
-      ja: `${SITE_URL}/ja${normalizedPath}`,
-      "x-default": canonicalUrl(normalizedPath),
-    },
+    languages,
   }
 }
 

@@ -1,15 +1,14 @@
 ---
 slug: high-dose-vitamin-c-50g-g6pd-test-tokyo
 title: "高濃度ビタミンC点滴50gにG6PD検査は必要？溶血リスクと安全性"
-excerpt: "高濃度ビタミンC点滴50gでG6PD検査が必要な理由を解説。溶血の危険性や腎機能、事前に確認したい安全性のポイントを紹介します。"
-metaDescription: 高濃度ビタミンC点滴50gでG6PD検査が必要な理由を解説。溶血の危険性や腎機能、事前に確認したい安全性のポイントを紹介します。Pitonneでは50gの点滴前にG6PD検査を必須としています。25gの場合の考え方や、点滴後に注意したい症状も解説します。
+excerpt: >-
+  高濃度ビタミンC点滴50gを受ける前にG6PD検査が必要な理由を解説します。G6PD活性が低い場合の溶血リスク、Pitonneが50gの点滴前に検査を必須としている理由、25gの場合の考え方、腎機能や服薬など事前に確認したい安全性のポイントを紹介します。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 7
 featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg
 featureImageAlt: "顕微鏡と点滴バッグのそばで血液サンプルを確認する医療従事者"
 featured: false
@@ -147,11 +146,11 @@ G6PDの活性が低い方に高用量のビタミンCを投与すると、赤血
 
 ## 関連記事
 
-[点滴を定期的に受ける前に血液検査は必要？](https://pitonne.jp/ja/blog/blood-tests-before-regular-iv-therapy-tokyo/)
+[点滴を定期的に受ける前に血液検査は必要？](/blog/blood-tests-before-regular-iv-therapy-tokyo/)
 
-[Pitonneの高濃度ビタミンC点滴](https://pitonne.jp/ja/services/high-dose-vitamin-c-iv-therapy/)
+[Pitonneの高濃度ビタミンC点滴](/services/high-dose-vitamin-c-iv-therapy/)
 
-[栄養解析血液検査](https://pitonne.jp/ja/services/nutrition-blood-testing/)
+[栄養解析血液検査](/services/nutrition-blood-testing/)
 
 ## 参考情報
 

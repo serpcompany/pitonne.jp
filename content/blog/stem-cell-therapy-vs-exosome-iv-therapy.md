@@ -5,17 +5,14 @@ title: >-
   Stem Cell Conditioned Media IV Relates and What to Look For
 metaTitle: 'Stem Cell Therapy vs. Exosome IV Therapy: Key Differences'
 excerpt: >-
-  Stem cell therapy, exosome IV therapy, and stem cell conditioned media IV are
-  often presented as closely related concepts. However, they are not exactly the
-  same, and for many patients, the differences can feel unclear at first.
-metaDescription: Stem cell therapy, Exosome IV therapy, and stem cell conditioned media IV are not the same. Learn how they differ and what to review when comparing.
+  Stem cell therapy, Exosome IV therapy, and stem cell conditioned media IV are
+  not the same. Learn how they differ and what to review when comparing.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 20
 featured: false
 relatedServiceSlugs:
   - stem-cell-therapy
@@ -26,6 +23,9 @@ tags:
   - conditioned media
   - regenerative medicine
 featureImage: /images/content/sheet/services/stem-cell-therapy.jpg
+featureImageAlt: >-
+  Doctor in scrubs with a stethoscope explaining treatment options to a patient
+  across a table
 ---
 Stem cell therapy, exosome IV therapy, and stem cell conditioned media IV are often presented as closely related concepts. However, they are not exactly the same, and for many patients, the differences can feel unclear at first.
 
@@ -180,4 +180,4 @@ Stem cell therapy, stem cell conditioned media IV, and Exosome IV therapy may ap
 
 The most important thing is not to choose based on the name alone. Source material, culture method, storage approach, quality management, pricing, and medical screening should all be reviewed carefully.
 
-At Pitonne | Stem Cell & IV Therapy, we take time to explain these differences clearly so patients can make informed decisions with confidence. If you would like to discuss in-clinic or mobile IV options in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we take time to explain these differences clearly so patients can make informed decisions with confidence. If you would like to discuss in-clinic or mobile IV options in Tokyo, please contact us here: [Booking & Consultation](/contact/)

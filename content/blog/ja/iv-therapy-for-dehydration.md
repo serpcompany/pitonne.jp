@@ -10,8 +10,8 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 8
 featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImageAlt: ストライプのクッションに置いた患者の腕に点滴ラインを留置する、青い手袋の医療従事者
 featured: false
 relatedServiceSlugs:
   - iv-therapy

@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
-import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getAllCategories, getBlogCategoryLocales, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${category.name} ${dict.blog.articles}`,
     description: categoryDescription,
-    alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale),
+    alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale, getBlogCategoryLocales(category.slug)),
     ...pageSocialMetadata({
       title: `${category.name} ${dict.blog.articles}`,
       description: categoryDescription,

@@ -11,8 +11,10 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 7
 featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImageAlt: >-
+  Smiling woman in a white bathrobe receiving an IV drip beside a window with
+  city views
 featured: false
 relatedServiceSlugs:
   - energy-fatigue-recovery-iv

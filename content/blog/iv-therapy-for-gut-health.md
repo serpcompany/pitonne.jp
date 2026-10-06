@@ -4,17 +4,17 @@ title: >-
   Is IV Therapy Good for Gut Health? How Pitonne Thinks About Hydration, Nutrition, and Whole-Body Condition
 metaTitle: Is IV Therapy Good for Gut Health? Hydration and Nutrition
 excerpt: >-
-  Digestive comfort is closely connected to daily life. At Pitonne, IV therapy is not thought of as something that directly treats the gut, but as support for hydration, nutritional balance, and whole-body condition management.
-metaDescription: IV therapy does not directly treat the gut. Learn how Pitonne approaches hydration, nutrition, and whole-body condition, and when to seek medical care.
+  IV therapy does not directly treat the gut. Learn how Pitonne approaches
+  hydration, nutrition, and whole-body condition, and when to seek medical care.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-gut-health.jpg
+featureImageAlt: Woman sitting on the edge of a bed, holding her stomach in discomfort
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - exosome-iv-drip

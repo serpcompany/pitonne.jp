@@ -4,17 +4,17 @@ title: >-
   Is IV Therapy Helpful for Jet Lag? What to Know Before Considering Supportive Care in Tokyo
 metaTitle: 'IV Therapy for Jet Lag in Tokyo: What to Know'
 excerpt: >-
-  Jet lag involves more than sleepiness. At Pitonne, IV therapy for jet lag is approached as supportive care for hydration and post-flight condition management, not as a cure for the time-zone shift itself.
-metaDescription: Is IV therapy helpful for jet lag? Learn how Pitonne approaches hydration and post-flight support for travelers in Tokyo, and why it is not a cure.
+  Is IV therapy helpful for jet lag? Learn how Pitonne approaches hydration and
+  post-flight support for travelers in Tokyo, and why it is not a cure.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 10
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-jet-lag.jpg
+featureImageAlt: Passenger airplane flying overhead against a cloudy blue sky
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv

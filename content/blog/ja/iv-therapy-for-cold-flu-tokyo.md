@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 7
 featured: false
 featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImageAlt: 東京の街並みと東京タワーを背景に、点滴スタンドに吊るされた「Immune Boost」の点滴バッグ
 relatedServiceSlugs:
   - immune-boost-iv-therapy
   - iv-therapy
@@ -135,7 +135,7 @@ Pitoneでは、風邪やインフルエンザのような症状に対して「�
 
 風邪やインフルエンザのような症状がある場合、点滴療法は「治療」ではなく、あくまで**対症療法**であると理解するのが適切です。 水分補給や全身状態の維持に役立つ場合もありますが、症状がより深刻な病気を示唆している場合は、決して適切な医学的評価の代わりにはなりません。
 
-Pitonne | Stem Cell & IV Therapyでは、患者様の状態に真に適した処置を慎重かつ慎重に、そして細心の注意を払って検討いたします。 東京にお住まいで、回復支援の一環として点滴療法が適しているかどうかご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](https://pitonne.jp/contact/)
+Pitonne | Stem Cell & IV Therapyでは、患者様の状態に真に適した処置を慎重かつ慎重に、そして細心の注意を払って検討いたします。 東京にお住まいで、回復支援の一環として点滴療法が適しているかどうかご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](/contact/)
 
 **参考文献**
 

@@ -1,5 +1,6 @@
 import { getAllAreas, wards } from "@/lib/data/areas"
-import { blogPosts, getAllCategories } from "@/lib/data/blog-posts"
+import { getAllBlogPostSlugs, getAllCategories, getBlogCategoryLocales, getBlogPostLocales } from "@/lib/data/blog-posts"
+import { locales, type Locale } from "@/lib/i18n/config"
 import { services } from "@/lib/data/services"
 import { canonicalRoutes } from "@/lib/data/routes"
 import { canonicalUrl, SITE_URL } from "@/lib/seo"
@@ -10,7 +11,13 @@ interface SitemapEntry {
   url: string
   changeFrequency: "weekly" | "monthly"
   priority: number
-  alternates: { en: string; ja: string; xDefault: string }
+  alternates: { en?: string; ja?: string; xDefault: string }
+}
+
+interface SitemapPath {
+  path: string
+  // Locales the page is published in; blog posts and categories can be single-locale
+  locales: readonly Locale[]
 }
 
 export function buildEntries(): SitemapEntry[] {
@@ -29,29 +36,42 @@ export function buildEntries(): SitemapEntry[] {
     canonicalRoutes.medicalDisclaimer,
   ]
 
-  const paths = [
+  const allLocalePaths = [
     ...staticPaths,
     ...services.map((service) => service.canonicalPath),
-    ...blogPosts.map((post) => `/blog/${post.slug}/`),
     // Watch pages are listed only in videos-sitemap.xml so each URL appears in exactly one sitemap.
-    ...getAllCategories().map((category) => `/blog/category/${category.slug}/`),
     ...wards.map((ward) => `/areas-served/${ward.slug}/`),
     ...getAllAreas().map(({ ward, area }) => `/areas-served/${ward.slug}/${area.slug}/`),
   ]
 
-  const uniquePaths = Array.from(new Set(paths))
+  const categorySlugs = Array.from(new Set(locales.flatMap((locale) => getAllCategories(locale).map((category) => category.slug))))
 
-  return uniquePaths.flatMap((path) => {
-    const changeFrequency = (path.startsWith("/blog/") ? "weekly" : "monthly") as "weekly" | "monthly"
-    const priority = path === "/" ? 1 : path.split("/").filter(Boolean).length === 1 ? 0.8 : 0.6
-    const enUrl = canonicalUrl(path)
-    const jaUrl = `${SITE_URL}/ja${path.endsWith("/") ? path : `${path}/`}`
+  const paths: SitemapPath[] = [
+    ...allLocalePaths.map((path) => ({ path, locales })),
+    ...getAllBlogPostSlugs().map((slug) => ({ path: `/blog/${slug}/`, locales: getBlogPostLocales(slug) })),
+    ...categorySlugs.map((slug) => ({ path: `/blog/category/${slug}/`, locales: getBlogCategoryLocales(slug) })),
+  ]
 
-    return [
-      { url: enUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl, xDefault: enUrl } },
-      { url: jaUrl, changeFrequency, priority, alternates: { en: enUrl, ja: jaUrl, xDefault: enUrl } },
-    ]
-  })
+  const seen = new Set<string>()
+  const uniquePaths = paths.filter(({ path }) => (seen.has(path) ? false : (seen.add(path), true)))
+
+  return uniquePaths.flatMap(({ path, locales: pathLocales }) => sitemapEntriesForPath(path, pathLocales))
+}
+
+export function sitemapEntriesForPath(path: string, pathLocales: readonly Locale[]): SitemapEntry[] {
+  const changeFrequency = (path.startsWith("/blog/") ? "weekly" : "monthly") as "weekly" | "monthly"
+  const priority = path === "/" ? 1 : path.split("/").filter(Boolean).length === 1 ? 0.8 : 0.6
+  const enUrl = canonicalUrl(path)
+  const jaUrl = `${SITE_URL}/ja${path.endsWith("/") ? path : `${path}/`}`
+  const urls: Record<Locale, string> = { en: enUrl, ja: jaUrl }
+
+  const alternates: SitemapEntry["alternates"] = {
+    ...(pathLocales.includes("en") ? { en: enUrl } : {}),
+    ...(pathLocales.includes("ja") ? { ja: jaUrl } : {}),
+    xDefault: urls[pathLocales.includes("en") ? "en" : pathLocales[0]],
+  }
+
+  return pathLocales.map((locale) => ({ url: urls[locale], changeFrequency, priority, alternates }))
 }
 
 function escapeXml(str: string): string {
@@ -60,16 +80,23 @@ function escapeXml(str: string): string {
 
 function toXml(entries: SitemapEntry[]): string {
   const urls = entries
-    .map(
-      (entry) => `  <url>
+    .map((entry) => {
+      const alternateLinks = [
+        ["en", entry.alternates.en],
+        ["ja", entry.alternates.ja],
+        ["x-default", entry.alternates.xDefault],
+      ]
+        .filter((link): link is [string, string] => Boolean(link[1]))
+        .map(([hreflang, href]) => `    <xhtml:link rel="alternate" hreflang="${hreflang}" href="${escapeXml(href)}" />`)
+        .join("\n")
+
+      return `  <url>
     <loc>${escapeXml(entry.url)}</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(entry.alternates.en)}" />
-    <xhtml:link rel="alternate" hreflang="ja" href="${escapeXml(entry.alternates.ja)}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(entry.alternates.xDefault)}" />
+${alternateLinks}
     <changefreq>${entry.changeFrequency}</changefreq>
     <priority>${entry.priority}</priority>
   </url>`
-    )
+    })
     .join("\n")
 
   return `<?xml version="1.0" encoding="UTF-8"?>

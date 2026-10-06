@@ -2,17 +2,20 @@
 slug: iv-therapy-for-low-energy
 title: 'Do You Need IV Therapy When You Feel Low on Energy? What to Know Before Considering Supportive Care'
 metaTitle: 'IV Therapy for Low Energy: What to Know Before Booking'
-excerpt: '“I slept, but I still don’t feel restored.” “I’ve been so busy that my body feels heavy.” “I’m in Tokyo with a full schedule and want to feel physically better as soon as possible.”'
-metaDescription: Feeling low on energy? Learn when IV therapy may be considered as supportive care, why it is not an instant fix, and when low energy needs medical review.
+excerpt: >-
+  Feeling low on energy? Learn when IV therapy may be considered as supportive
+  care, why it is not an instant fix, and when low energy needs medical review.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 7
 featured: false
 featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImageAlt: >-
+  Energy & Fatigue Recovery IV bag on a drip stand in a bright room overlooking
+  Tokyo
 relatedServiceSlugs:
   - 'energy-fatigue-recovery-iv'
   - 'iv-therapy'
@@ -170,4 +173,4 @@ When you feel low on energy, IV therapy is best understood as **supportive care 
 
 At Pitonne, we approach low energy and physical depletion with this broader perspective in mind. Whether through hydration IVs, vitamin-based IV support, or conversations that also include Exosome IV therapy, the goal is not to overpromise, but to help patients think more carefully about how to support their body well.
 
-If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+If you would like to discuss IV therapy in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](/contact/)

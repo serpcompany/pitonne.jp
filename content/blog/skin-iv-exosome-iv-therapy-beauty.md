@@ -5,17 +5,14 @@ title: >-
   Therapy
 metaTitle: 'IV Therapy for Beauty: Skin IV and Exosome IV Therapy'
 excerpt: >-
-  "Lately I look more tired than I feel."   "When I'm sleep-deprived or busy, it
-  shows on my face."   "I want to feel and look more put together before an
-  important event."
-metaDescription: Is IV therapy good for beauty? Learn how Pitonne approaches Skin IV with hydration, vitamins, and glutathione, and why beauty IVs are not a shortcut.
+  Is IV therapy good for beauty? Learn how Pitonne approaches Skin IV with
+  hydration, vitamins, and glutathione, and why beauty IVs are not a shortcut.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 15
 featured: false
 relatedServiceSlugs:
   - skin-brightening-iv-drip
@@ -27,6 +24,9 @@ tags:
   - glutathione
   - exosome iv
 featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
+featureImageAlt: >-
+  IV bag hand-labeled Skin Brightening on a drip stand, with Tokyo Tower in the
+  background
 ---
 "Lately I look more tired than I feel."  
 "When I'm sleep-deprived or busy, it shows on my face."  
@@ -158,4 +158,4 @@ At Pitonne, beauty-focused IV therapy is not treated as an instant cosmetic shor
 
 For patients who want hydration plus vitamins and glutathione, **Skin IV** is often a natural fit. For patients thinking more broadly about anti-aging and whole-body condition, **Exosome IV therapy** may be especially appealing.
 
-If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+If you would like to explore beauty and wellness support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](/contact/)

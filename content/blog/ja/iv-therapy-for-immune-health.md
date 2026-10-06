@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-immune-health.jpg
+featureImageAlt: 毛布にくるまってソファに座る体調のすぐれない女性と、テーブルの上の水や薬
 relatedServiceSlugs:
   - immune-boost-iv-therapy
   - iv-vitamin-therapy

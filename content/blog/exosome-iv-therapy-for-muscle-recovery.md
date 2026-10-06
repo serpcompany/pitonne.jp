@@ -2,17 +2,20 @@
 slug: exosome-iv-therapy-for-muscle-recovery
 title: 'Is Exosome IV Therapy a Good Option for Muscle Recovery? How to Think About IV Therapy After Training'
 metaTitle: 'Exosome IV Therapy and Muscle Recovery: What to Know'
-excerpt: 'After intense training, it is common to feel muscle tightness, heaviness, fatigue, or a lingering sense that the body has not fully recovered. For athletes, serious trainees, and people who exercise regularly, the...'
-metaDescription: Considering Exosome IV therapy for muscle recovery? Learn who may be a candidate, why hydration is only part of recovery, and when to see a doctor.
+excerpt: >-
+  Considering Exosome IV therapy for muscle recovery? Learn who may be a
+  candidate, why hydration is only part of recovery, and when to see a doctor.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featured: false
 featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImageAlt: >-
+  IV bag labeled Exosome hanging on a drip stand, with Tokyo Tower blurred in
+  the background
 relatedServiceSlugs:
   - 'exosome-iv-drip'
   - 'iv-therapy'
@@ -154,4 +157,4 @@ When thinking about muscle recovery, Pitonne may recommend not only hydration IV
 
 That said, IV therapy is not the foundation of recovery on its own. Recovery still depends first on sleep, food, hydration, rest, and training balance. For patients with high training loads, ongoing fatigue, or a strong interest in maintaining daily performance, the more important question is not only how to recover a muscle, but how to support the body as a whole.
 
-If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+If you would like to discuss Exosome IV therapy or IV support in a calm, private setting in Tokyo, please contact us here: [Booking & Consultation](/contact/)

@@ -2,17 +2,20 @@
 slug: iv-therapy-for-cold-flu-tokyo
 title: 'Do You Need IV Therapy for a Cold or the Flu? What to Know Before Considering Supportive Care'
 metaTitle: 'IV Therapy for a Cold or Flu in Tokyo: What to Know First'
-excerpt: 'A sore throat, runny nose, cough, fever, fatigue, headache. When cold- or flu-like symptoms appear, many people naturally wonder whether IV therapy might help them feel better more quickly, especially if drinking...'
-metaDescription: Considering IV therapy for a cold or flu? Learn when supportive hydration care may be considered, why it is not a cure, and when to see a doctor first.
+excerpt: >-
+  Considering IV therapy for a cold or flu? Learn when supportive hydration care
+  may be considered, why it is not a cure, and when to see a doctor first.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 7
 featured: false
 featureImage: /images/content/sheet/services/immune-boost-iv-therapy.jpg
+featureImageAlt: >-
+  Immune Boost IV bag on a drip stand, with the Tokyo skyline and Tokyo Tower
+  blurred behind it
 relatedServiceSlugs:
   - 'immune-boost-iv-therapy'
   - 'iv-therapy'
@@ -136,7 +139,7 @@ If there is breathing difficulty, chest pain, confusion, severe dehydration, per
 
 When cold- or flu-like symptoms are present, IV therapy is best understood as **supportive care**, not a cure. It may sometimes help support hydration and overall condition, but it should never replace proper medical evaluation when symptoms suggest something more serious.
 
-At Pitonne | Stem Cell & IV Therapy, we approach these consultations with caution, discretion, and attention to what is truly appropriate for the patient’s condition. If you are in Tokyo and would like to discuss whether IV therapy may be suitable as part of your recovery support, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we approach these consultations with caution, discretion, and attention to what is truly appropriate for the patient’s condition. If you are in Tokyo and would like to discuss whether IV therapy may be suitable as part of your recovery support, please contact us here: [Booking & Consultation](/contact/)
 
 **References**
 

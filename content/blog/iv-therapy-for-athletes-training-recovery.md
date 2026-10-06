@@ -5,18 +5,14 @@ title: >-
   Support and What to Check Before Competition
 metaTitle: 'IV Therapy for Athletes: Recovery Support and Doping Rules'
 excerpt: >-
-  Athletes and people who train intensely on a regular basis often place their
-  bodies under a level of physical demand that goes well beyond everyday
-  activity. As training volume increases, it becomes more common to notice
-  fluctuations in...
-metaDescription: Learn how athletes and serious trainees may use IV therapy for recovery support, and why anti-doping rules on IV volume matter before competition.
+  Learn how athletes and serious trainees may use IV therapy for recovery
+  support, and why anti-doping rules on IV volume matter before competition.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 14
 featured: false
 relatedServiceSlugs:
   - iv-therapy
@@ -27,6 +23,9 @@ tags:
   - training recovery
   - competition
 featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImageAlt: >-
+  IV bag hand-labeled Energy & Fatigue Recovery hanging by a window overlooking
+  Tokyo Tower
 ---
 Athletes and people who train intensely on a regular basis often place their bodies under a level of physical demand that goes well beyond everyday activity. As training volume increases, it becomes more common to notice fluctuations in recovery, fatigue, hydration, and overall condition. Sleep disruption, travel, work [stress](/blog/iv-therapy-for-stress/), and repeated hard sessions can make this even more noticeable.
 
@@ -105,7 +104,7 @@ For athletes and serious trainees, high training volume can make condition manag
 
 At the same time, for anyone entering official competition, IV therapy requires special caution because anti-doping rules may apply to the IV method itself. That is why competitive athletes should always confirm the rules of their sport and event in advance, rather than assuming treatment timing is automatically acceptable.
 
-At Pitonne | Stem Cell & IV Therapy, we take these questions seriously and aim to guide patients with clarity and discretion. If you are looking for private, medically guided IV care in Tokyo for daily condition support, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we take these questions seriously and aim to guide patients with clarity and discretion. If you are looking for private, medically guided IV care in Tokyo for daily condition support, please contact us here: [Booking & Consultation](/contact/)
 
 **References**
 

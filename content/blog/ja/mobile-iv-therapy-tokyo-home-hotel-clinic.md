@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 6
 featureImage: /images/content/blog/mobile-iv-therapy-tokyo-home-hotel-clinic.jpg
 featureImageAlt: "医療機器を持ってホテルの客室に入る医療従事者"
 featured: false
@@ -58,7 +57,7 @@ Pitonneは東京・西麻布を拠点に、院内での点滴に加えて、自�
 
 ただし、訪問と院内のどちらが適しているかは一律ではありません。点滴の内容、当日の体調、希望する環境、医療者の判断を踏まえて決める必要があります。
 
-Pitonneの院内拠点は、東京都港区西麻布にあります。サービス内容、対応エリア、料金などは変更される可能性があるため、利用前に[Pitonneの公式サービス情報](https://pitonne.jp/ja/services/)をご確認ください。
+Pitonneの院内拠点は、東京都港区西麻布にあります。サービス内容、対応エリア、料金などは変更される可能性があるため、利用前に[Pitonneの公式サービス情報](/services/)をご確認ください。
 
 ## 訪問点滴当日の流れ
 
@@ -142,18 +141,18 @@ MedlinePlusでも、点滴に関連して呼吸の問題、速い心拍、めま
 
 ## 関連記事
 
-[点滴の所要時間はどれくらい？東京の訪問点滴の流れ](https://pitonne.jp/ja/blog/how-long-does-iv-therapy-take-tokyo/)
+[点滴の所要時間はどれくらい？東京の訪問点滴の流れ](/blog/how-long-does-iv-therapy-take-tokyo/)
 
-[東京でエクソソーム点滴を受ける流れ](https://pitonne.jp/ja/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
+[東京でエクソソーム点滴を受ける流れ](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[Pitonneのサービス一覧](https://pitonne.jp/ja/services/)
+[Pitonneのサービス一覧](/services/)
 
 ## 参考情報
 
-[Pitonne公式サイト](https://pitonne.jp/ja/)
+[Pitonne公式サイト](/)
 
-[Pitonneサービス一覧](https://pitonne.jp/ja/services/)
+[Pitonneサービス一覧](/services/)
 
 [MedlinePlus：IV treatment at home](https://medlineplus.gov/ency/patientinstructions/000496.htm)

@@ -19,6 +19,7 @@ import {
 } from "@/lib/seo"
 import { businessJsonLd, websiteJsonLd } from "@/lib/structured-data"
 import { getServiceCategorySections } from "@/lib/data/services"
+import { getUntranslatedBlogPostSlugs } from "@/lib/data/blog-posts"
 import { nonDefaultLocales, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { localizedRoute } from "@/lib/data/routes"
@@ -144,6 +145,7 @@ export default async function LocaleLayout({
               href: localizedRoute(service.canonicalPath, typedLocale),
             })),
           }))}
+          untranslatedBlogSlugs={getUntranslatedBlogPostSlugs(typedLocale)}
         />
         <main className="min-h-screen">{children}</main>
         <Footer locale={typedLocale} dict={dict} />

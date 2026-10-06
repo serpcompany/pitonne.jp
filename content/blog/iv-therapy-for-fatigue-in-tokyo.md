@@ -2,17 +2,21 @@
 slug: iv-therapy-for-fatigue-in-tokyo
 title: 'Is IV Therapy Helpful for Fatigue? What to Know Before Considering Supportive Care'
 metaTitle: Is IV Therapy Helpful for Fatigue in Tokyo? What to Know
-excerpt: '“I thought I rested, but I still feel exhausted.” “I’m in Tokyo with a full schedule and my body feels heavy.” “I’ve been so busy that fatigue has started to feel normal.”'
-metaDescription: Feeling exhausted in Tokyo? Learn when IV therapy may be considered as supportive care for fatigue, why it is not a cure, and when to seek medical care.
+excerpt: >-
+  Feeling exhausted in Tokyo? Learn when IV therapy may be considered as
+  supportive care for fatigue, why it is not a cure, and when to seek medical
+  care.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImageAlt: >-
+  Woman in a bathrobe relaxing on a sofa during an IV drip in a Tokyo high-rise
+  room
 relatedServiceSlugs:
   - 'energy-fatigue-recovery-iv'
   - 'iv-therapy'
@@ -168,7 +172,7 @@ Fatigue that lasts for weeks, does not improve with rest, or significantly affec
 
 IV therapy for fatigue is best understood as **supportive care for hydration, nutrition, recovery, and overall condition**, not as a cure for fatigue itself. Because fatigue can have many different causes, it is important to think not only about immediate support, but also about sleep, stress, hydration, nutrition, activity load, and when medical evaluation may be necessary.
 
-At Pitonne | Stem Cell & IV Therapy, we approach fatigue with discretion, perspective, and attention to the whole picture. If you are in Tokyo and would like to discuss IV therapy in a calm, private, medically guided setting, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we approach fatigue with discretion, perspective, and attention to the whole picture. If you are in Tokyo and would like to discuss IV therapy in a calm, private, medically guided setting, please contact us here: [Booking & Consultation](/contact/)
 
 **References**
 

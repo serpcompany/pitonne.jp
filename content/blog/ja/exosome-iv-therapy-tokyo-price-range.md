@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 15
 featured: false
 relatedServiceSlugs:
   - exosome-iv-drip
@@ -19,6 +18,7 @@ tags:
   - 東京
   - 在宅介護
 featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImageAlt: 東京タワーを望む高層階の部屋で、点滴スタンドに吊るされたエクソソーム点滴のバッグ
 ---
 東京でエクソソーム点滴療法について調べ始めると、まず最初に浮かぶ疑問の一つが「一般的な価格帯はどのくらいか？」ということでしょう。 実際には、「エクソソーム点滴療法」や「幹細胞培養上清点滴」として提供される治療の費用は、比較的手頃な価格帯から非常に高額なものまで、幅広くなっています。
 

@@ -4,17 +4,20 @@ title: >-
   Do You Need IV Therapy When You Feel Nauseous? What to Know Before Considering Supportive Care
 metaTitle: 'IV Therapy for Nausea: What to Know About Supportive Care'
 excerpt: >-
-  Nausea is a symptom, not a diagnosis. At Pitonne, IV therapy is considered as supportive care for hydration and whole-body condition when nausea makes it hard to maintain fluid intake.
-metaDescription: Nausea is a symptom, not a diagnosis. Learn when IV therapy may support hydration if fluids are hard to keep down, and when to seek medical care first.
+  Nausea is a symptom, not a diagnosis. Learn when IV therapy may support
+  hydration if fluids are hard to keep down, and when to seek medical care
+  first.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 10
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-nausea.jpg
+featureImageAlt: >-
+  Person pressing a hand to their stomach while holding a plate of unfinished
+  food
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - hangover-iv-drip

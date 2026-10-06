@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 5
 featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
 featureImageAlt: "Clinician monitoring an IV infusion pump beside a seated patient"
 featured: false
@@ -100,10 +99,10 @@ For more information about IV therapy and mobile care in Tokyo, please review th
 
 ## Related Reading
 
-[How Long Does IV Therapy Take in Tokyo?](https://pitonne.jp/blog/how-long-does-iv-therapy-take-tokyo/)
+[How Long Does IV Therapy Take in Tokyo?](/blog/how-long-does-iv-therapy-take-tokyo/)
 
-[IV Therapy for Dehydration](https://pitonne.jp/blog/iv-therapy-for-dehydration-in-tokyo/)
+[IV Therapy for Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[Exosome IV Drip Risks](https://pitonne.jp/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[Exosome IV Drip Risks](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[Pitonne Services](https://pitonne.jp/services/)
+[Pitonne Services](/services/)

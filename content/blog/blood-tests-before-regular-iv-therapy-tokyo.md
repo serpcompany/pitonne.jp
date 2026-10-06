@@ -10,7 +10,6 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 8
 featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg
 featureImageAlt: "Gloved clinician arranging blood sample tubes for laboratory review"
 featured: false
@@ -142,11 +141,11 @@ If you are considering regular IV therapy in Tokyo, Pitonne can discuss whether 
 
 ## Related Reading
 
-[IV Therapy Side Effects and Safety](https://pitonne.jp/blog/iv-therapy-side-effects-safety-guide/)
+[IV Therapy Side Effects and Safety](/blog/iv-therapy-side-effects-safety-guide/)
 
-[What Is Exosome IV Therapy?](https://pitonne.jp/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[What Is Exosome IV Therapy?](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[IV Therapy for Dehydration](https://pitonne.jp/blog/iv-therapy-for-dehydration-in-tokyo/)
+[IV Therapy for Dehydration](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
 ## References
 
