@@ -18,7 +18,7 @@ export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
 // The brand-new hash deployment URL is slower: it can answer 404 for some paths while others already work (seen
 // 2026-10-06, issue #109), so its checks (`fresh: true`) keep retrying until FRESH_DEPLOYMENT_MS after the first of
 // them starts. Worst case, with every request hanging until its timeout: 12 x 15 s + 135 s + 22 x 2 x 15 s, about
-// 16 minutes, inside the job's 20.
+// 16 minutes; with the environment smoke test's 8 on Production, inside the deploy job's 30.
 const ATTEMPTS = 12
 const LATER_ATTEMPTS = 2
 const FRESH_DEPLOYMENT_MS = 120_000
