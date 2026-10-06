@@ -76,18 +76,19 @@ live in `.github/workflows/deploy.yml`, which CI calls.
 - **Content is never blocked by `test`.** A CMS save goes live as soon as it builds, whatever `test` says about it or
   any earlier commit. A failing `test` on `main` alerts instead: the run is red, and the `alert` job opens (or comments
   on) an issue titled "CI is failing on main" that mentions @devinschumacher. Close it once `main` is fixed.
-- **Code is gated.** A code commit deploys only after `test` passes, on `main` or (for promotions) on `staging`. Code
-  reaches `main` only through promotion or a hotfix PR, both of which passed `test` first, so a content save on top of
-  code never publishes untested code.
+- **Code is gated before `main`.** Code reaches `main` only through promotion or a hotfix PR, both of which passed
+  `test` first, and a code push's own deploy waits for `test` on `main`. If that post-merge `test` fails, the code
+  still goes live with the next CMS save, because every deploy uploads the tip and content is never held back; the
+  alert issue is the signal to fix or revert it. A hotfix that breaks `pnpm build` itself stops all deploys until it is
+  reverted.
 - **No stale deploys.** Deploys use `concurrency: deploy-pages-<environment>` (`deploy-pages-production`,
   `deploy-pages-staging`, `deploy-pages-pr-<n>`) with `cancel-in-progress: false`: a running deploy is never cancelled,
   and a Staging push never cancels a Production deploy. Queued deploys run in the order they were *queued*, not commit
   order (a code commit queues only after its `test`), and GitHub keeps only the newest queued one. So before building,
-  `scripts/deploy-target.mjs` picks what to upload:
-  - the branch tip instead of the run's commit, when everything newer is CMS content or code that passed `test`;
-  - nothing, when that commit is already live or older than the live one (the newest successful GitHub deployment).
-  An older commit never overwrites a newer live one, and a queued deploy that GitHub replaced is covered by the run
-  that replaced it, which deploys the tip.
+  `scripts/deploy-target.mjs` always picks the branch tip at that moment. Every deploy publishes everything committed
+  so far: rapid CMS saves all go live, and an older commit never overwrites a newer one. There is no "already live"
+  skip (GitHub deployment records name the branch, not the uploaded commit, so they can't tell what is live), and
+  redeploying the same tree is harmless. A failed Production deploy also opens the "CI is failing on main" issue.
 - Production deploys only from `main` and Staging only from `staging`; `deploy.yml` refuses anything else, so no PR can
   reach the `main` or `staging` aliases.
 - **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging` (Staging). It skips the

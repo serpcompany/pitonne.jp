@@ -50,10 +50,12 @@ describe("CI and deploy workflows", () => {
     expect(changes).toContain("|| passed=0")
   })
 
-  it("alerts the owner when test fails on main instead of blocking publishing", () => {
+  it("alerts the owner when test or a Production deploy fails on main instead of blocking publishing", () => {
     const alert = job(ci, "alert")
-    expect(alert).toContain("needs: test")
-    expect(alert).toContain("always() && github.event_name == 'push' && github.ref_name == 'main' && needs.test.result == 'failure'")
+    expect(alert).toContain("needs: [test, deploy-content, deploy]")
+    expect(alert).toContain("always() && github.event_name == 'push' && github.ref_name == 'main'")
+    for (const id of ["test", "deploy-content", "deploy"]) expect(alert).toContain(`needs.${id}.result == 'failure'`)
+    expect(alert).toContain("group: alert-red-main")
     expect(alert).toContain("issues: write")
     expect(alert).toContain("@devinschumacher")
     expect(alert).toContain("gh issue create")
