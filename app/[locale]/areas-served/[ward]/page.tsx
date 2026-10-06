@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `${wardLabel}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
     : `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
   const seoDescription = typedLocale === "ja"
-    ? `${wardLabel}（東京都）で訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご希望の方へ。Pitonneでは看護師がご自宅・ホテル・オフィスへお伺いし、医師によるオンライン診療のもとで、お一人おひとりに合わせたケアをご提供します。`
+    ? `${wardLabel}での訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査。Pitonneがご希望の場所へ看護師を派遣します。医師によるオンライン診療のもと、ご自宅・ホテル・オフィスなど、ご希望の場所でお一人おひとりに合わせたケアをご提供します。`
     : `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
 
   return {
