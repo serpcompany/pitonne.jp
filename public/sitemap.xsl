@@ -74,6 +74,31 @@
 			This is an XML Sitemap, meant for consumption by search engines.<br/>
 			You can find more information about XML sitemaps on <a href="https://sitemaps.org" target="_blank" rel="noopener">sitemaps.org</a>.
 		</p>
+		<xsl:choose>
+		<xsl:when test="sitemap:sitemapindex">
+		<p class="expl">
+			This XML Sitemap Index lists <xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> sitemaps.
+		</p>
+		<table id="sitemap" cellpadding="3">
+			<thead>
+			<tr>
+				<th width="100%">Sitemap</th>
+			</tr>
+			</thead>
+			<tbody>
+			<xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">
+				<tr>
+					<td>
+						<a href="{sitemap:loc}">
+							<xsl:value-of select="sitemap:loc"/>
+						</a>
+					</td>
+				</tr>
+			</xsl:for-each>
+			</tbody>
+		</table>
+		</xsl:when>
+		<xsl:otherwise>
 		<p class="expl">
 			This XML Sitemap contains <xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs.
 		</p>
@@ -106,6 +131,8 @@
 			</xsl:for-each>
 			</tbody>
 		</table>
+		</xsl:otherwise>
+		</xsl:choose>
 	</div>
 	</body>
 	</html>

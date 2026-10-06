@@ -28,7 +28,7 @@ jobs:
       - run: pnpm audit:strings
       - run: pnpm audit:meta
       - run: DEPLOY_ENV=production pnpm build
-      - run: test -f out/index.html && test -f out/ja/index.html && test -f out/robots.txt && test -f out/sitemap.xml && test -f out/videos-sitemap.xml && test -f out/_headers && test -f out/_redirects && test ! -d out/en
+      - run: pnpm audit:out
       - run: pnpm audit:seo
       - run: pnpm test:lighthouse
 
@@ -74,14 +74,7 @@ jobs:
 
       - name: Verify static preview output
         run: |
-          test -f out/index.html
-          test -f out/ja/index.html
-          test -f out/robots.txt
-          test -f out/sitemap.xml
-          test -f out/videos-sitemap.xml
-          test -f out/_headers
-          test -f out/_redirects
-          test ! -d out/en
+          pnpm audit:out
           grep -Fq "Disallow: /" out/robots.txt
 
       - name: Deploy isolated Cloudflare Pages preview

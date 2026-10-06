@@ -35,70 +35,68 @@ function withDeployEnv<T>(value: string | undefined, callback: () => T): T {
 }
 
 describe("SEO parity", () => {
-  it("generates a canonical sitemap from static pages and data-backed routes", async () => {
-    const { buildEntries } = await import("@/app/sitemap.xml/route")
-    const urls = buildEntries().map((entry) => entry.url)
+  it("lists each page in the sitemap of its content group", async () => {
+    const { sitemapEntriesByGroup } = await import("@/lib/sitemaps")
+    const byGroup = Object.fromEntries(
+      Object.entries(sitemapEntriesByGroup()).map(([group, entries]) => [group, entries.map((entry) => entry.url)]),
+    ) as Record<string, string[]>
 
-    expect(urls).toContain(`${SITE_URL}/`)
-    expect(urls).toContain(`${SITE_URL}/about/`)
-    expect(urls).toContain(`${SITE_URL}/services/`)
-    expect(urls).toContain(`${SITE_URL}/contact/`)
-    expect(urls).toContain(`${SITE_URL}/blog/`)
-    expect(urls).toContain(`${SITE_URL}/videos/`)
-    expect(urls).toContain(`${SITE_URL}/legal/`)
-    expect(urls).toContain(`${SITE_URL}/legal/privacy-policy/`)
-    expect(urls).toContain(`${SITE_URL}/legal/terms-conditions/`)
-    expect(urls).toContain(`${SITE_URL}/legal/disclaimer/`)
+    expect(byGroup.pages).toContain(SITE_URL)
+    for (const route of ["/about/", "/services/", "/contact/", "/blog/", "/faqs/", "/areas-served/", "/videos/", "/legal/"]) {
+      expect(byGroup.pages).toContain(`${SITE_URL}${route}`)
+      expect(byGroup.pages).toContain(`${SITE_URL}/ja${route}`)
+    }
+    for (const route of ["/legal/privacy-policy/", "/legal/terms-conditions/", "/legal/disclaimer/"]) {
+      expect(byGroup.pages).toContain(`${SITE_URL}${route}`)
+    }
 
     for (const service of services) {
-      expect(urls).toContain(`${SITE_URL}${service.canonicalPath}`)
+      expect(byGroup.services).toContain(`${SITE_URL}${service.canonicalPath}`)
+      expect(byGroup.services).toContain(`${SITE_URL}/ja${service.canonicalPath}`)
     }
 
     for (const post of blogPosts) {
-      expect(urls).toContain(`${SITE_URL}/blog/${post.slug}/`)
+      expect(byGroup.blog).toContain(`${SITE_URL}/blog/${post.slug}/`)
     }
 
     for (const category of getAllCategories()) {
-      expect(urls).toContain(`${SITE_URL}/blog/category/${category.slug}/`)
-    }
-
-    for (const video of pitonneVideos) {
-      // Watch pages belong only to videos-sitemap.xml (no page in multiple sitemaps)
-      expect(urls).not.toContain(`${SITE_URL}${video.watchPath}`)
-      expect(urls).not.toContain(`${SITE_URL}/ja${video.watchPath}`)
+      expect(byGroup.categories).toContain(`${SITE_URL}/blog/category/${category.slug}/`)
     }
 
     for (const ward of wards) {
-      expect(urls).toContain(`${SITE_URL}/areas-served/${ward.slug}/`)
+      expect(byGroup.areas).toContain(`${SITE_URL}/areas-served/${ward.slug}/`)
     }
 
     for (const { ward, area } of getAllAreas()) {
-      expect(urls).toContain(`${SITE_URL}/areas-served/${ward.slug}/${area.slug}/`)
+      expect(byGroup.areas).toContain(`${SITE_URL}/areas-served/${ward.slug}/${area.slug}/`)
     }
 
-    expect(urls).not.toContain(`${SITE_URL}/privacy-policy/`)
-    expect(urls).not.toContain(`${SITE_URL}/terms-of-use/`)
-    expect(urls).not.toContain(`${SITE_URL}/medical-disclaimer/`)
-    expect(urls).not.toContain(`${SITE_URL}/legal/terms-and-conditions/`)
-    expect(urls).not.toContain(`${SITE_URL}/services/medications/`)
-    expect(urls).not.toContain(`${SITE_URL}/areas-served/chiyoda/tokyo-station/`)
-    expect(urls.every((url) => url.startsWith(SITE_URL))).toBe(true)
+    for (const video of pitonneVideos) {
+      expect(byGroup.videos).toContain(`${SITE_URL}${video.watchPath}`)
+      expect(byGroup.videos).toContain(`${SITE_URL}/ja${video.watchPath}`)
+    }
 
-    const rootEntry = buildEntries().find((entry) => entry.url === `${SITE_URL}/`)
-    expect(rootEntry?.alternates).toMatchObject({
-      en: `${SITE_URL}/`,
-      ja: `${SITE_URL}/ja/`,
-      xDefault: `${SITE_URL}/`,
-    })
+    const allUrls = Object.values(byGroup).flat()
+    expect(allUrls).not.toContain(`${SITE_URL}/privacy-policy/`)
+    expect(allUrls).not.toContain(`${SITE_URL}/terms-of-use/`)
+    expect(allUrls).not.toContain(`${SITE_URL}/medical-disclaimer/`)
+    expect(allUrls).not.toContain(`${SITE_URL}/legal/terms-and-conditions/`)
+    expect(allUrls).not.toContain(`${SITE_URL}/services/medications/`)
+    expect(allUrls).not.toContain(`${SITE_URL}/areas-served/chiyoda/tokyo-station/`)
   })
 
-  it("includes x-default alternates in sitemap XML", async () => {
-    const { GET } = await import("@/app/sitemap.xml/route")
-    const response = GET()
-    const xml = await response.text()
+  it("lists the homepage as the bare origin, with hreflang alternates", async () => {
+    const { sitemapEntries, urlsetXml } = await import("@/lib/sitemaps")
+    const pages = sitemapEntries("pages")
+    const rootEntry = pages.find((entry) => entry.url === SITE_URL)
 
-    expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")
-    expect(xml).toContain('hreflang="x-default" href="https://pitonne.jp/"')
+    expect(rootEntry?.alternates).toEqual({ en: SITE_URL, ja: `${SITE_URL}/ja/`, xDefault: SITE_URL })
+    expect(pages.map((entry) => entry.url)).not.toContain(`${SITE_URL}/`)
+
+    const xml = urlsetXml(pages)
+    expect(xml).toContain(`<loc>${SITE_URL}</loc>`)
+    expect(xml).toContain(`hreflang="x-default" href="${SITE_URL}"`)
+    expect(xml).not.toContain(`<loc>${SITE_URL}/</loc>`)
     expect(xml).not.toContain("https://pitonne.jp/en/")
   })
 
@@ -111,7 +109,7 @@ describe("SEO parity", () => {
         userAgent: "*",
         allow: "/",
       },
-      sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`],
+      sitemap: `${SITE_URL}/sitemap-index.xml`,
     })
 
     const preview = withDeployEnv("preview", () => robots())
@@ -120,7 +118,7 @@ describe("SEO parity", () => {
         userAgent: "*",
         disallow: "/",
       },
-      sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`],
+      sitemap: `${SITE_URL}/sitemap-index.xml`,
     })
   })
 
