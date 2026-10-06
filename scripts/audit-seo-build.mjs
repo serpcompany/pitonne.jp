@@ -6,6 +6,7 @@
  * - <title> 15–70 chars and meta description 110–160 chars
  * - exactly one <h1> per page
  * - complete Open Graph tags, with og:url matching the canonical URL
+ * - at most one canonical and one og:url tag, both inside <head>
  * - internal links that resolve to a page (no 404s, no redirects)
  * - the sitemap index pattern: robots.txt advertises only /sitemap-index.xml, which lists root-level
  *   /sitemap-<group>.xml URL sets; /sitemap.xml serves the same XML as the index
@@ -133,6 +134,18 @@ for (const file of pages) {
   const missingOg = REQUIRED_OG.filter((key) => !metaContent(html, key))
   if (missingOg.length > 0) report(urlPath, `missing Open Graph tags: ${missingOg.join(", ")}`)
   const ogUrl = metaContent(html, "og:url")
+  // The homepage writes its canonical and og:url by hand (#91), so check what Next's metadata API used to guarantee:
+  // a page that has these tags has exactly one of each, inside <head>
+  const head = (html.match(/<head[\s>][\s\S]*?<\/head>/) || [""])[0]
+  for (const [label, pattern] of [
+    ["canonical", /<link[^>]*\srel="canonical"[^>]*>/g],
+    ["og:url", /<meta[^>]*\sproperty="og:url"[^>]*>/g],
+  ]) {
+    const total = (html.match(pattern) || []).length
+    const inHead = (head.match(pattern) || []).length
+    if (total > 1) report(urlPath, `has ${total} ${label} tags (want 1)`)
+    if (total > inHead) report(urlPath, `has a ${label} tag outside <head>`)
+  }
   if (ogUrl && canonical && ogUrl !== canonical) report(urlPath, `og:url ${ogUrl} does not match canonical ${canonical}`)
 
   for (const tag of html.match(/<a\s[^>]*href="[^"]*"/g) || []) {

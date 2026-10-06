@@ -4,6 +4,7 @@ import type { Service } from "@/lib/data/services"
 import type { PitonneVideo } from "@/lib/data/videos"
 import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 import type {
   BlogPosting,
   BreadcrumbList,
@@ -150,7 +151,9 @@ export function videoListJsonLd(videos: PitonneVideo[]): WithContext<ItemList> {
   }
 }
 
-export function videoBreadcrumbJsonLd(video: PitonneVideo): WithContext<BreadcrumbList> {
+// The breadcrumb follows the page's locale, matching the visible Breadcrumbs on /watch/ and /ja/watch/
+export function videoBreadcrumbJsonLd(video: PitonneVideo, locale: Locale = "en"): WithContext<BreadcrumbList> {
+  const dict = getDictionary(locale)
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -158,20 +161,20 @@ export function videoBreadcrumbJsonLd(video: PitonneVideo): WithContext<Breadcru
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
-        item: canonicalUrl("/"),
+        name: dict.nav.home,
+        item: localizedCanonicalUrl("/", locale),
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Videos",
-        item: canonicalUrl("/videos/"),
+        name: dict.nav.videos,
+        item: localizedCanonicalUrl("/videos/", locale),
       },
       {
         "@type": "ListItem",
         position: 3,
-        name: video.title,
-        item: canonicalUrl(video.watchPath),
+        name: locale === "ja" && video.titleJa ? video.titleJa : video.title,
+        item: localizedCanonicalUrl(video.watchPath, locale),
       },
     ],
   }
