@@ -1,0 +1,62 @@
+name: CMS publish
+
+# Keystatic Cloud commits editor saves to `cms/**` branches. Once CI passes on a save, open a PR into main (if
+# needed), squash-merge it and deploy. The merge uses GITHUB_TOKEN, which doesn't trigger other workflows, so
+# this workflow starts the deploy itself (workflow_dispatch is the exception GitHub allows).
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: cms-publish-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      startsWith(github.event.workflow_run.head_branch, 'cms/') &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BRANCH: ${{ github.event.workflow_run.head_branch }}
+      SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Skip if the branch has moved on since this CI run
+        id: head
+        run: |
+          current=$(gh api "repos/$GH_REPO/git/ref/heads/$BRANCH" --jq .object.sha 2>/dev/null || true)
+          if [ "$current" != "$SHA" ]; then
+            echo "Branch $BRANCH is at ${current:-<deleted>}, not $SHA; the CI run for the newer commit will publish it."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open a PR into main
+        if: steps.head.outputs.skip != 'true'
+        id: pr
+        run: |
+          number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number')
+          if [ -z "$number" ]; then
+            title=$(gh api "repos/$GH_REPO/commits/$SHA" --jq '.commit.message | split("\n")[0]')
+            gh pr create --base main --head "$BRANCH" --title "cms: $title" \
+              --body "Content change saved from the blog CMS on \`$BRANCH\`. Merged automatically once CI passes."
+            number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number')
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Squash-merge the tested commit
+        if: steps.head.outputs.skip != 'true'
+        run: gh pr merge "${{ steps.pr.outputs.number }}" --squash --delete-branch --match-head-commit "$SHA"
+
+      - name: Deploy main
+        if: steps.head.outputs.skip != 'true'
+        run: gh workflow run deploy.yml --ref main

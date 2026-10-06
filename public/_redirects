@@ -22,3 +22,6 @@
 /images/content/sheet/blog/iv-therapy-for-nausea.jpg /images/content/blog/iv-therapy-for-nausea/featureImage.jpg 301
 /images/content/sheet/blog/iv-therapy-for-relaxation.jpg /images/content/blog/iv-therapy-for-relaxation/featureImage.jpg 301
 /images/content/sheet/blog/iv-therapy-for-stress.jpg /images/content/blog/iv-therapy-for-stress/featureImage.jpg 301
+
+# The blog CMS is a single-page app exported only at /keystatic/; serve it for every /keystatic/* path
+/keystatic/* /keystatic/ 200
