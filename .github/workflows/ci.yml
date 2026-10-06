@@ -3,8 +3,9 @@ name: CI
 # Tests every PR and every push to staging and main, and deploys (via .github/workflows/deploy.yml):
 # - a push to `staging` to Staging (https://staging.pitonne.jp), a push to `main` to Production (https://pitonne.jp);
 # - same-repository PRs into `staging` or `main` to a `pr-<n>` preview, after the test job passes.
-# Code changes deploy only after the test job passes. CMS content saves deploy as soon as they build (see `changes`),
-# and a failing test on main opens an alert issue instead of blocking them (see `alert`).
+# A code push's own deploy waits for the test job; CMS content saves deploy as soon as they build (see `changes`).
+# Every deploy uploads the branch tip, so code already on the branch also goes live with the next content deploy; a
+# failing test or deploy on main opens an alert issue instead of blocking content (see `alert`).
 on:
   pull_request:
   push:
@@ -99,7 +100,7 @@ jobs:
     secrets:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-  # Code changes: deploy only after the test job passes
+  # Code pushes: this run's deploy waits for the test job (it still uploads the branch tip)
   deploy:
     name: Deploy
     needs: [changes, test]
@@ -116,25 +117,41 @@ jobs:
 
   # A failing test on main never blocks publishing, so it has to reach a person: the run is red, and one open issue
   # collects every failure (with a mention of the owner) until someone fixes main and closes it.
+  # Alerts when main's test fails or a Production deploy fails (CMS commits come from a bot, so nobody gets the
+  # failure email). One alert job at a time, so two red runs can't open duplicate issues.
   alert:
     name: Alert on red main
-    needs: test
-    if: always() && github.event_name == 'push' && github.ref_name == 'main' && needs.test.result == 'failure'
+    needs: [test, changes, deploy-content, deploy]
+    if: >-
+      always() && github.event_name == 'push' && github.ref_name == 'main' &&
+      (needs.test.result == 'failure' || needs.changes.result == 'failure' ||
+      needs.deploy-content.result == 'failure' || needs.deploy.result == 'failure')
     runs-on: ubuntu-latest
+    concurrency:
+      group: alert-red-main
+      cancel-in-progress: false
     permissions:
       issues: write
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       TITLE: "CI is failing on main"
+      TEST_RESULT: ${{ needs.test.result }}
+      CHANGES_RESULT: ${{ needs.changes.result }}
+      DEPLOY_RESULTS: ${{ needs.deploy-content.result }} ${{ needs.deploy.result }}
     steps:
       - name: Open or update the red-main issue
         run: |
+          failed=()
+          [ "$TEST_RESULT" = failure ] && failed+=("\`test\`")
+          [ "$CHANGES_RESULT" = failure ] && failed+=("the change classification (nothing was deployed)")
+          [[ " $DEPLOY_RESULTS " == *" failure "* ]] && failed+=("the Production deploy")
+          FAILED=$(printf '%s and ' "${failed[@]}"); FAILED=${FAILED% and }
           subject=$(gh api "repos/$GH_REPO/commits/$GITHUB_SHA" --jq '.commit.message | split("\n")[0]') || subject=""
-          body="@devinschumacher \`test\` failed on \`main\` at $GITHUB_SHA ($subject).
+          body="@devinschumacher Failed on \`main\` at $GITHUB_SHA ($subject): $FAILED.
           Run: $GITHUB_SERVER_URL/$GH_REPO/actions/runs/$GITHUB_RUN_ID
-          CMS content saves still deploy as soon as they build; code changes don't deploy until \`test\` passes again. Fix \`main\` (see the failed step), then close this issue."
-          number=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number,title \
+          Every Production deploy uploads the newest commit on main, so the next successful deploy publishes everything. CMS content saves deploy as soon as they build. Fix the failed step, then close this issue."
+          number=$(gh issue list --state open --limit 100 --json number,title \
             --jq "map(select(.title == \"$TITLE\")) | .[0].number // empty")
           if [ -n "$number" ]; then
             gh issue comment "$number" --body "$body"
