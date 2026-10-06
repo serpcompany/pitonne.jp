@@ -3,8 +3,9 @@ name: CI
 # Tests every PR and every push to staging and main, and deploys (via .github/workflows/deploy.yml):
 # - a push to `staging` to Staging (https://staging.pitonne.jp), a push to `main` to Production (https://pitonne.jp);
 # - same-repository PRs into `staging` or `main` to a `pr-<n>` preview, after the test job passes.
-# Code changes deploy only after the test job passes. CMS content saves deploy as soon as they build (see `changes`),
-# and a failing test on main opens an alert issue instead of blocking them (see `alert`).
+# A code push's own deploy waits for the test job; CMS content saves deploy as soon as they build (see `changes`).
+# Every deploy uploads the branch tip, so code already on the branch also goes live with the next content deploy; a
+# failing test or deploy on main opens an alert issue instead of blocking content (see `alert`).
 on:
   pull_request:
   push:
@@ -99,7 +100,7 @@ jobs:
     secrets:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-  # Code changes: deploy only after the test job passes
+  # Code pushes: this run's deploy waits for the test job (it still uploads the branch tip)
   deploy:
     name: Deploy
     needs: [changes, test]
@@ -120,10 +121,11 @@ jobs:
   # failure email). One alert job at a time, so two red runs can't open duplicate issues.
   alert:
     name: Alert on red main
-    needs: [test, deploy-content, deploy]
+    needs: [test, changes, deploy-content, deploy]
     if: >-
       always() && github.event_name == 'push' && github.ref_name == 'main' &&
-      (needs.test.result == 'failure' || needs.deploy-content.result == 'failure' || needs.deploy.result == 'failure')
+      (needs.test.result == 'failure' || needs.changes.result == 'failure' ||
+      needs.deploy-content.result == 'failure' || needs.deploy.result == 'failure')
     runs-on: ubuntu-latest
     concurrency:
       group: alert-red-main
@@ -134,12 +136,17 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       TITLE: "CI is failing on main"
-      FAILED: >-
-        ${{ needs.test.result == 'failure' && '`test`' || '' }}
-        ${{ (needs.deploy-content.result == 'failure' || needs.deploy.result == 'failure') && 'the Production deploy' || '' }}
+      TEST_RESULT: ${{ needs.test.result }}
+      CHANGES_RESULT: ${{ needs.changes.result }}
+      DEPLOY_RESULTS: ${{ needs.deploy-content.result }} ${{ needs.deploy.result }}
     steps:
       - name: Open or update the red-main issue
         run: |
+          failed=()
+          [ "$TEST_RESULT" = failure ] && failed+=("\`test\`")
+          [ "$CHANGES_RESULT" = failure ] && failed+=("the change classification (nothing was deployed)")
+          [[ " $DEPLOY_RESULTS " == *" failure "* ]] && failed+=("the Production deploy")
+          FAILED=$(printf '%s and ' "${failed[@]}"); FAILED=${FAILED% and }
           subject=$(gh api "repos/$GH_REPO/commits/$GITHUB_SHA" --jq '.commit.message | split("\n")[0]') || subject=""
           body="@devinschumacher Failed on \`main\` at $GITHUB_SHA ($subject): $FAILED.
           Run: $GITHUB_SERVER_URL/$GH_REPO/actions/runs/$GITHUB_RUN_ID

@@ -71,7 +71,10 @@ live in `.github/workflows/deploy.yml`, which CI calls.
 | Only draft blog posts changed | Nothing (the built site is unchanged) | – |
 | Only CMS content changed | Now (`Deploy content` job), as soon as the build succeeds | No, never |
 | A commit that already passed `test` (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
-| Any other change | After `test` passes on this run (`Deploy` job) | Yes |
+| Any other change | After `test` passes on this run (`Deploy` job) | Yes, for this run's deploy |
+
+Every row uploads the branch tip, so code already on the branch also goes live with the next content deploy, even
+before its own `test` finishes.
 
 - **Content is never blocked by `test`.** A CMS save goes live as soon as it builds, whatever `test` says about it or
   any earlier commit. A failing `test` on `main` alerts instead: the run is red, and the `alert` job opens (or comments
@@ -91,8 +94,8 @@ live in `.github/workflows/deploy.yml`, which CI calls.
   redeploying the same tree is harmless. A failed Production deploy also opens the "CI is failing on main" issue.
 - Production deploys only from `main` and Staging only from `staging`; `deploy.yml` refuses anything else, so no PR can
   reach the `main` or `staging` aliases.
-- **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging` (Staging). It skips the
-  `test` gate, so only redeploy a commit CI already passed.
+- **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging` (Staging). It uploads
+  that branch's current tip and skips the `test` gate.
 
 ### Environment configuration
 

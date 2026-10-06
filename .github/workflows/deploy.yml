@@ -3,8 +3,8 @@ name: Deploy
 # Builds the static export and uploads it to Cloudflare Pages, then smoke-tests the environment.
 # - CI (.github/workflows/ci.yml) calls it after each push to `staging` (Staging) or `main` (Production), and for PR
 #   previews (`pr-<n>`).
-# - A manual run (Actions > Deploy > Run workflow) redeploys the branch it's run from: `main` to Production, `staging`
-#   to Staging. It skips CI's test gate, so use it only to redeploy a commit CI already passed.
+# - A manual run (Actions > Deploy > Run workflow) redeploys the current tip of the branch it's run from: `main` to
+#   Production, `staging` to Staging. It skips CI's test gate.
 # Staging and Production deploys always upload the branch tip, so an older commit never replaces a newer one (scripts/deploy-target.mjs).
 on:
   workflow_call:
@@ -85,7 +85,8 @@ jobs:
         continue-on-error: true
         run: |
           git fetch --quiet origin "$PAGES_BRANCH" || echo "::warning::Couldn't fetch origin/$PAGES_BRANCH."
-          node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"
+          node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA" ||
+            echo "sha=$(git rev-parse "origin/$PAGES_BRANCH")" >> "$GITHUB_OUTPUT"
 
       - name: Check out the chosen commit
         if: steps.target.outputs.skip == 'false' && steps.target.outputs.sha != env.DEPLOY_SHA
