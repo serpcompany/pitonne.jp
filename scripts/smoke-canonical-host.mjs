@@ -141,6 +141,6 @@ async function main([deploymentUrl]) {
   if (!(await runChecks(smokeChecks({ deploymentUrl, marker })))) process.exit(1)
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main(process.argv.slice(2))
 }
