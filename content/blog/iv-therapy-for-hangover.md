@@ -1,6 +1,7 @@
 ---
 slug: iv-therapy-for-hangover
 title: 'IV Therapy for Hangover: What It May Help With and What It Cannot Do'
+metaTitle: 'IV Therapy for Hangover: What It Can and Cannot Do'
 excerpt: >-
   IV therapy for hangover may help support hydration and recovery comfort in the
   right situation, but it is not a cure-all and it is not right for emergencies.
@@ -22,8 +23,6 @@ tags:
   - hydration
   - recovery
 ---
-# IV Therapy for Hangover: What It May Help With and What It Cannot Do
-
 IV therapy for hangover is one of the most common wellness search phrases in this space because people usually want the same thing: to feel less miserable, rehydrate, and get functional again. That interest makes sense, but the topic needs a calmer and more accurate explanation than most hangover marketing gives it.
 
 At Pitonne, the better framing is that IV therapy for hangover may help support hydration and comfort in selected situations after clinician screening. It is not a cure for heavy drinking, it does not erase the effects of alcohol instantly, and it should never be used to gloss over symptoms that may actually point to alcohol poisoning or another urgent issue.
@@ -91,9 +90,9 @@ If someone is confused, difficult to wake, having trouble breathing, vomiting re
 
 ## Related Pitonne Services
 
-- [Hangover IV Drip](/services/iv-therapy/hangover-iv-drip/)
+- [Hangover IV Drip](/services/hangover-iv-drip/)
 - [Contact Pitonne](/contact/)
 
 ## Final Takeaway
 
-IV therapy for hangover may be a reasonable support option when the main issue is hydration and the person is otherwise stable after screening. The important part is using it responsibly and not confusing wellness support with emergency care. If you want to ask whether a [Hangover IV Drip](/services/iv-therapy/hangover-iv-drip/) visit is appropriate, contact Pitonne for clinician-guided next steps.
+IV therapy for hangover may be a reasonable support option when the main issue is hydration and the person is otherwise stable after screening. The important part is using it responsibly and not confusing wellness support with emergency care. If you want to ask whether a [Hangover IV Drip](/services/hangover-iv-drip/) visit is appropriate, contact Pitonne for clinician-guided next steps.

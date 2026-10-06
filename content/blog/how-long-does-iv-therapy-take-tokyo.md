@@ -1,6 +1,7 @@
 ---
 slug: how-long-does-iv-therapy-take-tokyo
 title: "How Long Does IV Therapy Take in Tokyo? What to Expect From Consultation to Aftercare"
+metaTitle: How Long Does IV Therapy Take in Tokyo? What to Expect
 excerpt: "Wondering how long IV therapy takes in Tokyo? Learn what to expect from booking and consultation to infusion, aftercare, and mobile visits at Pitonne."
 publishedAt: '2026-08-27'
 category: IV Therapy

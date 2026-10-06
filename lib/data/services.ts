@@ -27,6 +27,9 @@ const serviceFrontmatterSchema = z.object({
   parentSlug: z.string().min(1).optional(),
   canonicalPath: z.string().startsWith("/").endsWith("/"),
   shortDescription: z.string().min(1),
+  // Optional SEO overrides for <title> / meta description
+  metaTitle: z.string().min(1).optional(),
+  metaDescription: z.string().min(1).optional(),
   fullDescription: z.string().min(1),
   benefits: z.array(z.string().min(1)),
   keyPoints: z.array(z.string().min(1)),
@@ -51,6 +54,8 @@ export interface Service {
   sourcePath: string
   imageSourcePath?: string
   shortDescription: string
+  metaTitle?: string
+  metaDescription?: string
   fullDescription: string
   content: string
   benefits: string[]
@@ -144,6 +149,8 @@ function loadServices(locale: Locale): Service[] {
         sourcePath: `content/${contentSubdir}/${fileName}`,
         imageSourcePath: frontmatter.imageSourcePath,
         shortDescription: frontmatter.shortDescription,
+        metaTitle: frontmatter.metaTitle,
+        metaDescription: frontmatter.metaDescription,
         fullDescription: frontmatter.fullDescription,
         content: parsed.content.trim(),
         benefits: frontmatter.benefits,

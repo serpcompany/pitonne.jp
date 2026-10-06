@@ -42,17 +42,19 @@ export async function generateMetadata({
 
   const isJa = locale === "ja"
   const displayTitle = isJa && video.titleJa ? video.titleJa : video.title
-  const displayDescription = isJa && video.descriptionJa ? video.descriptionJa : video.description
+  const metaTitle = isJa ? displayTitle : (video.metaTitle ?? displayTitle)
+  const metaDescription = (isJa ? video.metaDescriptionJa : video.metaDescription)
+    ?? (isJa && video.descriptionJa ? video.descriptionJa : video.description)
 
   return {
-    title: displayTitle,
-    description: displayDescription,
+    title: metaTitle,
+    description: metaDescription,
     alternates,
     openGraph: {
       type: "video.other",
       url: alternates.canonical,
-      title: displayTitle,
-      description: displayDescription,
+      title: metaTitle,
+      description: metaDescription,
       siteName: SITE_NAME,
       images: [
         {
@@ -65,8 +67,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: displayTitle,
-      description: displayDescription,
+      title: metaTitle,
+      description: metaDescription,
       images: [absoluteUrl(video.thumbnailUrl)],
     },
   }

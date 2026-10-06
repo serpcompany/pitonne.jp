@@ -3,11 +3,13 @@ slug: iv-therapy-weight-management-pitonne
 title: >-
   Is There an IV for Weight Loss? What Pitonne Wants Patients to Understand
   About Weight Management
+metaTitle: Is There an IV for Weight Loss? What Patients Should Know
 excerpt: >-
   "Do you offer an IV for weight loss?"   This is a question we sometimes hear
   from patients exploring IV therapy in Tokyo. Because phrases like IV therapy
   for weight loss are common online, some people naturally wonder whether IV
   treatmen...
+metaDescription: Is there an IV for weight loss? Learn why Pitonne does not position IV therapy as a standalone solution, and how nutrition fits into weight management.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -26,8 +28,6 @@ tags:
   - wellness
 featureImage: /images/content/sheet/services/iv-vitamin-therapy.jpg
 ---
-# Is There an IV for Weight Loss? What Pitonne Wants Patients to Understand About Weight Management
-
 "Do you offer an IV for weight loss?"  
 This is a question we sometimes hear from patients exploring IV therapy in Tokyo. Because phrases like IV therapy for weight loss are common online, some people naturally wonder whether IV treatment can be used as a shortcut for body weight management.
 
@@ -166,5 +166,5 @@ If you would also like to learn more about food, nutrition, and sustainable body
 * [CDC: Healthy Weight](https://www.cdc.gov/diabetes/living-with/healthy-weight.html)  
 * [NIDDK: Eating & Physical Activity to Lose or Maintain Weight](https://www.niddk.nih.gov/health-information/weight-management/adult-overweight-obesity/eating-physical-activity)  
 * [PMDA: Mounjaro patient information](https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/2499422G1024_1?user=2)  
-* [PMDA: Zepbound professional information](https://www.pmda.go.jp/PmdaSearch/rdSearch/02/2499422G8029?user=1)  
-* [PMDA: Zepbound optimal use guideline](https://www.pmda.go.jp/files/000274411.pdf)
+* [PMDA: Zepbound professional information](https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/2499422G7022_1?user=1)  
+* [PMDA: Zepbound optimal use guideline](https://www.pmda.go.jp/files/000280607.pdf)

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { PageHero } from "@/components/shared/page-hero"
 import { ContactButton } from "@/components/shared/contact-button"
 import { getAllCategories, getBlogPostsByCategory } from "@/lib/data/blog-posts"
-import { localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -36,12 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${category.name} ${dict.blog.articles}`,
     description: categoryDescription,
     alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale),
-    openGraph: {
+    ...pageSocialMetadata({
       title: `${category.name} ${dict.blog.articles}`,
       description: categoryDescription,
-      url: localizedCanonicalUrl(`/blog/category/${category.slug}/`, typedLocale),
-      locale: locale === "ja" ? "ja_JP" : "en_US",
-    },
+      path: `/blog/category/${category.slug}/`,
+      locale: typedLocale,
+    }),
   }
 }
 

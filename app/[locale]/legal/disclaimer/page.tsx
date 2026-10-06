@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
 import { getLegalPage } from "@/lib/data/pages"
-import { localizedHreflangAlternates } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -24,11 +24,12 @@ export async function generateMetadata({
     title: dict.legal.medicalDisclaimer,
     description: dict.legal.disclaimerMeta,
     alternates: localizedHreflangAlternates("/legal/disclaimer/", locale as Locale),
-    openGraph: {
+    ...pageSocialMetadata({
       title: dict.legal.medicalDisclaimer,
       description: dict.legal.disclaimerMeta,
-      url: localizedHreflangAlternates("/legal/disclaimer/", locale as Locale).canonical,
-    },
+      path: "/legal/disclaimer/",
+      locale: locale as Locale,
+    }),
   }
 }
 

@@ -9,6 +9,7 @@ shortDescription: >-
   A physician-guided stem cell related nasal spray offered through a discreet
   online consultation, with convenient same-day local delivery available by bike
   courier in central Tokyo.
+metaDescription: Physician-guided stem cell conditioned media nasal spray via a discreet online consultation, with same-day bike courier delivery in central Tokyo.
 fullDescription: >-
   Stem Cell Nasal Spray at Pitonne is a physician-guided regenerative wellness
   support option designed for clients seeking a convenient and private way to

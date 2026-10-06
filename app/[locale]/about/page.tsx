@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { PageHero } from "@/components/shared/page-hero"
 import { BookingButton } from "@/components/shared/booking-button"
-import { localizedHreflangAlternates } from "@/lib/seo"
+import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -25,11 +25,12 @@ export async function generateMetadata({
     title: dict.about.aboutPitonne,
     description: dict.about.metaDescription,
     alternates: localizedHreflangAlternates("/about/", locale as Locale),
-    openGraph: {
+    ...pageSocialMetadata({
       title: dict.about.aboutPitonne,
       description: dict.about.metaDescription,
-      url: localizedHreflangAlternates("/about/", locale as Locale).canonical,
-    },
+      path: "/about/",
+      locale: locale as Locale,
+    }),
   }
 }
 

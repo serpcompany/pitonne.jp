@@ -1,0 +1,5 @@
+{
+  "titleSuffix": " | Pitonne",
+  "title": { "min": 15, "max": 70 },
+  "description": { "min": 110, "max": 160 }
+}

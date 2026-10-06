@@ -9,6 +9,7 @@ shortDescription: >-
   A skin wellness IV therapy designed to deliver hydration, antioxidants, and
   skin-supporting nutrients for brighter-looking skin and recovery support
   before and after sun exposure.
+metaDescription: Skin brightening IV drip in Tokyo with hydration, antioxidants, and skin-supporting nutrients to support skin wellness, including around sun exposure.
 fullDescription: >-
   Skin Brightening IV Drip is designed to deliver hydration, antioxidants, and
   skin-supporting nutrients directly into the bloodstream for efficient

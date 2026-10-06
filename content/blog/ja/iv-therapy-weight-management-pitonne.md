@@ -3,6 +3,7 @@ slug: iv-therapy-weight-management-pitonne
 title: 「減量のための点滴」は存在するのか？　ピトン医師が患者に理解してほしい体重管理について
 excerpt: >-
   「減量のための点滴治療はありますか？」　これは、東京で点滴療法を検討されている患者さんから時々寄せられる質問です。「減量のための点滴療法」といった表現がネット上でよく見られるため、当然ながら、点滴治療が……
+metaDescription: '「減量のための点滴治療はありますか？」これは、東京で点滴療法を検討されている患者さんから時々寄せられる質問です。「減量のための点滴療法」といった表現がネット上でよく見られるため、当然ながら、点滴治療が……Pitonneの考え方や、栄養の重要性、話題の減量注射について解説します。'
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -21,8 +22,6 @@ tags:
   - ウェルネス
 featureImage: /images/content/sheet/services/iv-vitamin-therapy.jpg
 ---
-# 減量のための点滴治療はあるのか？ピトンが患者さんに理解してほしい体重管理について
-
 「減量のための点滴治療はありますか？」  
 これは、東京で点滴療法を検討している患者さんから時々寄せられる質問です。 ネット上では「減量のための点滴療法」といった表現がよく見られるため、点滴治療が体重管理の近道になるのではないかと考える方もいるのは当然です。
 
@@ -161,5 +160,5 @@ Pitonneのアプローチは、特に次のような患者様に適している�
 * [CDC：健康的な体重](https://www.cdc.gov/diabetes/living-with/healthy-weight.html)  
 * [NIDDK：減量・体重維持のための食事と身体活動](https://www.niddk.nih.gov/health-information/weight-management/adult-overweight-obesity/eating-physical-activity)  
 * [PMDA：ムンジャロ患者向け情報](https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/2499422G1024_1?user=2)  
-* [PMDA：ゼプバウンド 医療従事者向け情報](https://www.pmda.go.jp/PmdaSearch/rdSearch/02/2499422G8029?user=1)  
-* [PMDA：ゼプバウンド適正使用ガイドライン](https://www.pmda.go.jp/files/000274411.pdf)
+* [PMDA：ゼプバウンド 医療従事者向け情報](https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/2499422G7022_1?user=1)  
+* [PMDA：ゼプバウンド適正使用ガイドライン](https://www.pmda.go.jp/files/000280607.pdf)

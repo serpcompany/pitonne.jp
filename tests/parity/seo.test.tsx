@@ -63,7 +63,9 @@ describe("SEO parity", () => {
     }
 
     for (const video of pitonneVideos) {
-      expect(urls).toContain(`${SITE_URL}${video.watchPath}`)
+      // Watch pages belong only to videos-sitemap.xml (no page in multiple sitemaps)
+      expect(urls).not.toContain(`${SITE_URL}${video.watchPath}`)
+      expect(urls).not.toContain(`${SITE_URL}/ja${video.watchPath}`)
     }
 
     for (const ward of wards) {
@@ -148,7 +150,7 @@ describe("SEO parity", () => {
 
     const servicesMeta = await servicesMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(servicesMeta).toMatchObject({
-      title: "Our Services",
+      title: "IV Therapy, Medications & Blood Tests in Tokyo",
       alternates: expect.objectContaining({ canonical: `${SITE_URL}/services/` }),
     })
 
