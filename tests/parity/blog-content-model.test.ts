@@ -11,7 +11,8 @@ const SITE_URL = "https://pitonne.jp"
 const validFrontmatter = {
   slug: "example-post",
   title: "Example Post",
-  excerpt: "An example excerpt that is long enough to satisfy the seventy character minimum length rule.",
+  excerpt:
+    "An example excerpt that is long enough to work as the meta description, which needs one hundred and ten characters.",
   publishedAt: "2026-10-01",
   category: "IV Therapy",
   categorySlug: "iv-therapy",
@@ -68,10 +69,18 @@ describe("blog content model", () => {
     ["excerpt shorter than 70 characters", { excerpt: "Too short." }, "excerpt"],
     ["excerpt longer than 160 characters", { excerpt: "x".repeat(161) }, "excerpt"],
     ["non-kebab-case slug", { slug: "Example_Post" }, "slug"],
+    ["excerpt under 110 characters without a metaDescription", { excerpt: "x".repeat(90) }, "excerpt"],
+    ["metaDescription shorter than 110 characters", { metaDescription: "Too short for search results." }, "metaDescription"],
+    ["metaTitle longer than 60 characters", { metaTitle: "x".repeat(61) }, "metaTitle"],
     ["featureImage without featureImageAlt", { featureImageAlt: undefined }, "featureImageAlt"],
   ])("rejects %s", (_label, override, field) => {
     const dir = writePosts({ "example-post.md": { ...validFrontmatter, ...override } })
     expect(() => loadBlogPostsFromDirectory(dir, "en", "content/blog")).toThrow(field)
+  })
+
+  it("allows a short excerpt when metaDescription covers the meta description", () => {
+    const dir = writePosts({ "example-post.md": { ...validFrontmatter, excerpt: "x".repeat(90), metaDescription: "y".repeat(120) } })
+    expect(loadBlogPostsFromDirectory(dir, "en", "content/blog")[0].excerpt).toHaveLength(90)
   })
 
   it("allows a post without a feature image or alt text", () => {
