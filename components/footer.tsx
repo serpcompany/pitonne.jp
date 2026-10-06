@@ -58,7 +58,6 @@ const podcastLinks = [
   { name: "Apple Podcasts", href: "https://podcasts.apple.com/jp/podcast/%E3%81%8A%E3%81%86%E3%81%A1%E3%83%8A%E3%83%BC%E3%82%B9%E3%81%AE%E3%81%8A%E3%81%97%E3%82%83%E3%81%B9%E3%82%8A%E3%82%AB%E3%83%AB%E3%83%86/id1843007006", icon: ApplePodcastIcon },
   { name: "Amazon Music", href: "https://music.amazon.com/podcasts/6d257495-6674-4592-9db6-55788db358c0/%E3%81%8A%E3%81%86%E3%81%A1%E3%83%8A%E3%83%BC%E3%82%B9%E3%81%AE%E3%81%8A%E3%81%97%E3%82%83%E3%81%B9%E3%82%8A%E3%82%AB%E3%83%AB%E3%83%86", icon: Music },
   { name: "Castbox", href: "https://castbox.fm/channel/id6768489", icon: Podcast },
-  { name: "Goodpods", href: "https://goodpods.com/ja/profile/pitonne-130086", icon: Podcast },
 ]
 
 function FooterHours({
