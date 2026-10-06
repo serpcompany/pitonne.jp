@@ -1,5 +1,5 @@
 ---
-title: '# IV Therapy Aftercare: What to Do After a Drip'
+title: 'IV Therapy Aftercare: What to Do After a Drip'
 metaTitle: 'IV Therapy Aftercare: What to Do After a Drip'
 excerpt: >-
   - Learn what to do after IV therapy, how to monitor the IV site, and when to
@@ -13,7 +13,7 @@ featureImageAlt: x
 featured: false
 relatedServiceSlugs:
   - iv-therapy
-draft: true
+draft: false
 ---
 # IV Therapy Aftercare: What to Do After a Drip
 
