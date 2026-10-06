@@ -48,7 +48,7 @@ describe("canonical-host smoke test", () => {
 
   it("skips the deployment URL checks when there is none", () => {
     const withoutDeployment = smokeChecks({ marker: "abc1234" })
-    expect(withoutDeployment.some((check) => check.url.startsWith(deploymentUrl))).toBe(false)
+    expect(withoutDeployment.some((check) => new URL(check.url).origin === deploymentUrl)).toBe(false)
     expect(withoutDeployment.length).toBeLessThan(checks.length)
   })
 
