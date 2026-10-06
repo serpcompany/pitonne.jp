@@ -48,9 +48,9 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - **Area data**: `lib/data/areas.ts` (co-located en/ja fields)
 - **i18n docs**: `docs/i18n.md`
 
-## SEO audits
+## Audits and parity tests
 
-These mirror the Ahrefs Site Audit checks; `pnpm check` and CI run them (see [AGENTS.md](AGENTS.md)):
+`pnpm check` and CI run these (see [AGENTS.md](AGENTS.md)). The SEO audits mirror the Ahrefs Site Audit checks:
 - `pnpm audit:meta` — blog/service `<title>` 15–70 chars (incl. " | Pitonne") and meta description 110–160 chars.
   Use the optional `metaTitle` / `metaDescription` frontmatter instead of editing the visible title/excerpt.
 - `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`

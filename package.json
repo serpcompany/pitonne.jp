@@ -23,7 +23,8 @@
     "audit:strings": "node scripts/audit-hardcoded-strings.mjs",
     "audit:meta": "node scripts/audit-meta-lengths.mjs",
     "audit:seo": "node scripts/audit-seo-build.mjs",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:routes && pnpm audit:content && pnpm audit:strings && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:seo"
+    "audit:out": "node scripts/audit-out.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:routes && pnpm audit:content && pnpm audit:strings && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
