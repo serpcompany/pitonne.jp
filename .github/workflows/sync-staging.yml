@@ -8,8 +8,9 @@ name: Sync staging
 # to `staging` runs CI there, which deploys Staging. A promotion pushes `main` to a commit `staging` already contains,
 # so the run after it finds nothing to do.
 #
-# It pushes with the RELEASE_DEPLOY_KEY deploy key, which the `staging` ruleset lets bypass the pull-request rule. A
-# push with GITHUB_TOKEN would not start CI on `staging`, so Staging would not redeploy.
+# It pushes with the RELEASE_DEPLOY_KEY deploy key, a bypass actor on the `staging` ruleset (a bypass skips every rule
+# of the ruleset, including required checks and force-push protection; this job never forces). A push with
+# GITHUB_TOKEN would not start CI on `staging`, so Staging would not redeploy.
 on:
   push:
     branches:
@@ -28,13 +29,15 @@ jobs:
     name: Merge main into staging
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # RELEASE_DEPLOY_KEY is a secret of the `release` environment, which only main and staging runs can use
+    environment: release
     steps:
       - name: Check deploy key
         env:
           RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
         run: |
           if [ -z "$RELEASE_DEPLOY_KEY" ]; then
-            echo "::error::Missing RELEASE_DEPLOY_KEY repository secret (a write deploy key; see docs/gitflow.md)."
+            echo "::error::Missing RELEASE_DEPLOY_KEY repository secret (a write deploy key, stored in the release environment; see docs/gitflow.md)."
             exit 1
           fi
 

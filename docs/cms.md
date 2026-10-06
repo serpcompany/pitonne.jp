@@ -59,15 +59,16 @@ posts are moved to another category.
   straight to `main` and deploy to Production without waiting for a promotion. This is the one documented exception to
   the staging → main flow in [gitflow.md](gitflow.md): code goes through Staging, content goes live immediately.
   - A save that changes only CMS files (`content/blog/`, `content/blog-categories/`, `public/images/content/blog/`)
-    deploys without waiting for CI's tests, as long as the previous commit passed them; the build itself validates the
-    content, and a build that fails isn't deployed. Saves that only touch drafts don't deploy at all, since drafts are
-    excluded from the build.
+    deploys as soon as the site builds, never waiting for CI's tests; a build that fails isn't deployed. If CI's tests
+    then fail on `main`, an issue titled "CI is failing on main" alerts the owner, but later saves keep publishing.
+    Saves that only touch drafts don't deploy at all, since drafts are excluded from the build.
   - The Sync staging workflow then merges `main` into `staging`, so Staging gets the content too and promotions stay
     fast-forwards.
   - `main` stays GitHub's default branch because Keystatic Cloud opens on the default branch; making `staging` the
     default would send saves to Staging. Branches created in the CMS are not published.
-- **Undoing a change**: revert the CMS merge commit on `main` (`git revert <sha>`) through a normal PR; history is the
-  version record.
+- **Undoing a change**: revert the CMS commit on `main` (`git revert <sha>`) through a hotfix PR into `main` (a normal
+  PR into `staging` wouldn't go live until the next promotion); history is the version record. Undoing a single post is
+  usually quicker in the CMS itself.
 - **Access**: editors are managed in the Keystatic Cloud project `serp/pitonne-website` (free plan: up to 3 users per
   team). The project's URLs must include every domain the CMS is opened from (currently `https://pitonne.jp`). Open the
   CMS only on https://pitonne.jp: https://staging.pitonne.jp/keystatic would also save to `main`, so it isn't a place

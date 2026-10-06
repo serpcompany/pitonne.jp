@@ -5,6 +5,7 @@ name: Deploy
 #   previews (`pr-<n>`).
 # - A manual run (Actions > Deploy > Run workflow) redeploys the branch it's run from: `main` to Production, `staging`
 #   to Staging. It skips CI's test gate, so use it only to redeploy a commit CI already passed.
+# Staging and Production deploys never upload an older commit over a newer live one (scripts/deploy-target.mjs).
 on:
   workflow_call:
     inputs:
@@ -20,10 +21,15 @@ on:
         description: Commit to deploy (defaults to the triggering commit)
         type: string
         required: false
+    # Only the Cloudflare token; the release deploy key never reaches deploys or PR previews
+    secrets:
+      CLOUDFLARE_API_TOKEN:
+        required: true
   workflow_dispatch:
 
 permissions:
   contents: read
+  checks: read
   deployments: write
 
 jobs:
@@ -68,19 +74,44 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ env.DEPLOY_SHA }}
+          fetch-depth: 0
+
+      # Inside the concurrency group, so no other deploy of this environment runs between this check and the upload.
+      # Deploys the branch tip instead when everything newer is CMS content or tested code; skips when the commit is
+      # already live or older than the live one.
+      - name: Choose the commit to deploy
+        id: target
+        if: env.DEPLOY_ENV != 'preview'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch --quiet origin "$PAGES_BRANCH"
+          node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"
+
+      - name: Check out the chosen commit
+        if: steps.target.outputs.skip == 'false' && steps.target.outputs.sha != env.DEPLOY_SHA
+        env:
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          git checkout --quiet --detach "$TARGET_SHA"
+          echo "DEPLOY_SHA=$TARGET_SHA" >> "$GITHUB_ENV"
 
       - uses: pnpm/action-setup@v4
+        if: steps.target.outputs.skip != 'true'
         with:
           version: 10.14.0
 
       - uses: actions/setup-node@v4
+        if: steps.target.outputs.skip != 'true'
         with:
           node-version: 24
           cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      - if: steps.target.outputs.skip != 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Check Cloudflare deploy token
+        if: steps.target.outputs.skip != 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
@@ -90,10 +121,12 @@ jobs:
           fi
 
       - name: Build static export
+        if: steps.target.outputs.skip != 'true'
         run: pnpm build
 
       # Production must be indexable; every other environment must not be
       - name: Verify static output
+        if: steps.target.outputs.skip != 'true'
         run: |
           pnpm audit:out
           if [ "$DEPLOY_ENV" = production ]; then
@@ -105,6 +138,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages
+        if: steps.target.outputs.skip != 'true'
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
@@ -117,19 +151,22 @@ jobs:
           gitHubToken: ${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}
 
       - name: Smoke-test canonical host redirects
-        if: env.DEPLOY_ENV == 'production'
+        if: steps.target.outputs.skip != 'true' && env.DEPLOY_ENV == 'production'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"
 
-      # Production allows crawling and lists its sitemap; Staging and previews send noindex and disallow crawling
+      # Production allows crawling and lists its sitemap; Staging and previews send noindex and disallow crawling.
+      # Production is checked on the pages.dev production alias (with the smoke-test header) and pitonne.jp, never on
+      # the hash deployment URL: Cloudflare adds X-Robots-Tag: noindex to every hash URL, Production's included.
       - name: Smoke-test environment behaviour
+        if: steps.target.outputs.skip != 'true'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
           ALIAS_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
         run: |
           case "$DEPLOY_ENV" in
-            production) node scripts/smoke-environment.mjs production "$DEPLOYMENT_URL" https://pitonne.jp ;;
+            production) node scripts/smoke-environment.mjs production https://pitonne-jp.pages.dev https://pitonne.jp ;;
             staging) node scripts/smoke-environment.mjs staging "${ALIAS_URL:-https://staging.pitonne-jp.pages.dev}" "$DEPLOYMENT_URL" https://staging.pitonne.jp ;;
             preview) node scripts/smoke-environment.mjs preview "${ALIAS_URL:-https://$PAGES_BRANCH.pitonne-jp.pages.dev}" "$DEPLOYMENT_URL" ;;
           esac

@@ -3,7 +3,8 @@ name: CI
 # Tests every PR and every push to staging and main, and deploys (via .github/workflows/deploy.yml):
 # - a push to `staging` to Staging (https://staging.pitonne.jp), a push to `main` to Production (https://pitonne.jp);
 # - same-repository PRs into `staging` or `main` to a `pr-<n>` preview, after the test job passes.
-# Code changes deploy only after the test job passes. CMS content saves deploy without waiting for it (see `changes`).
+# Code changes deploy only after the test job passes. CMS content saves deploy as soon as they build (see `changes`),
+# and a failing test on main opens an alert issue instead of blocking them (see `alert`).
 on:
   pull_request:
   push:
@@ -46,9 +47,10 @@ jobs:
 
   # Classifies the push. A separate job, so a skipped deploy never joins the deploy concurrency group.
   # - skip: only draft blog posts changed (a draft saved from the CMS), so the built site is unchanged.
-  # - fast: only CMS content changed and the previous commit passed `test`, so this deploys without waiting for `test`.
-  #   The build validates the content itself. When the previous commit hasn't passed (still running or failed), its
-  #   code isn't proven yet, so the push waits for `test` like a code change.
+  # - fast: deploy without waiting for this run's `test`, because either
+  #   - only CMS content changed: content saves go live as soon as they build, whatever `test` says (a failing `test`
+  #     alerts instead; see `alert`). Code reaches main only through tested PRs and promotions; or
+  #   - this exact commit already passed `test`, e.g. a promotion of a commit tested on staging.
   changes:
     name: Classify changes
     if: github.event_name == 'push'
@@ -58,52 +60,87 @@ jobs:
       checks: read
     outputs:
       skip: ${{ steps.classify.outputs.skip }}
-      fast: ${{ steps.base.outputs.fast }}
+      fast: ${{ steps.fast.outputs.fast }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: classify
         run: node scripts/draft-only-change.mjs "${{ github.event.before }}" "${{ github.sha }}"
-      - id: base
+      - id: fast
         env:
           GH_TOKEN: ${{ github.token }}
-          BEFORE: ${{ github.event.before }}
           CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
         run: |
           fast=false
           if [ "$CONTENT_ONLY" = true ]; then
-            passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$BEFORE/check-runs?check_name=test" \
-              --jq '[.check_runs[] | select(.conclusion == "success")] | length')
-            if [ "${passed:-0}" -gt 0 ]; then fast=true; else echo "The previous commit hasn't passed test; waiting for test."; fi
+            fast=true
+            echo "Only CMS content changed; deploying without waiting for test."
+          else
+            # An API error falls back to waiting for test; it never skips the deploy
+            passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=test" \
+              --jq '[.check_runs[] | select(.conclusion == "success")] | length') || passed=0
+            if [ "${passed:-0}" -gt 0 ]; then fast=true; echo "This commit already passed test; deploying now."; fi
           fi
           echo "fast=$fast" >> "$GITHUB_OUTPUT"
 
-  # CMS content: deploy now, so publishing stays quick
+  # CMS content and already-tested commits: deploy now, so publishing stays quick
   deploy-content:
     name: Deploy content
     needs: changes
     if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
     permissions:
       contents: read
+      checks: read
       deployments: write
     uses: ./.github/workflows/deploy.yml
     with:
       environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
-    secrets: inherit
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-  # Everything else: deploy only after the test job passes
+  # Code changes: deploy only after the test job passes
   deploy:
     name: Deploy
     needs: [changes, test]
     if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
     permissions:
       contents: read
+      checks: read
       deployments: write
     uses: ./.github/workflows/deploy.yml
     with:
       environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
-    secrets: inherit
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+  # A failing test on main never blocks publishing, so it has to reach a person: the run is red, and one open issue
+  # collects every failure (with a mention of the owner) until someone fixes main and closes it.
+  alert:
+    name: Alert on red main
+    needs: test
+    if: always() && github.event_name == 'push' && github.ref_name == 'main' && needs.test.result == 'failure'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TITLE: "CI is failing on main"
+    steps:
+      - name: Open or update the red-main issue
+        run: |
+          subject=$(gh api "repos/$GH_REPO/commits/$GITHUB_SHA" --jq '.commit.message | split("\n")[0]') || subject=""
+          body="@devinschumacher \`test\` failed on \`main\` at $GITHUB_SHA ($subject).
+          Run: $GITHUB_SERVER_URL/$GH_REPO/actions/runs/$GITHUB_RUN_ID
+          CMS content saves still deploy as soon as they build; code changes don't deploy until \`test\` passes again. Fix \`main\` (see the failed step), then close this issue."
+          number=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number,title \
+            --jq "map(select(.title == \"$TITLE\")) | .[0].number // empty")
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$body"
+          else
+            gh issue create --title "$TITLE" --body "$body"
+          fi
 
   # Forked PRs get no secrets and no preview. Previews are non-indexable and never use the main or staging aliases.
   preview:
@@ -115,10 +152,12 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       contents: read
+      checks: read
       deployments: write
     uses: ./.github/workflows/deploy.yml
     with:
       environment: preview
       pr: ${{ github.event.pull_request.number }}
       ref: ${{ github.event.pull_request.head.sha }}
-    secrets: inherit
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

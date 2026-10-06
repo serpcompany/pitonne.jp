@@ -30,15 +30,34 @@ describe("CI and deploy workflows", () => {
     expect(gated).not.toContain("always()")
   })
 
-  it("deploys CMS content without waiting for tests, only when the previous commit passed them", () => {
+  it("deploys CMS content as soon as it builds, whatever any test result says", () => {
     const content = job(ci, "deploy-content")
     expect(content).toContain("needs: changes")
     expect(content).not.toMatch(/needs:.*test/)
     expect(content).toContain("needs.changes.outputs.fast == 'true'")
     const changes = job(ci, "changes")
     expect(changes).toContain("node scripts/draft-only-change.mjs")
-    expect(changes).toContain("check-runs?check_name=test")
+    // Content only is fast on its own, with no test lookup in that branch
+    expect(changes).toMatch(/if \[ "\$CONTENT_ONLY" = true \]; then\n\s+fast=true\n/)
+    expect(changes).not.toContain("BEFORE")
+  })
+
+  it("deploys a commit that already passed test (a promotion) without retesting it", () => {
+    const changes = job(ci, "changes")
+    expect(changes).toContain("commits/$GITHUB_SHA/check-runs?check_name=test")
     expect(changes).toContain('select(.conclusion == "success")')
+    // An API error waits for test instead of failing the job, which would skip every deploy
+    expect(changes).toContain("|| passed=0")
+  })
+
+  it("alerts the owner when test fails on main instead of blocking publishing", () => {
+    const alert = job(ci, "alert")
+    expect(alert).toContain("needs: test")
+    expect(alert).toContain("always() && github.event_name == 'push' && github.ref_name == 'main' && needs.test.result == 'failure'")
+    expect(alert).toContain("issues: write")
+    expect(alert).toContain("@devinschumacher")
+    expect(alert).toContain("gh issue create")
+    expect(alert).toContain("gh issue comment")
   })
 
   it("keeps the draft-only skip out of the deploy concurrency group", () => {
@@ -61,6 +80,15 @@ describe("CI and deploy workflows", () => {
     expect(ci).toContain("cancel-in-progress: ${{ github.event_name == 'pull_request' }}")
   })
 
+  it("never uploads an older commit over a newer live one", () => {
+    expect(deploy).toContain('node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"')
+    expect(deploy).toContain("if: env.DEPLOY_ENV != 'preview'")
+    // Every step after the decision honours a skip
+    const afterGuard = deploy.slice(deploy.indexOf("- name: Check out the chosen commit"))
+    const steps = afterGuard.split("\n      - ").slice(1)
+    for (const step of steps) expect(step).toMatch(/if: steps\.target\.outputs\.skip/)
+  })
+
   it("serializes deploys per target and environment without cancelling a running one", () => {
     expect(deploy).toContain(
       "group: deploy-pages-${{ inputs.environment == 'preview' && format('pr-{0}', inputs.pr) || inputs.environment || (github.ref_name == 'main' && 'production') || github.ref_name }}",
@@ -80,19 +108,26 @@ describe("CI and deploy workflows", () => {
   it("checks that each environment is indexable only in production, before and after deploying", () => {
     expect(deploy).toContain('grep -Fxq "Disallow: /" out/robots.txt')
     expect(deploy).toContain('grep -Fq "X-Robots-Tag: noindex" out/_headers')
-    expect(deploy).toContain('node scripts/smoke-environment.mjs production "$DEPLOYMENT_URL" https://pitonne.jp')
+    // Never the hash deployment URL: Cloudflare sends X-Robots-Tag: noindex on every hash URL, Production's included
+    expect(deploy).toContain("node scripts/smoke-environment.mjs production https://pitonne-jp.pages.dev https://pitonne.jp")
+    expect(deploy).not.toMatch(/smoke-environment\.mjs production[^\n]*DEPLOYMENT_URL/)
     expect(deploy).toContain("node scripts/smoke-environment.mjs staging")
     expect(deploy).toContain("https://staging.pitonne.jp")
     expect(deploy).toContain("node scripts/smoke-environment.mjs preview")
   })
 
   it("keeps workflow tokens minimal and leaves the PR preview comment to Cloudflare Pages", () => {
-    for (const workflow of [ci, deploy]) {
+    const ciWithoutAlert = ci.replace(job(ci, "alert"), "")
+    for (const workflow of [ciWithoutAlert, deploy]) {
       expect(workflow).not.toContain("pull-requests: write")
       expect(workflow).not.toContain("issues: write")
       expect(workflow).not.toContain("contents: write")
       expect(workflow).not.toContain("actions/github-script")
     }
+    // Deploys and previews get only the Cloudflare token, never the release deploy key
+    expect(ci).not.toContain("secrets: inherit")
+    expect(ci).not.toContain("RELEASE_DEPLOY_KEY")
+    expect(ci.match(/CLOUDFLARE_API_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN \}\}/g)).toHaveLength(3)
     expect(deploy).toContain("gitHubToken: ${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}")
   })
 })
@@ -119,9 +154,10 @@ describe("staging sync and promotion workflows", () => {
     expect(promote).not.toMatch(/--force|\+refs|-f /)
   })
 
-  it("pushes with the deploy key, so the pushed branch runs CI and deploys", () => {
+  it("pushes with the deploy key from the release environment, so the pushed branch runs CI and deploys", () => {
     for (const workflow of [sync, promote]) {
       expect(workflow).toContain("ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}")
+      expect(workflow).toContain("environment: release")
       expect(workflow).toMatch(/concurrency:\n\s+group: [\w-]+\n\s+cancel-in-progress: false/)
     }
   })
