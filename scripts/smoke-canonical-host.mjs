@@ -88,13 +88,6 @@ export function evaluate(check, { status, location, contentType, mitigated }) {
     (expect.location === undefined || sameLocation(location, expect.location, check.url)) &&
     (expect.contentType === undefined || (contentType ?? "").startsWith(expect.contentType))
   if (matches) return { ok: true, message: `${label}: ${got}` }
-  if (check.zone && status === 301 && sameLocation(location, expect.location, check.url)) {
-    return {
-      ok: true,
-      warning: true,
-      message: `${label}: ${got}, expected ${wanted}. Change the www zone redirect rule's status code to 308.`,
-    }
-  }
   if (check.zone && mitigated) {
     return { ok: true, warning: true, message: `${label}: Cloudflare challenged the CI runner (${status}); not checked.` }
   }
