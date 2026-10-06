@@ -15,7 +15,9 @@ import {
 const deploymentUrl = "https://d49a67b6.pitonne-jp.pages.dev"
 
 describe("canonical-host smoke test", () => {
-  const checks = smokeChecks({ deploymentUrl, marker: "abc1234" })
+  const allChecks = smokeChecks({ deploymentUrl, marker: "abc1234" })
+  // `fresh` (the new deployment URL's longer retry window) is covered on its own below
+  const checks = allChecks.map(({ fresh: _fresh, ...check }) => check)
   const fileChecks = [
     ...slashedFileChecks("https://pitonne.jp", "abc1234"),
     ...slashedFileChecks(deploymentUrl, "abc1234", SMOKE_HEADERS),
@@ -148,6 +150,42 @@ describe("canonical-host smoke test", () => {
     const subset = checks.slice(0, 3)
     expect(await runChecks(subset, { attempts: 6, delayMs: 0, probeFn })).toBe(false)
     expect(subset.map((check) => calls.get(check.url))).toEqual([6, 2, 2])
+    log.mockRestore()
+  })
+
+  it("keeps retrying the new deployment URL's checks until it has had time to settle", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {})
+    let clock = 0
+    const now = () => clock
+    const calls = new Map()
+    const probeFn = async (check) => {
+      calls.set(check.url, (calls.get(check.url) ?? 0) + 1)
+      clock += 10
+      return { status: 404 }
+    }
+    const fresh = allChecks.filter((check) => check.fresh)
+    expect(fresh.length).toBeGreaterThan(0)
+    expect(fresh.every((check) => new URL(check.url).origin === deploymentUrl)).toBe(true)
+    expect(allChecks.filter((check) => !check.fresh).some((check) => new URL(check.url).origin === deploymentUrl)).toBe(
+      false,
+    )
+
+    const subset = [allChecks[0], ...fresh.slice(0, 2)]
+    expect(await runChecks(subset, { attempts: 6, delayMs: 0, probeFn, now, freshMs: 100 })).toBe(false)
+    // The window opens at the first fresh check, which retries until 100 ms later; the next one is past it
+    expect(subset.map((check) => calls.get(check.url))).toEqual([6, 10, 2])
+
+    calls.clear()
+    clock = 0
+    let ready = false
+    const settling = async (check) => {
+      calls.set(check.url, (calls.get(check.url) ?? 0) + 1)
+      clock += 10
+      if (clock >= 50) ready = true
+      return ready ? { status: 308, location: check.expect.location } : { status: 404 }
+    }
+    expect(await runChecks(fresh.slice(0, 1), { attempts: 6, delayMs: 0, probeFn: settling, now })).toBe(true)
+    expect(calls.get(fresh[0].url)).toBe(5)
     log.mockRestore()
   })
 

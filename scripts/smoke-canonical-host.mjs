@@ -14,10 +14,14 @@ export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
 export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
 
 // A new deployment can take a few seconds to replace the previous one at the edge. The first check waits for that
-// (up to ATTEMPTS tries); once the edge has answered, every later check gets LATER_ATTEMPTS tries. Worst case, with
-// every request hanging until its timeout: 12 x 15 s + 22 x 2 x 15 s, about 14 minutes, inside the job's 20.
+// (up to ATTEMPTS tries); once the edge has answered, every later check gets LATER_ATTEMPTS tries.
+// The brand-new hash deployment URL is slower: it can answer 404 for some paths while others already work (seen
+// 2026-10-06, issue #109), so its checks (`fresh: true`) keep retrying until FRESH_DEPLOYMENT_MS after the first of
+// them starts. Worst case, with every request hanging until its timeout: 12 x 15 s + 135 s + 22 x 2 x 15 s, about
+// 16 minutes, inside the job's 20.
 const ATTEMPTS = 12
 const LATER_ATTEMPTS = 2
+const FRESH_DEPLOYMENT_MS = 120_000
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
 
@@ -76,9 +80,11 @@ export function smokeChecks({ deploymentUrl, marker }) {
   if (deploymentUrl) {
     const origin = new URL(deploymentUrl).origin
     checks.push(
-      ...redirectChecks(origin, marker),
-      ...passThroughChecks(origin),
-      ...slashedFileChecks(origin, marker, SMOKE_HEADERS),
+      ...[
+        ...redirectChecks(origin, marker),
+        ...passThroughChecks(origin),
+        ...slashedFileChecks(origin, marker, SMOKE_HEADERS),
+      ].map((check) => ({ ...check, fresh: true })),
     )
   }
   return checks
@@ -128,27 +134,32 @@ export async function probe(check) {
   }
 }
 
-/** Runs one check, retrying while it fails. */
-export async function run(check, { attempts = ATTEMPTS, delayMs = RETRY_DELAY_MS, probeFn = probe } = {}) {
+/** Runs one check, retrying while it fails: at least `attempts` tries, and until `until` (a Date.now() time). */
+export async function run(
+  check,
+  { attempts = ATTEMPTS, until = 0, delayMs = RETRY_DELAY_MS, probeFn = probe, now = Date.now } = {},
+) {
   let result
-  for (let attempt = 1; attempt <= attempts; attempt++) {
+  for (let attempt = 1; ; attempt++) {
     try {
       result = evaluate(check, await probeFn(check))
     } catch (error) {
       result = { ok: false, message: `${check.url}: ${error.message}` }
     }
-    if (result.ok) return result
-    if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs))
+    if (result.ok || (attempt >= attempts && now() >= until)) return result
+    await new Promise((resolve) => setTimeout(resolve, delayMs))
   }
-  return result
 }
 
 /** Runs every check, prints GitHub annotations for warnings and failures, and returns true when all passed. */
-export async function runChecks(checks, options = {}) {
+export async function runChecks(checks, { freshMs = FRESH_DEPLOYMENT_MS, ...options } = {}) {
+  const now = options.now ?? Date.now
   let passed = true
+  let freshUntil
   for (const [index, check] of checks.entries()) {
     const attempts = index === 0 ? options.attempts : Math.min(options.attempts ?? ATTEMPTS, LATER_ATTEMPTS)
-    const result = await run(check, { ...options, attempts })
+    if (check.fresh) freshUntil ??= now() + freshMs
+    const result = await run(check, { ...options, attempts, until: check.fresh ? freshUntil : 0 })
     if (!result.ok) passed = false
     const prefix = result.ok ? (result.warning ? "::warning::" : "ok ") : "::error::"
     console.log(`${prefix}${result.message}`)
