@@ -5,6 +5,7 @@ import VideosPage, { generateMetadata as videosGenerateMetadata } from "@/app/[l
 import WatchPage, { generateMetadata, generateStaticParams } from "@/app/[locale]/watch/[video]/page"
 import { videoObjectJsonLd, videoBreadcrumbJsonLd, videoListJsonLd } from "@/lib/structured-data"
 import { getVideoBySlug, pitonneVideos } from "@/lib/data/videos"
+import { getDictionary } from "@/lib/i18n/dictionaries"
 
 const SITE_URL = "https://pitonne.jp"
 
@@ -102,9 +103,19 @@ describe("Pitonne video pages", () => {
     expect(videoBreadcrumbJsonLd(video)).toMatchObject({
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
         { "@type": "ListItem", position: 2, name: "Videos", item: `${SITE_URL}/videos/` },
         { "@type": "ListItem", position: 3, name: video.title, item: `${SITE_URL}/watch/${video.slug}/` },
+      ],
+    })
+
+    // /ja/watch/* breadcrumbs point at the Japanese pages, with the Japanese labels
+    const ja = getDictionary("ja")
+    expect(videoBreadcrumbJsonLd(video, "ja")).toMatchObject({
+      itemListElement: [
+        { position: 1, name: ja.nav.home, item: `${SITE_URL}/ja/` },
+        { position: 2, name: ja.nav.videos, item: `${SITE_URL}/ja/videos/` },
+        { position: 3, name: video.titleJa ?? video.title, item: `${SITE_URL}/ja/watch/${video.slug}/` },
       ],
     })
   })

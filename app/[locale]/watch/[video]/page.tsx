@@ -94,7 +94,7 @@ export default async function WatchPage({ params }: Props) {
   return (
     <article className="bg-background">
       <JsonLd data={videoObjectJsonLd(video)} />
-      <JsonLd data={videoBreadcrumbJsonLd(video)} />
+      <JsonLd data={videoBreadcrumbJsonLd(video, locale as Locale)} />
       <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
         <Breadcrumbs
           items={[
