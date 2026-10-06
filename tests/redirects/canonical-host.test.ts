@@ -245,6 +245,8 @@ describe("slashed file redirect", () => {
   const assetServer = (asked: string[] = []) => async (request?: Request) => {
     const { pathname } = new URL(request!.url)
     asked.push(`${request!.method} ${pathname}`)
+    // A followed redirect would hide the rule behind the target's content
+    expect(request!.redirect).toBe("manual")
     const rule = rules[pathname]
     return rule
       ? new Response(null, { status: rule[0], headers: { location: rule[1] } })

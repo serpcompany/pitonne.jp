@@ -95,8 +95,10 @@ async function assetRedirectTarget(url: URL, ask: () => Promise<Response>): Prom
 
 /** Asks the asset server about `url` instead of the request's own URL (`/robots.txt` for `/robots.txt/`). */
 function askFor(url: URL, request: Request, next: AssetServer): () => Promise<Response> {
-  // GET, never the original body: only the status and Location matter, and the body is discarded.
-  return () => next(new Request(url, { method: "GET", headers: request.headers }))
+  // GET, never the original body: only the status and Location matter, and the body is discarded. `redirect: "manual"`
+  // is required: a new Request defaults to "follow", and the asset server then answers with the target's content
+  // instead of the 301 (seen on Pages and in wrangler dev).
+  return () => next(new Request(url, { method: "GET", headers: request.headers, redirect: "manual" }))
 }
 
 const redirect308 = (location: string) =>
