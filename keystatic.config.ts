@@ -80,11 +80,9 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         directory: `public/${imageFolder}`,
         publicPath: `/${imageFolder}/`,
       }),
-      // Required even without an image: Keystatic can't make one field conditional on another
       featureImageAlt: fields.text({
-        label: "Feature image alt text",
-        description: "Describe the feature image for screen readers.",
-        validation: { isRequired: true },
+        label: "Feature image alt text (optional)",
+        description: "Describes the image for screen readers and search engines. If left empty, the post title is used.",
       }),
       featured: fields.checkbox({ label: "Featured" }),
       relatedServiceSlugs: fields.multiselect({ label: "Related services", options: BLOG_RELATED_SERVICE_OPTIONS }),

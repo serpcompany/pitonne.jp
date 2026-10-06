@@ -22,7 +22,8 @@ Keystatic Cloud team; no GitHub account is needed.
    - **Excerpt**: 70–160 characters, shown on blog cards and in search results. If it's under 110 characters, also
      fill in **Meta description override** (110–160 characters).
    - **Category**: pick one (see [Categories](#categories)).
-   - **Feature image** and **alt text**: keep images under 1 MB. Alt text describes the image for screen readers.
+   - **Feature image**: optional; keep images under 1 MB. **Alt text** (optional) describes the image for screen
+     readers; if it's empty, the post title is used.
    - **Draft**: tick it to save without publishing.
 4. Choose **Save**. The site checks the change and publishes it automatically, usually within 10 minutes. If a check
    fails, the change is not published; ask a developer.
