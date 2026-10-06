@@ -4,7 +4,7 @@ import { ServiceDetailTemplate } from "@/components/services/service-detail-temp
 import { ServiceParentTemplate } from "@/components/services/service-parent-template"
 import { getBlogPostsForService } from "@/lib/data/blog-posts"
 import { getAllServiceSlugs, getChildServices, getService, getServicesFromSlugs } from "@/lib/data/services"
-import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -29,23 +29,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: getDictionary(locale as Locale).common.notFoundService }
   }
 
+  const metaTitle = service.metaTitle ?? service.name
+  const metaDescription = service.metaDescription ?? service.shortDescription
+
   return {
-    title: service.name,
-    description: service.shortDescription,
+    title: metaTitle,
+    description: metaDescription,
     alternates: localizedHreflangAlternates(service.canonicalPath, locale as Locale),
-    openGraph: {
-      title: service.name,
-      description: service.shortDescription,
-      url: localizedCanonicalUrl(service.canonicalPath, locale as Locale),
+    ...pageSocialMetadata({
+      title: metaTitle,
+      description: metaDescription,
+      path: service.canonicalPath,
+      locale: locale as Locale,
       images: service.image ? [absoluteUrl(service.image)] : undefined,
-      locale: locale === "ja" ? "ja_JP" : "en_US",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: service.name,
-      description: service.shortDescription,
-      images: service.image ? [absoluteUrl(service.image)] : undefined,
-    },
+    }),
   }
 }
 

@@ -1,7 +1,9 @@
 ---
 slug: exosome-iv-therapy-risks-precautions
 title: 'What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment'
+metaTitle: 'Exosome IV Therapy Risks and Precautions: Safety Guide'
 excerpt: 'When considering Exosome IV therapy, many patients naturally focus on what the treatment is and how it works. Just as important, however, is understanding how to think about safety, what precautions should be...'
+metaDescription: Learn the key risks and precautions of Exosome IV therapy, from general IV risks and pre-treatment screening to what to review before booking.
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -20,8 +22,6 @@ tags:
   - 'safety'
   - 'tokyo'
 ---
-
-# What Are the Risks and Precautions of Exosome IV Therapy? Safety Points to Review Before Treatment
 
 When considering Exosome IV therapy, many patients naturally focus on what the treatment is and how it works. Just as important, however, is understanding how to think about safety, what precautions should be reviewed in advance, and what questions are worth asking before proceeding.
 

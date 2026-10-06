@@ -2,8 +2,10 @@
 slug: iv-therapy-for-immune-health
 title: >-
   Is IV Therapy Helpful When You're Thinking About Immune Health? How Pitonne Approaches Whole-Body Condition Support
+metaTitle: 'IV Therapy and Immune Health: Whole-Body Condition Support'
 excerpt: >-
   The immune system is not something that can be boosted in one step. At Pitonne, IV therapy is approached as support for the physical foundation that whole-body condition depends on, not as a direct immune treatment.
+metaDescription: IV therapy cannot boost immunity in one step. Learn how Pitonne approaches hydration and vitamin IVs as support for whole-body condition and daily habits.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -23,8 +25,6 @@ tags:
   - hydration
   - vitamins
 ---
-# Is IV Therapy Helpful When You're Thinking About Immune Health? How Pitonne Approaches Whole-Body Condition Support
-
 "I feel like I get run down too easily."  
 "When life gets busy, I stop feeling physically steady."  
 "I want to do more to support my immune health."

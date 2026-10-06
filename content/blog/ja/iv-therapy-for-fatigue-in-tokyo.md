@@ -2,6 +2,7 @@
 slug: iv-therapy-for-fatigue-in-tokyo
 title: 点滴療法は疲労に効果があるか？ 支持療法を検討する前に知っておくべきこと
 excerpt: 「休んだつもりなのに、まだ疲れが残っている。」「東京に来てから予定がぎっしりで、体が重く感じる。」「忙しすぎて、疲れが当たり前になってきた。」
+metaDescription: '「休んだつもりなのに、まだ疲れが残っている。」「東京に来てから予定がぎっしりで、体が重く感じる。」「忙しすぎて、疲れが当たり前になってきた。」疲労の原因は必ずしも同じとは限りません。点滴療法を検討すべき場合や、まず医学的評価が必要な場合、Pitonneの考え方を解説します。'
 publishedAt: '2026-05-31'
 category: IV Therapy
 categorySlug: iv-therapy
@@ -19,8 +20,6 @@ tags:
   - ストレス
   - 疲労
 ---
-# 点滴療法は疲労に効果がある？ サポートケアを検討する前に知っておくべきこと
-
 「休んだつもりなのに、まだ疲れが取れない」  
 「東京でスケジュールが詰まっていて、体が重く感じる」  
 「忙しすぎて、疲れが当たり前になってきた」
@@ -173,4 +172,4 @@ Pitonne | Stem Cell & IV Therapyでは、こうした幅広い視点を持って
 
 * [MedlinePlus: 疲労](https://medlineplus.gov/fatigue.html)  
 * [MedlinePlus 医学百科事典: 疲労](https://medlineplus.gov/ency/article/003088.htm)  
-* [メイヨークリニック：疲労 ― 医師の診察を受けるべき場合](https://www.mayoclinic.org/symptoms/fatigue/basics/when-to-see-doctor/sym-20050894)
+* [メイヨークリニック：疲労 ― 医師の診察を受けるべき場合](https://www.mayoclinic.org/symptoms/fatigue/basics/causes/sym-20050894)

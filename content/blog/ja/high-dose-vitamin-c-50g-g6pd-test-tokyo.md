@@ -2,6 +2,7 @@
 slug: high-dose-vitamin-c-50g-g6pd-test-tokyo
 title: "高濃度ビタミンC点滴50gにG6PD検査は必要？溶血リスクと安全性"
 excerpt: "高濃度ビタミンC点滴50gでG6PD検査が必要な理由を解説。溶血の危険性や腎機能、事前に確認したい安全性のポイントを紹介します。"
+metaDescription: 高濃度ビタミンC点滴50gでG6PD検査が必要な理由を解説。溶血の危険性や腎機能、事前に確認したい安全性のポイントを紹介します。Pitonneでは50gの点滴前にG6PD検査を必須としています。25gの場合の考え方や、点滴後に注意したい症状も解説します。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy

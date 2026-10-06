@@ -49,16 +49,15 @@ const socialLinks = [
   { name: "LinkedIn", href: "https://www.linkedin.com/company/pitonnestemcellivtherapy/", icon: Linkedin },
   { name: "TikTok", href: "https://www.tiktok.com/@ouchi_nurse_karte", icon: TikTokIcon },
   { name: "X (Twitter)", href: "https://x.com/pitonne1184", icon: Twitter },
-  { name: "Pinterest", href: "https://pinterest.com/pitonne1184am/", icon: Pin },
+  { name: "Pinterest", href: "https://www.pinterest.com/pitonne1184am/", icon: Pin },
 ]
 
 // Podcast links
 const podcastLinks = [
   { name: "Spotify", href: "https://open.spotify.com/show/7c75dDPlIQ2qL5TKEoWb7P?si=9kRgvJtvSDamHjQrfgJRnA", icon: SpotifyIcon },
   { name: "Apple Podcasts", href: "https://podcasts.apple.com/jp/podcast/%E3%81%8A%E3%81%86%E3%81%A1%E3%83%8A%E3%83%BC%E3%82%B9%E3%81%AE%E3%81%8A%E3%81%97%E3%82%83%E3%81%B9%E3%82%8A%E3%82%AB%E3%83%AB%E3%83%86/id1843007006", icon: ApplePodcastIcon },
-  { name: "Amazon Music", href: "https://music.amazon.com/podcasts/6d257495-6674-4592-9db6-55788db358c0/", icon: Music },
-  { name: "Castbox", href: "https://castbox.fm/vh/6768489", icon: Podcast },
-  { name: "Goodpods", href: "https://goodpods.com/ja/profile/pitonne-130086", icon: Podcast },
+  { name: "Amazon Music", href: "https://music.amazon.com/podcasts/6d257495-6674-4592-9db6-55788db358c0/%E3%81%8A%E3%81%86%E3%81%A1%E3%83%8A%E3%83%BC%E3%82%B9%E3%81%AE%E3%81%8A%E3%81%97%E3%82%83%E3%81%B9%E3%82%8A%E3%82%AB%E3%83%AB%E3%83%86", icon: Music },
+  { name: "Castbox", href: "https://castbox.fm/channel/id6768489", icon: Podcast },
 ]
 
 function FooterHours({

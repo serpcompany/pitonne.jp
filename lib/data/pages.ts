@@ -29,7 +29,7 @@ const legalPagePaths: Record<LegalPageKey, string> = {
 function normalizePageContent(content: string) {
   return content
     .trim()
-    .replace(/^Legal\s*/i, "")
+    .replace(/^(Legal|法的情報)[ \t]*\n+/i, "")
     .replace(/^# .+\n+/, "")
     .trim()
 }

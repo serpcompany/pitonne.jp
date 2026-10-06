@@ -9,6 +9,7 @@ shortDescription: >-
   A private hormone blood test that includes standard health markers plus
   thyroid hormones and sex hormones. Designed for people experiencing fatigue,
   weight changes, irregular periods, or concerns about hormone balance.
+metaDescription: Hormone blood test in Tokyo covering standard markers plus thyroid and sex hormones, for concerns such as fatigue, weight changes, or hormone balance.
 fullDescription: >-
   Hormone Blood Testing at Pitonne includes everything in our standard blood
   test, plus thyroid and sex hormone panels. It may be helpful if you often feel

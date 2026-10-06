@@ -4,7 +4,7 @@ import { BlogPostTemplate, type BlogPostViewModel } from "@/components/blog/blog
 import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
 import { getDictionary } from "@/lib/i18n/dictionaries"
 import { getServicesFromSlugs } from "@/lib/data/services"
-import { absoluteUrl, localizedCanonicalUrl, localizedHreflangAlternates } from "@/lib/seo"
+import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import type { Locale } from "@/lib/i18n/config"
 import { nonDefaultLocales } from "@/lib/i18n/config"
 
@@ -26,25 +26,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = getBlogPostBySlug(postSlug, typedLocale)
   if (post) {
+    const metaTitle = post.metaTitle ?? post.title
+    const metaDescription = post.metaDescription ?? post.excerpt
+
+    const social = pageSocialMetadata({
+      title: metaTitle,
+      description: metaDescription,
+      path: `/blog/${post.slug}/`,
+      locale: typedLocale,
+      images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
+    })
+
     return {
-      title: post.title,
-      description: post.excerpt,
+      title: metaTitle,
+      description: metaDescription,
       alternates: localizedHreflangAlternates(`/blog/${post.slug}/`, typedLocale),
       openGraph: {
-        title: post.title,
-        description: post.excerpt,
-        url: localizedCanonicalUrl(`/blog/${post.slug}/`, typedLocale),
+        ...social.openGraph,
         type: "article",
         publishedTime: post.publishedAt,
-        images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
-        locale: locale === "ja" ? "ja_JP" : "en_US",
       },
-      twitter: {
-        card: "summary_large_image",
-        title: post.title,
-        description: post.excerpt,
-        images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined,
-      },
+      twitter: social.twitter,
     }
   }
 

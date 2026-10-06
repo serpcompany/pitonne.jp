@@ -31,7 +31,16 @@
 
 ## CI Pipeline
 
-Tests run on every PR: `pnpm lint` → `pnpm test` → `pnpm audit:strings` → `pnpm build` → `pnpm test:lighthouse`
+Tests run on every PR: `pnpm lint` → `pnpm test` → `pnpm audit:strings` → `pnpm audit:meta` → `pnpm build` → `pnpm audit:seo` → `pnpm test:lighthouse`
+
+SEO audits (mirror the Ahrefs Site Audit checks):
+- `pnpm audit:meta` — blog/service `<title>` 15–70 chars (incl. " | Pitonne") and meta description 110–160 chars.
+  Use the optional `metaTitle` / `metaDescription` frontmatter instead of editing the visible title/excerpt.
+- `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`
+  (don't start markdown bodies with `# Title`), complete Open Graph tags (use `pageOpenGraph()` from `lib/seo.ts`),
+  broken or redirecting internal links, URLs listed in more than one sitemap, and images over 5 MB.
+- JSON-LD is typed with `schema-dts` (`WithContext<...>` in `lib/structured-data.ts`), so `pnpm typecheck`
+  rejects properties that aren't valid for a schema.org type.
 
 Key parity tests in `tests/parity/`:
 - `i18n-dictionaries.test.ts` — en.json and ja.json must have identical keys
