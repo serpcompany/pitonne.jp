@@ -139,12 +139,33 @@ describe("canonical host redirect", () => {
     expect(await legacy("https://pitonne-jp.pages.dev/services/medications", "/services/medication/")).toBe(
       "https://pitonne.jp/services/medication/",
     )
-    expect(await legacy("https://main.pitonne-jp.pages.dev/old/?a=1", "/new/?b=2", 302)).toBe(
+    expect(await legacy("https://main.pitonne-jp.pages.dev/old/?a=1", "/new/?b=2", 308)).toBe(
       "https://pitonne.jp/new/?b=2",
+    )
+    // Pages' own slash redirect also applies on paths the Function never re-slashes, as it does on pitonne.jp
+    expect(await legacy("https://pitonne-jp.pages.dev/keystatic", "/keystatic/", 308)).toBe(
+      "https://pitonne.jp/keystatic/",
     )
     // Relative targets resolve against the request; a target on another host isn't followed.
     expect(await legacy("https://pitonne-jp.pages.dev/x/y", "z")).toBe("https://pitonne.jp/x/z/")
     expect(await legacy("https://pitonne-jp.pages.dev/out/", "https://example.com/")).toBe("https://pitonne.jp/out/")
+  })
+
+  it.each([302, 303, 307])("doesn't make a temporary %i permanent", async (status) => {
+    const response = await canonicalHostRedirect(
+      new Request("https://main.pitonne-jp.pages.dev/old/?a=1"),
+      asset(status, { location: "/new/?b=2" }),
+    )
+    expect(response?.status).toBe(308)
+    expect(response?.headers.get("location")).toBe("https://pitonne.jp/old/?a=1")
+  })
+
+  it("falls back to the plain host redirect when the asset server fails", async () => {
+    const response = await canonicalHostRedirect(new Request("https://pitonne-jp.pages.dev/en/?a=1"), async () => {
+      throw new Error("asset server unavailable")
+    })
+    expect(response?.status).toBe(308)
+    expect(response?.headers.get("location")).toBe("https://pitonne.jp/en/?a=1")
   })
 
   it("ignores asset responses that aren't redirects", async () => {

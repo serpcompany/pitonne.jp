@@ -12,8 +12,11 @@ export const WWW_ORIGIN = "https://www.pitonne.jp"
 export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
 export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
 
-// A new deployment can take a few seconds to replace the previous one at the edge.
+// A new deployment can take a few seconds to replace the previous one at the edge. The first check waits for that
+// (up to ATTEMPTS tries); once the edge has answered, every later check gets LATER_ATTEMPTS tries. Worst case, with
+// every request hanging until its timeout: 12 x 15 s + 18 x 2 x 15 s, about 12 minutes, inside the job's 20.
 const ATTEMPTS = 12
+const LATER_ATTEMPTS = 2
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
 
@@ -62,6 +65,16 @@ export function smokeChecks({ deploymentUrl, marker }) {
   return checks
 }
 
+/** Whether a `location` header points where expected; relative and absolute forms resolve against the request URL. */
+export function sameLocation(location, expected, requestUrl) {
+  if (!location) return false
+  try {
+    return new URL(location, requestUrl).href === new URL(expected, requestUrl).href
+  } catch {
+    return false
+  }
+}
+
 /** Compares one response with its check. Returns { ok, warning?, message }. */
 export function evaluate(check, { status, location, contentType, mitigated }) {
   const { expect } = check
@@ -72,10 +85,10 @@ export function evaluate(check, { status, location, contentType, mitigated }) {
   }`
   const matches =
     status === expect.status &&
-    (expect.location === undefined || location === expect.location) &&
+    (expect.location === undefined || sameLocation(location, expect.location, check.url)) &&
     (expect.contentType === undefined || (contentType ?? "").startsWith(expect.contentType))
   if (matches) return { ok: true, message: `${label}: ${got}` }
-  if (check.zone && status === 301 && location === expect.location) {
+  if (check.zone && status === 301 && sameLocation(location, expect.location, check.url)) {
     return {
       ok: true,
       warning: true,
@@ -119,10 +132,11 @@ export async function run(check, { attempts = ATTEMPTS, delayMs = RETRY_DELAY_MS
 }
 
 /** Runs every check, prints GitHub annotations for warnings and failures, and returns true when all passed. */
-export async function runChecks(checks, options) {
+export async function runChecks(checks, options = {}) {
   let passed = true
-  for (const check of checks) {
-    const result = await run(check, options)
+  for (const [index, check] of checks.entries()) {
+    const attempts = index === 0 ? options.attempts : Math.min(options.attempts ?? ATTEMPTS, LATER_ATTEMPTS)
+    const result = await run(check, { ...options, attempts })
     if (!result.ok) passed = false
     const prefix = result.ok ? (result.warning ? "::warning::" : "ok ") : "::error::"
     console.log(`${prefix}${result.message}`)

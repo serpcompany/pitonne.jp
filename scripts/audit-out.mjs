@@ -16,9 +16,26 @@ const childSitemaps = fs.existsSync(indexPath)
   ? [...fs.readFileSync(indexPath, "utf8").matchAll(/<loc>[^<]*\/(sitemap-[^/<]+\.xml)<\/loc>/g)].map(([, file]) => file)
   : []
 
+// Paths excluded in _routes.json never reach the canonical-host Function, so they answer 200 on pages.dev. Only static
+// files may live there, never an exported page.
+function htmlUnder(relative) {
+  const full = path.join(OUT, relative)
+  if (!fs.existsSync(full)) return []
+  if (!fs.statSync(full).isDirectory()) return relative.endsWith(".html") ? [relative] : []
+  return fs
+    .readdirSync(full, { recursive: true })
+    .map(String)
+    .filter((file) => file.endsWith(".html"))
+    .map((file) => path.join(relative, file))
+}
+const routesPath = path.join(OUT, "_routes.json")
+const excludedRoutes = fs.existsSync(routesPath) ? JSON.parse(fs.readFileSync(routesPath, "utf8")).exclude ?? [] : []
+const htmlInExcludedRoutes = excludedRoutes.flatMap((rule) => htmlUnder(rule.replace(/^\//, "").replace(/\*$/, "")))
+
 const failures = [
   ...[...required, ...childSitemaps].filter((file) => !fs.existsSync(path.join(OUT, file))).map((file) => `missing out/${file}`),
   ...forbidden.filter((file) => fs.existsSync(path.join(OUT, file))).map((file) => `unexpected out/${file}`),
+  ...htmlInExcludedRoutes.map((file) => `out/${file} is a page under a path _routes.json keeps off the Function`),
   ...(fs.existsSync(indexPath) && childSitemaps.length === 0 ? [`out/${SITEMAP_INDEX} lists no sitemaps`] : []),
 ]
 

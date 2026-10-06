@@ -1,12 +1,13 @@
 import fs from "node:fs"
 import path from "node:path"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import {
   SMOKE_HEADERS,
   evaluate,
   passThroughChecks,
   redirectChecks,
   run,
+  runChecks,
   smokeChecks,
 } from "../../scripts/smoke-canonical-host.mjs"
 
@@ -66,6 +67,9 @@ describe("canonical-host smoke test", () => {
     expect(evaluate(keystatic, { status: 200, contentType: "text/html; charset=utf-8" }).ok).toBe(true)
     expect(evaluate(keystatic, { status: 404, contentType: "text/html; charset=utf-8" }).ok).toBe(false)
     expect(evaluate(legacy, { status: 301, location: "/" }).ok).toBe(true)
+    expect(evaluate(legacy, { status: 301, location: "https://x.test/" }).ok).toBe(true)
+    expect(evaluate(legacy, { status: 301, location: "https://x.test/en/" }).ok).toBe(false)
+    expect(evaluate(legacy, { status: 301, location: "https://pitonne.jp/" }).ok).toBe(false)
     expect(evaluate(legacy, { status: 308, location: "https://pitonne.jp/" }).ok).toBe(false)
     expect(evaluate(sitemap, { status: 200, contentType: "application/xml; charset=utf-8" }).ok).toBe(true)
     expect(evaluate(sitemap, { status: 200, contentType: "text/html" }).ok).toBe(false)
@@ -107,6 +111,19 @@ describe("canonical-host smoke test", () => {
     })
     expect(timedOut).toMatchObject({ ok: false })
     expect(timedOut.message).toContain("timeout")
+  })
+
+  it("waits for propagation on the first check only", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {})
+    const calls = new Map()
+    const probeFn = async (check) => {
+      calls.set(check.url, (calls.get(check.url) ?? 0) + 1)
+      return { status: 500 }
+    }
+    const subset = checks.slice(0, 3)
+    expect(await runChecks(subset, { attempts: 6, delayMs: 0, probeFn })).toBe(false)
+    expect(subset.map((check) => calls.get(check.url))).toEqual([6, 2, 2])
+    log.mockRestore()
   })
 
   it("runs after every production deploy", () => {

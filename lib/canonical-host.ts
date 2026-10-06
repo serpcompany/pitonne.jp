@@ -22,8 +22,9 @@ const FILE_EXTENSIONS = new Set([
   "webm", "webmanifest", "webp", "woff", "woff2", "xml", "xsl",
 ])
 
-// Paths whose form is never changed: `_`-prefixed (`/_next/`), `/api`, `/.well-known/`, and the Keystatic SPA,
-// whose router reads a trailing slash as an extra segment.
+// Paths on which the Function itself never adds or strips a slash: `_`-prefixed (`/_next/`), `/api`, `/.well-known/`,
+// and the Keystatic SPA, whose router reads a trailing slash as an extra segment. Pages' own redirects still apply
+// (and are folded into the host redirect), exactly as they do on pitonne.jp.
 const KEEP_PATH = /^\/(?:_|api(?:\/|$)|\.well-known\/|keystatic(?:\/|$))/i
 
 function normalizeHost(host: string): string {
@@ -63,7 +64,9 @@ export function canonicalRedirectLocation(requestUrl: string | URL, headers: Hea
   return `${CANONICAL_ORIGIN}${canonicalPath(url.pathname)}${url.search}`
 }
 
-const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308])
+// Only permanent redirects are folded into the permanent, day-cached 308. A temporary 302/307 (or a 303's POST -> GET)
+// in `_redirects` must not become permanent, so those keep the plain host redirect.
+const FOLDED_STATUSES = new Set([301, 308])
 
 /**
  * A 308 to the canonical host, or `null` when the request should pass through to static assets.
@@ -79,10 +82,15 @@ export async function canonicalHostRedirect(
   let location = canonicalRedirectLocation(request.url, request.headers)
   if (!location) return null
 
-  const asset = await next()
-  const assetLocation = asset.headers.get("location")
-  await asset.body?.cancel()
-  if (REDIRECT_STATUSES.has(asset.status) && assetLocation) {
+  let asset: Response | undefined
+  try {
+    asset = await next()
+  } catch {
+    // Folding is an optimization: if the asset server fails, still send the plain host redirect.
+  }
+  const assetLocation = asset?.headers.get("location")
+  await asset?.body?.cancel().catch(() => undefined)
+  if (asset && FOLDED_STATUSES.has(asset.status) && assetLocation) {
     const url = new URL(request.url)
     const target = new URL(assetLocation, url)
     // Only same-host targets are folded in; anything else keeps the plain host redirect.
