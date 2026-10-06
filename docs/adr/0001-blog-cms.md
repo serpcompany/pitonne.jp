@@ -43,8 +43,9 @@ Use **[Keystatic Cloud](https://keystatic.com/docs/cloud)** (free tier) as a git
 
 - Keystatic detects the `main` branch ruleset (PR required) and prompts editors to create a branch
   ([Thinkmill/keystatic#1601](https://github.com/Thinkmill/keystatic/pull/1601)), but its "Create pull request" button links to
-  GitHub, which editors cannot use. Publishing therefore uses `storage.branchPrefix: "cms/"` plus a GitHub Action that opens a
-  PR from each `cms/**` branch, enables auto-merge once `test` passes, and merges `main` back into `staging`.
+  GitHub, which editors cannot use. Publishing first used `cms/*` branches plus a GitHub Action that merged them, but
+  naming branches and being left on deleted ones confused editors. **Update (2026-10-06):** the Keystatic Cloud GitHub
+  app now bypasses the `main` ruleset, so saves commit straight to `main` and deploy; drafts use the `draft` field.
 - Keystatic's admin UI must be served from the static export (stubbed `generateStaticParams` plus a `_redirects` SPA fallback)
   or, failing that, from a separate small Pages/Workers deploy. Phase 1 is a throwaway spike to prove this before committing.
 - Images are committed to `public/images/content/blog/` with an upload cap (~500 KB–1 MB) because the site serves images
@@ -59,7 +60,7 @@ git history, and CI already provide hosting, versioning, and validation for free
 
 Payload's main unique benefit for this project is AI agent access for the client (MCP) without GitHub. That is Phase 3 and is
 not a v1 requirement. When it becomes one, the choice is between a small custom blog-only MCP Worker that commits through the
-same `cms/**` → PR flow, and migrating to Payload. Keeping content as plain markdown with a strict schema keeps both paths open.
+same validated commit-to-`main` path as the CMS, and migrating to Payload. Keeping content as plain markdown with a strict schema keeps both paths open.
 
 ## Consequences
 

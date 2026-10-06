@@ -136,12 +136,12 @@ const blogCategories = collection({
   },
 })
 
-// The deployed CMS (and `pnpm cms:cloud`) signs in through Keystatic Cloud and commits to GitHub on `cms/` branches,
-// which .github/workflows/cms-publish.yml merges and deploys. `pnpm cms` edits local files instead.
+// The deployed CMS (and `pnpm cms:cloud`) signs in through Keystatic Cloud and commits straight to main (the Keystatic
+// Cloud app bypasses the main ruleset), which deploys the site. `pnpm cms` edits local files instead.
 const useLocal = process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === "local"
 
 export default config({
-  storage: useLocal ? { kind: "local" } : { kind: "cloud", branchPrefix: "cms/" },
+  storage: useLocal ? { kind: "local" } : { kind: "cloud" },
   cloud: { project: "serp/pitonne-website" },
   ui: { brand: { name: "Pitonne" } },
   collections: {

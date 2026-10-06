@@ -18,9 +18,9 @@
   the filename; don't add a `slug:` key. `readingTime` is computed at build; don't add it to new posts.
 - Blog posts are edited in Keystatic (`keystatic.config.ts`, guide in `docs/cms.md`) at `/keystatic`, a static
   single-page app served for every `/keystatic/*` path by `public/_redirects`. CMS saves commit straight to `main` (the
-  Keystatic Cloud app bypasses the ruleset); saves on `cms/*` branches are merged by `.github/workflows/cms-publish.yml`.
-  Locally, `pnpm cms` edits files and `pnpm cms:cloud` uses Keystatic Cloud. Feature images live in
-  `public/images/content/blog/<slug>/` (English) and `public/images/content/blog/ja/<slug>/` (Japanese).
+  Keystatic Cloud app bypasses the ruleset) and deploy; editors use the Draft checkbox, not branches. Locally, `pnpm cms`
+  edits files and `pnpm cms:cloud` uses Keystatic Cloud. Feature images live in `public/images/content/blog/<slug>/`
+  (English) and `public/images/content/blog/ja/<slug>/` (Japanese).
 - Blog markdown links to internal pages use locale-neutral relative paths (`/blog/<slug>/`, `/contact/`), never
   `https://pitonne.jp/...` or `/ja/...`; Japanese posts resolve them to `/ja/...` at render time.
 - Blog categories live in `content/blog-categories/<slug>.json` (bilingual `name`/`nameJa`, `description`/`descriptionJa`,

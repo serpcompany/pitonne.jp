@@ -12,7 +12,8 @@ Keystatic Cloud team; no GitHub account is needed.
 
 ### Writing and publishing a post
 
-1. Make sure the branch box at the top left says **main**.
+1. Make sure the branch box at the top left says **main**. Always work on `main`; don't create branches (changes on
+   another branch are never published).
 2. Choose **Blog (English)** or **Blog (Japanese)**, then **Add**.
 3. Fill in the fields. Keystatic shows a message under any field that needs fixing:
    - **Title**: about 60 characters.
@@ -23,9 +24,15 @@ Keystatic Cloud team; no GitHub account is needed.
    - **Category**: pick one (see [Categories](#categories)).
    - **Feature image**: optional; keep images under 1 MB. **Alt text** (optional) describes the image for screen
      readers; if it's empty, the post title is used.
-   - **Draft**: tick it to save without publishing.
+   - **Draft**: tick it to keep the post off the site (see [Drafts](#drafts)).
 4. Choose **Create** (or **Save** when editing). The site rebuilds and the change is live within a few minutes. If the
    build fails, the live site doesn't change; ask a developer.
+
+### Drafts
+
+A post with **Draft** ticked is saved but never shown on the site, so you can come back to it as often as you like.
+To publish it, untick **Draft** and choose **Save**. (Keystatic also keeps unsaved edits in your browser; those are only
+on your computer until you save.)
 
 ### Translations
 
@@ -49,8 +56,8 @@ posts are moved to another category.
 - **Local editing**: `pnpm cms` edits files in your checkout; `pnpm cms:cloud` uses Keystatic Cloud and commits to
   GitHub. Open http://127.0.0.1:3000/keystatic (Keystatic switches `localhost` to `127.0.0.1`).
 - **Publishing flow**: the Keystatic Cloud GitHub app is on the `main` ruleset's bypass list, so CMS saves commit
-  straight to `main`, which triggers CI and the deploy (a build that fails isn't deployed). If a save ever lands on a
-  `cms/*` branch instead, `.github/workflows/cms-publish.yml` merges it into `main` once CI passes and deploys.
+  straight to `main`, which triggers CI and the deploy (a build that fails isn't deployed). Draft saves rebuild too,
+  but drafts are excluded from the build. Branches created in the CMS are not published.
 - **Undoing a change**: revert the CMS merge commit on `main` (`git revert <sha>`) through a normal PR; history is the
   version record.
 - **Access**: editors are managed in the Keystatic Cloud project `serp/pitonne-website` (free plan: up to 3 users per
