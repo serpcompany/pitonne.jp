@@ -100,6 +100,39 @@ describe("SEO parity", () => {
     expect(xml).not.toContain("https://pitonne.jp/en/")
   })
 
+  it("writes the English homepage as the bare origin in its canonical, og:url and hreflang tags", async () => {
+    const { default: HomePage } = await import("@/app/[locale]/page")
+    const headTags = async (locale: string) => {
+      const markup = renderToStaticMarkup(await HomePage({ params: Promise.resolve({ locale }) }))
+      const linkHref = (pattern: RegExp) => markup.match(pattern)?.[1]
+      return {
+        canonicals: markup.match(/<link rel="canonical"/g)?.length ?? 0,
+        canonical: linkHref(/<link rel="canonical" href="([^"]*)"/),
+        ogUrl: linkHref(/<meta property="og:url" content="([^"]*)"/),
+        en: linkHref(/<link rel="alternate" hrefLang="en" href="([^"]*)"/),
+        ja: linkHref(/<link rel="alternate" hrefLang="ja" href="([^"]*)"/),
+        xDefault: linkHref(/<link rel="alternate" hrefLang="x-default" href="([^"]*)"/),
+      }
+    }
+
+    expect(await headTags("en")).toEqual({
+      canonicals: 1,
+      canonical: SITE_URL,
+      ogUrl: SITE_URL,
+      en: SITE_URL,
+      ja: `${SITE_URL}/ja/`,
+      xDefault: SITE_URL,
+    })
+    expect(await headTags("ja")).toEqual({
+      canonicals: 1,
+      canonical: `${SITE_URL}/ja/`,
+      ogUrl: `${SITE_URL}/ja/`,
+      en: SITE_URL,
+      ja: `${SITE_URL}/ja/`,
+      xDefault: SITE_URL,
+    })
+  })
+
   it("allows production crawling and blocks non-production crawling", async () => {
     const { default: robots } = await import("@/app/robots")
 
@@ -136,7 +169,10 @@ describe("SEO parity", () => {
     const rootMetadata = await localeLayoutMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(rootMetadata.metadataBase?.toString()).toBe(`${SITE_URL}/`)
     expect(rootMetadata.robots).toMatchObject({ index: false, follow: false })
-    expect(rootMetadata.openGraph).toMatchObject({ siteName: "Pitonne", url: `${SITE_URL}/` })
+    expect(rootMetadata.openGraph).toMatchObject({ siteName: "Pitonne" })
+    // The metadata API would add a slash to the homepage URL, so the layout leaves these to the pages (#91)
+    expect(rootMetadata.openGraph).not.toHaveProperty("url")
+    expect(rootMetadata).not.toHaveProperty("alternates")
     expect(rootMetadata.twitter).toMatchObject({ card: "summary_large_image" })
 
     const aboutMeta = await aboutMetadata({ params: Promise.resolve({ locale: "en" }) })

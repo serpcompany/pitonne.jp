@@ -24,8 +24,11 @@ export function normalizePath(path: string): string {
   return withLeadingSlash.endsWith("/") ? withLeadingSlash : `${withLeadingSlash}/`
 }
 
+// The English homepage is written as the bare origin (https://pitonne.jp, no trailing slash); every other page
+// ends in a slash. See the SERP URL trailing-slash standard.
 export function canonicalUrl(path: string): string {
-  return `${SITE_URL}${normalizePath(path)}`
+  const normalizedPath = normalizePath(path)
+  return normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`
 }
 
 export function absoluteUrl(path: string): string {
@@ -41,7 +44,7 @@ export function localizedCanonicalUrl(path: string, locale: Locale): string {
   if (locale === "ja") {
     return `${SITE_URL}/ja${normalizedPath}`
   }
-  return `${SITE_URL}${normalizedPath}`
+  return canonicalUrl(normalizedPath)
 }
 
 export function localizedPath(path: string, locale: Locale): string {

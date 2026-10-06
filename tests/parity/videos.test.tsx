@@ -102,7 +102,7 @@ describe("Pitonne video pages", () => {
     expect(videoBreadcrumbJsonLd(video)).toMatchObject({
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
         { "@type": "ListItem", position: 2, name: "Videos", item: `${SITE_URL}/videos/` },
         { "@type": "ListItem", position: 3, name: video.title, item: `${SITE_URL}/watch/${video.slug}/` },
       ],

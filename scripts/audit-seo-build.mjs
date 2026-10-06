@@ -201,9 +201,7 @@ for (const sitemap of childSitemaps) {
       continue
     }
     const page = pageInfo.get(url === SITE_URL ? "/" : decodeURI(new URL(url).pathname))
-    // The homepage canonical is still https://pitonne.jp/ until the page itself writes the bare origin (#91)
-    const canonical = url === SITE_URL && page?.canonical === `${SITE_URL}/` ? SITE_URL : page?.canonical
-    if (canonical !== url) report(`/${sitemap}`, `${url} does not match the page canonical ${page?.canonical}`)
+    if (page?.canonical !== url) report(`/${sitemap}`, `${url} does not match the page canonical ${page?.canonical}`)
     if (indexable && page?.noindex) report(`/${sitemap}`, `lists a noindex page: ${url}`)
   }
   for (const tag of xml.match(/<xhtml:link\s[^>]*>/g) || []) {

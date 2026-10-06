@@ -35,13 +35,14 @@ describe("structured data parity", () => {
           "@type": "MedicalBusiness",
           "@id": "https://pitonne.jp/#business",
           name: "Pitonne",
-          url: "https://pitonne.jp/",
+          // The English homepage is the bare origin, without a trailing slash (#91)
+          url: "https://pitonne.jp",
           telephone: "03-6821-8285",
         }),
         expect.objectContaining({
           "@type": "WebSite",
           "@id": "https://pitonne.jp/#website",
-          url: "https://pitonne.jp/",
+          url: "https://pitonne.jp",
         }),
       ]),
     )
@@ -68,6 +69,13 @@ describe("structured data parity", () => {
     expect(businessSchema).not.toHaveProperty("availableLanguage")
     expect(businessSchema.knowsLanguage).toHaveLength(2)
     expect(websiteSchema).not.toHaveProperty("availableLanguage")
+  })
+
+  it("writes the Japanese homepage URL with its trailing slash", async () => {
+    const { businessJsonLd, websiteJsonLd } = await import("@/lib/structured-data")
+
+    expect(businessJsonLd("ja")).toMatchObject({ url: "https://pitonne.jp/ja/" })
+    expect(websiteJsonLd("ja")).toMatchObject({ url: "https://pitonne.jp/ja/" })
   })
 
   it("renders Service JSON-LD on service detail pages", () => {
