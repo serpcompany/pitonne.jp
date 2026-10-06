@@ -80,6 +80,7 @@ jobs:
           pnpm audit:out
 
       - name: Deploy to Cloudflare Pages
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -87,3 +88,9 @@ jobs:
           wranglerVersion: "4.103.0"
           command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Smoke-test canonical host redirects
+        if: github.ref_name == 'main'
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"
