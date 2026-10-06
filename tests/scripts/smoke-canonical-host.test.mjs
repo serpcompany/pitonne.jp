@@ -8,6 +8,7 @@ import {
   redirectChecks,
   run,
   runChecks,
+  slashedFileChecks,
   smokeChecks,
 } from "../../scripts/smoke-canonical-host.mjs"
 
@@ -15,7 +16,13 @@ const deploymentUrl = "https://d49a67b6.pitonne-jp.pages.dev"
 
 describe("canonical-host smoke test", () => {
   const checks = smokeChecks({ deploymentUrl, marker: "abc1234" })
-  const redirects = checks.filter((check) => check.expect.status === 308)
+  const fileChecks = [
+    ...slashedFileChecks("https://pitonne.jp", "abc1234"),
+    ...slashedFileChecks(deploymentUrl, "abc1234", SMOKE_HEADERS),
+  ]
+  // The host redirects; slashed-file checks (`/robots.txt/`) are covered on their own below.
+  const isSlashedFile = (check) => /\.\w+\/$/.test(new URL(check.url).pathname)
+  const redirects = checks.filter((check) => check.expect.status === 308 && !isSlashedFile(check))
 
   it("redirects pages.dev, the deployment URL and www to the same path and query on pitonne.jp", () => {
     for (const origin of ["https://pitonne-jp.pages.dev", deploymentUrl]) {
@@ -45,6 +52,24 @@ describe("canonical-host smoke test", () => {
     expect(byPath["/sitemap.xml"].expect).toEqual({ status: 200, contentType: "application/xml" })
     expect(byPath["/no-such-page-smoke-test/"].expect).toEqual({ status: 404 })
     for (const check of Object.values(byPath)) expect(check.headers).toEqual(SMOKE_HEADERS)
+  })
+
+  it("redirects slashed file URLs to the file on the same host, on pitonne.jp and behind the smoke-test header", () => {
+    expect(checks).toEqual(expect.arrayContaining(fileChecks))
+    expect(fileChecks.map(({ url, expect, headers }) => [url, expect, headers])).toEqual([
+      [
+        "https://pitonne.jp/sitemap-index.xml/?smoke=abc1234",
+        { status: 308, location: "https://pitonne.jp/sitemap-index.xml?smoke=abc1234" },
+        undefined,
+      ],
+      ["https://pitonne.jp/robots.txt/", { status: 308, location: "https://pitonne.jp/robots.txt" }, undefined],
+      [
+        `${deploymentUrl}/sitemap-index.xml/?smoke=abc1234`,
+        { status: 308, location: `${deploymentUrl}/sitemap-index.xml?smoke=abc1234` },
+        SMOKE_HEADERS,
+      ],
+      [`${deploymentUrl}/robots.txt/`, { status: 308, location: `${deploymentUrl}/robots.txt` }, SMOKE_HEADERS],
+    ])
   })
 
   it("skips the deployment URL checks when there is none", () => {
