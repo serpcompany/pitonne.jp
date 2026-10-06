@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-focus-clarity.jpg
+featureImageAlt: 観葉植物のある明るいオフィスで、頬杖をつきながらノートパソコンに集中する女性
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - energy-fatigue-recovery-iv

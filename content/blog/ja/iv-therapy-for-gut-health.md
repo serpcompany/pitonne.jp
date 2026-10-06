@@ -10,9 +10,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-gut-health.jpg
+featureImageAlt: ベッドの端に腰かけ、つらそうにお腹を押さえる女性
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - exosome-iv-drip

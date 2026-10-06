@@ -2,7 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
-import type { Locale } from "@/lib/i18n/config"
+import { locales, type Locale } from "@/lib/i18n/config"
 
 function blogContentDirectory(locale: Locale): string {
   if (locale === "ja") {
@@ -11,27 +11,41 @@ function blogContentDirectory(locale: Locale): string {
   return path.join(process.cwd(), "content", "blog")
 }
 
-const blogPostFrontmatterSchema = z.object({
-  slug: z.string().min(1),
-  title: z.string().min(1),
-  // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
-  metaTitle: z.string().min(1).optional(),
-  metaDescription: z.string().min(1).optional(),
-  excerpt: z.string().min(1),
-  publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  category: z.string().min(1),
-  categorySlug: z.string().min(1),
-  author: z.object({
-    name: z.string().min(1),
-    role: z.string().min(1),
-  }),
-  readingTime: z.number().int().positive(),
-  featureImage: z.string().optional(),
-  featureImageAlt: z.string().min(1).optional(),
-  featured: z.boolean().optional(),
-  relatedServiceSlugs: z.array(z.string()).optional(),
-  tags: z.array(z.string()).optional(),
-})
+// Rules mirror the CMS field validation planned in GitHub issue #64.
+export const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+export const EXCERPT_MIN_LENGTH = 70
+export const EXCERPT_MAX_LENGTH = 160
+
+export const blogPostFrontmatterSchema = z
+  .object({
+    slug: z.string().regex(BLOG_SLUG_PATTERN, "slug must be lowercase kebab-case"),
+    title: z.string().min(1),
+    // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
+    metaTitle: z.string().min(1).optional(),
+    metaDescription: z.string().min(1).optional(),
+    // Also the default meta/OG/Twitter description
+    excerpt: z.string().trim().min(EXCERPT_MIN_LENGTH).max(EXCERPT_MAX_LENGTH),
+    publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    category: z.string().min(1),
+    categorySlug: z.string().regex(BLOG_SLUG_PATTERN, "categorySlug must be lowercase kebab-case"),
+    author: z.object({
+      name: z.string().min(1),
+      role: z.string().min(1),
+    }),
+    // Computed from the body when omitted; set only to override the estimate
+    readingTime: z.number().int().positive().optional(),
+    featureImage: z.string().min(1).optional(),
+    featureImageAlt: z.string().trim().min(1).optional(),
+    featured: z.boolean().optional(),
+    relatedServiceSlugs: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
+    // Drafts are excluded from every build (production, staging, and PR previews)
+    draft: z.boolean().optional(),
+  })
+  .refine((data) => !data.featureImage || data.featureImageAlt, {
+    message: "featureImageAlt is required when featureImage is set",
+    path: ["featureImageAlt"],
+  })
 
 export interface BlogPost {
   slug: string
@@ -56,9 +70,30 @@ export interface BlogPost {
   sourcePath: string
 }
 
-function loadBlogPosts(locale: Locale): BlogPost[] {
-  const directory = blogContentDirectory(locale)
+const WORDS_PER_MINUTE = 200
+// Japanese has no word spaces, so it is estimated from characters read per minute
+const JA_CHARACTERS_PER_MINUTE = 500
 
+function plainText(markdown: string): string {
+  return markdown
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/\{\{video:[a-z0-9-]+\}\}/g, " ")
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/https?:\/\/\S+/g, " ")
+    .replace(/[#>*_`|~]/g, " ")
+}
+
+export function estimateReadingTime(markdown: string, locale: Locale): number {
+  const text = plainText(markdown)
+  const minutes =
+    locale === "ja"
+      ? text.replace(/\s+/g, "").length / JA_CHARACTERS_PER_MINUTE
+      : text.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE
+
+  return Math.max(1, Math.ceil(minutes))
+}
+
+export function loadBlogPostsFromDirectory(directory: string, locale: Locale, contentSubdir: string): BlogPost[] {
   if (!fs.existsSync(directory)) {
     return []
   }
@@ -66,25 +101,47 @@ function loadBlogPosts(locale: Locale): BlogPost[] {
   return fs
     .readdirSync(directory)
     .filter((fileName) => fileName.endsWith(".md"))
-    .map((fileName) => {
+    .flatMap((fileName) => {
       const absolutePath = path.join(directory, fileName)
       const raw = fs.readFileSync(absolutePath, "utf8")
       const parsed = matter(raw)
-      const frontmatter = blogPostFrontmatterSchema.parse(parsed.data)
+      const result = blogPostFrontmatterSchema.safeParse(parsed.data)
 
-      const contentSubdir = locale === "ja" ? "blog/ja" : "blog"
-
-      return {
-        ...frontmatter,
-        featureImage: frontmatter.featureImage || undefined,
-        featureImageAlt: frontmatter.featureImageAlt || undefined,
-        featured: frontmatter.featured ?? false,
-        relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
-        tags: frontmatter.tags ?? [],
-        content: parsed.content.trim(),
-        sourcePath: `content/${contentSubdir}/${fileName}`,
+      if (!result.success) {
+        const issues = result.error.issues.map((issue) => `  ${issue.path.join(".")}: ${issue.message}`).join("\n")
+        throw new Error(`Invalid frontmatter in ${contentSubdir}/${fileName}:\n${issues}`)
       }
+
+      const { draft, readingTime, ...frontmatter } = result.data
+
+      if (`${frontmatter.slug}.md` !== fileName) {
+        throw new Error(`Blog post slug "${frontmatter.slug}" must match its filename (${contentSubdir}/${fileName})`)
+      }
+
+      if (draft) {
+        return []
+      }
+
+      const content = parsed.content.trim()
+
+      return [
+        {
+          ...frontmatter,
+          readingTime: readingTime ?? estimateReadingTime(content, locale),
+          featureImage: frontmatter.featureImage || undefined,
+          featureImageAlt: frontmatter.featureImageAlt || undefined,
+          featured: frontmatter.featured ?? false,
+          relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
+          tags: frontmatter.tags ?? [],
+          content,
+          sourcePath: `${contentSubdir}/${fileName}`,
+        },
+      ]
     })
+}
+
+function loadBlogPosts(locale: Locale): BlogPost[] {
+  return loadBlogPostsFromDirectory(blogContentDirectory(locale), locale, locale === "ja" ? "content/blog/ja" : "content/blog")
 }
 
 const blogPostsByLocale = { en: loadBlogPosts("en"), ja: loadBlogPosts("ja") }
@@ -101,6 +158,41 @@ export function getAllBlogPosts(locale: Locale = "en"): BlogPost[] {
 
 export function getBlogPostBySlug(slug: string, locale: Locale = "en"): BlogPost | undefined {
   return getPostsForLocale(locale).find((post) => post.slug === slug)
+}
+
+// A post may be published in one locale only; the missing locale has no page, index entry, or hreflang.
+export function getBlogPostLocales(slug: string): Locale[] {
+  return locales.filter((locale) => blogPostsByLocale[locale].some((post) => post.slug === slug))
+}
+
+// Posts published in this locale that have no translation in another locale
+export function getUntranslatedBlogPostSlugs(locale: Locale): string[] {
+  return blogPostsByLocale[locale].map((post) => post.slug).filter((slug) => getBlogPostLocales(slug).length !== locales.length)
+}
+
+export function getAllBlogPostSlugs(): string[] {
+  return Array.from(new Set(locales.flatMap((locale) => blogPostsByLocale[locale].map((post) => post.slug))))
+}
+
+export function getBlogCategoryLocales(categorySlug: string): Locale[] {
+  return locales.filter((locale) => blogPostsByLocale[locale].some((post) => post.categorySlug === categorySlug))
+}
+
+// Blog markdown links to locale-neutral paths (/blog/..., /contact/); JA posts resolve them to /ja/...,
+// except for blog posts that have no Japanese version, which keep pointing at the English page.
+export function localizeBlogContentHref(href: string, locale: Locale): string {
+  if (locale === "en" || !href.startsWith("/") || href.startsWith("//")) return href
+  if (href === "/ja" || href.startsWith("/ja/") || href.startsWith("/images/")) return href
+
+  const pathname = href.split(/[?#]/)[0]
+  if (/\.[a-z0-9]+$/i.test(pathname)) return href
+
+  const blogPostMatch = pathname.match(/^\/blog\/([^/]+)\/?$/)
+  if (blogPostMatch && !getBlogPostLocales(blogPostMatch[1]).includes(locale)) {
+    return href
+  }
+
+  return `/${locale}${href}`
 }
 
 export function getBlogPostsByCategory(categorySlug: string, locale: Locale = "en"): BlogPost[] {

@@ -1,11 +1,11 @@
 import Link from "next/link"
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown, { type Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { PageHero } from "@/components/shared/page-hero"
 import { JsonLd } from "@/components/shared/json-ld"
 import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
 import { BlogSidebar } from "@/components/blog/blog-sidebar"
-import type { BlogPost } from "@/lib/data/blog-posts"
+import { localizeBlogContentHref, type BlogPost } from "@/lib/data/blog-posts"
 import { getVideoBySlug } from "@/lib/data/videos"
 import type { Service } from "@/lib/data/services"
 import { blogPostingJsonLd } from "@/lib/structured-data"
@@ -74,11 +74,18 @@ function BlogVideoEmbed({ slug, locale }: { slug: string; locale: Locale }) {
   )
 }
 
+function markdownComponents(locale: Locale): Components {
+  return {
+    a: ({ node: _node, href, ...props }) => <a href={href ? localizeBlogContentHref(href, locale) : href} {...props} />,
+  }
+}
+
 function MarkdownContent({ content, locale }: { content: string; locale: Locale }) {
   const segments = content.split(videoEmbedPattern)
+  const components = markdownComponents(locale)
 
   if (segments.length === 1) {
-    return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+    return <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>{content}</ReactMarkdown>
   }
 
   return (
@@ -89,7 +96,7 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
         }
 
         const markdown = segment.trim()
-        return markdown ? <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown> : null
+        return markdown ? <ReactMarkdown key={index} remarkPlugins={[remarkGfm]} components={components}>{markdown}</ReactMarkdown> : null
       })}
     </>
   )

@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 6
 featureImage: /images/content/blog/iv-therapy-vs-oral-vitamins.jpg
 featureImageAlt: "比較のために並べられた点滴バッグと経口サプリメント"
 featured: false
@@ -109,11 +108,11 @@ tags:
 
 ## 関連記事
 
-[点滴の副反応と安全性](https://pitonne.jp/ja/blog/iv-therapy-side-effects-safety-guide/)
+[点滴の副反応と安全性](/blog/iv-therapy-side-effects-safety-guide/)
 
-[エクソソーム点滴とは？](https://pitonne.jp/ja/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[エクソソーム点滴とは？](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
 ## 参考情報
 

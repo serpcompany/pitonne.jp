@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 7
 featureImage: /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg
 featureImageAlt: "Clinician examining a blood sample beside a microscope and IV bag"
 featured: false
@@ -147,11 +146,11 @@ If you are considering high-dose vitamin C IV therapy in Tokyo, discuss the inte
 
 ## Related Reading
 
-[Are Blood Tests Needed Before Regular IV Therapy?](https://pitonne.jp/blog/blood-tests-before-regular-iv-therapy-tokyo/)
+[Are Blood Tests Needed Before Regular IV Therapy?](/blog/blood-tests-before-regular-iv-therapy-tokyo/)
 
-[Pitonne High-Dose Vitamin C IV Therapy](https://pitonne.jp/services/high-dose-vitamin-c-iv-therapy/)
+[Pitonne High-Dose Vitamin C IV Therapy](/services/high-dose-vitamin-c-iv-therapy/)
 
-[Nutrition Blood Testing](https://pitonne.jp/services/nutrition-blood-testing/)
+[Nutrition Blood Testing](/services/nutrition-blood-testing/)
 
 ## References
 

@@ -1,15 +1,14 @@
 ---
 slug: blood-tests-before-regular-iv-therapy-tokyo
 title: "点滴前に血液検査は必要？東京で定期的なIV Therapyを考えるときの確認事項"
-excerpt: "定期的に点滴を受けたいと考える方から、「始める前に血液検査は必要ですか？」という質問を受けることがあります。"
-metaDescription: 定期的に点滴を受ける前に血液検査は必要なのでしょうか。すべての方に必須ではない理由、検査で確認できること、継続中の体調管理への活かし方など、東京でビタミン点滴やエクソソーム点滴を検討する前に確認したいポイントを、Pitonneが解説します。
+excerpt: >-
+  定期的に点滴を受ける前に血液検査は必要なのでしょうか。すべての方に必須ではない理由、検査で確認できること、継続中の体調管理への活かし方など、東京でビタミン点滴やエクソソーム点滴を検討する前に確認したいポイントを、Pitonneが解説します。
 publishedAt: '2026-08-27'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 8
 featureImage: /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg
 featureImageAlt: "検査のために血液サンプルの試験管を並べる医療従事者"
 featured: false
@@ -141,11 +140,11 @@ MedlinePlusでは、ビタミンBの検査について、血液や尿で状態�
 
 ## 関連記事
 
-[点滴の副反応と安全性](https://pitonne.jp/ja/blog/iv-therapy-side-effects-safety-guide/)
+[点滴の副反応と安全性](/blog/iv-therapy-side-effects-safety-guide/)
 
-[エクソソーム点滴とは？](https://pitonne.jp/ja/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[エクソソーム点滴とは？](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
 ## 参考情報
 

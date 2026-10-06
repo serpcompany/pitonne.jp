@@ -11,8 +11,10 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 8
 featureImage: /images/content/sheet/blog/iv-therapy-for-dehydration.jpg
+featureImageAlt: >-
+  Clinician in blue gloves placing an IV line in a patient's arm resting on a
+  striped cushion
 featured: false
 relatedServiceSlugs:
   - iv-therapy

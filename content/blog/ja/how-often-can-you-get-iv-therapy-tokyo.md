@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 7
 featureImage: /images/content/blog/how-often-can-you-get-iv-therapy-tokyo.jpg
 featureImageAlt: "卓上カレンダーで点滴のスケジュールを確認する医療従事者"
 featured: false
@@ -130,11 +129,11 @@ Pitonneでは、エクソソーム点滴を2〜3週間に1回程度の目安で�
 
 ## 関連記事
 
-[エクソソーム点滴とは？](https://pitonne.jp/ja/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[エクソソーム点滴とは？](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[点滴の副反応と安全性](https://pitonne.jp/ja/blog/iv-therapy-side-effects-safety-guide/)
+[点滴の副反応と安全性](/blog/iv-therapy-side-effects-safety-guide/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
 ## 参考情報
 

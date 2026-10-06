@@ -11,7 +11,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 15
 featured: false
 relatedServiceSlugs:
   - skin-brightening-iv-drip
@@ -23,6 +22,7 @@ tags:
   - グルタチオン
   - エクソソーム IV
 featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
+featureImageAlt: 東京タワーを背景に、点滴スタンドに吊るされた「Skin Brightening」と手書きされた点滴バッグ
 ---
 「最近、気分ほどには疲れて見えないのに、見た目だけは疲れて見えるんです」  
 「睡眠不足や多忙な時は、それが顔に現れてしまいます」  
@@ -154,4 +154,4 @@ featureImage: /images/content/sheet/services/skin-brightening-iv-drip.jpg
 
 水分補給に加え、ビタミンやグルタチオンを摂取したい患者様には、**スキンIV**が最適な選択肢となることがよくあります。 アンチエイジングや全身のコンディションをより広範に考えたい患者様には、**エクソソーム点滴療法**が特に魅力的かもしれません。
 
-東京の落ち着いたプライベートな空間で、美容とウェルネスのサポートをご検討の方は、こちらからお問い合わせください：[ご予約・ご相談](https://pitonne.jp/contact/)
+東京の落ち着いたプライベートな空間で、美容とウェルネスのサポートをご検討の方は、こちらからお問い合わせください：[ご予約・ご相談](/contact/)

@@ -9,8 +9,8 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 7
 featureImage: /images/content/sheet/blog/iv-therapy-for-fatigue.jpg
+featureImageAlt: 街を見渡す窓のそばで、白いバスローブ姿で笑顔を見せながら点滴を受ける女性
 featured: false
 relatedServiceSlugs:
   - energy-fatigue-recovery-iv

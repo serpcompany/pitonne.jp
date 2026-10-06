@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 5
 featureImage: /images/content/blog/iv-therapy-side-effects-safety-guide.jpg
 featureImageAlt: "座って点滴を受ける患者のそばで輸液ポンプを確認する医療従事者"
 featured: false
@@ -100,13 +99,13 @@ MedlinePlusでも、呼吸困難、速い心拍、めまい、胸の痛みがあ
 
 ## 関連記事
 
-[点滴の所要時間はどれくらい？東京の訪問点滴の流れ](https://pitonne.jp/ja/blog/how-long-does-iv-therapy-take-tokyo/)
+[点滴の所要時間はどれくらい？東京の訪問点滴の流れ](/blog/how-long-does-iv-therapy-take-tokyo/)
 
-[脱水時の点滴について](https://pitonne.jp/ja/blog/iv-therapy-for-dehydration-in-tokyo/)
+[脱水時の点滴について](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[エクソソーム点滴のリスク](https://pitonne.jp/ja/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[エクソソーム点滴のリスク](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[Pitonneのサービス一覧](https://pitonne.jp/ja/services/)
+[Pitonneのサービス一覧](/services/)
 
 ## 参考情報
 

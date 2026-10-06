@@ -9,7 +9,6 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 6
 featureImage: /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg
 featureImageAlt: "Patient receiving an IV infusion while a clinician checks the drip"
 featured: false
@@ -134,13 +133,13 @@ If you are considering IV therapy in Tokyo at home, in a hotel, at an office, or
 
 ## Related Reading
 
-[What Is an Exosome IV Drip?](https://pitonne.jp/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
+[What Is an Exosome IV Drip?](/blog/what-is-an-exosome-iv-drip-differences-from-stem-cell-conditioned-media-cost-and-risks-explained/)
 
-[How to Get an Exosome IV in Tokyo](https://pitonne.jp/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
+[How to Get an Exosome IV in Tokyo](/blog/exosome-iv-tokyo-mobile-in-clinic-booking/)
 
-[Is IV Therapy Helpful for Dehydration?](https://pitonne.jp/blog/iv-therapy-for-dehydration-in-tokyo/)
+[Is IV Therapy Helpful for Dehydration?](/blog/iv-therapy-for-dehydration-in-tokyo/)
 
-[Pitonne Services](https://pitonne.jp/services/)
+[Pitonne Services](/services/)
 
 ## References
 

@@ -59,8 +59,9 @@ function areaRoutes() {
 walk(path.join(root, "app"))
 
 const serviceRoutes = markdownFrontmatter("content/services").map((item) => item.canonicalPath)
-const blogPosts = markdownFrontmatter("content/blog")
-const blogRoutes = blogPosts.map((item) => `/blog/${item.slug}/`)
+// Drafts are never built; JA-only posts are routes too
+const blogPosts = [...markdownFrontmatter("content/blog"), ...markdownFrontmatter("content/blog/ja")].filter((item) => !item.draft)
+const blogRoutes = [...new Set(blogPosts.map((item) => `/blog/${item.slug}/`))]
 const categoryRoutes = [...new Set(blogPosts.map((item) => `/blog/category/${item.categorySlug}/`))]
 
 const canonicalRoutes = [

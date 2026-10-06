@@ -5,18 +5,14 @@ title: >-
   Pitonne
 metaTitle: 'How to Get an Exosome IV in Tokyo: Mobile and In-Clinic'
 excerpt: >-
-  When considering an Exosome IV in Tokyo, many patients want to know whether
-  they need to visit a clinic, whether treatment can be arranged at a hotel or
-  residence, and what information is required before booking. For international
-  travel...
-metaDescription: 'How to book an Exosome IV in Tokyo: compare in-clinic appointments with mobile IV visits at your home, hotel, or office, and what to prepare beforehand.'
+  How to book an Exosome IV in Tokyo: compare in-clinic appointments with mobile
+  IV visits at your home, hotel, or office, and what to prepare beforehand.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 14
 featured: false
 relatedServiceSlugs:
   - exosome-iv-drip
@@ -27,6 +23,7 @@ tags:
   - tokyo
   - booking
 featureImage: /images/content/sheet/services/exosome-iv-drip.jpg
+featureImageAlt: Exosome IV drip set up beside a window with a view of Tokyo Tower
 ---
 When considering an Exosome IV in Tokyo, many patients want to know whether they need to visit a clinic, whether treatment can be arranged at a hotel or residence, and what information is required before booking. For international travelers, foreign residents in Japan, and busy professionals, the treatment itself is only one part of the decision. Just as important is understanding how the experience is arranged.
 
@@ -152,4 +149,4 @@ Cancellations and changes should be made at least 24 hours in advance. Same-day 
 
 When considering an Exosome IV in Tokyo, it is helpful to look beyond the treatment itself and also understand where the treatment can be received, how booking works, and what kind of medical review is involved.
 
-At Pitonne | Stem Cell & IV Therapy, we offer both in-clinic and mobile IV care so that patients can choose the setting that best fits their condition, location, and schedule. If you are looking for discreet, medically guided IV care in Tokyo, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)
+At Pitonne | Stem Cell & IV Therapy, we offer both in-clinic and mobile IV care so that patients can choose the setting that best fits their condition, location, and schedule. If you are looking for discreet, medically guided IV care in Tokyo, please contact us here: [Booking & Consultation](/contact/)

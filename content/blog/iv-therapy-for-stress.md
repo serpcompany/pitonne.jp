@@ -4,17 +4,17 @@ title: >-
   Is IV Therapy Helpful During Stress? How Pitonne Thinks About Hydration, Vitamin Support, and Exosome IV Therapy
 metaTitle: 'IV Therapy for Stress: Hydration and Vitamin Support'
 excerpt: >-
-  When stress continues, the effects often show up in the body: poor sleep, heaviness, fatigue, and difficulty recovering. At Pitonne, IV therapy is approached as support for the body when stress is contributing to physical depletion.
-metaDescription: Ongoing stress can show up as poor sleep, fatigue, and slow recovery. Learn how IV therapy may support the body, and why it does not remove the cause.
+  Ongoing stress can show up as poor sleep, fatigue, and slow recovery. Learn
+  how IV therapy may support the body, and why it does not remove the cause.
 publishedAt: '2026-06-13'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 12
 featured: false
 featureImage: /images/content/sheet/blog/iv-therapy-for-stress.jpg
+featureImageAlt: Stressed woman at her office desk pressing her fingers to her brow
 relatedServiceSlugs:
   - iv-vitamin-therapy
   - exosome-iv-drip

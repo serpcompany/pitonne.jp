@@ -9,9 +9,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-readingTime: 7
 featured: false
 featureImage: /images/content/sheet/services/energy-fatigue-recovery-iv.jpg
+featureImageAlt: 東京を見渡す明るい部屋で、点滴スタンドに吊るされた「Energy & Fatigue Recovery」の点滴バッグ
 relatedServiceSlugs:
   - energy-fatigue-recovery-iv
   - iv-therapy
@@ -168,4 +168,4 @@ tags:
 
 ピトンヌでは、このような広い視野を持って、活力の低下や身体の消耗に取り組んでいます。水分補給点滴、ビタミン点滴、あるいはエクソソーム点滴療法についても含めた対話を通じて、過度な期待を抱かせるのではなく、患者様がご自身の体をどのように支えていくかをより深く考えていただけるようサポートすることを目標としています。
 
-東京で、落ち着いたプライベートな空間にて点滴療法についてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](https://pitonne.jp/contact/)
+東京で、落ち着いたプライベートな空間にて点滴療法についてご相談をご希望の方は、こちらからお問い合わせください：[予約・相談](/contact/)

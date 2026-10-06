@@ -5,18 +5,14 @@ title: >-
   About Weight Management
 metaTitle: Is There an IV for Weight Loss? What Patients Should Know
 excerpt: >-
-  "Do you offer an IV for weight loss?"   This is a question we sometimes hear
-  from patients exploring IV therapy in Tokyo. Because phrases like IV therapy
-  for weight loss are common online, some people naturally wonder whether IV
-  treatmen...
-metaDescription: Is there an IV for weight loss? Learn why Pitonne does not position IV therapy as a standalone solution, and how nutrition fits into weight management.
+  Is there an IV for weight loss? Learn why Pitonne does not position IV therapy
+  as a standalone solution, and how nutrition fits into weight management.
 publishedAt: '2026-05-03'
 category: IV Therapy
 categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-readingTime: 21
 featured: false
 relatedServiceSlugs:
   - iv-therapy
@@ -27,6 +23,9 @@ tags:
   - nutrition
   - wellness
 featureImage: /images/content/sheet/services/iv-vitamin-therapy.jpg
+featureImageAlt: >-
+  Gloved clinician injecting from a syringe into an IV line taped to a patient's
+  forearm
 ---
 "Do you offer an IV for weight loss?"  
 This is a question we sometimes hear from patients exploring IV therapy in Tokyo. Because phrases like IV therapy for weight loss are common online, some people naturally wonder whether IV treatment can be used as a shortcut for body weight management.
@@ -157,7 +156,7 @@ At Pitonne, we do not believe in presenting IV therapy as a glamorous shortcut f
 
 Weight management begins with daily habits. Water, vitamins, wellness-oriented IV support, and medical guidance may all have a place, but none of them replace the need to understand food, routine, and the reasons weight changes in the first place.
 
-That is why Pitonne approaches this topic with care. If you are looking for a calm, private, medically guided conversation in Tokyo about IV therapy, condition support, and realistic wellness care, please contact us here: [Booking & Consultation](https://pitonne.jp/contact/)  
+That is why Pitonne approaches this topic with care. If you are looking for a calm, private, medically guided conversation in Tokyo about IV therapy, condition support, and realistic wellness care, please contact us here: [Booking & Consultation](/contact/)  
 If you would also like to learn more about food, nutrition, and sustainable body care, we encourage you to explore [Ouchi Nurse no Oshaberi Karte](https://open.spotify.com/show/7c75dDPlIQ2qL5TKEoWb7P?si=9kRgvJtvSDamHjQrfgJRnA).
 
 **References**
