@@ -19,8 +19,8 @@ Keystatic Cloud team; no GitHub account is needed.
    - **Title**: about 60 characters.
    - **Slug**: becomes the web address. Use the same slug for the English and Japanese versions of a post, and don't
      change it after publishing.
-   - **Excerpt**: 70–160 characters, shown on blog cards and in search results. If it's under 110 characters, also
-     fill in **Meta description override** (110–160 characters).
+   - **Excerpt**: 70–160 characters, shown on blog cards and in search results. If it's under 110 characters, search
+     results add the post's opening sentences; fill in **Meta description override** (110–160 characters) to choose the wording.
    - **Category**: pick one (see [Categories](#categories)).
    - **Feature image**: optional; keep images under 1 MB. **Alt text** (optional) describes the image for screen
      readers; if it's empty, the post title is used.

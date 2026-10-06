@@ -14,8 +14,10 @@ const DESC_MIN = limits.description.min
 const DESC_MAX = limits.description.max
 
 const sources = [
-  { dir: "content/blog", titleKey: "title", descKey: "excerpt" },
-  { dir: "content/blog/ja", titleKey: "title", descKey: "excerpt" },
+  // A short blog excerpt is extended from the post body at build time (fallbackMetaDescription in
+  // lib/data/blog-posts.ts), so only its rendered length matters; audit:seo checks that on the built page.
+  { dir: "content/blog", titleKey: "title", descKey: "excerpt", shortDescriptionExtended: true },
+  { dir: "content/blog/ja", titleKey: "title", descKey: "excerpt", shortDescriptionExtended: true },
   { dir: "content/services", titleKey: "title", descKey: "shortDescription" },
   { dir: "content/services/ja", titleKey: "title", descKey: "shortDescription" },
 ]
@@ -23,7 +25,7 @@ const sources = [
 const normalize = (value) => String(value ?? "").replace(/\s+/g, " ").trim()
 const problems = []
 
-for (const { dir, titleKey, descKey } of sources) {
+for (const { dir, titleKey, descKey, shortDescriptionExtended } of sources) {
   for (const file of fs.readdirSync(dir).filter((name) => name.endsWith(".md"))) {
     const { data } = matter(fs.readFileSync(path.join(dir, file), "utf8"))
     if (data.draft) continue // drafts are never built
@@ -34,7 +36,7 @@ for (const { dir, titleKey, descKey } of sources) {
     if (title.length > TITLE_MAX) problems.push(`${where}: title too long (${title.length})`)
     if (title.length < TITLE_MIN) problems.push(`${where}: title too short (${title.length})`)
     if (description.length > DESC_MAX) problems.push(`${where}: description too long (${description.length})`)
-    if (description.length < DESC_MIN) problems.push(`${where}: description too short (${description.length})`)
+    if (description.length < DESC_MIN && !(shortDescriptionExtended && !data.metaDescription)) problems.push(`${where}: description too short (${description.length})`)
   }
 }
 

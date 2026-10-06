@@ -16,8 +16,8 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - Blog posts may exist in one locale only (see `docs/adr/0001-blog-cms.md`). Translations pair by identical filename/slug;
   a missing translation gets no page, index/category entry, hreflang, or sitemap URL in that locale.
 - `draft: true` blog posts are excluded from every build (production, staging, PR previews). Don't link to drafts.
-- Blog frontmatter rules (zod in `lib/data/blog-posts.ts`, limits in `lib/blog-rules.ts`): excerpt 70–160 chars (110+
-  unless `metaDescription` is set). `featureImageAlt` is optional; an image without it uses the post title. The slug is
+- Blog frontmatter rules (zod in `lib/data/blog-posts.ts`, limits in `lib/blog-rules.ts`): excerpt 70–160 chars; under 110 without
+  `metaDescription`, the meta description is extended with the post's opening sentences at build time (never fail a CMS save). `featureImageAlt` is optional; an image without it uses the post title. The slug is
   the filename; don't add a `slug:` key. `readingTime` is computed at build; don't add it to new posts.
 - Blog posts are edited in Keystatic (`keystatic.config.ts`, guide in `docs/cms.md`) at `/keystatic`, a static
   single-page app served for every `/keystatic/*` path by `public/_redirects`. CMS saves commit straight to `main` (the

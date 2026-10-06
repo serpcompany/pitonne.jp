@@ -3,7 +3,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { describe, expect, it } from "vitest"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
-import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "@/lib/data/blog-posts"
+import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory, localizeBlogContentHref } from "@/lib/data/blog-posts"
 import { getServicesFromSlugs } from "@/lib/data/services"
 import { getVideoBySlug } from "@/lib/data/videos"
 
@@ -263,13 +263,11 @@ describe("blog post parity", () => {
     )
   })
 
-  it("links internal pages with locale-neutral relative paths in both locales", () => {
-    for (const locale of ["en", "ja"] as const) {
-      for (const post of getAllBlogPosts(locale)) {
-        expect(post.content, post.sourcePath).not.toMatch(/\]\(https?:\/\/(www\.)?pitonne\.jp/)
-        expect(post.content, post.sourcePath).not.toMatch(/\]\(\/ja\//)
-      }
-    }
+  it("renders full pitonne.jp links as relative, localized paths", () => {
+    expect(localizeBlogContentHref("https://pitonne.jp/contact/", "en")).toBe("/contact/")
+    expect(localizeBlogContentHref("https://www.pitonne.jp/contact/?a=1", "ja")).toBe("/ja/contact/?a=1")
+    expect(localizeBlogContentHref("https://pitonne.jp", "ja")).toBe("/ja/")
+    expect(localizeBlogContentHref("https://pitonne.jp.evil.com/x/", "ja")).toBe("https://pitonne.jp.evil.com/x/")
   })
 
   it("resolves relative links in Japanese posts to Japanese pages", () => {

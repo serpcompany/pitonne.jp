@@ -51,7 +51,7 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
       }),
       excerpt: fields.text({
         label: "Excerpt / meta description",
-        description: `Shown on blog cards and used as the search and social description. ${EXCERPT_MIN_LENGTH}–${EXCERPT_MAX_LENGTH} characters; if it's under ${META_DESCRIPTION_MIN_LENGTH}, also fill in the meta description override.`,
+        description: `Shown on blog cards and used as the search and social description. ${EXCERPT_MIN_LENGTH}–${EXCERPT_MAX_LENGTH} characters. Under ${META_DESCRIPTION_MIN_LENGTH}, search results add the post's opening sentences unless you fill in the meta description override.`,
         validation: { length: { min: EXCERPT_MIN_LENGTH, max: EXCERPT_MAX_LENGTH } },
       }),
       metaDescription: fields.text({
