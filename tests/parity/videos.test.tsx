@@ -153,12 +153,12 @@ describe("Pitonne video pages", () => {
   })
 
   it("serves a Google video sitemap", async () => {
-    const { GET } = await import("@/app/videos-sitemap.xml/route")
+    const { GET } = await import("@/app/sitemap-videos.xml/route")
     const response = await GET()
     const xml = await response.text()
 
     expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")
-    expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">')
+    expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">')
     expect(xml).toContain("<loc>https://pitonne.jp/watch/does-a-hangover-iv-really-help/</loc>")
     expect(xml).toContain("<loc>https://pitonne.jp/ja/watch/does-a-hangover-iv-really-help/</loc>")
     expect(xml).toContain('<xhtml:link rel="alternate" hreflang="ja" href="https://pitonne.jp/ja/watch/does-a-hangover-iv-really-help/" />')

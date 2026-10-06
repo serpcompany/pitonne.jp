@@ -15,7 +15,7 @@ import {
 import { BLOG_RELATED_SERVICE_OPTIONS } from "@/lib/blog-rules"
 import { blogCategories, loadBlogCategoriesFromDirectory } from "@/lib/data/blog-categories"
 import { localizedHreflangAlternates } from "@/lib/seo"
-import { sitemapEntriesForPath } from "@/app/sitemap.xml/route"
+import { sitemapEntriesForPath } from "@/lib/sitemaps"
 
 const SITE_URL = "https://pitonne.jp"
 

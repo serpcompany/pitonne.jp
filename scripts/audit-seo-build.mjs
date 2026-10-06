@@ -7,7 +7,10 @@
  * - exactly one <h1> per page
  * - complete Open Graph tags, with og:url matching the canonical URL
  * - internal links that resolve to a page (no 404s, no redirects)
- * - each URL listed in only one sitemap, and every sitemap URL exists
+ * - the sitemap index pattern: robots.txt advertises only /sitemap-index.xml, which lists root-level
+ *   /sitemap-<group>.xml URL sets; /sitemap.xml serves the same XML as the index
+ * - every page is listed in exactly one child sitemap, and every sitemap URL (and hreflang alternate) is a page
+ * - the homepage is listed as the bare origin; every other sitemap URL ends in a slash
  * - no oversized image files
  *
  * Usage: node scripts/audit-seo-build.mjs [outDir]
@@ -23,7 +26,8 @@ const TITLE_RANGE = [limits.title.min, limits.title.max]
 const DESCRIPTION_RANGE = [limits.description.min, limits.description.max]
 const REQUIRED_OG = ["og:title", "og:description", "og:image", "og:url", "og:type"]
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
-const SITEMAPS = ["sitemap.xml", "videos-sitemap.xml"]
+const SITEMAP_INDEX = "sitemap-index.xml"
+const CHILD_SITEMAP = /^sitemap-[a-z0-9]+(?:-[a-z0-9]+)*\.xml$/
 
 if (!fs.existsSync(path.join(OUT, "index.html"))) {
   console.error(`No build output found in ${OUT}. Run \`pnpm build\` first.`)
@@ -141,20 +145,66 @@ for (const file of pages) {
   }
 }
 
-const sitemapOwners = new Map()
-for (const sitemap of SITEMAPS) {
-  const xml = fs.readFileSync(path.join(OUT, sitemap), "utf8")
-  for (const [, loc] of xml.matchAll(/<loc>([^<]*)<\/loc>/g)) {
-    const url = decode(loc)
-    sitemapOwners.set(url, [...(sitemapOwners.get(url) || []), sitemap])
-    const link = classifyLink(url, SITE_URL)
-    if (link.kind === "internal" && resolveInternal(link.path) !== "ok") {
-      report(sitemap, `lists URL that is not a page: ${url}`)
+const readOut = (file) => (fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), "utf8") : null)
+const locs = (xml) => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
+
+const robotsSitemaps = [...(readOut("robots.txt") || "").matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(([, url]) => url)
+if (robotsSitemaps.length !== 1 || robotsSitemaps[0] !== `${SITE_URL}/${SITEMAP_INDEX}`) {
+  report("/robots.txt", `must list only Sitemap: ${SITE_URL}/${SITEMAP_INDEX} (found ${robotsSitemaps.join(", ") || "none"})`)
+}
+
+const indexXml = readOut(SITEMAP_INDEX)
+const childSitemaps = []
+if (!indexXml) {
+  report(`/${SITEMAP_INDEX}`, "missing")
+} else {
+  if (!/<sitemapindex[\s>]/.test(indexXml) || /<urlset[\s>]/.test(indexXml)) report(`/${SITEMAP_INDEX}`, "is not a <sitemapindex>")
+  if (readOut("sitemap.xml") !== indexXml) report("/sitemap.xml", `must serve the same XML as /${SITEMAP_INDEX}`)
+  for (const loc of locs(indexXml)) {
+    const file = loc.startsWith(`${SITE_URL}/`) ? loc.slice(SITE_URL.length + 1) : null
+    if (!file || !CHILD_SITEMAP.test(file)) {
+      report(`/${SITEMAP_INDEX}`, `child ${loc} must be a root-level ${SITE_URL}/sitemap-<group>.xml`)
+    } else if (!readOut(file)) {
+      report(`/${SITEMAP_INDEX}`, `lists missing sitemap ${loc}`)
+    } else {
+      childSitemaps.push(file)
     }
+  }
+}
+for (const file of fs.readdirSync(OUT)) {
+  if (CHILD_SITEMAP.test(file) && file !== SITEMAP_INDEX && !childSitemaps.includes(file)) {
+    report(`/${file}`, `is not listed in /${SITEMAP_INDEX}`)
+  }
+}
+
+const sitemapOwners = new Map()
+const isPage = (url) => {
+  const link = classifyLink(url, SITE_URL)
+  return link.kind === "internal" && resolveInternal(link.path) === "ok"
+}
+for (const sitemap of childSitemaps) {
+  const xml = readOut(sitemap)
+  // A sitemap index never points at another sitemap index
+  if (!/<urlset[\s>]/.test(xml) || /<sitemapindex[\s>]/.test(xml)) report(`/${sitemap}`, "is not a <urlset>")
+  for (const url of locs(xml)) {
+    sitemapOwners.set(url, [...(sitemapOwners.get(url) || []), sitemap])
+    if (url === `${SITE_URL}/`) report(`/${sitemap}`, `lists the homepage as ${url} (use ${SITE_URL})`)
+    else if (url !== SITE_URL && !url.endsWith("/")) report(`/${sitemap}`, `URL has no trailing slash: ${url}`)
+    if (!isPage(url)) report(`/${sitemap}`, `lists URL that is not a page: ${url}`)
+  }
+  for (const tag of xml.match(/<xhtml:link\s[^>]*>/g) || []) {
+    const href = attribute(tag, "href")
+    if (!isPage(href)) report(`/${sitemap}`, `hreflang alternate is not a page: ${href}`)
   }
 }
 for (const [url, owners] of sitemapOwners) {
   if (owners.length > 1) report(url, `listed in multiple sitemaps: ${owners.join(", ")}`)
+}
+const sitemapPaths = new Set([...sitemapOwners.keys()].map((url) => (url === SITE_URL ? "/" : url.slice(SITE_URL.length))))
+for (const file of pages) {
+  const urlPath = "/" + path.relative(OUT, file).replace(/index\.html$/, "")
+  if (urlPath.startsWith("/404") || urlPath.startsWith("/_not-found")) continue
+  if (!sitemapPaths.has(urlPath)) report(urlPath, "is not listed in any sitemap")
 }
 
 for (const file of allFiles) {
@@ -170,4 +220,4 @@ if (findings.length > 0) {
   process.exit(1)
 }
 
-console.log(`SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} sitemap URLs.`)
+console.log(`SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} URLs in ${childSitemaps.length} sitemaps.`)

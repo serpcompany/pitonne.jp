@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next"
-import { SITE_URL, isProductionDeployment } from "@/lib/seo"
+import { isProductionDeployment } from "@/lib/seo"
+import { SITEMAP_INDEX_FILE, sitemapOrigin } from "@/lib/sitemaps"
 
 export const dynamic = "force-static"
 
-const sitemaps = [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/videos-sitemap.xml`]
-
 export default function robots(): MetadataRoute.Robots {
+  // The sitemap index is the only entry point; it links every child sitemap
+  const sitemap = `${sitemapOrigin()}/${SITEMAP_INDEX_FILE}`
+
   if (isProductionDeployment()) {
     return {
       rules: {
@@ -14,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         // The blog CMS sign-in page
         disallow: "/keystatic/",
       },
-      sitemap: sitemaps,
+      sitemap,
     }
   }
 
@@ -23,6 +25,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       disallow: "/",
     },
-    sitemap: sitemaps,
+    sitemap,
   }
 }

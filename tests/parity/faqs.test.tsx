@@ -26,8 +26,8 @@ describe("FAQs page", () => {
   })
 
   it("exposes FAQ metadata and sitemap entry", async () => {
-    const { buildEntries } = await import("@/app/sitemap.xml/route")
-    const urls = buildEntries().map((entry) => entry.url)
+    const { sitemapEntries } = await import("@/lib/sitemaps")
+    const urls = sitemapEntries("pages").map((entry) => entry.url)
 
     const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en" }) })
     expect(metadata).toMatchObject({
