@@ -8,6 +8,8 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
+featureImage: /images/content/blog/ja/nmn-iv-therapy-in-tokyo-evidence/featureImage.jpg
+featureImageAlt: 東京の窓辺に並べられた透明な点滴バッグ、アンプル、研究データ
 featured: false
 relatedServiceSlugs:
   - nmn-iv-therapy
