@@ -269,6 +269,8 @@ AGA治療は、1回や短期間だけで判断するものではありません�
 
 定期的に写真を残し、薬の効果や副作用、髪の変化を確認しながら、処方した医師へ相談しましょう。
 
+[AGA治療のご予約はこちら](https://api.leadconnectorhq.com/booking/pitonne/bp/japanese)
+
 ## 参考文献
 
 - [Pitonne：AGA治療薬](https://pitonne.jp/ja/services/androgenetic-alopecia-medicine/)
