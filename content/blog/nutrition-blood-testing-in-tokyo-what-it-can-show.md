@@ -9,6 +9,11 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
+featureImage: >-
+  /images/content/blog/nutrition-blood-testing-in-tokyo-what-it-can-show/featureImage.jpg
+featureImageAlt: >-
+  Blood sample tubes and nutrient-rich foods arranged for a nutrition blood
+  testing article
 featured: false
 relatedServiceSlugs:
   - blood-tests
