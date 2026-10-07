@@ -10,7 +10,11 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/iv-therapy-while-taking-medication-blood-thinners/featureImage.jpg
+featureImageAlt: >-
+  Nurse reviewing a patient's medications and checklist before IV therapy in
+  Tokyo
 featured: false
 relatedServiceSlugs:
   - iv-therapy
