@@ -9,6 +9,11 @@ categorySlug: blood-tests
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
+featureImage: >-
+  /images/content/blog/tumor-marker-blood-testing-in-tokyo-what-it-can-and-cannot-show/featureImage.jpg
+featureImageAlt: >-
+  Nurse and patient reviewing a laboratory trend chart with blood sample tubes
+  in Tokyo
 featured: false
 relatedServiceSlugs:
   - tumor-marker-blood-testing
