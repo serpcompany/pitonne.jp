@@ -10,7 +10,11 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/how-to-choose-a-safe-iv-therapy-clinic-in-tokyo/featureImage.jpg
+featureImageAlt: >-
+  Nurse reviewing sterile IV supplies with a female patient in a private Tokyo
+  wellness clinic
 featured: false
 relatedServiceSlugs:
   - iv-therapy
