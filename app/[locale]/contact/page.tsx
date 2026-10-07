@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Phone, MapPin, Clock } from "lucide-react"
 import { PageHero } from "@/components/shared/page-hero"
 import { BookingButton } from "@/components/shared/booking-button"
+import { LineIcon } from "@/components/shared/line-icon"
 import { ContactFormDialog } from "@/components/contact/contact-form-dialog"
 import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
 import { getBusinessInfo } from "@/lib/data/site"
@@ -103,6 +104,25 @@ export default async function ContactPage({ params }: Props) {
                     </div>
                   </div>
                 </div>
+
+                {info.lineUrl && (
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
+                      <LineIcon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">{dict.contact.line}</h3>
+                      <a
+                        href={info.lineUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-[#7A8F87] transition-colors"
+                      >
+                        {dict.contact.lineAddFriend}
+                      </a>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">

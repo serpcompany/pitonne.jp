@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
 import { canonicalRoutes, localizedRoute, getAreaNavigation, type ServiceNavCategory } from "@/lib/data/routes"
-import { businessInfo } from "@/lib/data/site"
+import { businessInfo, getBusinessInfo } from "@/lib/data/site"
 import { ContactButton } from "@/components/shared/contact-button"
+import { LineIcon } from "@/components/shared/line-icon"
 import type { Locale } from "@/lib/i18n/config"
 import { normalizePath } from "@/lib/seo"
 import type { Dictionary } from "@/lib/i18n/dictionaries"
@@ -65,6 +66,7 @@ export function Header({
     { label: dict.contact.japan, number: businessInfo.phone, href: "tel:03-6821-8285" },
     { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
   ]
+  const { lineUrl } = getBusinessInfo(locale)
 
   const navigation = [
     { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
@@ -88,7 +90,7 @@ export function Header({
   </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden xl:flex items-center gap-8">
           {navigation.map((item) => (
             <div
               key={item.name}
@@ -209,7 +211,7 @@ export function Header({
         </div>
 
         {/* Language Switcher & Phone & CTA */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden xl:flex items-center gap-6">
           <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
           <div
             className="relative"
@@ -245,6 +247,18 @@ export function Header({
               </div>
             )}
           </div>
+          {lineUrl && (
+            <a
+              href={lineUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={dict.contact.lineAddFriend}
+              title={dict.contact.lineAddFriend}
+              className="-m-1.5 shrink-0 rounded-md p-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2"
+            >
+              <LineIcon className="h-7 w-7" />
+            </a>
+          )}
           <ContactButton className="px-5 py-2.5" locale={locale}>
             {dict.common.contactUs}
           </ContactButton>
@@ -253,7 +267,7 @@ export function Header({
         {/* Mobile menu button */}
         <button
           type="button"
-          className="lg:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
+          className="xl:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <span className="sr-only">{dict.common.toggleMenu}</span>
@@ -267,7 +281,7 @@ export function Header({
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-border bg-white max-h-[80vh] overflow-y-auto">
+        <div className="xl:hidden border-t border-border bg-white max-h-[80vh] overflow-y-auto">
           <div className="container mx-auto px-4 py-4 space-y-1">
             {/* Language Switcher - Mobile */}
             <div className="pb-3 mb-1 border-b border-border">
@@ -386,6 +400,18 @@ export function Header({
                     <span>{phone.label}: {phone.number}</span>
                   </a>
                 ))}
+                {lineUrl && (
+                  <a
+                    href={lineUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm font-medium"
+                    onClick={closeMobileMenu}
+                  >
+                    <LineIcon className="h-4 w-4" />
+                    <span>{dict.contact.lineAddFriend}</span>
+                  </a>
+                )}
               </div>
               <ContactButton className="w-full px-5 py-2.5" locale={locale} onClick={closeMobileMenu}>
                 {dict.common.contactUs}
