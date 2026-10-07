@@ -9,13 +9,15 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/iv-therapy-aftercare-what-to-do-after-a-drip/featureImage.jpg
+featureImageAlt: Woman pressing clean gauze on her arm after IV therapy beside a glass of water
 featured: false
 relatedServiceSlugs:
   - iv-therapy
 draft: false
 ---
-# IV Therapy Aftercare: What to Do After a Drip
+## IV Therapy Aftercare: What to Do After a Drip
 
 If you are considering IV therapy in Tokyo, you may wonder what to do after the infusion is complete. IV therapy aftercare depends on the treatment contents, the amount administered, your medical history, and how you feel on the day.
 
