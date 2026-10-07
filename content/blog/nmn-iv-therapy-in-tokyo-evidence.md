@@ -9,6 +9,10 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
+featureImage: /images/content/blog/nmn-iv-therapy-in-tokyo-evidence/featureImage.jpg
+featureImageAlt: >-
+  Clear IV bag, ampoule, and research chart arranged beside a Tokyo window for
+  an NMN therapy article
 featured: false
 relatedServiceSlugs:
   - nmn-iv-therapy
