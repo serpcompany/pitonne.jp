@@ -107,9 +107,17 @@ export default async function ContactPage({ params }: Props) {
 
                 {info.lineUrl && (
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0">
+                    {/* Duplicate of the text link below, so it's skipped by keyboard and screen readers */}
+                    <a
+                      href={info.lineUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0 transition-opacity hover:opacity-80"
+                    >
                       <LineIcon className="h-5 w-5" />
-                    </div>
+                    </a>
                     <div>
                       <h3 className="font-semibold mb-1">{dict.contact.line}</h3>
                       <a
@@ -118,7 +126,7 @@ export default async function ContactPage({ params }: Props) {
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-[#7A8F87] transition-colors"
                       >
-                        {dict.contact.lineAddFriend}
+                        {dict.contact.lineContact}
                       </a>
                     </div>
                   </div>

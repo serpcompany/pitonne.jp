@@ -252,8 +252,8 @@ export function Header({
               href={lineUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={dict.contact.lineAddFriend}
-              title={dict.contact.lineAddFriend}
+              aria-label={dict.contact.lineContact}
+              title={dict.contact.lineContact}
               className="-m-1.5 shrink-0 rounded-md p-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2"
             >
               <LineIcon className="h-7 w-7" />
@@ -409,7 +409,7 @@ export function Header({
                     onClick={closeMobileMenu}
                   >
                     <LineIcon className="h-4 w-4" />
-                    <span>{dict.contact.lineAddFriend}</span>
+                    <span>{dict.contact.lineContact}</span>
                   </a>
                 )}
               </div>
