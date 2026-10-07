@@ -8,6 +8,9 @@ categorySlug: blood-tests
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
+featureImage: >-
+  /images/content/blog/ja/nutrition-blood-testing-in-tokyo-what-it-can-show/featureImage.jpg
+featureImageAlt: 栄養状態の血液検査を示す採血管と栄養を含む食材
 featured: false
 relatedServiceSlugs:
   - blood-tests
