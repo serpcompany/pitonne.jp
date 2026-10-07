@@ -8,7 +8,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/ja/iv-therapy-for-older-adults-in-tokyo-what-to-know/featureImage.jpg
+featureImageAlt: 東京の個室ラウンジで看護師の見守りのもと点滴を受ける高齢女性
 featured: false
 relatedServiceSlugs:
   - iv-therapy
