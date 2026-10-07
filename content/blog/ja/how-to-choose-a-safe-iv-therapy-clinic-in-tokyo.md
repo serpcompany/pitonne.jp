@@ -8,7 +8,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/ja/how-to-choose-a-safe-iv-therapy-clinic-in-tokyo/featureImage.jpg
+featureImageAlt: 東京のプライベートな空間で女性に未開封の点滴用品を説明する看護師
 featured: false
 relatedServiceSlugs:
   - iv-therapy
