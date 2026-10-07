@@ -8,9 +8,13 @@ categorySlug: blood-tests
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
+featureImage: >-
+  /images/content/blog/ja/tumor-marker-blood-testing-in-tokyo-what-it-can-and-cannot-show/featureImage.jpg
+featureImageAlt: 東京で採血管をそばに置き検査結果の推移を確認する看護師と患者
 featured: false
 relatedServiceSlugs:
   - tumor-marker-blood-testing
+  - blood-tests
 draft: false
 ---
 東京で腫瘍マーカー血液検査を検討している方は、検査で何がわかるのか、がんを発見できるのか気になるかもしれません。
