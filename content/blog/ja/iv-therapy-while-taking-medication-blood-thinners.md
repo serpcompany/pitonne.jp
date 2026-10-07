@@ -8,7 +8,9 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/ja/iv-therapy-while-taking-medication-blood-thinners/featureImage.jpg
+featureImageAlt: 東京で点滴前に患者の服薬内容とチェックリストを確認する看護師
 featured: false
 relatedServiceSlugs:
   - iv-therapy
