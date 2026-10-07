@@ -44,31 +44,19 @@ ED medication can support erectile function, but it does not automatically cause
 
 Sildenafil and tadalafil belong to a group of medicines called phosphodiesterase type 5 inhibitors, or PDE5 inhibitors.
 
-{% table %}
-- 
-- Sildenafil
-- Tadalafil
----
-- Common brand name
-- Viagra
-- Cialis
----
-- Typical timing in Japan
-- Approximately 1 hour before sexual activity
-- Approximately 1 hour before sexual activity
----
-- Effective period
-- Generally shorter acting
-- May support erectile function for up to 36 hours
----
-- Effect of food
-- Food may delay the onset
-- Can generally be taken without regard to food
----
-- Often selected by
-- People who prefer planned, shorter-duration use
-- People who prefer a longer window and greater flexibility
-{% /table %}
+Sildenafil
+• Common brand name: Viagra
+• Typical timing in Japan: Approximately 1 hour before sexual activity
+• Effective period: Generally shorter acting
+• Effect of food: Food may delay the onset
+• Often selected by: People who prefer planned, shorter-duration use
+
+Tadalafil
+• Common brand name: Cialis
+• Typical timing in Japan: Approximately 1 hour before sexual activity
+• Effective period: May support erectile function for up to 36 hours
+• Effect of food: Can generally be taken without regard to food
+• Often selected by: People who prefer a longer window and greater flexibility
 
 The longer window associated with tadalafil does not mean that an erection continues for 36 hours. It means the medication may support erectile function during that period when sexual stimulation occurs.
 
