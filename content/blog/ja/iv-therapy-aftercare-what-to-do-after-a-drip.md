@@ -8,13 +8,15 @@ categorySlug: iv-therapy
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/ja/iv-therapy-aftercare-what-to-do-after-a-drip/featureImage.jpg
+featureImageAlt: 点滴後に水を飲みながら腕のガーゼを押さえる女性
 featured: false
 relatedServiceSlugs:
   - iv-therapy
 draft: false
 ---
-# 点滴後のアフターケア：点滴後に気をつけること
+## 点滴後のアフターケア：点滴後に気をつけること
 
 東京で点滴療法を検討している方の中には、点滴が終わった後に何をすればよいのか気になる方もいるかもしれません。点滴後のアフターケアは、点滴の内容、投与量、既往歴、当日の体調によって異なります。
 
