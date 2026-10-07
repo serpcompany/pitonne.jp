@@ -9,6 +9,11 @@ categorySlug: blood-tests
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
+featureImage: >-
+  /images/content/blog/hormone-blood-testing-in-tokyo-what-it-can-tell-you/featureImage.jpg
+featureImageAlt: >-
+  Nurse reviewing hormone blood test results with a male patient in a private
+  Tokyo wellness clinic
 featured: false
 relatedServiceSlugs:
   - blood-tests
