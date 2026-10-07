@@ -10,7 +10,11 @@ categorySlug: iv-therapy
 author:
   name: Pitonne Medical Team
   role: Wellness Experts
-featureImageAlt: x
+featureImage: >-
+  /images/content/blog/iv-therapy-for-older-adults-in-tokyo-what-to-know/featureImage.jpg
+featureImageAlt: >-
+  Older woman receiving IV therapy while a nurse monitors the drip in a private
+  Tokyo lounge
 featured: false
 relatedServiceSlugs:
   - iv-therapy
