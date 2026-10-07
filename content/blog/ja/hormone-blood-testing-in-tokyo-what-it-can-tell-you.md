@@ -8,6 +8,9 @@ categorySlug: blood-tests
 author:
   name: ピトン・メディカル・チーム
   role: ウェルネス専門家
+featureImage: >-
+  /images/content/blog/ja/hormone-blood-testing-in-tokyo-what-it-can-tell-you/featureImage.jpg
+featureImageAlt: 東京のプライベートな空間で男性にホルモン血液検査の結果を説明する看護師
 featured: false
 relatedServiceSlugs:
   - blood-tests
