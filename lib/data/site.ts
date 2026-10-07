@@ -67,6 +67,8 @@ export const businessInfo = {
   phone: "03-6821-8285",
   siteUrl: "https://pitonne.jp",
   bookingUrl: "https://api.leadconnectorhq.com/booking/pitonne/bp/english",
+  // LINE official account, offered on the Japanese site only
+  lineUrl: null as string | null,
   hours: businessHoursDisplay,
   description:
     "Pitonne is a concierge wellness service based in Nishi Azabu, Tokyo, specializing in premium IV therapy, stem cell related wellness support, and personalized in home or hotel visit care.",
@@ -77,6 +79,7 @@ const businessInfoJa = {
   addressLine1: "〒106-0031 東京都港区西麻布",
   addressLine2: "3丁目17-22 モダンフォルム西麻布 1階",
   bookingUrl: "https://api.leadconnectorhq.com/booking/pitonne/bp/japanese",
+  lineUrl: "https://line.me/R/ti/p/@938mtcip",
   hours: businessHoursDisplayJa,
   description:
     "Pitonneは、東京・西麻布を拠点とするコンシェルジュ型ウェルネスサービスです。プレミアム点滴療法、幹細胞関連のウェルネスサポート、ご自宅やホテルへの出張ケアを専門としています。",
