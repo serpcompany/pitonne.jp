@@ -63,7 +63,7 @@ export function Header({
   }
 
   const { phone, lineUrl } = getBusinessInfo(locale)
-  const phoneLinks = [{ number: phone, href: "tel:03-6821-8285" }]
+  const phoneLinks = [{ number: phone, href: `tel:${phone}` }]
 
   const navigation = [
     { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },

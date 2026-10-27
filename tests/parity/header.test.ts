@@ -25,7 +25,7 @@ describe("header navigation parity", () => {
 
     expect(headerSource).toContain('setActiveDropdown("phone")')
     expect(headerSource).toContain('activeDropdown === "phone"')
-    expect(headerSource).toContain("tel:03-6821-8285")
+    expect(headerSource).toContain("href: `tel:${phone}`")
     expect(headerSource).not.toContain("tel:+17868140323")
     expect(headerSource).not.toContain("+1 786 814 0323")
   })

@@ -164,7 +164,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               <p>{businessInfo.addressLine1}</p>
               <p>{businessInfo.addressLine2}</p>
               <p>
-                <a href="tel:03-6821-8285" className="hover:text-white transition-colors">
+                <a href={`tel:${businessInfo.phone}`} className="hover:text-white transition-colors">
                   {businessInfo.phone}
                 </a>
               </p>

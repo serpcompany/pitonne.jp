@@ -87,7 +87,7 @@ export default async function ContactPage({ params }: Props) {
                   <div>
                     <h3 className="font-semibold mb-1">{dict.nav.phone}</h3>
                     <a
-                      href="tel:03-6821-8285"
+                      href={`tel:${info.phone}`}
                       className="text-muted-foreground hover:text-[#7A8F87] transition-colors"
                     >
                       {info.phone}
