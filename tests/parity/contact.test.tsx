@@ -30,17 +30,15 @@ describe("contact page", () => {
     expect(screen.getByText(`${saturdayHours!.day}: ${saturdayHours!.hours}`)).toBeInTheDocument()
   })
 
-  it("renders Japan and U.S. phone numbers as callable links", async () => {
-    render(await ContactPage({ params: Promise.resolve({ locale: "en" }) }))
+  it.each(["en", "ja"] as const)("renders only the Japan phone number as a callable link (%s)", async (locale) => {
+    const { container } = render(await ContactPage({ params: Promise.resolve({ locale }) }))
 
-    expect(screen.getByRole("link", { name: `${dict.contact.japan}: ${info.phone}` })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: getBusinessInfo(locale).phone })).toHaveAttribute(
       "href",
       "tel:03-6821-8285",
     )
-    expect(screen.getByRole("link", { name: `${dict.contact.us}: +1 786 814 0323` })).toHaveAttribute(
-      "href",
-      "tel:+17868140323",
-    )
+    expect(container).not.toHaveTextContent("+1 786 814 0323")
+    expect(container.querySelector('a[href="tel:+17868140323"]')).not.toBeInTheDocument()
   })
 
   it("does not expose the retired Gmail address", async () => {
