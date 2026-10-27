@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Phone, Menu, X, ChevronDown } from "lucide-react"
 import { canonicalRoutes, localizedRoute, getAreaNavigation, type ServiceNavCategory } from "@/lib/data/routes"
-import { businessInfo, getBusinessInfo } from "@/lib/data/site"
+import { getBusinessInfo } from "@/lib/data/site"
 import { ContactButton } from "@/components/shared/contact-button"
 import { LineIcon } from "@/components/shared/line-icon"
 import type { Locale } from "@/lib/i18n/config"
@@ -62,11 +62,8 @@ export function Header({
     ],
   }
 
-  const phoneLinks = [
-    { label: dict.contact.japan, number: businessInfo.phone, href: "tel:03-6821-8285" },
-    { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
-  ]
-  const { lineUrl } = getBusinessInfo(locale)
+  const { phone, lineUrl } = getBusinessInfo(locale)
+  const phoneLinks = [{ number: phone, href: `tel:${phone}` }]
 
   const navigation = [
     { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
@@ -231,14 +228,13 @@ export function Header({
               <div className="absolute top-full right-0 pt-4 w-56">
                 <div className="rounded-lg border border-border bg-white p-3 shadow-xl">
                   <ul className="space-y-1">
-                    {phoneLinks.map((phone) => (
-                      <li key={phone.label}>
+                    {phoneLinks.map((phoneLink) => (
+                      <li key={phoneLink.href}>
                         <a
-                          href={phone.href}
+                          href={phoneLink.href}
                           className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-[#7A8F87]"
                         >
-                          <span className="font-medium text-foreground">{phone.label}</span>
-                          <span className="block">{phone.number}</span>
+                          {phoneLink.number}
                         </a>
                       </li>
                     ))}
@@ -394,10 +390,10 @@ export function Header({
 
             <div className="pt-4 border-t border-border">
               <div className="mb-3 space-y-2">
-                {phoneLinks.map((phone) => (
-                  <a key={phone.label} href={phone.href} className="flex items-center gap-2 text-sm font-medium" onClick={closeMobileMenu}>
+                {phoneLinks.map((phoneLink) => (
+                  <a key={phoneLink.href} href={phoneLink.href} className="flex items-center gap-2 text-sm font-medium" onClick={closeMobileMenu}>
                     <Phone className="h-4 w-4" />
-                    <span>{phone.label}: {phone.number}</span>
+                    <span>{phoneLink.number}</span>
                   </a>
                 ))}
                 {lineUrl && (
