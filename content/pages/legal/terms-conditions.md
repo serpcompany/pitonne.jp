@@ -48,3 +48,13 @@ These Terms of Use may be updated at any time without prior notice. The latest v
 ## 7. Governing Law
 
 These Terms of Use shall be governed by and interpreted in accordance with the laws of Japan.
+
+## 8. Cancellation Policy
+
+Cancellation fees are based on when we receive your cancellation notice.
+
+- Until the close of business on the day before your appointment: No cancellation fee.
+- After this deadline — Mobile visits: 50% of the treatment fee before the nurse departs for your location; 100% once the nurse has departed.
+- After this deadline — In-clinic appointments: 50% of the treatment fee when canceled at least 2 hours before your appointment; 100% when canceled less than 2 hours before your appointment.
+
+If the day before your appointment is a non-business day, the free cancellation deadline is the close of business on the most recent preceding business day. Business closing times are 5:00 PM Monday–Friday and 1:00 PM Saturday. We are closed on Sundays and Japanese public holidays. All dates and times are in Japan Standard Time (JST).
