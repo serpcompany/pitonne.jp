@@ -170,13 +170,17 @@ It is important to confirm whether allergies, medications, medical history, and 
 
 ## Cancellation and Changes
 
-If you need to cancel or change your booking, please contact us no later than one day before your scheduled appointment time.
+If you need to cancel or change your booking, please contact us by the close of business on the day before your appointment.
 
-- Up to 1 day before: no cancellation fee
+- Until the close of business on the day before your appointment: No cancellation fee.
 
-- Same-day cancellation: 100% of the reserved treatment fee
+- After this deadline — Mobile visits: 50% of the treatment fee before the nurse departs for your location; 100% once the nurse has departed.
+
+- After this deadline — In-clinic appointments: 50% of the treatment fee when canceled at least 2 hours before your appointment; 100% when canceled less than 2 hours before your appointment.
 
 - No-show without notice: future reservations may be declined
+
+See our [Terms of Use](/legal/terms-conditions/) for the full cancellation policy.
 
 If you paid in advance by card and a cancellation fee applies, the refunded amount will be the payment amount minus the applicable cancellation fee.
 
@@ -212,7 +216,7 @@ Yes. If you book an in-clinic visit, the IV menu is offered at JPY 5,000 off the
 
 ### Is there a cancellation fee?
 
-Yes. There is no fee if you cancel by one day before your appointment. Same-day cancellations are charged at 100% of the reserved treatment fee. Repeated no-shows or cancellations without notice may result in future bookings being declined.
+Yes. Cancellation is free until the close of business on the day before your appointment. After that, fees apply as set out in the cancellation policy in our Terms of Use. Repeated no-shows or cancellations without notice may result in future bookings being declined.
 
 ### Is treatment always possible on the day?
 

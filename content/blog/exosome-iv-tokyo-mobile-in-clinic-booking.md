@@ -113,11 +113,14 @@ Preparing this information in advance helps us guide your reservation more effic
 
 ## Cancellation and Changes
 
-Pitonne operates by appointment only. If you need to cancel or change your booking, please contact us at least **24 hours in advance**.
+Pitonne operates by appointment only. If you need to cancel or change your booking, please contact us by the close of business on the day before your appointment.
 
-* Up to 24 hours in advance: changes or cancellation accepted  
-* Same-day cancellation: 100% of the reserved treatment fee  
+* Until the close of business on the day before your appointment: No cancellation fee.  
+* After this deadline — Mobile visits: 50% of the treatment fee before the nurse departs for your location; 100% once the nurse has departed.  
+* After this deadline — In-clinic appointments: 50% of the treatment fee when canceled at least 2 hours before your appointment; 100% when canceled less than 2 hours before your appointment.  
 * No-show without notice: future bookings may not be accepted
+
+See our [Terms of Use](/legal/terms-conditions/) for the full cancellation policy.
 
 For safety reasons, we may also need to adjust the treatment plan or decline treatment depending on your condition on the day.
 
@@ -141,7 +144,7 @@ Payment is generally accepted by credit card and other cashless methods. If you 
 
 ### When can I cancel?
 
-Cancellations and changes should be made at least 24 hours in advance. Same-day cancellations are charged at 100% of the reserved treatment fee.
+Cancellation is free until the close of business on the day before your appointment. After that, fees apply as set out in the cancellation policy in our Terms of Use.
 
 ## Summary
 
