@@ -20,17 +20,14 @@ describe("header navigation parity", () => {
     expect(headerSource).toContain('mobileExpandedSection === "about"')
   })
 
-  it("exposes phone links through the header phone menu using dict labels", () => {
+  it("exposes only the Japan phone number through the header phone menu", () => {
     const headerSource = fs.readFileSync(path.join(process.cwd(), "components/header.tsx"), "utf8")
 
     expect(headerSource).toContain('setActiveDropdown("phone")')
     expect(headerSource).toContain('activeDropdown === "phone"')
-    expect(headerSource).toContain("dict.contact.japan")
-    expect(headerSource).toContain("dict.contact.us")
-    expect(headerSource).toContain("tel:03-6821-8285")
-    expect(headerSource).toContain("03-6821-8285")
-    expect(headerSource).toContain("tel:+17868140323")
-    expect(headerSource).toContain("+1 786 814 0323")
+    expect(headerSource).toContain("href: `tel:${phone}`")
+    expect(headerSource).not.toContain("tel:+17868140323")
+    expect(headerSource).not.toContain("+1 786 814 0323")
   })
 
   it("uses dict for toggle menu sr-only text", () => {

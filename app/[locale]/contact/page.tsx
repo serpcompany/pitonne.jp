@@ -47,11 +47,6 @@ export default async function ContactPage({ params }: Props) {
   const dict = getDictionary(locale as Locale)
   const info = getBusinessInfo(locale as Locale)
 
-  const phoneLinks = [
-    { label: dict.contact.japan, number: info.phone, href: "tel:03-6821-8285" },
-    { label: dict.contact.us, number: "+1 786 814 0323", href: "tel:+17868140323" },
-  ]
-
   return (
     <>
       <PageHero
@@ -91,17 +86,12 @@ export default async function ContactPage({ params }: Props) {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">{dict.nav.phone}</h3>
-                    <div className="space-y-1">
-                      {phoneLinks.map((phone) => (
-                        <a
-                          key={phone.label}
-                          href={phone.href}
-                          className="block text-muted-foreground hover:text-[#7A8F87] transition-colors"
-                        >
-                          <span className="font-medium text-foreground">{phone.label}:</span> {phone.number}
-                        </a>
-                      ))}
-                    </div>
+                    <a
+                      href={`tel:${info.phone}`}
+                      className="text-muted-foreground hover:text-[#7A8F87] transition-colors"
+                    >
+                      {info.phone}
+                    </a>
                   </div>
                 </div>
 
