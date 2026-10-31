@@ -1,6 +1,6 @@
 // LINE brand icon (green tile, white speech bubble); colors follow LINE's brand guidelines. Decorative: the
 // surrounding link carries the accessible name.
-export function LineIcon({ className = "" }: { className?: string }) {
+export function LineIcon({ className = '' }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" focusable="false">
       <rect width="24" height="24" rx="5.5" fill="#06C755" />

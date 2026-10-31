@@ -1,16 +1,16 @@
-import Link from "next/link"
-import type { Service } from "@/lib/data/services"
+import Link from 'next/link'
+import type { Service } from '@/lib/data/services'
 
 export function ServiceCardGrid({
   services,
-  cardClassName = "bg-background",
+  cardClassName = 'bg-background'
 }: {
   services: Service[]
   cardClassName?: string
 }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {services.map((service) => (
+      {services.map(service => (
         <Link
           key={service.slug}
           href={service.canonicalPath}
@@ -32,7 +32,7 @@ export function ServiceCardGrid({
             </h3>
             <p className="mb-4 text-sm text-muted-foreground">{service.shortDescription}</p>
             <ul className="space-y-1">
-              {service.keyPoints.slice(0, 3).map((point) => (
+              {service.keyPoints.slice(0, 3).map(point => (
                 <li key={point} className="flex items-start gap-2 text-xs text-muted-foreground">
                   <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#7A8F87]" />
                   <span>{point}</span>

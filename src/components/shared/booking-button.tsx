@@ -1,9 +1,15 @@
-import Link from "next/link"
-import { getBusinessInfo } from "@/lib/data/site"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import Link from 'next/link'
+import { getBusinessInfo } from '@/lib/data/site'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 
-export function BookingButton({ className = "", locale = "en" as Locale }: { className?: string; locale?: Locale }) {
+export function BookingButton({
+  className = '',
+  locale = 'en' as Locale
+}: {
+  className?: string
+  locale?: Locale
+}) {
   const dict = getDictionary(locale)
   const businessInfo = getBusinessInfo(locale)
   return (

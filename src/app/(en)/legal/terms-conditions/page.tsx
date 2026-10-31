@@ -1,5 +1,7 @@
-import TermsConditionsPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/legal/terms-conditions/page"
-import { englishLocaleParams } from "../../route-helpers"
+import TermsConditionsPage, {
+  generateMetadata as generateLocaleMetadata
+} from '@/app/[locale]/legal/terms-conditions/page'
+import { englishLocaleParams } from '../../route-helpers'
 
 export function generateMetadata() {
   return generateLocaleMetadata({ params: englishLocaleParams })

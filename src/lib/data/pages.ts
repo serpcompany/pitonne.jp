@@ -1,14 +1,14 @@
-import fs from "node:fs"
-import path from "node:path"
-import matter from "gray-matter"
-import { z } from "zod"
-import type { Locale } from "@/lib/i18n/config"
+import fs from 'node:fs'
+import path from 'node:path'
+import matter from 'gray-matter'
+import { z } from 'zod'
+import type { Locale } from '@/lib/i18n/config'
 
-const pageContentDirectory = path.join(/*turbopackIgnore: true*/ process.cwd(), "content", "pages")
+const pageContentDirectory = path.join(/*turbopackIgnore: true*/ process.cwd(), 'content', 'pages')
 
 const pageFrontmatterSchema = z.object({
   title: z.string().min(1),
-  slug: z.string().min(1),
+  slug: z.string().min(1)
 })
 
 export interface MarkdownPage {
@@ -18,32 +18,32 @@ export interface MarkdownPage {
   sourcePath: string
 }
 
-type LegalPageKey = "privacyPolicy" | "termsConditions" | "medicalDisclaimer"
+type LegalPageKey = 'privacyPolicy' | 'termsConditions' | 'medicalDisclaimer'
 
 const legalPagePaths: Record<LegalPageKey, string> = {
-  privacyPolicy: "legal/privacy-policy.md",
-  termsConditions: "legal/terms-conditions.md",
-  medicalDisclaimer: "legal/disclaimer.md",
+  privacyPolicy: 'legal/privacy-policy.md',
+  termsConditions: 'legal/terms-conditions.md',
+  medicalDisclaimer: 'legal/disclaimer.md'
 }
 
 function normalizePageContent(content: string) {
   return content
     .trim()
-    .replace(/^(Legal|法的情報)[ \t]*\n+/i, "")
-    .replace(/^# .+\n+/, "")
+    .replace(/^(Legal|法的情報)[ \t]*\n+/i, '')
+    .replace(/^# .+\n+/, '')
     .trim()
 }
 
 function getMarkdownPage(relativePath: string): MarkdownPage
 function getMarkdownPage(relativePath: string, locale: Locale): MarkdownPage | null
-function getMarkdownPage(relativePath: string, locale: Locale = "en"): MarkdownPage | null {
+function getMarkdownPage(relativePath: string, locale: Locale = 'en'): MarkdownPage | null {
   let sourcePath: string
   let absolutePath: string
 
-  if (locale === "ja") {
+  if (locale === 'ja') {
     const dir = path.dirname(relativePath)
     const file = path.basename(relativePath)
-    const jaRelativePath = dir === "." ? `ja/${file}` : `${dir}/ja/${file}`
+    const jaRelativePath = dir === '.' ? `ja/${file}` : `${dir}/ja/${file}`
     sourcePath = `content/pages/${jaRelativePath}`
     absolutePath = path.join(pageContentDirectory, jaRelativePath)
 
@@ -55,20 +55,20 @@ function getMarkdownPage(relativePath: string, locale: Locale = "en"): MarkdownP
     absolutePath = path.join(pageContentDirectory, relativePath)
   }
 
-  const parsed = matter(fs.readFileSync(absolutePath, "utf8"))
+  const parsed = matter(fs.readFileSync(absolutePath, 'utf8'))
   const frontmatter = pageFrontmatterSchema.parse(parsed.data)
 
   return {
     title: frontmatter.title,
     slug: frontmatter.slug,
     content: normalizePageContent(parsed.content),
-    sourcePath,
+    sourcePath
   }
 }
 
 export function getLegalPage(key: LegalPageKey): MarkdownPage
 export function getLegalPage(key: LegalPageKey, locale: Locale): MarkdownPage
-export function getLegalPage(key: LegalPageKey, locale: Locale = "en"): MarkdownPage {
+export function getLegalPage(key: LegalPageKey, locale: Locale = 'en'): MarkdownPage {
   const path = legalPagePaths[key]
   return getMarkdownPage(path, locale) ?? getMarkdownPage(path)
 }

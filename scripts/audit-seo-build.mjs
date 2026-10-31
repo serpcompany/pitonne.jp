@@ -18,20 +18,22 @@
  * Usage: node scripts/audit-seo-build.mjs [outDir]
  */
 
-import fs from "node:fs"
-import path from "node:path"
+import fs from 'node:fs'
+import path from 'node:path'
 
-const OUT = path.resolve(process.argv[2] || "out")
-const SITE_URL = "https://pitonne.jp"
-const limits = JSON.parse(fs.readFileSync(new URL("../src/lib/seo-limits.json", import.meta.url), "utf8"))
+const OUT = path.resolve(process.argv[2] || 'out')
+const SITE_URL = 'https://pitonne.jp'
+const limits = JSON.parse(
+  fs.readFileSync(new URL('../src/lib/seo-limits.json', import.meta.url), 'utf8')
+)
 const TITLE_RANGE = [limits.title.min, limits.title.max]
 const DESCRIPTION_RANGE = [limits.description.min, limits.description.max]
-const REQUIRED_OG = ["og:title", "og:description", "og:image", "og:url", "og:type"]
+const REQUIRED_OG = ['og:title', 'og:description', 'og:image', 'og:url', 'og:type']
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
-const SITEMAP_INDEX = "sitemap-index.xml"
+const SITEMAP_INDEX = 'sitemap-index.xml'
 const CHILD_SITEMAP = /^sitemap-[a-z0-9]+(?:-[a-z0-9]+)*\.xml$/
 
-if (!fs.existsSync(path.join(OUT, "index.html"))) {
+if (!fs.existsSync(path.join(OUT, 'index.html'))) {
   console.error(`No build output found in ${OUT}. Run \`pnpm build\` first.`)
   process.exit(1)
 }
@@ -41,7 +43,7 @@ function walk(dir, files = []) {
     const fullPath = path.join(dir, name)
     if (fs.statSync(fullPath).isDirectory()) {
       // _next holds build assets; keystatic is the noindex CMS app, not a site page
-      if (name !== "_next" && fullPath !== path.join(OUT, "keystatic")) walk(fullPath, files)
+      if (name !== '_next' && fullPath !== path.join(OUT, 'keystatic')) walk(fullPath, files)
     } else {
       files.push(fullPath)
     }
@@ -49,9 +51,10 @@ function walk(dir, files = []) {
   return files
 }
 
-const HTML_ENTITIES = { amp: "&", quot: '"', "#x27": "'", "#39": "'", lt: "<", gt: ">" }
+const HTML_ENTITIES = { amp: '&', quot: '"', '#x27': "'", '#39': "'", lt: '<', gt: '>' }
 // Single pass so "&amp;quot;" decodes to "&quot;", not '"'
-const decode = (value) => value.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, entity) => HTML_ENTITIES[entity])
+const decode = value =>
+  value.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, entity) => HTML_ENTITIES[entity])
 
 const SITE = new URL(SITE_URL)
 const SITE_HOSTS = new Set([SITE.hostname, `www.${SITE.hostname}`])
@@ -62,11 +65,12 @@ function classifyLink(href, baseUrl) {
   try {
     url = new URL(href, baseUrl)
   } catch {
-    return { kind: "external" }
+    return { kind: 'external' }
   }
-  if (!SITE_HOSTS.has(url.hostname)) return { kind: "external" }
-  if (url.protocol !== SITE.protocol || url.hostname !== SITE.hostname) return { kind: "non-canonical" }
-  return { kind: "internal", path: url.pathname }
+  if (!SITE_HOSTS.has(url.hostname)) return { kind: 'external' }
+  if (url.protocol !== SITE.protocol || url.hostname !== SITE.hostname)
+    return { kind: 'non-canonical' }
+  return { kind: 'internal', path: url.pathname }
 }
 
 function attribute(tag, name) {
@@ -76,113 +80,143 @@ function attribute(tag, name) {
 
 function metaContent(html, key) {
   for (const tag of html.match(/<meta[^>]*>/g) || []) {
-    if (attribute(tag, "name") === key || attribute(tag, "property") === key) return attribute(tag, "content")
+    if (attribute(tag, 'name') === key || attribute(tag, 'property') === key)
+      return attribute(tag, 'content')
   }
   return null
 }
 
 const redirectSources = fs
-  .readFileSync(path.join(OUT, "_redirects"), "utf8")
-  .split("\n")
-  .map((line) => line.trim().split(/\s+/)[0])
+  .readFileSync(path.join(OUT, '_redirects'), 'utf8')
+  .split('\n')
+  .map(line => line.trim().split(/\s+/)[0])
   .filter(Boolean)
 
 function resolveInternal(href) {
   let pathname
   try {
-    pathname = decodeURI(href.split("#")[0].split("?")[0])
+    pathname = decodeURI(href.split('#')[0].split('?')[0])
   } catch {
-    return "broken" // malformed percent-encoding
+    return 'broken' // malformed percent-encoding
   }
-  if (!pathname) return "ok"
-  if (redirectSources.some((source) => source === pathname || (source.endsWith("*") && pathname.startsWith(source.slice(0, -1))))) {
-    return "redirect"
+  if (!pathname) return 'ok'
+  if (
+    redirectSources.some(
+      source =>
+        source === pathname || (source.endsWith('*') && pathname.startsWith(source.slice(0, -1)))
+    )
+  ) {
+    return 'redirect'
   }
   const target = path.join(OUT, pathname)
-  if (pathname.endsWith("/")) return fs.existsSync(path.join(target, "index.html")) ? "ok" : "broken"
-  if (fs.existsSync(target) && fs.statSync(target).isFile()) return "ok"
-  if (fs.existsSync(path.join(target, "index.html"))) return "redirect" // missing trailing slash
-  return "broken"
+  if (pathname.endsWith('/'))
+    return fs.existsSync(path.join(target, 'index.html')) ? 'ok' : 'broken'
+  if (fs.existsSync(target) && fs.statSync(target).isFile()) return 'ok'
+  if (fs.existsSync(path.join(target, 'index.html'))) return 'redirect' // missing trailing slash
+  return 'broken'
 }
 
 const allFiles = walk(OUT)
-const pages = allFiles.filter((file) => file.endsWith(".html"))
+const pages = allFiles.filter(file => file.endsWith('.html'))
 const findings = []
 // Canonical URL and robots noindex of each page, keyed by URL path, for the sitemap checks
 const pageInfo = new Map()
 const report = (urlPath, message) => findings.push(`${urlPath}: ${message}`)
 
 for (const file of pages) {
-  const urlPath = "/" + path.relative(OUT, file).replace(/index\.html$/, "").replace(/\.html$/, "")
-  if (urlPath.startsWith("/404") || urlPath.startsWith("/_not-found")) continue
+  const urlPath =
+    '/' +
+    path
+      .relative(OUT, file)
+      .replace(/index\.html$/, '')
+      .replace(/\.html$/, '')
+  if (urlPath.startsWith('/404') || urlPath.startsWith('/_not-found')) continue
 
-  const html = fs.readFileSync(file, "utf8")
-  const title = decode((html.match(/<title>([^<]*)<\/title>/) || [])[1] || "")
-  const description = metaContent(html, "description") || ""
-  const canonical = attribute((html.match(/<link[^>]*rel="canonical"[^>]*>/) || [""])[0], "href")
+  const html = fs.readFileSync(file, 'utf8')
+  const title = decode((html.match(/<title>([^<]*)<\/title>/) || [])[1] || '')
+  const description = metaContent(html, 'description') || ''
+  const canonical = attribute((html.match(/<link[^>]*rel="canonical"[^>]*>/) || [''])[0], 'href')
   const h1Count = (html.match(/<h1[\s>]/g) || []).length
-  pageInfo.set(urlPath, { canonical, noindex: /\bnoindex\b/i.test(metaContent(html, "robots") || "") })
+  pageInfo.set(urlPath, {
+    canonical,
+    noindex: /\bnoindex\b/i.test(metaContent(html, 'robots') || '')
+  })
 
   if (title.length < TITLE_RANGE[0] || title.length > TITLE_RANGE[1]) {
-    report(urlPath, `title is ${title.length} chars (want ${TITLE_RANGE.join("–")}): ${title}`)
+    report(urlPath, `title is ${title.length} chars (want ${TITLE_RANGE.join('–')}): ${title}`)
   }
   if (description.length < DESCRIPTION_RANGE[0] || description.length > DESCRIPTION_RANGE[1]) {
-    report(urlPath, `meta description is ${description.length} chars (want ${DESCRIPTION_RANGE.join("–")})`)
+    report(
+      urlPath,
+      `meta description is ${description.length} chars (want ${DESCRIPTION_RANGE.join('–')})`
+    )
   }
   if (h1Count !== 1) report(urlPath, `has ${h1Count} <h1> tags (want 1)`)
 
-  const missingOg = REQUIRED_OG.filter((key) => !metaContent(html, key))
-  if (missingOg.length > 0) report(urlPath, `missing Open Graph tags: ${missingOg.join(", ")}`)
-  const ogUrl = metaContent(html, "og:url")
+  const missingOg = REQUIRED_OG.filter(key => !metaContent(html, key))
+  if (missingOg.length > 0) report(urlPath, `missing Open Graph tags: ${missingOg.join(', ')}`)
+  const ogUrl = metaContent(html, 'og:url')
   // The homepage writes its canonical and og:url by hand (#91), so check what Next's metadata API used to guarantee:
   // a page that has these tags has exactly one of each, inside <head>
-  const head = (html.match(/<head[\s>][\s\S]*?<\/head>/) || [""])[0]
+  const head = (html.match(/<head[\s>][\s\S]*?<\/head>/) || [''])[0]
   for (const [label, pattern] of [
-    ["canonical", /<link[^>]*\srel="canonical"[^>]*>/g],
-    ["og:url", /<meta[^>]*\sproperty="og:url"[^>]*>/g],
+    ['canonical', /<link[^>]*\srel="canonical"[^>]*>/g],
+    ['og:url', /<meta[^>]*\sproperty="og:url"[^>]*>/g]
   ]) {
     const total = (html.match(pattern) || []).length
     const inHead = (head.match(pattern) || []).length
     if (total > 1) report(urlPath, `has ${total} ${label} tags (want 1)`)
     if (total > inHead) report(urlPath, `has a ${label} tag outside <head>`)
   }
-  if (ogUrl && canonical && ogUrl !== canonical) report(urlPath, `og:url ${ogUrl} does not match canonical ${canonical}`)
+  if (ogUrl && canonical && ogUrl !== canonical)
+    report(urlPath, `og:url ${ogUrl} does not match canonical ${canonical}`)
 
   for (const tag of html.match(/<a\s[^>]*href="[^"]*"/g) || []) {
-    const href = attribute(tag, "href")
+    const href = attribute(tag, 'href')
     const link = classifyLink(href, SITE_URL + urlPath)
-    if (link.kind === "non-canonical") {
+    if (link.kind === 'non-canonical') {
       report(urlPath, `links to non-canonical URL ${href} (use ${SITE_URL})`)
       continue
     }
-    if (link.kind !== "internal") continue
+    if (link.kind !== 'internal') continue
     const status = resolveInternal(link.path)
-    if (status === "broken") report(urlPath, `broken internal link ${href}`)
-    if (status === "redirect") report(urlPath, `internal link redirects: ${href}`)
+    if (status === 'broken') report(urlPath, `broken internal link ${href}`)
+    if (status === 'redirect') report(urlPath, `internal link redirects: ${href}`)
   }
 }
 
-const readOut = (file) => (fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), "utf8") : null)
-const locs = (xml) => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
+const readOut = file =>
+  fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), 'utf8') : null
+const locs = xml => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
 
 // Non-production builds disallow everything and noindex every page, so noindex checks apply only to indexable builds
-const indexable = !/^Disallow:\s*\/\s*$/im.test(readOut("robots.txt") || "")
-const robotsSitemaps = [...(readOut("robots.txt") || "").matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(([, url]) => url)
+const indexable = !/^Disallow:\s*\/\s*$/im.test(readOut('robots.txt') || '')
+const robotsSitemaps = [...(readOut('robots.txt') || '').matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(
+  ([, url]) => url
+)
 if (robotsSitemaps.length !== 1 || robotsSitemaps[0] !== `${SITE_URL}/${SITEMAP_INDEX}`) {
-  report("/robots.txt", `must list only Sitemap: ${SITE_URL}/${SITEMAP_INDEX} (found ${robotsSitemaps.join(", ") || "none"})`)
+  report(
+    '/robots.txt',
+    `must list only Sitemap: ${SITE_URL}/${SITEMAP_INDEX} (found ${robotsSitemaps.join(', ') || 'none'})`
+  )
 }
 
 const indexXml = readOut(SITEMAP_INDEX)
 const childSitemaps = []
 if (!indexXml) {
-  report(`/${SITEMAP_INDEX}`, "missing")
+  report(`/${SITEMAP_INDEX}`, 'missing')
 } else {
-  if (!/<sitemapindex[\s>]/.test(indexXml) || /<urlset[\s>]/.test(indexXml)) report(`/${SITEMAP_INDEX}`, "is not a <sitemapindex>")
-  if (readOut("sitemap.xml") !== indexXml) report("/sitemap.xml", `must serve the same XML as /${SITEMAP_INDEX}`)
+  if (!/<sitemapindex[\s>]/.test(indexXml) || /<urlset[\s>]/.test(indexXml))
+    report(`/${SITEMAP_INDEX}`, 'is not a <sitemapindex>')
+  if (readOut('sitemap.xml') !== indexXml)
+    report('/sitemap.xml', `must serve the same XML as /${SITEMAP_INDEX}`)
   for (const loc of locs(indexXml)) {
     const file = loc.startsWith(`${SITE_URL}/`) ? loc.slice(SITE_URL.length + 1) : null
     if (!file || !CHILD_SITEMAP.test(file)) {
-      report(`/${SITEMAP_INDEX}`, `child ${loc} must be a root-level ${SITE_URL}/sitemap-<group>.xml`)
+      report(
+        `/${SITEMAP_INDEX}`,
+        `child ${loc} must be a root-level ${SITE_URL}/sitemap-<group>.xml`
+      )
     } else if (!readOut(file)) {
       report(`/${SITEMAP_INDEX}`, `lists missing sitemap ${loc}`)
     } else {
@@ -197,53 +231,65 @@ for (const file of fs.readdirSync(OUT)) {
 }
 
 const sitemapOwners = new Map()
-const isPage = (url) => {
+const isPage = url => {
   const link = classifyLink(url, SITE_URL)
-  return link.kind === "internal" && resolveInternal(link.path) === "ok"
+  return link.kind === 'internal' && resolveInternal(link.path) === 'ok'
 }
 for (const sitemap of childSitemaps) {
   const xml = readOut(sitemap)
   // A sitemap index never points at another sitemap index
-  if (!/<urlset[\s>]/.test(xml) || /<sitemapindex[\s>]/.test(xml)) report(`/${sitemap}`, "is not a <urlset>")
+  if (!/<urlset[\s>]/.test(xml) || /<sitemapindex[\s>]/.test(xml))
+    report(`/${sitemap}`, 'is not a <urlset>')
   for (const url of locs(xml)) {
     sitemapOwners.set(url, [...(sitemapOwners.get(url) || []), sitemap])
-    if (url === `${SITE_URL}/`) report(`/${sitemap}`, `lists the homepage as ${url} (use ${SITE_URL})`)
-    else if (url !== SITE_URL && !url.endsWith("/")) report(`/${sitemap}`, `URL has no trailing slash: ${url}`)
+    if (url === `${SITE_URL}/`)
+      report(`/${sitemap}`, `lists the homepage as ${url} (use ${SITE_URL})`)
+    else if (url !== SITE_URL && !url.endsWith('/'))
+      report(`/${sitemap}`, `URL has no trailing slash: ${url}`)
     if (!isPage(url)) {
       report(`/${sitemap}`, `lists URL that is not a page: ${url}`)
       continue
     }
-    const page = pageInfo.get(url === SITE_URL ? "/" : decodeURI(new URL(url).pathname))
-    if (page?.canonical !== url) report(`/${sitemap}`, `${url} does not match the page canonical ${page?.canonical}`)
+    const page = pageInfo.get(url === SITE_URL ? '/' : decodeURI(new URL(url).pathname))
+    if (page?.canonical !== url)
+      report(`/${sitemap}`, `${url} does not match the page canonical ${page?.canonical}`)
     if (indexable && page?.noindex) report(`/${sitemap}`, `lists a noindex page: ${url}`)
   }
   for (const tag of xml.match(/<xhtml:link\s[^>]*>/g) || []) {
-    const href = attribute(tag, "href")
+    const href = attribute(tag, 'href')
     if (!isPage(href)) report(`/${sitemap}`, `hreflang alternate is not a page: ${href}`)
   }
 }
 for (const [url, owners] of sitemapOwners) {
-  if (owners.length > 1) report(url, `listed in multiple sitemaps: ${owners.join(", ")}`)
+  if (owners.length > 1) report(url, `listed in multiple sitemaps: ${owners.join(', ')}`)
 }
-const sitemapPaths = new Set([...sitemapOwners.keys()].map((url) => (url === SITE_URL ? "/" : url.slice(SITE_URL.length))))
+const sitemapPaths = new Set(
+  [...sitemapOwners.keys()].map(url => (url === SITE_URL ? '/' : url.slice(SITE_URL.length)))
+)
 for (const file of pages) {
-  const urlPath = "/" + path.relative(OUT, file).replace(/index\.html$/, "")
-  if (urlPath.startsWith("/404") || urlPath.startsWith("/_not-found")) continue
+  const urlPath = '/' + path.relative(OUT, file).replace(/index\.html$/, '')
+  if (urlPath.startsWith('/404') || urlPath.startsWith('/_not-found')) continue
   // A noindex page (or any page of a non-production build) need not be in a sitemap
-  if (!sitemapPaths.has(urlPath) && indexable && !pageInfo.get(urlPath)?.noindex) report(urlPath, "is not listed in any sitemap")
+  if (!sitemapPaths.has(urlPath) && indexable && !pageInfo.get(urlPath)?.noindex)
+    report(urlPath, 'is not listed in any sitemap')
 }
 
 for (const file of allFiles) {
   if (/\.(jpe?g|png|webp|gif|avif)$/i.test(file) && fs.statSync(file).size > MAX_IMAGE_BYTES) {
     const megabytes = (fs.statSync(file).size / 1024 / 1024).toFixed(1)
-    report("/" + path.relative(OUT, file), `image is ${megabytes} MB (max ${MAX_IMAGE_BYTES / 1024 / 1024} MB)`)
+    report(
+      '/' + path.relative(OUT, file),
+      `image is ${megabytes} MB (max ${MAX_IMAGE_BYTES / 1024 / 1024} MB)`
+    )
   }
 }
 
 if (findings.length > 0) {
-  console.log(findings.join("\n"))
+  console.log(findings.join('\n'))
   console.log(`\n${findings.length} SEO issue(s) found in ${pages.length} pages.`)
   process.exit(1)
 }
 
-console.log(`SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} URLs in ${childSitemaps.length} sitemaps.`)
+console.log(
+  `SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} URLs in ${childSitemaps.length} sitemaps.`
+)

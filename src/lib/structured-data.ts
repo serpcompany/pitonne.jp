@@ -1,10 +1,3 @@
-import { businessHours, getBusinessInfo, isOpenBusinessHours } from "@/lib/data/site"
-import type { BlogPost } from "@/lib/data/blog-posts"
-import type { Service } from "@/lib/data/services"
-import type { PitonneVideo } from "@/lib/data/videos"
-import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
 import type {
   BlogPosting,
   BreadcrumbList,
@@ -13,101 +6,108 @@ import type {
   Service as ServiceSchema,
   VideoObject,
   WebSite,
-  WithContext,
-} from "schema-dts"
+  WithContext
+} from 'schema-dts'
+import type { BlogPost } from '@/lib/data/blog-posts'
+import type { Service } from '@/lib/data/services'
+import { businessHours, getBusinessInfo, isOpenBusinessHours } from '@/lib/data/site'
+import type { PitonneVideo } from '@/lib/data/videos'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from '@/lib/seo'
 
 const businessId = `${SITE_URL}/#business`
 const websiteId = `${SITE_URL}/#website`
 
-export function businessJsonLd(locale: Locale = "en"): WithContext<MedicalBusiness> {
+export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusiness> {
   const info = getBusinessInfo(locale)
   return {
-    "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
-    "@id": businessId,
+    '@context': 'https://schema.org',
+    '@type': 'MedicalBusiness',
+    '@id': businessId,
     name: info.name,
-    url: localizedCanonicalUrl("/", locale),
+    url: localizedCanonicalUrl('/', locale),
     telephone: info.phone,
     description: info.description,
     knowsLanguage: [
-      { "@type": "Language", name: "English", alternateName: "en" },
-      { "@type": "Language", name: "Japanese", alternateName: "ja" },
+      { '@type': 'Language', name: 'English', alternateName: 'en' },
+      { '@type': 'Language', name: 'Japanese', alternateName: 'ja' }
     ],
     address: {
-      "@type": "PostalAddress",
+      '@type': 'PostalAddress',
       streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
-      addressLocality: "Minato City",
-      addressRegion: "Tokyo",
-      postalCode: "106-0031",
-      addressCountry: "JP",
+      addressLocality: 'Minato City',
+      addressRegion: 'Tokyo',
+      postalCode: '106-0031',
+      addressCountry: 'JP'
     },
-    openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map((item) => ({
-      "@type": "OpeningHoursSpecification",
+    openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map(item => ({
+      '@type': 'OpeningHoursSpecification',
       dayOfWeek: item.day,
       opens: item.opens,
-      closes: item.closes,
-    })),
+      closes: item.closes
+    }))
   }
 }
 
-export function websiteJsonLd(locale: Locale = "en"): WithContext<WebSite> {
+export function websiteJsonLd(locale: Locale = 'en'): WithContext<WebSite> {
   return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": websiteId,
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': websiteId,
     name: SITE_NAME,
-    url: localizedCanonicalUrl("/", locale),
-    publisher: { "@id": businessId },
-    inLanguage: locale === "ja" ? "ja" : "en",
+    url: localizedCanonicalUrl('/', locale),
+    publisher: { '@id': businessId },
+    inLanguage: locale === 'ja' ? 'ja' : 'en'
   }
 }
 
-export function serviceJsonLd(service: Service, locale: Locale = "en"): WithContext<ServiceSchema> {
+export function serviceJsonLd(service: Service, locale: Locale = 'en'): WithContext<ServiceSchema> {
   return {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "@id": `${localizedCanonicalUrl(service.canonicalPath, locale)}#service`,
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${localizedCanonicalUrl(service.canonicalPath, locale)}#service`,
     name: service.name,
     description: service.shortDescription,
     url: localizedCanonicalUrl(service.canonicalPath, locale),
     image: service.image ? absoluteUrl(service.image) : undefined,
-    provider: { "@id": businessId },
+    provider: { '@id': businessId },
     areaServed: {
-      "@type": "City",
-      name: "Tokyo",
+      '@type': 'City',
+      name: 'Tokyo'
     },
-    serviceType: service.category,
+    serviceType: service.category
   }
 }
 
 export function blogPostingJsonLd(
-  post: Pick<BlogPost, "slug" | "title" | "excerpt" | "publishedAt" | "author" | "featureImage">,
-  locale: Locale = "en",
+  post: Pick<BlogPost, 'slug' | 'title' | 'excerpt' | 'publishedAt' | 'author' | 'featureImage'>,
+  locale: Locale = 'en'
 ): WithContext<BlogPosting> {
   const enUrl = canonicalUrl(`/blog/${post.slug}/`)
   const jaUrl = `${SITE_URL}/ja/blog/${post.slug}/`
 
   return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "@id": `${localizedCanonicalUrl(`/blog/${post.slug}/`, locale)}#blog-posting`,
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${localizedCanonicalUrl(`/blog/${post.slug}/`, locale)}#blog-posting`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     image: post.featureImage ? absoluteUrl(post.featureImage) : undefined,
-    inLanguage: locale === "ja" ? "ja" : "en",
+    inLanguage: locale === 'ja' ? 'ja' : 'en',
     // Link original and translation via Schema.org translationOfWork/workTranslation
-    ...(locale === "ja"
-      ? { translationOfWork: { "@type": "BlogPosting", "@id": `${enUrl}#blog-posting` } }
-      : { workTranslation: { "@type": "BlogPosting", "@id": `${jaUrl}#blog-posting` } }),
+    ...(locale === 'ja'
+      ? { translationOfWork: { '@type': 'BlogPosting', '@id': `${enUrl}#blog-posting` } }
+      : { workTranslation: { '@type': 'BlogPosting', '@id': `${jaUrl}#blog-posting` } }),
     author: {
-      "@type": "Person",
+      '@type': 'Person',
       name: post.author.name,
-      jobTitle: post.author.role,
+      jobTitle: post.author.role
     },
-    publisher: { "@id": businessId },
-    mainEntityOfPage: localizedCanonicalUrl(`/blog/${post.slug}/`, locale),
+    publisher: { '@id': businessId },
+    mainEntityOfPage: localizedCanonicalUrl(`/blog/${post.slug}/`, locale)
   }
 }
 
@@ -115,9 +115,9 @@ export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject>
   const watchUrl = canonicalUrl(video.watchPath)
 
   return {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "@id": `${watchUrl}#video`,
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    '@id': `${watchUrl}#video`,
     name: video.title,
     description: video.description,
     thumbnailUrl: [absoluteUrl(video.thumbnailUrl)],
@@ -126,56 +126,59 @@ export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject>
     embedUrl: absoluteUrl(video.embedUrl),
     url: watchUrl,
     mainEntityOfPage: watchUrl,
-    publisher: { "@id": businessId },
+    publisher: { '@id': businessId },
     potentialAction: {
-      "@type": "WatchAction",
+      '@type': 'WatchAction',
       target: {
-        "@type": "EntryPoint",
-        urlTemplate: watchUrl,
-      },
-    },
+        '@type': 'EntryPoint',
+        urlTemplate: watchUrl
+      }
+    }
   }
 }
 
 export function videoListJsonLd(videos: PitonneVideo[]): WithContext<ItemList> {
   return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
     name: `${SITE_NAME} Videos`,
     itemListElement: videos.map((video, index) => ({
-      "@type": "ListItem",
+      '@type': 'ListItem',
       position: index + 1,
       url: canonicalUrl(video.watchPath),
-      item: videoObjectJsonLd(video),
-    })),
+      item: videoObjectJsonLd(video)
+    }))
   }
 }
 
 // The breadcrumb follows the page's locale, matching the visible Breadcrumbs on /watch/ and /ja/watch/
-export function videoBreadcrumbJsonLd(video: PitonneVideo, locale: Locale = "en"): WithContext<BreadcrumbList> {
+export function videoBreadcrumbJsonLd(
+  video: PitonneVideo,
+  locale: Locale = 'en'
+): WithContext<BreadcrumbList> {
   const dict = getDictionary(locale)
   return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
         name: dict.nav.home,
-        item: localizedCanonicalUrl("/", locale),
+        item: localizedCanonicalUrl('/', locale)
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
         name: dict.nav.videos,
-        item: localizedCanonicalUrl("/videos/", locale),
+        item: localizedCanonicalUrl('/videos/', locale)
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 3,
-        name: locale === "ja" && video.titleJa ? video.titleJa : video.title,
-        item: localizedCanonicalUrl(video.watchPath, locale),
-      },
-    ],
+        name: locale === 'ja' && video.titleJa ? video.titleJa : video.title,
+        item: localizedCanonicalUrl(video.watchPath, locale)
+      }
+    ]
   }
 }

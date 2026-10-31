@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
-import { getLegalPage } from "@/lib/data/pages"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import type { Metadata } from 'next'
+import { LegalMarkdownPage } from '@/components/legal/legal-markdown-page'
+import { getLegalPage } from '@/lib/data/pages'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -23,13 +23,13 @@ export async function generateMetadata({
   return {
     title: dict.legal.termsMetaTitle,
     description: dict.legal.termsMeta,
-    alternates: localizedHreflangAlternates("/legal/terms-conditions/", locale as Locale),
+    alternates: localizedHreflangAlternates('/legal/terms-conditions/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.legal.termsMetaTitle,
       description: dict.legal.termsMeta,
-      path: "/legal/terms-conditions/",
-      locale: locale as Locale,
-    }),
+      path: '/legal/terms-conditions/',
+      locale: locale as Locale
+    })
   }
 }
 
@@ -41,7 +41,13 @@ export default async function TermsConditionsPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
-  const page = getLegalPage("termsConditions", locale as Locale)
+  const page = getLegalPage('termsConditions', locale as Locale)
 
-  return <LegalMarkdownPage page={page} canonicalTitle={dict.legal.termsOfUse} locale={locale as Locale} />
+  return (
+    <LegalMarkdownPage
+      page={page}
+      canonicalTitle={dict.legal.termsOfUse}
+      locale={locale as Locale}
+    />
+  )
 }

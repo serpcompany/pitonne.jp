@@ -1,5 +1,7 @@
-import ContactPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/contact/page"
-import { englishLocaleParams } from "../route-helpers"
+import ContactPage, {
+  generateMetadata as generateLocaleMetadata
+} from '@/app/[locale]/contact/page'
+import { englishLocaleParams } from '../route-helpers'
 
 export function generateMetadata() {
   return generateLocaleMetadata({ params: englishLocaleParams })

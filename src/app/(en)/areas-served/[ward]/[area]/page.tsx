@@ -1,13 +1,15 @@
-import AreaPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/areas-served/[ward]/[area]/page"
-import { getAllAreas } from "@/lib/data/areas"
-import { type PageProps, withEnglishLocale } from "../../../route-helpers"
+import AreaPage, {
+  generateMetadata as generateLocaleMetadata
+} from '@/app/[locale]/areas-served/[ward]/[area]/page'
+import { getAllAreas } from '@/lib/data/areas'
+import { type PageProps, withEnglishLocale } from '../../../route-helpers'
 
 type Params = { ward: string; area: string }
 
 export function generateStaticParams(): Params[] {
   return getAllAreas().map(({ ward, area }) => ({
     ward: ward.slug,
-    area: area.slug,
+    area: area.slug
   }))
 }
 

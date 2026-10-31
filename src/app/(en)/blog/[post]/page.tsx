@@ -1,11 +1,13 @@
-import BlogPostPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/blog/[post]/page"
-import { getAllBlogPosts } from "@/lib/data/blog-posts"
-import { type PageProps, withEnglishLocale } from "../../route-helpers"
+import BlogPostPage, {
+  generateMetadata as generateLocaleMetadata
+} from '@/app/[locale]/blog/[post]/page'
+import { getAllBlogPosts } from '@/lib/data/blog-posts'
+import { type PageProps, withEnglishLocale } from '../../route-helpers'
 
 type Params = { post: string }
 
 export function generateStaticParams(): Params[] {
-  return getAllBlogPosts("en").map((post) => ({ post: post.slug }))
+  return getAllBlogPosts('en').map(post => ({ post: post.slug }))
 }
 
 export const dynamicParams = false

@@ -8,10 +8,10 @@
 //
 // Self-contained on purpose: Wrangler bundles this file into the Function and doesn't resolve the `@/` alias.
 
-export const CANONICAL_ORIGIN = "https://pitonne.jp"
-const CANONICAL_HOST = "pitonne.jp"
-const PAGES_HOST = "pitonne-jp.pages.dev"
-export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
+export const CANONICAL_ORIGIN = 'https://pitonne.jp'
+const CANONICAL_HOST = 'pitonne.jp'
+const PAGES_HOST = 'pitonne-jp.pages.dev'
+export const SMOKE_TEST_HEADER = 'x-pitonne-smoke-test'
 
 const NON_CANONICAL_HOSTS = new Set([`www.${CANONICAL_HOST}`, PAGES_HOST])
 const PREVIEW_ALIAS = /^(?:pr-\d+|staging)$/
@@ -19,8 +19,28 @@ const PREVIEW_ALIAS = /^(?:pr-\d+|staging)$/
 // Last path segments ending in one of these are files: they never take a trailing slash. Every other dotless
 // segment is a page, which always ends in one (`trailingSlash: true`). See the URL trailing-slash standard.
 const FILE_EXTENSIONS = new Set([
-  "avif", "css", "gif", "html", "ico", "jpeg", "jpg", "js", "json", "map", "mp4", "pdf", "png", "svg", "txt",
-  "webm", "webmanifest", "webp", "woff", "woff2", "xml", "xsl",
+  'avif',
+  'css',
+  'gif',
+  'html',
+  'ico',
+  'jpeg',
+  'jpg',
+  'js',
+  'json',
+  'map',
+  'mp4',
+  'pdf',
+  'png',
+  'svg',
+  'txt',
+  'webm',
+  'webmanifest',
+  'webp',
+  'woff',
+  'woff2',
+  'xml',
+  'xsl'
 ])
 
 // Paths on which the Function itself never adds or strips a slash: `_`-prefixed (`/_next/`), `/api`, `/.well-known/`,
@@ -29,7 +49,7 @@ const FILE_EXTENSIONS = new Set([
 const KEEP_PATH = /^\/(?:_|api(?:\/|$)|\.well-known\/|keystatic(?:\/|$))/i
 
 function normalizeHost(host: string): string {
-  return host.toLowerCase().replace(/\.$/, "")
+  return host.toLowerCase().replace(/\.$/, '')
 }
 
 /** True when this host should be redirected to the canonical host. */
@@ -44,10 +64,10 @@ export function isNonCanonicalHost(host: string): boolean {
 
 /** The path in its canonical trailing-slash form, so the host redirect lands in one hop. */
 export function canonicalPath(pathname: string): string {
-  if (pathname === "/" || KEEP_PATH.test(pathname)) return pathname
-  const trimmed = pathname.replace(/\/+$/, "")
-  const lastSegment = trimmed.slice(trimmed.lastIndexOf("/") + 1)
-  const dot = lastSegment.lastIndexOf(".")
+  if (pathname === '/' || KEEP_PATH.test(pathname)) return pathname
+  const trimmed = pathname.replace(/\/+$/, '')
+  const lastSegment = trimmed.slice(trimmed.lastIndexOf('/') + 1)
+  const dot = lastSegment.lastIndexOf('.')
   if (dot === -1) return `${trimmed}/`
   if (FILE_EXTENSIONS.has(lastSegment.slice(dot + 1).toLowerCase())) return trimmed
   // A dotted segment that isn't a known file: leave it exactly as requested.
@@ -58,7 +78,10 @@ export function canonicalPath(pathname: string): string {
  * The `Location` for a canonical-host redirect, or `null` when the request should be served as is.
  * The path and query string are kept; only the trailing slash is normalized.
  */
-export function canonicalRedirectLocation(requestUrl: string | URL, headers: Headers): string | null {
+export function canonicalRedirectLocation(
+  requestUrl: string | URL,
+  headers: Headers
+): string | null {
   if (headers.has(SMOKE_TEST_HEADER)) return null
   const url = new URL(requestUrl)
   if (!isNonCanonicalHost(url.hostname)) return null
@@ -86,7 +109,7 @@ async function assetRedirectTarget(url: URL, ask: () => Promise<Response>): Prom
     // Folding is an optimization: if the asset server fails, the plain redirect still goes out.
     return null
   }
-  const location = asset.headers.get("location")
+  const location = asset.headers.get('location')
   await asset.body?.cancel().catch(() => undefined)
   if (!FOLDED_STATUSES.has(asset.status) || !location) return null
   const target = new URL(location, url)
@@ -98,7 +121,8 @@ function askFor(url: URL, request: Request, next: AssetServer): () => Promise<Re
   // GET, never the original body: only the status and Location matter, and the body is discarded. `redirect: "manual"`
   // is required: a new Request defaults to "follow", and the asset server then answers with the target's content
   // instead of the 301 (seen on Pages and in wrangler dev).
-  return () => next(new Request(url, { method: "GET", headers: request.headers, redirect: "manual" }))
+  return () =>
+    next(new Request(url, { method: 'GET', headers: request.headers, redirect: 'manual' }))
 }
 
 const redirect308 = (location: string) =>
@@ -107,8 +131,8 @@ const redirect308 = (location: string) =>
     headers: {
       Location: location,
       // Preview and deployment hosts change often; let the 308 be cached for a day, not forever.
-      "Cache-Control": "public, max-age=86400",
-    },
+      'Cache-Control': 'public, max-age=86400'
+    }
   })
 
 /**
@@ -118,16 +142,24 @@ const redirect308 = (location: string) =>
  * its final `pitonne.jp` URL in one hop instead of two. For a slashed file it is asked about the unslashed file, the
  * URL `_redirects` lists (`/videos-sitemap.xml/` -> `https://pitonne.jp/sitemap-videos.xml`).
  */
-export async function canonicalHostRedirect(request: Request, next: AssetServer): Promise<Response | null> {
+export async function canonicalHostRedirect(
+  request: Request,
+  next: AssetServer
+): Promise<Response | null> {
   const location = canonicalRedirectLocation(request.url, request.headers)
   if (!location) return null
 
   const url = new URL(request.url)
   const file = slashedFileLocation(url)
   const fileUrl = file ? new URL(file) : null
-  const target = await assetRedirectTarget(fileUrl ?? url, fileUrl ? askFor(fileUrl, request, next) : () => next())
+  const target = await assetRedirectTarget(
+    fileUrl ?? url,
+    fileUrl ? askFor(fileUrl, request, next) : () => next()
+  )
   if (!target) return redirect308(location)
-  return redirect308(`${CANONICAL_ORIGIN}${canonicalPath(target.pathname)}${target.search || url.search}`)
+  return redirect308(
+    `${CANONICAL_ORIGIN}${canonicalPath(target.pathname)}${target.search || url.search}`
+  )
 }
 
 /**
@@ -140,10 +172,10 @@ export async function canonicalHostRedirect(request: Request, next: AssetServer)
  */
 export function slashedFileLocation(requestUrl: string | URL): string | null {
   const url = new URL(requestUrl)
-  if (!url.pathname.endsWith("/")) return null
+  if (!url.pathname.endsWith('/')) return null
   const path = canonicalPath(url.pathname)
   // Unchanged (exempt or unknown dotted segment) or still slashed (a page): not a slashed file.
-  if (path === url.pathname || path.endsWith("/")) return null
+  if (path === url.pathname || path.endsWith('/')) return null
   return `${url.origin}${path}${url.search}`
 }
 
@@ -153,7 +185,10 @@ export function slashedFileLocation(requestUrl: string | URL): string | null {
  * The asset server is asked about the unslashed file, so a `_redirects` rule on it is folded into the same hop:
  * `/videos-sitemap.xml/` -> `/sitemap-videos.xml`, `/en/robots.txt/` -> `/robots.txt`.
  */
-export async function slashedFileRedirect(request: Request, next: AssetServer): Promise<Response | null> {
+export async function slashedFileRedirect(
+  request: Request,
+  next: AssetServer
+): Promise<Response | null> {
   const file = slashedFileLocation(request.url)
   if (!file) return null
   const fileUrl = new URL(file)

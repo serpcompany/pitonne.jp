@@ -1,79 +1,79 @@
-import fs from "node:fs/promises"
-import path from "node:path"
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 export const BLOG_DRAFT_SOURCES = [
   {
-    topic: "Allergies",
-    slug: "exosome-iv-therapy-risks-precautions",
-    docId: "1sTNKcmUt_iW3yzsnP-L_XOuln4Elro-Sp7ph2Ba2KPA",
-    tabId: "t.k1x6twnjjk19",
-    featureImage: "/images/content/sheet/services/immune-boost-iv-therapy.jpg",
-    relatedServiceSlugs: ["exosome-iv-drip", "iv-therapy"],
-    tags: ["iv therapy", "allergies", "safety", "tokyo"],
+    topic: 'Allergies',
+    slug: 'exosome-iv-therapy-risks-precautions',
+    docId: '1sTNKcmUt_iW3yzsnP-L_XOuln4Elro-Sp7ph2Ba2KPA',
+    tabId: 't.k1x6twnjjk19',
+    featureImage: '/images/content/sheet/services/immune-boost-iv-therapy.jpg',
+    relatedServiceSlugs: ['exosome-iv-drip', 'iv-therapy'],
+    tags: ['iv therapy', 'allergies', 'safety', 'tokyo']
   },
   {
-    topic: "Nausea",
-    slug: "iv-therapy-for-hangover-in-tokyo",
-    docId: "1_Far1t7PBMkrHRRatlXqW8evg2qCHIYV4njSd9urFFk",
-    tabId: "t.0",
-    featureImage: "/images/content/sheet/blog/iv-therapy-for-dehydration.jpg",
-    relatedServiceSlugs: ["hangover-iv-drip", "iv-therapy"],
-    tags: ["iv therapy", "nausea", "hydration", "tokyo"],
+    topic: 'Nausea',
+    slug: 'iv-therapy-for-hangover-in-tokyo',
+    docId: '1_Far1t7PBMkrHRRatlXqW8evg2qCHIYV4njSd9urFFk',
+    tabId: 't.0',
+    featureImage: '/images/content/sheet/blog/iv-therapy-for-dehydration.jpg',
+    relatedServiceSlugs: ['hangover-iv-drip', 'iv-therapy'],
+    tags: ['iv therapy', 'nausea', 'hydration', 'tokyo']
   },
   {
-    topic: "Immune health",
-    slug: "iv-therapy-for-cold-flu-tokyo",
-    docId: "1AdHS4PJNVnxyTJ4JpcU7oCUzTYbl5eP7Ffh61GY8otU",
-    tabId: "t.vs2e4rxb09mh",
-    featureImage: "/images/content/sheet/services/immune-boost-iv-therapy.jpg",
-    relatedServiceSlugs: ["immune-boost-iv-therapy", "iv-therapy"],
-    tags: ["iv therapy", "immune health", "cold and flu", "tokyo"],
+    topic: 'Immune health',
+    slug: 'iv-therapy-for-cold-flu-tokyo',
+    docId: '1AdHS4PJNVnxyTJ4JpcU7oCUzTYbl5eP7Ffh61GY8otU',
+    tabId: 't.vs2e4rxb09mh',
+    featureImage: '/images/content/sheet/services/immune-boost-iv-therapy.jpg',
+    relatedServiceSlugs: ['immune-boost-iv-therapy', 'iv-therapy'],
+    tags: ['iv therapy', 'immune health', 'cold and flu', 'tokyo']
   },
   {
-    topic: "Gut health",
-    slug: "iv-therapy-for-detox-support",
-    docId: "1MEceoXIForI_630cBbKJiXsnHsBGHwzfHXeYGG5JPzA",
-    tabId: "t.jygco4njr3f8",
-    featureImage: "/images/wellness-consultation.jpg",
-    relatedServiceSlugs: ["iv-vitamin-therapy", "iv-therapy"],
-    tags: ["iv therapy", "gut health", "detox", "tokyo"],
+    topic: 'Gut health',
+    slug: 'iv-therapy-for-detox-support',
+    docId: '1MEceoXIForI_630cBbKJiXsnHsBGHwzfHXeYGG5JPzA',
+    tabId: 't.jygco4njr3f8',
+    featureImage: '/images/wellness-consultation.jpg',
+    relatedServiceSlugs: ['iv-vitamin-therapy', 'iv-therapy'],
+    tags: ['iv therapy', 'gut health', 'detox', 'tokyo']
   },
   {
-    topic: "Stress",
-    slug: "iv-therapy-for-fatigue-in-tokyo",
-    docId: "1CnOsEDmI_12lurGeRX6PmdAdpRnM3OGEnlBt7OssXV0",
-    tabId: "t.tvgjq61z0xy1",
-    featureImage: "/images/content/sheet/blog/iv-therapy-for-fatigue.jpg",
-    relatedServiceSlugs: ["energy-fatigue-recovery-iv", "iv-therapy"],
-    tags: ["iv therapy", "stress", "fatigue", "tokyo"],
+    topic: 'Stress',
+    slug: 'iv-therapy-for-fatigue-in-tokyo',
+    docId: '1CnOsEDmI_12lurGeRX6PmdAdpRnM3OGEnlBt7OssXV0',
+    tabId: 't.tvgjq61z0xy1',
+    featureImage: '/images/content/sheet/blog/iv-therapy-for-fatigue.jpg',
+    relatedServiceSlugs: ['energy-fatigue-recovery-iv', 'iv-therapy'],
+    tags: ['iv therapy', 'stress', 'fatigue', 'tokyo']
   },
   {
-    topic: "Jet lag",
-    slug: "iv-therapy-for-low-energy",
-    docId: "1Q02V5jSewmZlk73CXsS8Kdk3qByQWjEDBJN5kZQx_n0",
-    tabId: "t.kheflcro80vc",
-    featureImage: "/images/content/sheet/services/energy-fatigue-recovery-iv.jpg",
-    relatedServiceSlugs: ["energy-fatigue-recovery-iv", "iv-therapy"],
-    tags: ["iv therapy", "jet lag", "low energy", "tokyo"],
+    topic: 'Jet lag',
+    slug: 'iv-therapy-for-low-energy',
+    docId: '1Q02V5jSewmZlk73CXsS8Kdk3qByQWjEDBJN5kZQx_n0',
+    tabId: 't.kheflcro80vc',
+    featureImage: '/images/content/sheet/services/energy-fatigue-recovery-iv.jpg',
+    relatedServiceSlugs: ['energy-fatigue-recovery-iv', 'iv-therapy'],
+    tags: ['iv therapy', 'jet lag', 'low energy', 'tokyo']
   },
   {
-    topic: "Relaxation",
-    slug: "exosome-iv-therapy-for-muscle-recovery",
-    docId: "1kVk430OSOuZju5gNvydeNpse1TMHgYAsHLQ2u2DLzuQ",
-    tabId: "t.7sb3s7d7mfa2",
-    featureImage: "/images/content/sheet/services/exosome-iv-drip.jpg",
-    relatedServiceSlugs: ["exosome-iv-drip", "iv-therapy"],
-    tags: ["iv therapy", "relaxation", "recovery", "tokyo"],
-  },
+    topic: 'Relaxation',
+    slug: 'exosome-iv-therapy-for-muscle-recovery',
+    docId: '1kVk430OSOuZju5gNvydeNpse1TMHgYAsHLQ2u2DLzuQ',
+    tabId: 't.7sb3s7d7mfa2',
+    featureImage: '/images/content/sheet/services/exosome-iv-drip.jpg',
+    relatedServiceSlugs: ['exosome-iv-drip', 'iv-therapy'],
+    tags: ['iv therapy', 'relaxation', 'recovery', 'tokyo']
+  }
 ]
 
-const BLOG_DRAFT_OUT_DIR = path.join(process.cwd(), "tmp", "blog-drafts")
-const BLOG_DRAFT_PUBLISHED_AT = "2026-05-31"
+const BLOG_DRAFT_OUT_DIR = path.join(process.cwd(), 'tmp', 'blog-drafts')
+const BLOG_DRAFT_PUBLISHED_AT = '2026-05-31'
 
 export function buildGoogleDocExportUrl({ docId, tabId }) {
   const url = new URL(`https://docs.google.com/document/d/${docId}/export`)
-  url.searchParams.set("format", "md")
-  url.searchParams.set("tab", tabId)
+  url.searchParams.set('format', 'md')
+  url.searchParams.set('tab', tabId)
   return url
 }
 
@@ -82,22 +82,23 @@ function yamlEscape(value) {
 }
 
 function formatYamlList(key, values) {
-  return [key + ":", ...values.map((value) => `  - ${yamlEscape(value)}`)]
+  return [key + ':', ...values.map(value => `  - ${yamlEscape(value)}`)]
 }
 
 function slugifyAscii(value) {
   return value
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/[^a-z0-9\s-]/g, '')
     .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
     .slice(0, 80)
 }
 
 function makeSlug(source, title, index, usedSlugs) {
   const ascii = source.slug ?? slugifyAscii(title)
-  const base = ascii && ascii.length >= 3 ? ascii : `draft-post-${String(index + 1).padStart(2, "0")}`
+  const base =
+    ascii && ascii.length >= 3 ? ascii : `draft-post-${String(index + 1).padStart(2, '0')}`
   let candidate = base
   let suffix = 2
 
@@ -111,8 +112,8 @@ function makeSlug(source, title, index, usedSlugs) {
 
 function estimateReadingTime(markdown) {
   const wordCount = markdown
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/[#>*_`[\]()]|https?:\/\/\S+/g, " ")
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/[#>*_`[\]()]|https?:\/\/\S+/g, ' ')
     .split(/\s+/)
     .filter(Boolean).length
 
@@ -120,19 +121,19 @@ function estimateReadingTime(markdown) {
 }
 
 export function cleanContent(rawMarkdown) {
-  let markdown = rawMarkdown.replace(/\r\n/g, "\n")
+  let markdown = rawMarkdown.replace(/\r\n/g, '\n')
 
   if (markdown.charCodeAt(0) === 0xfeff) {
     markdown = markdown.slice(1)
   }
 
-  markdown = markdown.replace(/^#\s*(?:タブ|Tab)\s*\d+\s*\n+/u, "")
-  markdown = markdown.replace(/^\s*If you want, I can continue with the next topic now:.*$/gim, "")
-  markdown = markdown.replace(/^\s*\[image\d*\]:\s+\S+\s*$/gim, "")
-  markdown = markdown.replace(/!\[\]\[image\d*\]\n*/g, "")
-  markdown = markdown.replace(/\n{3,}/g, "\n\n")
+  markdown = markdown.replace(/^#\s*(?:タブ|Tab)\s*\d+\s*\n+/u, '')
+  markdown = markdown.replace(/^\s*If you want, I can continue with the next topic now:.*$/gim, '')
+  markdown = markdown.replace(/^\s*\[image\d*\]:\s+\S+\s*$/gim, '')
+  markdown = markdown.replace(/!\[\]\[image\d*\]\n*/g, '')
+  markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
-  return markdown.trim() + "\n"
+  return markdown.trim() + '\n'
 }
 
 function extractTitle(markdown) {
@@ -142,18 +143,18 @@ function extractTitle(markdown) {
 function extractExcerpt(markdown) {
   const paragraphs = markdown
     .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
-    .filter((paragraph) => paragraph && !/^#{1,6}\s/.test(paragraph))
+    .map(paragraph => paragraph.trim())
+    .filter(paragraph => paragraph && !/^#{1,6}\s/.test(paragraph))
 
-  let excerpt = (paragraphs[0] ?? "Draft excerpt - please update.")
-    .replace(/\s+/g, " ")
-    .replace(/\*\*(.+?)\*\*/g, "$1")
-    .replace(/\*(.+?)\*/g, "$1")
-    .replace(/\[(.+?)\]\([^)]+\)/g, "$1")
+  let excerpt = (paragraphs[0] ?? 'Draft excerpt - please update.')
+    .replace(/\s+/g, ' ')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/\[(.+?)\]\([^)]+\)/g, '$1')
     .trim()
 
   if (excerpt.length > 220) {
-    excerpt = excerpt.slice(0, 217).replace(/\s+\S*$/, "") + "..."
+    excerpt = excerpt.slice(0, 217).replace(/\s+\S*$/, '') + '...'
   }
 
   return excerpt
@@ -161,25 +162,25 @@ function extractExcerpt(markdown) {
 
 function buildFrontmatter({ source, slug, title, excerpt, readingTime }) {
   const lines = [
-    "---",
+    '---',
     `slug: ${slug}`,
     `title: ${yamlEscape(title)}`,
     `excerpt: ${yamlEscape(excerpt)}`,
     `publishedAt: '${BLOG_DRAFT_PUBLISHED_AT}'`,
-    "category: IV Therapy",
-    "categorySlug: iv-therapy",
-    "author:",
-    "  name: Pitonne Medical Team",
-    "  role: Wellness Experts",
+    'category: IV Therapy',
+    'categorySlug: iv-therapy',
+    'author:',
+    '  name: Pitonne Medical Team',
+    '  role: Wellness Experts',
     `readingTime: ${readingTime}`,
-    "featured: false",
+    'featured: false',
     `featureImage: ${source.featureImage}`,
-    ...formatYamlList("relatedServiceSlugs", source.relatedServiceSlugs),
-    ...formatYamlList("tags", source.tags),
-    "---",
+    ...formatYamlList('relatedServiceSlugs', source.relatedServiceSlugs),
+    ...formatYamlList('tags', source.tags),
+    '---'
   ]
 
-  return lines.join("\n")
+  return lines.join('\n')
 }
 
 export function buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown }) {
@@ -194,13 +195,13 @@ export function buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown }) {
     slug,
     title,
     filename: `${slug}.md`,
-    markdown: `${frontmatter}\n\n${body}`,
+    markdown: `${frontmatter}\n\n${body}`
   }
 }
 
 async function fetchDocMarkdown(source, fetchImpl = fetch) {
   const url = buildGoogleDocExportUrl(source)
-  const response = await fetchImpl(url, { redirect: "follow" })
+  const response = await fetchImpl(url, { redirect: 'follow' })
 
   if (!response.ok) {
     throw new Error(`Failed to fetch ${source.docId} (${source.tabId}): ${response.status}`)
@@ -215,8 +216,8 @@ async function cleanManagedMarkdown(outDir) {
 
   await Promise.all(
     entries
-      .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-      .map((entry) => fs.unlink(path.join(outDir, entry.name))),
+      .filter(entry => entry.isFile() && entry.name.endsWith('.md'))
+      .map(entry => fs.unlink(path.join(outDir, entry.name)))
   )
 }
 
@@ -224,7 +225,7 @@ export async function writeBlogDrafts({
   sources = BLOG_DRAFT_SOURCES,
   outDir = BLOG_DRAFT_OUT_DIR,
   fetchImpl = fetch,
-  clean = true,
+  clean = true
 } = {}) {
   if (clean) {
     await cleanManagedMarkdown(outDir)
@@ -241,7 +242,7 @@ export async function writeBlogDrafts({
     const draft = buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown })
     const outPath = path.join(outDir, draft.filename)
 
-    await fs.writeFile(outPath, draft.markdown, "utf8")
+    await fs.writeFile(outPath, draft.markdown, 'utf8')
     drafts.push({ ...draft, outPath, topic: source.topic })
   }
 

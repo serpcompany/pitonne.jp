@@ -1,17 +1,17 @@
-import Link from "next/link"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import { PageHero } from "@/components/shared/page-hero"
-import type { MarkdownPage } from "@/lib/data/pages"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { PageHero } from '@/components/shared/page-hero'
+import type { MarkdownPage } from '@/lib/data/pages'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export function LegalMarkdownPage({
   page,
   canonicalTitle,
   description,
-  locale = "en" as Locale,
+  locale = 'en' as Locale
 }: {
   page: MarkdownPage
   canonicalTitle: string
@@ -24,9 +24,9 @@ export function LegalMarkdownPage({
     <div className="bg-[#faf9f7]">
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", locale) },
-          { label: dict.legal.legal, href: localizedRoute("/legal/", locale) },
-          { label: canonicalTitle },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
+          { label: dict.legal.legal, href: localizedRoute('/legal/', locale) },
+          { label: canonicalTitle }
         ]}
         title={canonicalTitle}
         description={description}
@@ -43,7 +43,7 @@ export function LegalMarkdownPage({
 
       <section className="border-t border-border py-8">
         <div className="container mx-auto max-w-4xl px-4">
-          <Link href={localizedRoute("/legal/", locale)} className="text-[#7A8F87] hover:underline">
+          <Link href={localizedRoute('/legal/', locale)} className="text-[#7A8F87] hover:underline">
             &larr; {dict.legal.backToLegal}
           </Link>
         </div>

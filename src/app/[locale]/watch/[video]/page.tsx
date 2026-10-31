@@ -1,15 +1,15 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Breadcrumbs } from "@/components/shared/breadcrumbs"
-import { JsonLd } from "@/components/shared/json-ld"
-import { canonicalRoutes, localizedRoute } from "@/lib/data/routes"
-import { getVideoBySlug, pitonneVideos, type PitonneVideo } from "@/lib/data/videos"
-import { absoluteUrl, localizedHreflangAlternates, SITE_NAME } from "@/lib/seo"
-import { videoBreadcrumbJsonLd, videoObjectJsonLd } from "@/lib/structured-data"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { Breadcrumbs } from '@/components/shared/breadcrumbs'
+import { JsonLd } from '@/components/shared/json-ld'
+import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
+import { getVideoBySlug, type PitonneVideo, pitonneVideos } from '@/lib/data/videos'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { absoluteUrl, localizedHreflangAlternates, SITE_NAME } from '@/lib/seo'
+import { videoBreadcrumbJsonLd, videoObjectJsonLd } from '@/lib/structured-data'
 
 export const dynamicParams = false
 
@@ -19,13 +19,13 @@ type WatchPageParams = {
 }
 
 export function generateStaticParams(): WatchPageParams[] {
-  return nonDefaultLocales.flatMap((locale) =>
-    pitonneVideos.map((video) => ({ locale, video: video.slug }))
+  return nonDefaultLocales.flatMap(locale =>
+    pitonneVideos.map(video => ({ locale, video: video.slug }))
   )
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<WatchPageParams>
 }): Promise<Metadata> {
@@ -34,24 +34,25 @@ export async function generateMetadata({
 
   if (!video) {
     return {
-      title: getDictionary(locale as Locale).common.notFoundVideo,
+      title: getDictionary(locale as Locale).common.notFoundVideo
     }
   }
 
   const alternates = localizedHreflangAlternates(video.watchPath, locale as Locale)
 
-  const isJa = locale === "ja"
+  const isJa = locale === 'ja'
   const displayTitle = isJa && video.titleJa ? video.titleJa : video.title
   const metaTitle = isJa ? displayTitle : (video.metaTitle ?? displayTitle)
-  const metaDescription = (isJa ? video.metaDescriptionJa : video.metaDescription)
-    ?? (isJa && video.descriptionJa ? video.descriptionJa : video.description)
+  const metaDescription =
+    (isJa ? video.metaDescriptionJa : video.metaDescription) ??
+    (isJa && video.descriptionJa ? video.descriptionJa : video.description)
 
   return {
     title: metaTitle,
     description: metaDescription,
     alternates,
     openGraph: {
-      type: "video.other",
+      type: 'video.other',
       url: alternates.canonical,
       title: metaTitle,
       description: metaDescription,
@@ -61,16 +62,16 @@ export async function generateMetadata({
           url: absoluteUrl(video.thumbnailUrl),
           width: 1280,
           height: 720,
-          alt: displayTitle,
-        },
-      ],
+          alt: displayTitle
+        }
+      ]
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: metaTitle,
       description: metaDescription,
-      images: [absoluteUrl(video.thumbnailUrl)],
-    },
+      images: [absoluteUrl(video.thumbnailUrl)]
+    }
   }
 }
 
@@ -87,9 +88,9 @@ export default async function WatchPage({ params }: Props) {
     notFound()
   }
 
-  const isJa = locale === "ja"
+  const isJa = locale === 'ja'
   const displayTitle = isJa && video.titleJa ? video.titleJa : video.title
-  const relatedVideos = pitonneVideos.filter((item) => item.slug !== video.slug).slice(0, 3)
+  const relatedVideos = pitonneVideos.filter(item => item.slug !== video.slug).slice(0, 3)
 
   return (
     <article className="bg-background">
@@ -99,14 +100,19 @@ export default async function WatchPage({ params }: Props) {
         <Breadcrumbs
           items={[
             { label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) },
-            { label: dict.nav.videos, href: localizedRoute(canonicalRoutes.videos, locale as Locale) },
-            { label: displayTitle },
+            {
+              label: dict.nav.videos,
+              href: localizedRoute(canonicalRoutes.videos, locale as Locale)
+            },
+            { label: displayTitle }
           ]}
         />
 
         <div className="mx-auto max-w-5xl">
           <header className="mb-8">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">{dict.videos.pitonneVideo}</p>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">
+              {dict.videos.pitonneVideo}
+            </p>
             <h1 className="font-serif text-4xl font-bold leading-tight text-foreground md:text-5xl">
               {displayTitle}
             </h1>
@@ -120,7 +126,7 @@ export default async function WatchPage({ params }: Props) {
                 {dict.videos.moreVideos}
               </h2>
               <div className="mt-6 grid gap-5 md:grid-cols-3">
-                {relatedVideos.map((related) => {
+                {relatedVideos.map(related => {
                   const relatedTitle = isJa && related.titleJa ? related.titleJa : related.title
                   return (
                     <Link
@@ -154,7 +160,7 @@ export default async function WatchPage({ params }: Props) {
 }
 
 function VideoEmbed({ video, locale }: { video: PitonneVideo; locale: string }) {
-  const displayTitle = locale === "ja" && video.titleJa ? video.titleJa : video.title
+  const displayTitle = locale === 'ja' && video.titleJa ? video.titleJa : video.title
   return (
     <div className="overflow-hidden rounded-lg bg-black shadow-lg">
       <iframe

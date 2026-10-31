@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
-import { getLegalPage } from "@/lib/data/pages"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import type { Metadata } from 'next'
+import { LegalMarkdownPage } from '@/components/legal/legal-markdown-page'
+import { getLegalPage } from '@/lib/data/pages'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -23,13 +23,13 @@ export async function generateMetadata({
   return {
     title: dict.legal.medicalDisclaimer,
     description: dict.legal.disclaimerMeta,
-    alternates: localizedHreflangAlternates("/legal/disclaimer/", locale as Locale),
+    alternates: localizedHreflangAlternates('/legal/disclaimer/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.legal.medicalDisclaimer,
       description: dict.legal.disclaimerMeta,
-      path: "/legal/disclaimer/",
-      locale: locale as Locale,
-    }),
+      path: '/legal/disclaimer/',
+      locale: locale as Locale
+    })
   }
 }
 
@@ -43,7 +43,7 @@ export default async function DisclaimerPage({ params }: Props) {
 
   return (
     <LegalMarkdownPage
-      page={getLegalPage("medicalDisclaimer", locale as Locale)}
+      page={getLegalPage('medicalDisclaimer', locale as Locale)}
       canonicalTitle={dict.legal.medicalDisclaimer}
       description={dict.legal.disclaimerDescription}
       locale={locale as Locale}

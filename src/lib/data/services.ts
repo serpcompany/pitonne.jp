@@ -1,22 +1,22 @@
-import fs from "node:fs"
-import path from "node:path"
-import matter from "gray-matter"
-import { z } from "zod"
-import type { Locale } from "@/lib/i18n/config"
+import fs from 'node:fs'
+import path from 'node:path'
+import matter from 'gray-matter'
+import { z } from 'zod'
+import type { Locale } from '@/lib/i18n/config'
 
 function serviceContentDirectory(locale: Locale): string {
-  if (locale === "ja") {
-    return path.join(process.cwd(), "content", "services", "ja")
+  if (locale === 'ja') {
+    return path.join(process.cwd(), 'content', 'services', 'ja')
   }
-  return path.join(process.cwd(), "content", "services")
+  return path.join(process.cwd(), 'content', 'services')
 }
 
-const serviceCategorySchema = z.enum(["iv-therapy", "stem-cell", "medication", "blood-tests"])
-const serviceKindSchema = z.enum(["parent", "leaf"])
+const serviceCategorySchema = z.enum(['iv-therapy', 'stem-cell', 'medication', 'blood-tests'])
+const serviceKindSchema = z.enum(['parent', 'leaf'])
 
 const faqSchema = z.object({
   question: z.string().min(1),
-  answer: z.string().min(1),
+  answer: z.string().min(1)
 })
 
 const serviceFrontmatterSchema = z.object({
@@ -25,7 +25,7 @@ const serviceFrontmatterSchema = z.object({
   category: serviceCategorySchema,
   kind: serviceKindSchema,
   parentSlug: z.string().min(1).optional(),
-  canonicalPath: z.string().startsWith("/").endsWith("/"),
+  canonicalPath: z.string().startsWith('/').endsWith('/'),
   shortDescription: z.string().min(1),
   // Optional SEO overrides for <title> / meta description
   metaTitle: z.string().min(1).optional(),
@@ -36,7 +36,7 @@ const serviceFrontmatterSchema = z.object({
   faqs: z.array(faqSchema),
   relatedServices: z.array(z.string().min(1)),
   image: z.string().optional(),
-  imageSourcePath: z.string().optional(),
+  imageSourcePath: z.string().optional()
 })
 
 interface FAQ {
@@ -74,52 +74,52 @@ export interface ServiceCategorySection {
 
 const serviceCategorySections: ServiceCategorySection[] = [
   {
-    slug: "iv-therapy",
-    title: "IV Therapy",
-    href: "/services/iv-therapy/",
+    slug: 'iv-therapy',
+    title: 'IV Therapy',
+    href: '/services/iv-therapy/',
     serviceSlugs: [
-      "exosome-iv-drip",
-      "hangover-iv-drip",
-      "energy-fatigue-recovery-iv",
-      "skin-brightening-iv-drip",
-      "immune-boost-iv-therapy",
-      "iv-vitamin-therapy",
-      "high-dose-vitamin-c-iv-therapy",
-      "nmn-iv-therapy",
-    ],
+      'exosome-iv-drip',
+      'hangover-iv-drip',
+      'energy-fatigue-recovery-iv',
+      'skin-brightening-iv-drip',
+      'immune-boost-iv-therapy',
+      'iv-vitamin-therapy',
+      'high-dose-vitamin-c-iv-therapy',
+      'nmn-iv-therapy'
+    ]
   },
   {
-    slug: "stem-cell-therapy",
-    title: "Stem Cell Therapy",
-    href: "/services/stem-cell-therapy/",
-    serviceSlugs: ["stem-cell-nasal-spray"],
+    slug: 'stem-cell-therapy',
+    title: 'Stem Cell Therapy',
+    href: '/services/stem-cell-therapy/',
+    serviceSlugs: ['stem-cell-nasal-spray']
   },
   {
-    slug: "medication",
-    title: "Medications",
-    href: "/services/medication/",
-    serviceSlugs: ["ed-medication", "androgenetic-alopecia-medicine"],
+    slug: 'medication',
+    title: 'Medications',
+    href: '/services/medication/',
+    serviceSlugs: ['ed-medication', 'androgenetic-alopecia-medicine']
   },
   {
-    slug: "blood-tests",
-    title: "Blood Tests",
-    href: "/services/blood-tests/",
-    serviceSlugs: ["hormone-blood-testing", "nutrition-blood-testing", "tumor-marker-blood-testing"],
-  },
+    slug: 'blood-tests',
+    title: 'Blood Tests',
+    href: '/services/blood-tests/',
+    serviceSlugs: ['hormone-blood-testing', 'nutrition-blood-testing', 'tumor-marker-blood-testing']
+  }
 ]
 
 const serviceCategoryTitlesJa: Record<string, string> = {
-  "IV Therapy": "点滴療法",
-  "Stem Cell Therapy": "幹細胞療法",
-  "Medications": "処方薬",
-  "Blood Tests": "血液検査",
+  'IV Therapy': '点滴療法',
+  'Stem Cell Therapy': '幹細胞療法',
+  Medications: '処方薬',
+  'Blood Tests': '血液検査'
 }
 
 const serviceOrder = [
-  "iv-therapy",
-  "stem-cell-therapy",
-  "medication",
-  ...serviceCategorySections.flatMap((section) => section.serviceSlugs),
+  'iv-therapy',
+  'stem-cell-therapy',
+  'medication',
+  ...serviceCategorySections.flatMap(section => section.serviceSlugs)
 ]
 
 function loadServices(locale: Locale): Service[] {
@@ -131,13 +131,13 @@ function loadServices(locale: Locale): Service[] {
 
   return fs
     .readdirSync(directory)
-    .filter((fileName) => fileName.endsWith(".md"))
-    .map((fileName) => {
+    .filter(fileName => fileName.endsWith('.md'))
+    .map(fileName => {
       const absolutePath = path.join(directory, fileName)
-      const parsed = matter(fs.readFileSync(absolutePath, "utf8"))
+      const parsed = matter(fs.readFileSync(absolutePath, 'utf8'))
       const frontmatter = serviceFrontmatterSchema.parse(parsed.data)
 
-      const contentSubdir = locale === "ja" ? "services/ja" : "services"
+      const contentSubdir = locale === 'ja' ? 'services/ja' : 'services'
 
       return {
         slug: frontmatter.slug,
@@ -157,13 +157,13 @@ function loadServices(locale: Locale): Service[] {
         keyPoints: frontmatter.keyPoints,
         faqs: frontmatter.faqs,
         relatedServices: frontmatter.relatedServices,
-        image: frontmatter.image,
+        image: frontmatter.image
       }
     })
     .sort((a, b) => serviceOrder.indexOf(a.slug) - serviceOrder.indexOf(b.slug))
 }
 
-const servicesByLocale = { en: loadServices("en"), ja: loadServices("ja") }
+const servicesByLocale = { en: loadServices('en'), ja: loadServices('ja') }
 
 export const services: Service[] = servicesByLocale.en
 
@@ -171,32 +171,37 @@ function getServicesForLocale(locale: Locale): Service[] {
   return servicesByLocale[locale] ?? servicesByLocale.en
 }
 
-export function getService(slug: string, locale: Locale = "en"): Service | undefined {
-  return getServicesForLocale(locale).find((service) => service.slug === slug)
+export function getService(slug: string, locale: Locale = 'en'): Service | undefined {
+  return getServicesForLocale(locale).find(service => service.slug === slug)
 }
 
-export function getServicesFromSlugs(slugs: string[], locale: Locale = "en"): Service[] {
-  return slugs.map((slug) => getService(slug, locale)).filter((service): service is Service => Boolean(service))
+export function getServicesFromSlugs(slugs: string[], locale: Locale = 'en'): Service[] {
+  return slugs
+    .map(slug => getService(slug, locale))
+    .filter((service): service is Service => Boolean(service))
 }
 
-export function getChildServices(parentSlug: string, locale: Locale = "en"): Service[] {
-  return getServicesForLocale(locale).filter((service) => service.parentSlug === parentSlug)
+export function getChildServices(parentSlug: string, locale: Locale = 'en'): Service[] {
+  return getServicesForLocale(locale).filter(service => service.parentSlug === parentSlug)
 }
 
-export function getServiceCategorySections(locale: Locale = "en"): Array<ServiceCategorySection & { services: Service[] }> {
-  return serviceCategorySections.map((section) => {
-    const localizedTitle = locale === "ja" ? (serviceCategoryTitlesJa[section.title] ?? section.title) : section.title
-    const localizedHref = locale === "ja" ? `/ja${section.href}` : section.href
+export function getServiceCategorySections(
+  locale: Locale = 'en'
+): Array<ServiceCategorySection & { services: Service[] }> {
+  return serviceCategorySections.map(section => {
+    const localizedTitle =
+      locale === 'ja' ? (serviceCategoryTitlesJa[section.title] ?? section.title) : section.title
+    const localizedHref = locale === 'ja' ? `/ja${section.href}` : section.href
 
     return {
       ...section,
       title: localizedTitle,
       href: localizedHref,
-      services: getServicesFromSlugs(section.serviceSlugs, locale),
+      services: getServicesFromSlugs(section.serviceSlugs, locale)
     }
   })
 }
 
-export function getAllServiceSlugs(locale: Locale = "en"): string[] {
-  return getServicesForLocale(locale).map((service) => service.slug)
+export function getAllServiceSlugs(locale: Locale = 'en'): string[] {
+  return getServicesForLocale(locale).map(service => service.slug)
 }

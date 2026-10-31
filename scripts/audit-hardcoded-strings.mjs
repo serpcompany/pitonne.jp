@@ -7,16 +7,16 @@
  * Usage: node scripts/audit-hardcoded-strings.mjs
  */
 
-import fs from "node:fs"
-import path from "node:path"
+import fs from 'node:fs'
+import path from 'node:path'
 
 const root = process.cwd()
 const findings = []
 
 // Directories to scan
-const scanDirs = ["src/app/[locale]", "src/components"]
+const scanDirs = ['src/app/[locale]', 'src/components']
 // Directories to skip
-const skipDirs = ["src/components/ui"]
+const skipDirs = ['src/components/ui']
 
 // Lines containing these patterns are safe (using dict, locale logic, etc.)
 const safeLinePatterns = [
@@ -40,23 +40,88 @@ const safeLinePatterns = [
   /aria-hidden/,
   /data-testid/,
   /\.test\./,
-  /console\./,
+  /console\./
 ]
 
 // Known safe English words/brands that can appear literally
 const safeWords = new Set([
-  "pitonne", "serp", "tokyo", "japan", "jsx", "tsx", "svg", "html", "css",
-  "div", "span", "section", "nav", "header", "footer", "main", "article",
-  "button", "input", "form", "label", "select", "option", "textarea",
-  "true", "false", "null", "undefined", "return", "export", "default",
-  "function", "const", "let", "var", "async", "await", "new", "this",
-  "map", "filter", "find", "key", "ref", "children", "props", "state",
-  "string", "number", "boolean", "object", "array",
-  "use", "client", "server",
-  "next", "react", "link", "image",
-  "utf", "url", "api", "gtm", "www", "http", "https", "mailto", "tel",
-  "png", "jpg", "jpeg", "webp", "gif", "ico", "pdf",
-  "english", "locale",
+  'pitonne',
+  'serp',
+  'tokyo',
+  'japan',
+  'jsx',
+  'tsx',
+  'svg',
+  'html',
+  'css',
+  'div',
+  'span',
+  'section',
+  'nav',
+  'header',
+  'footer',
+  'main',
+  'article',
+  'button',
+  'input',
+  'form',
+  'label',
+  'select',
+  'option',
+  'textarea',
+  'true',
+  'false',
+  'null',
+  'undefined',
+  'return',
+  'export',
+  'default',
+  'function',
+  'const',
+  'let',
+  'var',
+  'async',
+  'await',
+  'new',
+  'this',
+  'map',
+  'filter',
+  'find',
+  'key',
+  'ref',
+  'children',
+  'props',
+  'state',
+  'string',
+  'number',
+  'boolean',
+  'object',
+  'array',
+  'use',
+  'client',
+  'server',
+  'next',
+  'react',
+  'link',
+  'image',
+  'utf',
+  'url',
+  'api',
+  'gtm',
+  'www',
+  'http',
+  'https',
+  'mailto',
+  'tel',
+  'png',
+  'jpg',
+  'jpeg',
+  'webp',
+  'gif',
+  'ico',
+  'pdf',
+  'english',
+  'locale'
 ])
 
 // Regex: find lines with JSX text content containing 3+ consecutive ASCII letters
@@ -76,12 +141,12 @@ function extractEnglishWords(text) {
 
 function isAllSafeWords(text) {
   const words = extractEnglishWords(text)
-  return words.length > 0 && words.every((w) => safeWords.has(w.toLowerCase()))
+  return words.length > 0 && words.every(w => safeWords.has(w.toLowerCase()))
 }
 
 function scanFile(filePath) {
-  const content = fs.readFileSync(filePath, "utf8")
-  const lines = content.split("\n")
+  const content = fs.readFileSync(filePath, 'utf8')
+  const lines = content.split('\n')
   const relPath = path.relative(root, filePath)
 
   for (let i = 0; i < lines.length; i++) {
@@ -101,12 +166,12 @@ function scanFile(filePath) {
       // Skip if no real English words (just symbols/numbers)
       const englishWords = extractEnglishWords(text)
       if (englishWords.length === 0) continue
-      if (englishWords.every((w) => safeWords.has(w.toLowerCase()))) continue
+      if (englishWords.every(w => safeWords.has(w.toLowerCase()))) continue
 
       findings.push({
         file: relPath,
         line: i + 1,
-        text: text.length > 80 ? text.slice(0, 80) + "..." : text,
+        text: text.length > 80 ? text.slice(0, 80) + '...' : text
       })
     }
   }
@@ -120,12 +185,12 @@ function walkDir(dir) {
     const relPath = path.join(dir, entry.name)
 
     if (entry.isDirectory()) {
-      if (skipDirs.some((skip) => relPath.startsWith(skip))) continue
+      if (skipDirs.some(skip => relPath.startsWith(skip))) continue
       walkDir(relPath)
-    } else if (entry.name.endsWith(".tsx") || entry.name.endsWith(".ts")) {
+    } else if (entry.name.endsWith('.tsx') || entry.name.endsWith('.ts')) {
       // Skip test files and type definition files
-      if (entry.name.endsWith(".test.ts") || entry.name.endsWith(".test.tsx")) continue
-      if (entry.name.endsWith(".d.ts")) continue
+      if (entry.name.endsWith('.test.ts') || entry.name.endsWith('.test.tsx')) continue
+      if (entry.name.endsWith('.d.ts')) continue
       scanFile(path.join(root, relPath))
     }
   }
@@ -137,7 +202,7 @@ for (const dir of scanDirs) {
 }
 
 if (findings.length === 0) {
-  console.log("No hardcoded English strings found.")
+  console.log('No hardcoded English strings found.')
   process.exit(0)
 } else {
   console.log(`Found ${findings.length} potential hardcoded English string(s):\n`)
@@ -145,8 +210,8 @@ if (findings.length === 0) {
     console.log(`  ${f.file}:${f.line}`)
     console.log(`    "${f.text}"\n`)
   }
-  console.log("Review the above and ensure all user-visible text uses dict lookups.")
-  console.log("If a string is intentional (brand name, technical term), add it to the safe list")
-  console.log("in scripts/audit-hardcoded-strings.mjs\n")
+  console.log('Review the above and ensure all user-visible text uses dict lookups.')
+  console.log('If a string is intentional (brand name, technical term), add it to the safe list')
+  console.log('in scripts/audit-hardcoded-strings.mjs\n')
   process.exit(1)
 }

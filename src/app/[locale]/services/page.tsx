@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import { ServicesIndexTemplate } from "@/components/services/services-index-template"
-import { getServiceCategorySections } from "@/lib/data/services"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import type { Metadata } from 'next'
+import { ServicesIndexTemplate } from '@/components/services/services-index-template'
+import { getServiceCategorySections } from '@/lib/data/services'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -23,18 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: dict.services.metaTitle,
     description: dict.services.metaDescription,
-    alternates: localizedHreflangAlternates("/services/", locale as Locale),
+    alternates: localizedHreflangAlternates('/services/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.services.metaTitle,
       description: dict.services.metaDescription,
-      path: "/services/",
-      locale: locale as Locale,
-    }),
+      path: '/services/',
+      locale: locale as Locale
+    })
   }
 }
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params
 
-  return <ServicesIndexTemplate sections={getServiceCategorySections(locale as Locale)} locale={locale as Locale} />
+  return (
+    <ServicesIndexTemplate
+      sections={getServiceCategorySections(locale as Locale)}
+      locale={locale as Locale}
+    />
+  )
 }

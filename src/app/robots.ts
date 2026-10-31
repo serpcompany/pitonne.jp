@@ -1,8 +1,8 @@
-import type { MetadataRoute } from "next"
-import { isProductionDeployment } from "@/lib/seo"
-import { SITEMAP_INDEX_FILE, sitemapOrigin } from "@/lib/sitemaps"
+import type { MetadataRoute } from 'next'
+import { isProductionDeployment } from '@/lib/seo'
+import { SITEMAP_INDEX_FILE, sitemapOrigin } from '@/lib/sitemaps'
 
-export const dynamic = "force-static"
+export const dynamic = 'force-static'
 
 export default function robots(): MetadataRoute.Robots {
   // The sitemap index is the only entry point; it links every child sitemap
@@ -11,20 +11,20 @@ export default function robots(): MetadataRoute.Robots {
   if (isProductionDeployment()) {
     return {
       rules: {
-        userAgent: "*",
-        allow: "/",
+        userAgent: '*',
+        allow: '/',
         // The blog CMS sign-in page
-        disallow: "/keystatic/",
+        disallow: '/keystatic/'
       },
-      sitemap,
+      sitemap
     }
   }
 
   return {
     rules: {
-      userAgent: "*",
-      disallow: "/",
+      userAgent: '*',
+      disallow: '/'
     },
-    sitemap,
+    sitemap
   }
 }

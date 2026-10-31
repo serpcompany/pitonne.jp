@@ -1,14 +1,18 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { PageHero } from "@/components/shared/page-hero"
-import { ContactButton } from "@/components/shared/contact-button"
-import { getAllCategories, getBlogCategoryLocales, getBlogPostsByCategory } from "@/lib/data/blog-posts"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { ContactButton } from '@/components/shared/contact-button'
+import { PageHero } from '@/components/shared/page-hero'
+import {
+  getAllCategories,
+  getBlogCategoryLocales,
+  getBlogPostsByCategory
+} from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -17,8 +21,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.flatMap((locale) =>
-    getAllCategories(locale).map((category) => ({ locale, category: category.slug }))
+  return nonDefaultLocales.flatMap(locale =>
+    getAllCategories(locale).map(category => ({ locale, category: category.slug }))
   )
 }
 
@@ -34,20 +38,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${category.name} ${dict.blog.articles}`,
     description: categoryDescription,
-    alternates: localizedHreflangAlternates(`/blog/category/${category.slug}/`, typedLocale, getBlogCategoryLocales(category.slug)),
+    alternates: localizedHreflangAlternates(
+      `/blog/category/${category.slug}/`,
+      typedLocale,
+      getBlogCategoryLocales(category.slug)
+    ),
     ...pageSocialMetadata({
       title: `${category.name} ${dict.blog.articles}`,
       description: categoryDescription,
       path: `/blog/category/${category.slug}/`,
-      locale: typedLocale,
-    }),
+      locale: typedLocale
+    })
   }
 }
 
 export default async function BlogCategoryPage({ params }: Props) {
   const { locale, category: categorySlug } = await params
   const typedLocale = locale as Locale
-  const dateLocale = locale === "ja" ? "ja-JP" : "en-US"
+  const dateLocale = locale === 'ja' ? 'ja-JP' : 'en-US'
   const dict = getDictionary(typedLocale)
   const categories = getAllCategories(typedLocale)
   const category = categories.find(c => c.slug === categorySlug)
@@ -64,9 +72,9 @@ export default async function BlogCategoryPage({ params }: Props) {
     <div className="bg-background">
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
-          { label: dict.blog.blog, href: localizedRoute("/blog/", typedLocale) },
-          { label: category.name },
+          { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
+          { label: dict.blog.blog, href: localizedRoute('/blog/', typedLocale) },
+          { label: category.name }
         ]}
         eyebrow={dict.blog.category}
         title={category.name}
@@ -78,7 +86,7 @@ export default async function BlogCategoryPage({ params }: Props) {
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href={localizedRoute("/blog/", typedLocale)}
+              href={localizedRoute('/blog/', typedLocale)}
               className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#7A8F87] hover:text-[#7A8F87] transition-colors"
             >
               {dict.blog.all}
@@ -89,8 +97,8 @@ export default async function BlogCategoryPage({ params }: Props) {
                 href={localizedRoute(`/blog/category/${cat.slug}/`, typedLocale)}
                 className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
                   cat.slug === categorySlug
-                    ? "bg-[#7A8F87] text-white"
-                    : "border border-border hover:border-[#7A8F87] hover:text-[#7A8F87]"
+                    ? 'bg-[#7A8F87] text-white'
+                    : 'border border-border hover:border-[#7A8F87] hover:text-[#7A8F87]'
                 }`}
               >
                 {cat.name}
@@ -105,7 +113,7 @@ export default async function BlogCategoryPage({ params }: Props) {
         <div className="container mx-auto px-4">
           {categoryPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-              {categoryPosts.map((post) => (
+              {categoryPosts.map(post => (
                 <Link
                   key={post.slug}
                   href={localizedRoute(`/blog/${post.slug}/`, typedLocale)}
@@ -134,14 +142,14 @@ export default async function BlogCategoryPage({ params }: Props) {
                         })}
                       </time>
                       <span>&middot;</span>
-                      <span>{post.readingTime} {dict.common.minRead}</span>
+                      <span>
+                        {post.readingTime} {dict.common.minRead}
+                      </span>
                     </div>
                     <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                       {post.title}
                     </h2>
-                    <p className="text-muted-foreground text-sm line-clamp-3">
-                      {post.excerpt}
-                    </p>
+                    <p className="text-muted-foreground text-sm line-clamp-3">{post.excerpt}</p>
                   </div>
                 </Link>
               ))}
@@ -153,7 +161,7 @@ export default async function BlogCategoryPage({ params }: Props) {
               </div>
               <p className="text-muted-foreground mb-6">{dict.blog.noArticlesFound}</p>
               <Link
-                href={localizedRoute("/blog/", typedLocale)}
+                href={localizedRoute('/blog/', typedLocale)}
                 className="text-[#7A8F87] hover:underline"
               >
                 {dict.blog.viewAllArticles}
@@ -166,12 +174,8 @@ export default async function BlogCategoryPage({ params }: Props) {
       {/* CTA Section */}
       <section className="py-12 md:py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-serif text-foreground mb-4">
-            {dict.blog.haveQuestions}
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            {categoryCtaDescription}
-          </p>
+          <h2 className="text-2xl font-serif text-foreground mb-4">{dict.blog.haveQuestions}</h2>
+          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">{categoryCtaDescription}</p>
           <ContactButton locale={typedLocale} />
         </div>
       </section>

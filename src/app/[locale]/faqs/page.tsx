@@ -1,21 +1,21 @@
-import type { Metadata } from "next"
-import type { FAQPage, WithContext } from "schema-dts"
-import { JsonLd } from "@/components/shared/json-ld"
-import { PageHero } from "@/components/shared/page-hero"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import type { Metadata } from 'next'
+import type { FAQPage, WithContext } from 'schema-dts'
+import { JsonLd } from '@/components/shared/json-ld'
+import { PageHero } from '@/components/shared/page-hero'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -25,13 +25,13 @@ export async function generateMetadata({
   return {
     title: dict.faqs.frequentlyAskedQuestions,
     description: dict.faqs.metaDescription,
-    alternates: localizedHreflangAlternates("/faqs/", locale as Locale),
+    alternates: localizedHreflangAlternates('/faqs/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.faqs.frequentlyAskedQuestions,
       description: dict.faqs.metaDescription,
-      path: "/faqs/",
-      locale: locale as Locale,
-    }),
+      path: '/faqs/',
+      locale: locale as Locale
+    })
   }
 }
 
@@ -44,16 +44,16 @@ export default async function FaqsPage({ params }: Props) {
   const dict = getDictionary(locale as Locale)
 
   const faqJsonLd: WithContext<FAQPage> = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: dict.faqs.items.map((faq) => ({
-      "@type": "Question",
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: dict.faqs.items.map(faq => ({
+      '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
   }
 
   return (
@@ -61,8 +61,8 @@ export default async function FaqsPage({ params }: Props) {
       <JsonLd data={faqJsonLd} />
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", locale as Locale) },
-          { label: dict.nav.faqs },
+          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.faqs }
         ]}
         title={dict.faqs.frequentlyAskedQuestions}
         description={dict.faqs.heroDescription}
@@ -71,7 +71,7 @@ export default async function FaqsPage({ params }: Props) {
       <section className="bg-white py-16 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl divide-y divide-border">
-            {dict.faqs.items.map((faq) => (
+            {dict.faqs.items.map(faq => (
               <article key={faq.question} className="py-8 first:pt-0 last:pb-0">
                 <h2 className="mb-4 font-serif text-2xl text-foreground">{faq.question}</h2>
                 <p className="text-muted-foreground">{faq.answer}</p>

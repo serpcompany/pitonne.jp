@@ -5,13 +5,13 @@
 // requests the Function passes through still get `_redirects`, `_headers` and 404s from the static asset server.
 // Run after a production deploy:
 // Usage: node scripts/smoke-canonical-host.mjs <deployment-url>   (for example https://d49a67b6.pitonne-jp.pages.dev)
-import { pathToFileURL } from "node:url"
+import { pathToFileURL } from 'node:url'
 
-export const CANONICAL_ORIGIN = "https://pitonne.jp"
-export const PAGES_ORIGIN = "https://pitonne-jp.pages.dev"
-export const WWW_ORIGIN = "https://www.pitonne.jp"
-export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
-export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: "1" }
+export const CANONICAL_ORIGIN = 'https://pitonne.jp'
+export const PAGES_ORIGIN = 'https://pitonne-jp.pages.dev'
+export const WWW_ORIGIN = 'https://www.pitonne.jp'
+export const SMOKE_TEST_HEADER = 'x-pitonne-smoke-test'
+export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: '1' }
 
 // A new deployment can take a few seconds to replace the previous one at the edge. The first check waits for that
 // (up to ATTEMPTS tries); once the edge has answered, every later check gets LATER_ATTEMPTS tries.
@@ -25,7 +25,11 @@ const FRESH_DEPLOYMENT_MS = 120_000
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
 
-const redirect = (url, location, extra = {}) => ({ url, expect: { status: 308, location }, ...extra })
+const redirect = (url, location, extra = {}) => ({
+  url,
+  expect: { status: 308, location },
+  ...extra
+})
 
 /** One 308 from a non-canonical origin (pages.dev, a deployment URL) to the matching pitonne.jp URL. */
 export function redirectChecks(origin, marker) {
@@ -35,7 +39,7 @@ export function redirectChecks(origin, marker) {
     redirect(`${origin}/contact`, `${CANONICAL_ORIGIN}/contact/`),
     redirect(`${origin}/robots.txt`, `${CANONICAL_ORIGIN}/robots.txt`),
     // A `_redirects` rule is folded into the same hop: /en/ -> / on the canonical host
-    redirect(`${origin}/en/`, `${CANONICAL_ORIGIN}/`),
+    redirect(`${origin}/en/`, `${CANONICAL_ORIGIN}/`)
   ]
 }
 
@@ -45,13 +49,21 @@ export function redirectChecks(origin, marker) {
  */
 export function passThroughChecks(origin, headers = SMOKE_HEADERS) {
   return [
-    { url: `${origin}/ja/`, headers, expect: { status: 200, contentType: "text/html" } },
+    { url: `${origin}/ja/`, headers, expect: { status: 200, contentType: 'text/html' } },
     // `_redirects`: the Keystatic single-page-app rewrite and a legacy 301
-    { url: `${origin}/keystatic/branch/main`, headers, expect: { status: 200, contentType: "text/html" } },
-    { url: `${origin}/en/`, headers, expect: { status: 301, location: "/" } },
+    {
+      url: `${origin}/keystatic/branch/main`,
+      headers,
+      expect: { status: 200, contentType: 'text/html' }
+    },
+    { url: `${origin}/en/`, headers, expect: { status: 301, location: '/' } },
     // `_headers`
-    { url: `${origin}/sitemap.xml`, headers, expect: { status: 200, contentType: "application/xml" } },
-    { url: `${origin}/no-such-page-smoke-test/`, headers, expect: { status: 404 } },
+    {
+      url: `${origin}/sitemap.xml`,
+      headers,
+      expect: { status: 200, contentType: 'application/xml' }
+    },
+    { url: `${origin}/no-such-page-smoke-test/`, headers, expect: { status: 404 } }
   ]
 }
 
@@ -63,9 +75,9 @@ export function slashedFileChecks(origin, marker, headers) {
   const query = `?smoke=${encodeURIComponent(marker)}`
   const checks = [
     redirect(`${origin}/sitemap-index.xml/${query}`, `${origin}/sitemap-index.xml${query}`),
-    redirect(`${origin}/robots.txt/`, `${origin}/robots.txt`),
+    redirect(`${origin}/robots.txt/`, `${origin}/robots.txt`)
   ]
-  return headers ? checks.map((check) => ({ ...check, headers })) : checks
+  return headers ? checks.map(check => ({ ...check, headers })) : checks
 }
 
 /** The production checks run after each deploy to main. `zone: true` marks www, which a zone rule redirects. */
@@ -75,7 +87,9 @@ export function smokeChecks({ deploymentUrl, marker }) {
     ...redirectChecks(PAGES_ORIGIN, marker),
     ...passThroughChecks(PAGES_ORIGIN),
     ...slashedFileChecks(CANONICAL_ORIGIN, marker),
-    redirect(`${WWW_ORIGIN}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`, { zone: true }),
+    redirect(`${WWW_ORIGIN}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`, {
+      zone: true
+    })
   ]
   if (deploymentUrl) {
     const origin = new URL(deploymentUrl).origin
@@ -83,8 +97,8 @@ export function smokeChecks({ deploymentUrl, marker }) {
       ...[
         ...redirectChecks(origin, marker),
         ...passThroughChecks(origin),
-        ...slashedFileChecks(origin, marker, SMOKE_HEADERS),
-      ].map((check) => ({ ...check, fresh: true })),
+        ...slashedFileChecks(origin, marker, SMOKE_HEADERS)
+      ].map(check => ({ ...check, fresh: true }))
     )
   }
   return checks
@@ -103,41 +117,45 @@ export function sameLocation(location, expected, requestUrl) {
 /** Compares one response with its check. Returns { ok, warning?, message }. */
 export function evaluate(check, { status, location, contentType, mitigated }) {
   const { expect } = check
-  const label = `${check.url}${check.headers ? ` (with ${Object.keys(check.headers).join(", ")})` : ""}`
-  const got = `${status}${location ? ` -> ${location}` : ""}${contentType ? ` [${contentType}]` : ""}`
-  const wanted = `${expect.status}${expect.location ? ` -> ${expect.location}` : ""}${
-    expect.contentType ? ` [${expect.contentType}]` : ""
+  const label = `${check.url}${check.headers ? ` (with ${Object.keys(check.headers).join(', ')})` : ''}`
+  const got = `${status}${location ? ` -> ${location}` : ''}${contentType ? ` [${contentType}]` : ''}`
+  const wanted = `${expect.status}${expect.location ? ` -> ${expect.location}` : ''}${
+    expect.contentType ? ` [${expect.contentType}]` : ''
   }`
   const matches =
     status === expect.status &&
     (expect.location === undefined || sameLocation(location, expect.location, check.url)) &&
-    (expect.contentType === undefined || (contentType ?? "").startsWith(expect.contentType))
+    (expect.contentType === undefined || (contentType ?? '').startsWith(expect.contentType))
   if (matches) return { ok: true, message: `${label}: ${got}` }
   if (check.zone && mitigated) {
-    return { ok: true, warning: true, message: `${label}: Cloudflare challenged the CI runner (${status}); not checked.` }
+    return {
+      ok: true,
+      warning: true,
+      message: `${label}: Cloudflare challenged the CI runner (${status}); not checked.`
+    }
   }
   return { ok: false, message: `${label}: ${got}, expected ${wanted}` }
 }
 
 export async function probe(check) {
   const response = await fetch(check.url, {
-    redirect: "manual",
+    redirect: 'manual',
     headers: check.headers ?? {},
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
   })
   await response.body?.cancel()
   return {
     status: response.status,
-    location: response.headers.get("location"),
-    contentType: response.headers.get("content-type"),
-    mitigated: response.headers.has("cf-mitigated"),
+    location: response.headers.get('location'),
+    contentType: response.headers.get('content-type'),
+    mitigated: response.headers.has('cf-mitigated')
   }
 }
 
 /** Runs one check, retrying while it fails: at least `attempts` tries, and until `until` (a Date.now() time). */
 export async function run(
   check,
-  { attempts = ATTEMPTS, until = 0, delayMs = RETRY_DELAY_MS, probeFn = probe, now = Date.now } = {},
+  { attempts = ATTEMPTS, until = 0, delayMs = RETRY_DELAY_MS, probeFn = probe, now = Date.now } = {}
 ) {
   let result
   for (let attempt = 1; ; attempt++) {
@@ -147,7 +165,7 @@ export async function run(
       result = { ok: false, message: `${check.url}: ${error.message}` }
     }
     if (result.ok || (attempt >= attempts && now() >= until)) return result
-    await new Promise((resolve) => setTimeout(resolve, delayMs))
+    await new Promise(resolve => setTimeout(resolve, delayMs))
   }
 }
 
@@ -157,11 +175,12 @@ export async function runChecks(checks, { freshMs = FRESH_DEPLOYMENT_MS, ...opti
   let passed = true
   let freshUntil
   for (const [index, check] of checks.entries()) {
-    const attempts = index === 0 ? options.attempts : Math.min(options.attempts ?? ATTEMPTS, LATER_ATTEMPTS)
+    const attempts =
+      index === 0 ? options.attempts : Math.min(options.attempts ?? ATTEMPTS, LATER_ATTEMPTS)
     if (check.fresh) freshUntil ??= now() + freshMs
     const result = await run(check, { ...options, attempts, until: check.fresh ? freshUntil : 0 })
     if (!result.ok) passed = false
-    const prefix = result.ok ? (result.warning ? "::warning::" : "ok ") : "::error::"
+    const prefix = result.ok ? (result.warning ? '::warning::' : 'ok ') : '::error::'
     console.log(`${prefix}${result.message}`)
   }
   return passed
@@ -171,7 +190,7 @@ async function main([deploymentUrl]) {
   if (!deploymentUrl) {
     console.log(
       "::warning::No deployment URL given (wrangler-action's deployment-url output was empty); " +
-        "checking pitonne-jp.pages.dev and www only.",
+        'checking pitonne-jp.pages.dev and www only.'
     )
   }
   const marker = process.env.GITHUB_SHA?.slice(0, 7) || String(Date.now())

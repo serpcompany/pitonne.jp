@@ -1,45 +1,45 @@
-import type { Metadata } from "next"
-import { Inter, Playfair_Display } from "next/font/google"
-import { GoogleTagManager } from "@next/third-parties/google"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { JsonLd } from "@/components/shared/json-ld"
+import { GoogleTagManager } from '@next/third-parties/google'
+import type { Metadata } from 'next'
+import { Inter, Playfair_Display } from 'next/font/google'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { JsonLd } from '@/components/shared/json-ld'
+import { getUntranslatedBlogPaths } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import { getServiceCategorySections } from '@/lib/data/services'
+import { type Locale, nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 import {
+  absoluteUrl,
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   DEFAULT_TITLE,
-  GTM_CONTAINER_ID,
-  SITE_NAME,
-  SITE_URL,
-  absoluteUrl,
   deploymentRobots,
+  GTM_CONTAINER_ID,
   isProductionDeployment,
-} from "@/lib/seo"
-import { businessJsonLd, websiteJsonLd } from "@/lib/structured-data"
-import { getServiceCategorySections } from "@/lib/data/services"
-import { getUntranslatedBlogPaths } from "@/lib/data/blog-posts"
-import { nonDefaultLocales, type Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+  SITE_NAME,
+  SITE_URL
+} from '@/lib/seo'
+import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
 
 export const dynamicParams = false
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  variable: '--font-inter'
 })
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
+  subsets: ['latin'],
+  variable: '--font-playfair'
 })
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -49,63 +49,52 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: locale === "ja"
-        ? "Pitonne | 東京の幹細胞・点滴療法"
-        : DEFAULT_TITLE,
-      template: `%s | ${SITE_NAME}`,
+      default: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      template: `%s | ${SITE_NAME}`
     },
-    description: locale === "ja"
-      ? dict.home.heroDescription
-      : DEFAULT_DESCRIPTION,
+    description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
     // No alternates or openGraph.url here: with trailingSlash on, the metadata API would write the homepage as
     // https://pitonne.jp/. Every other page sets its own; the homepage renders its tags itself (HomepageHeadTags).
     openGraph: {
-      title: locale === "ja"
-        ? "Pitonne | 東京の幹細胞・点滴療法"
-        : DEFAULT_TITLE,
-      description: locale === "ja"
-        ? dict.home.heroDescription
-        : DEFAULT_DESCRIPTION,
+      title: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
       siteName: SITE_NAME,
       images: [
         {
           url: absoluteUrl(DEFAULT_OG_IMAGE),
           width: 1200,
           height: 630,
-          alt: locale === "ja"
-            ? "Pitonne 東京の幹細胞・点滴療法"
-            : "Pitonne Stem Cell & IV Therapy in Tokyo",
-        },
+          alt:
+            locale === 'ja'
+              ? 'Pitonne 東京の幹細胞・点滴療法'
+              : 'Pitonne Stem Cell & IV Therapy in Tokyo'
+        }
       ],
-      locale: locale === "ja" ? "ja_JP" : "en_US",
-      type: "website",
+      locale: locale === 'ja' ? 'ja_JP' : 'en_US',
+      type: 'website'
     },
     twitter: {
-      card: "summary_large_image",
-      title: locale === "ja"
-        ? "Pitonne | 東京の幹細胞・点滴療法"
-        : DEFAULT_TITLE,
-      description: locale === "ja"
-        ? dict.home.heroDescription
-        : DEFAULT_DESCRIPTION,
-      images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+      card: 'summary_large_image',
+      title: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
+      images: [absoluteUrl(DEFAULT_OG_IMAGE)]
     },
     robots: deploymentRobots(),
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },
-        { url: "/icon-dark-32x32.png", media: "(prefers-color-scheme: dark)" },
-        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+        { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+        { url: '/icon.svg', type: 'image/svg+xml' }
       ],
-      apple: "/apple-icon.png",
-    },
+      apple: '/apple-icon.png'
+    }
   }
 }
 
 export default async function LocaleLayout({
   children,
-  params,
+  params
 }: Readonly<{
   children: React.ReactNode
   params: Promise<{ locale: string }>
@@ -125,7 +114,7 @@ export default async function LocaleLayout({
               src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
               height="0"
               width="0"
-              style={{ display: "none", visibility: "hidden" }}
+              style={{ display: 'none', visibility: 'hidden' }}
               title="Google Tag Manager"
             />
           </noscript>
@@ -135,13 +124,13 @@ export default async function LocaleLayout({
         <Header
           locale={typedLocale}
           dict={dict}
-          serviceNavigation={getServiceCategorySections(typedLocale).map((section) => ({
+          serviceNavigation={getServiceCategorySections(typedLocale).map(section => ({
             name: section.title,
             href: section.href,
-            items: section.services.map((service) => ({
+            items: section.services.map(service => ({
               name: service.name,
-              href: localizedRoute(service.canonicalPath, typedLocale),
-            })),
+              href: localizedRoute(service.canonicalPath, typedLocale)
+            }))
           }))}
           untranslatedPaths={getUntranslatedBlogPaths(typedLocale)}
         />

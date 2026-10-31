@@ -1,5 +1,7 @@
-import PrivacyPolicyPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/legal/privacy-policy/page"
-import { englishLocaleParams } from "../../route-helpers"
+import PrivacyPolicyPage, {
+  generateMetadata as generateLocaleMetadata
+} from '@/app/[locale]/legal/privacy-policy/page'
+import { englishLocaleParams } from '../../route-helpers'
 
 export function generateMetadata() {
   return generateLocaleMetadata({ params: englishLocaleParams })

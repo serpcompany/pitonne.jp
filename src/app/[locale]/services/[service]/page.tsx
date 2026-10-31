@@ -1,13 +1,18 @@
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { ServiceDetailTemplate } from "@/components/services/service-detail-template"
-import { ServiceParentTemplate } from "@/components/services/service-parent-template"
-import { getBlogPostsForService } from "@/lib/data/blog-posts"
-import { getAllServiceSlugs, getChildServices, getService, getServicesFromSlugs } from "@/lib/data/services"
-import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { ServiceDetailTemplate } from '@/components/services/service-detail-template'
+import { ServiceParentTemplate } from '@/components/services/service-parent-template'
+import { getBlogPostsForService } from '@/lib/data/blog-posts'
+import {
+  getAllServiceSlugs,
+  getChildServices,
+  getService,
+  getServicesFromSlugs
+} from '@/lib/data/services'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -16,8 +21,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.flatMap((locale) =>
-    getAllServiceSlugs(locale).map((slug) => ({ locale, service: slug }))
+  return nonDefaultLocales.flatMap(locale =>
+    getAllServiceSlugs(locale).map(slug => ({ locale, service: slug }))
   )
 }
 
@@ -41,8 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: metaDescription,
       path: service.canonicalPath,
       locale: locale as Locale,
-      images: service.image ? [absoluteUrl(service.image)] : undefined,
-    }),
+      images: service.image ? [absoluteUrl(service.image)] : undefined
+    })
   }
 }
 
@@ -55,12 +60,16 @@ export default async function ServiceDetailPage({ params }: Props) {
     notFound()
   }
 
-  const parentService = service.parentSlug
-    ? getService(service.parentSlug, typedLocale)
-    : undefined
+  const parentService = service.parentSlug ? getService(service.parentSlug, typedLocale) : undefined
 
-  if (service.kind === "parent") {
-    return <ServiceParentTemplate service={service} childServices={getChildServices(service.slug, typedLocale)} locale={typedLocale} />
+  if (service.kind === 'parent') {
+    return (
+      <ServiceParentTemplate
+        service={service}
+        childServices={getChildServices(service.slug, typedLocale)}
+        locale={typedLocale}
+      />
+    )
   }
 
   return (

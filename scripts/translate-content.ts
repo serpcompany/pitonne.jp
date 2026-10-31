@@ -8,64 +8,64 @@
  *   npx tsx scripts/translate-content.ts --file content/blog/iv-therapy-for-fatigue.md
  */
 
-import fs from "node:fs"
-import path from "node:path"
-import matter from "gray-matter"
+import fs from 'node:fs'
+import path from 'node:path'
+import matter from 'gray-matter'
 
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY
-const DEEPL_API_URL = "https://api-free.deepl.com/v2/translate"
+const DEEPL_API_URL = 'https://api-free.deepl.com/v2/translate'
 
 if (!DEEPL_API_KEY) {
-  console.error("Error: DEEPL_API_KEY environment variable is required")
+  console.error('Error: DEEPL_API_KEY environment variable is required')
   process.exit(1)
 }
 
 // Parse CLI args
 const args = process.argv.slice(2)
-const force = args.includes("--force")
-const dryRun = args.includes("--dry-run")
-const fileArgIndex = args.indexOf("--file")
+const force = args.includes('--force')
+const dryRun = args.includes('--dry-run')
+const fileArgIndex = args.indexOf('--file')
 const singleFile = fileArgIndex !== -1 ? args[fileArgIndex + 1] : null
 
 // Content directories to translate
 const contentDirs = [
-  { dir: "content/services", type: "service" },
-  { dir: "content/blog", type: "blog" },
+  { dir: 'content/services', type: 'service' },
+  { dir: 'content/blog', type: 'blog' }
 ]
 
 // Fields to translate per content type
 const translatableFields: Record<string, string[]> = {
-  service: ["title", "shortDescription", "fullDescription"],
-  blog: ["title", "excerpt"],
+  service: ['title', 'shortDescription', 'fullDescription'],
+  blog: ['title', 'excerpt']
 }
 
 // Array fields that contain translatable strings
 const translatableArrayFields: Record<string, string[]> = {
-  service: ["benefits", "keyPoints"],
-  blog: ["tags"],
+  service: ['benefits', 'keyPoints'],
+  blog: ['tags']
 }
 
 // FAQ fields (array of objects with question/answer)
 const faqFields: Record<string, string> = {
-  service: "faqs",
+  service: 'faqs'
 }
 
 // Fields to NEVER translate (slugs, paths, references)
 const preserveFields = new Set([
-  "slug",
-  "category",
-  "categorySlug",
-  "kind",
-  "parentSlug",
-  "canonicalPath",
-  "relatedServices",
-  "relatedServiceSlugs",
-  "image",
-  "imageSourcePath",
-  "featureImage",
-  "publishedAt",
-  "readingTime",
-  "featured",
+  'slug',
+  'category',
+  'categorySlug',
+  'kind',
+  'parentSlug',
+  'canonicalPath',
+  'relatedServices',
+  'relatedServiceSlugs',
+  'image',
+  'imageSourcePath',
+  'featureImage',
+  'publishedAt',
+  'readingTime',
+  'featured'
 ])
 
 async function translateText(text: string): Promise<string> {
@@ -77,16 +77,16 @@ async function translateBatch(texts: string[]): Promise<string[]> {
   if (texts.length === 0) return []
 
   const response = await fetch(DEEPL_API_URL, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       text: texts,
-      source_lang: "EN",
-      target_lang: "JA",
-    }),
+      source_lang: 'EN',
+      target_lang: 'JA'
+    })
   })
 
   if (!response.ok) {
@@ -98,14 +98,11 @@ async function translateBatch(texts: string[]): Promise<string[]> {
   return data.translations.map((t: { text: string }) => t.text)
 }
 
-async function translateMarkdownFile(
-  filePath: string,
-  contentType: string,
-): Promise<void> {
+async function translateMarkdownFile(filePath: string, contentType: string): Promise<void> {
   const absolutePath = path.join(process.cwd(), filePath)
   const dir = path.dirname(absolutePath)
   const fileName = path.basename(absolutePath)
-  const jaDir = path.join(dir, "ja")
+  const jaDir = path.join(dir, 'ja')
   const jaPath = path.join(jaDir, fileName)
 
   // Check if translation already exists
@@ -115,7 +112,7 @@ async function translateMarkdownFile(
   }
 
   // Read and parse the English file
-  const raw = fs.readFileSync(absolutePath, "utf8")
+  const raw = fs.readFileSync(absolutePath, 'utf8')
   const parsed = matter(raw)
   const frontmatter = { ...parsed.data }
   const bodyContent = parsed.content.trim()
@@ -127,7 +124,7 @@ async function translateMarkdownFile(
   // Simple string fields
   const simpleFields = translatableFields[contentType] || []
   for (const field of simpleFields) {
-    if (frontmatter[field] && typeof frontmatter[field] === "string") {
+    if (frontmatter[field] && typeof frontmatter[field] === 'string') {
       textsToTranslate.push(frontmatter[field])
       textKeys.push(`field:${field}`)
     }
@@ -138,7 +135,7 @@ async function translateMarkdownFile(
   for (const field of arrayFields) {
     if (Array.isArray(frontmatter[field])) {
       for (let i = 0; i < frontmatter[field].length; i++) {
-        if (typeof frontmatter[field][i] === "string") {
+        if (typeof frontmatter[field][i] === 'string') {
           textsToTranslate.push(frontmatter[field][i])
           textKeys.push(`array:${field}:${i}`)
         }
@@ -163,21 +160,21 @@ async function translateMarkdownFile(
   }
 
   // Author name/role for blog posts
-  if (contentType === "blog" && frontmatter.author) {
+  if (contentType === 'blog' && frontmatter.author) {
     if (frontmatter.author.name) {
       textsToTranslate.push(frontmatter.author.name)
-      textKeys.push("author:name")
+      textKeys.push('author:name')
     }
     if (frontmatter.author.role) {
       textsToTranslate.push(frontmatter.author.role)
-      textKeys.push("author:role")
+      textKeys.push('author:role')
     }
   }
 
   // Body content
   if (bodyContent) {
     textsToTranslate.push(bodyContent)
-    textKeys.push("body")
+    textKeys.push('body')
   }
 
   if (dryRun) {
@@ -198,24 +195,25 @@ async function translateMarkdownFile(
     const key = textKeys[i]
     const value = translated[i]
 
-    if (key.startsWith("field:")) {
-      const field = key.split(":")[1]
+    if (key.startsWith('field:')) {
+      const field = key.split(':')[1]
       jaFrontmatter[field] = value
-    } else if (key.startsWith("array:")) {
-      const [, field, index] = key.split(":")
+    } else if (key.startsWith('array:')) {
+      const [, field, index] = key.split(':')
       if (!jaFrontmatter[field]) jaFrontmatter[field] = [...frontmatter[field]]
       jaFrontmatter[field][parseInt(index)] = value
-    } else if (key.startsWith("faq:")) {
-      const [, field, index, subField] = key.split(":")
-      if (!jaFrontmatter[field]) jaFrontmatter[field] = frontmatter[field].map((f: Record<string, string>) => ({ ...f }))
+    } else if (key.startsWith('faq:')) {
+      const [, field, index, subField] = key.split(':')
+      if (!jaFrontmatter[field])
+        jaFrontmatter[field] = frontmatter[field].map((f: Record<string, string>) => ({ ...f }))
       jaFrontmatter[field][parseInt(index)][subField] = value
-    } else if (key === "author:name") {
+    } else if (key === 'author:name') {
       if (!jaFrontmatter.author) jaFrontmatter.author = { ...frontmatter.author }
       jaFrontmatter.author.name = value
-    } else if (key === "author:role") {
+    } else if (key === 'author:role') {
       if (!jaFrontmatter.author) jaFrontmatter.author = { ...frontmatter.author }
       jaFrontmatter.author.role = value
-    } else if (key === "body") {
+    } else if (key === 'body') {
       jaBody = value
     }
   }
@@ -226,24 +224,24 @@ async function translateMarkdownFile(
   }
 
   const jaContent = matter.stringify(jaBody, jaFrontmatter)
-  fs.writeFileSync(jaPath, jaContent, "utf8")
+  fs.writeFileSync(jaPath, jaContent, 'utf8')
   console.log(`  DONE ${filePath} -> ja/${fileName}`)
 }
 
 async function main() {
-  console.log("DeepL Content Translation")
-  console.log(`Mode: ${dryRun ? "DRY RUN" : force ? "FORCE" : "NORMAL"}`)
-  console.log("")
+  console.log('DeepL Content Translation')
+  console.log(`Mode: ${dryRun ? 'DRY RUN' : force ? 'FORCE' : 'NORMAL'}`)
+  console.log('')
 
   if (singleFile) {
     // Determine content type from path
-    const type = singleFile.includes("/blog/")
-      ? "blog"
-      : singleFile.includes("/services/")
-        ? "service"
-        : "unknown"
-    if (type === "unknown") {
-      console.error("Cannot determine content type for:", singleFile)
+    const type = singleFile.includes('/blog/')
+      ? 'blog'
+      : singleFile.includes('/services/')
+        ? 'service'
+        : 'unknown'
+    if (type === 'unknown') {
+      console.error('Cannot determine content type for:', singleFile)
       process.exit(1)
     }
     await translateMarkdownFile(singleFile, type)
@@ -258,22 +256,20 @@ async function main() {
     }
 
     console.log(`\nProcessing ${dir}/`)
-    const files = fs
-      .readdirSync(absoluteDir)
-      .filter((f) => f.endsWith(".md"))
+    const files = fs.readdirSync(absoluteDir).filter(f => f.endsWith('.md'))
 
     for (const file of files) {
       const filePath = `${dir}/${file}`
       await translateMarkdownFile(filePath, type)
       // Small delay to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 200))
+      await new Promise(resolve => setTimeout(resolve, 200))
     }
   }
 
-  console.log("\nDone!")
+  console.log('\nDone!')
 }
 
-main().catch((err) => {
-  console.error("Translation failed:", err)
+main().catch(err => {
+  console.error('Translation failed:', err)
   process.exit(1)
 })

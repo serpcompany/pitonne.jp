@@ -1,25 +1,24 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { PlayCircle } from "lucide-react"
-import { Breadcrumbs } from "@/components/shared/breadcrumbs"
-import { JsonLd } from "@/components/shared/json-ld"
-import { canonicalRoutes } from "@/lib/data/routes"
-import { localizedRoute } from "@/lib/data/routes"
-import { pitonneVideos } from "@/lib/data/videos"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import { videoListJsonLd } from "@/lib/structured-data"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import { PlayCircle } from 'lucide-react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { Breadcrumbs } from '@/components/shared/breadcrumbs'
+import { JsonLd } from '@/components/shared/json-ld'
+import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
+import { pitonneVideos } from '@/lib/data/videos'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { videoListJsonLd } from '@/lib/structured-data'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -35,8 +34,8 @@ export async function generateMetadata({
       title: dict.videos.metaTitle,
       description: dict.videos.metaDescription,
       path: canonicalRoutes.videos,
-      locale: locale as Locale,
-    }),
+      locale: locale as Locale
+    })
   }
 }
 
@@ -52,24 +51,39 @@ export default async function VideosPage({ params }: Props) {
     <section className="bg-background">
       <JsonLd data={videoListJsonLd(pitonneVideos)} />
       <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
-        <Breadcrumbs items={[{ label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) }, { label: dict.nav.videos }]} />
+        <Breadcrumbs
+          items={[
+            { label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) },
+            { label: dict.nav.videos }
+          ]}
+        />
 
         <div className="mb-10 max-w-3xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">{dict.videos.watch}</p>
-          <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">{dict.videos.pitonneVideos}</h1>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#7A8F87]">
+            {dict.videos.watch}
+          </p>
+          <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">
+            {dict.videos.pitonneVideos}
+          </h1>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
             {dict.videos.videosDescription}
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {pitonneVideos.map((video) => (
-            <article key={video.slug} className="overflow-hidden rounded-lg border border-border bg-white shadow-sm">
-              <Link href={localizedRoute(video.watchPath, locale as Locale)} className="group block">
+          {pitonneVideos.map(video => (
+            <article
+              key={video.slug}
+              className="overflow-hidden rounded-lg border border-border bg-white shadow-sm"
+            >
+              <Link
+                href={localizedRoute(video.watchPath, locale as Locale)}
+                className="group block"
+              >
                 <div className="relative aspect-video bg-muted">
                   <img
                     src={video.thumbnailUrl}
-                    alt={locale === "ja" && video.titleJa ? video.titleJa : video.title}
+                    alt={locale === 'ja' && video.titleJa ? video.titleJa : video.title}
                     className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]"
                     loading="lazy"
                   />
@@ -79,7 +93,7 @@ export default async function VideosPage({ params }: Props) {
                 </div>
                 <div className="p-5">
                   <h2 className="text-base font-semibold leading-7 text-foreground group-hover:text-[#7A8F87]">
-                    {locale === "ja" && video.titleJa ? video.titleJa : video.title}
+                    {locale === 'ja' && video.titleJa ? video.titleJa : video.title}
                   </h2>
                 </div>
               </Link>

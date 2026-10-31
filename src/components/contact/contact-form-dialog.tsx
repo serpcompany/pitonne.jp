@@ -1,16 +1,16 @@
-import Script from "next/script"
-import { X } from "lucide-react"
+import { X } from 'lucide-react'
+import Script from 'next/script'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+  DialogTrigger
+} from '@/components/ui/dialog'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 
-const CONTACT_FORM_URL = "https://api.leadconnectorhq.com/widget/form/QJR9bZP4y72C8jUcGC7F"
+const CONTACT_FORM_URL = 'https://api.leadconnectorhq.com/widget/form/QJR9bZP4y72C8jUcGC7F'
 
 export function ContactFormDialog({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale)
@@ -26,7 +26,10 @@ export function ContactFormDialog({ locale }: { locale: Locale }) {
         </button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[calc(100vh-2rem)] max-w-2xl overflow-auto p-2" showCloseButton={false}>
+      <DialogContent
+        className="max-h-[calc(100vh-2rem)] max-w-2xl overflow-auto p-2"
+        showCloseButton={false}
+      >
         <DialogTitle className="sr-only">{dict.contact.formTitle}</DialogTitle>
         <DialogClose asChild>
           <button

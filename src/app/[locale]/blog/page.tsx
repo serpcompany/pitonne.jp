@@ -1,14 +1,14 @@
-import Link from "next/link"
-import Image from "next/image"
-import type { Metadata } from "next"
-import { PageHero } from "@/components/shared/page-hero"
-import { ContactButton } from "@/components/shared/contact-button"
-import { getAllBlogPosts, getAllCategories } from "@/lib/data/blog-posts"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ContactButton } from '@/components/shared/contact-button'
+import { PageHero } from '@/components/shared/page-hero'
+import { getAllBlogPosts, getAllCategories } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,31 +28,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: dict.blog.metaTitle,
     description: dict.blog.metaDescription,
-    alternates: localizedHreflangAlternates("/blog/", typedLocale),
+    alternates: localizedHreflangAlternates('/blog/', typedLocale),
     ...pageSocialMetadata({
       title: dict.blog.metaTitle,
       description: dict.blog.metaDescription,
-      path: "/blog/",
-      locale: typedLocale,
-    }),
+      path: '/blog/',
+      locale: typedLocale
+    })
   }
 }
 
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params
   const typedLocale = locale as Locale
-  const dateLocale = locale === "ja" ? "ja-JP" : "en-US"
+  const dateLocale = locale === 'ja' ? 'ja-JP' : 'en-US'
   const dict = getDictionary(typedLocale)
 
-  const posts = getAllBlogPosts(typedLocale).map((post) => ({
+  const posts = getAllBlogPosts(typedLocale).map(post => ({
     slug: post.slug,
     title: post.title,
-    date: new Date(post.publishedAt).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }),
+    date: new Date(post.publishedAt).toLocaleDateString(dateLocale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }),
     excerpt: post.excerpt,
     readingTime: post.readingTime,
     featureImage: post.featureImage,
     featureImageAlt: post.featureImageAlt,
-    category: post.category,
+    category: post.category
   }))
 
   const featuredPost = posts[0]
@@ -62,8 +66,8 @@ export default async function BlogPage({ params }: Props) {
     <>
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", typedLocale) },
-          { label: dict.blog.blog },
+          { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
+          { label: dict.blog.blog }
         ]}
         title={dict.blog.blog}
         description={dict.blog.heroDescription}
@@ -75,7 +79,7 @@ export default async function BlogPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-sm font-medium text-foreground">{dict.blog.categories}</span>
             <Link
-              href={localizedRoute("/blog/", typedLocale)}
+              href={localizedRoute('/blog/', typedLocale)}
               className="px-4 py-1.5 text-sm rounded-full bg-[#7A8F87] text-white"
             >
               {dict.blog.all}
@@ -119,7 +123,9 @@ export default async function BlogPage({ params }: Props) {
                         <div className="w-20 h-20 mx-auto rounded-full bg-white/50 flex items-center justify-center mb-4">
                           <div className="w-10 h-10 rounded-full bg-[#d4c4a8]" />
                         </div>
-                        <span className="text-sm text-muted-foreground">{dict.blog.featuredArticle}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {dict.blog.featuredArticle}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -135,16 +141,16 @@ export default async function BlogPage({ params }: Props) {
                     {featuredPost.readingTime && (
                       <>
                         <span>&middot;</span>
-                        <span>{featuredPost.readingTime} {dict.common.minRead}</span>
+                        <span>
+                          {featuredPost.readingTime} {dict.common.minRead}
+                        </span>
                       </>
                     )}
                   </div>
                   <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#7A8F87] transition-colors">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-muted-foreground mb-6 line-clamp-3">
-                    {featuredPost.excerpt}
-                  </p>
+                  <p className="text-muted-foreground mb-6 line-clamp-3">{featuredPost.excerpt}</p>
                   <span className="text-[#7A8F87] font-medium group-hover:underline">
                     {dict.blog.readArticle} &rarr;
                   </span>
@@ -160,7 +166,7 @@ export default async function BlogPage({ params }: Props) {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-serif text-foreground mb-8">{dict.blog.latestArticles}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-            {otherPosts.map((post) => (
+            {otherPosts.map(post => (
               <Link
                 key={post.slug}
                 href={localizedRoute(`/blog/${post.slug}/`, typedLocale)}
@@ -191,16 +197,16 @@ export default async function BlogPage({ params }: Props) {
                     {post.readingTime && (
                       <>
                         <span>&middot;</span>
-                        <span>{post.readingTime} {dict.common.minRead}</span>
+                        <span>
+                          {post.readingTime} {dict.common.minRead}
+                        </span>
                       </>
                     )}
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                     {post.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm line-clamp-3">
-                    {post.excerpt}
-                  </p>
+                  <p className="text-muted-foreground text-sm line-clamp-3">{post.excerpt}</p>
                 </div>
               </Link>
             ))}

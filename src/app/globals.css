@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -37,7 +37,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  
+
   /* Pitonne Brand Colors */
   --pitonne-cream: #faf9f7;
   --pitonne-peach: #f5ebe0;
@@ -83,9 +83,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), 'Inter', sans-serif;
-  --font-serif: var(--font-playfair), 'Playfair Display', serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-inter), "Inter", sans-serif;
+  --font-serif: var(--font-playfair), "Playfair Display", serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -195,13 +195,13 @@
   }
 
   .blog-prose a {
-    color: #7A8F87;
+    color: #7a8f87;
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }
 
   .blog-prose blockquote {
-    border-left: 3px solid #7A8F87;
+    border-left: 3px solid #7a8f87;
     margin: 2rem 0;
     padding-left: 1.25rem;
     color: var(--foreground);

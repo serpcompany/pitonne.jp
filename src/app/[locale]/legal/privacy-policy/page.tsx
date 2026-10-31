@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { LegalMarkdownPage } from "@/components/legal/legal-markdown-page"
-import { getLegalPage } from "@/lib/data/pages"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
+import type { Metadata } from 'next'
+import { LegalMarkdownPage } from '@/components/legal/legal-markdown-page'
+import { getLegalPage } from '@/lib/data/pages'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -23,13 +23,13 @@ export async function generateMetadata({
   return {
     title: dict.legal.privacyPolicy,
     description: dict.legal.privacyPolicyMeta,
-    alternates: localizedHreflangAlternates("/legal/privacy-policy/", locale as Locale),
+    alternates: localizedHreflangAlternates('/legal/privacy-policy/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.legal.privacyPolicy,
       description: dict.legal.privacyPolicyMeta,
-      path: "/legal/privacy-policy/",
-      locale: locale as Locale,
-    }),
+      path: '/legal/privacy-policy/',
+      locale: locale as Locale
+    })
   }
 }
 
@@ -41,7 +41,13 @@ export default async function PrivacyPolicyPage({ params }: Props) {
   const { locale } = await params
   const dict = getDictionary(locale as Locale)
 
-  const page = getLegalPage("privacyPolicy", locale as Locale)
+  const page = getLegalPage('privacyPolicy', locale as Locale)
 
-  return <LegalMarkdownPage page={page} canonicalTitle={dict.legal.privacyPolicy} locale={locale as Locale} />
+  return (
+    <LegalMarkdownPage
+      page={page}
+      canonicalTitle={dict.legal.privacyPolicy}
+      locale={locale as Locale}
+    />
+  )
 }

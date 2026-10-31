@@ -1,21 +1,21 @@
-import Link from "next/link"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import Link from 'next/link'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export function ContactButton({
-  className = "",
+  className = '',
   children,
   locale,
-  onClick,
+  onClick
 }: {
   className?: string
   children?: React.ReactNode
   locale?: Locale
   onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }) {
-  const dict = getDictionary(locale ?? "en")
-  const href = locale ? localizedRoute("/contact/", locale) : "/contact/"
+  const dict = getDictionary(locale ?? 'en')
+  const href = locale ? localizedRoute('/contact/', locale) : '/contact/'
   return (
     <Link
       href={href}

@@ -7,13 +7,14 @@
 //   deploys only after the test job passes.
 // Usage: node scripts/draft-only-change.mjs <before-sha> <after-sha>
 //   (writes skip=true|false and content_only=true|false to $GITHUB_OUTPUT)
-import { execFileSync } from "node:child_process"
-import fs from "node:fs"
-import { pathToFileURL } from "node:url"
+import { execFileSync } from 'node:child_process'
+import fs from 'node:fs'
+import { pathToFileURL } from 'node:url'
 
 const BLOG_POST = /^content\/blog\/(ja\/)?[^/]+\.md$/
 // What keystatic.config.ts writes: content/blog/*, content/blog/ja/*, content/blog-categories/*, and feature images
-const CMS_CONTENT = /^(?:content\/blog\/|content\/blog-categories\/|public\/images\/content\/blog\/)/
+const CMS_CONTENT =
+  /^(?:content\/blog\/|content\/blog-categories\/|public\/images\/content\/blog\/)/
 
 export function isDraft(markdown) {
   const frontmatter = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/)
@@ -26,19 +27,24 @@ export function isDraftOnlyChange(changes) {
     changes.length > 0 &&
     changes.every(
       ({ path, before, after }) =>
-        BLOG_POST.test(path) && (before === null || isDraft(before)) && (after === null || isDraft(after))
+        BLOG_POST.test(path) &&
+        (before === null || isDraft(before)) &&
+        (after === null || isDraft(after))
     )
   )
 }
 
 /** True when every changed path is one the CMS edits. */
 export function isContentOnlyChange(paths) {
-  return paths.length > 0 && paths.every((path) => CMS_CONTENT.test(path))
+  return paths.length > 0 && paths.every(path => CMS_CONTENT.test(path))
 }
 
 function fileAt(sha, path) {
   try {
-    return execFileSync("git", ["show", `${sha}:${path}`], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
+    return execFileSync('git', ['show', `${sha}:${path}`], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    })
   } catch {
     return null
   }
@@ -48,18 +54,23 @@ function main([before, after]) {
   let skip = false
   let contentOnly = false
   if (before && after && !/^0+$/.test(before)) {
-    const paths = execFileSync("git", ["diff", "--name-only", before, after], { encoding: "utf8" }).split("\n").filter(Boolean)
-    skip = isDraftOnlyChange(paths.map((path) => ({ path, before: fileAt(before, path), after: fileAt(after, path) })))
+    const paths = execFileSync('git', ['diff', '--name-only', before, after], { encoding: 'utf8' })
+      .split('\n')
+      .filter(Boolean)
+    skip = isDraftOnlyChange(
+      paths.map(path => ({ path, before: fileAt(before, path), after: fileAt(after, path) }))
+    )
     contentOnly = isContentOnlyChange(paths)
   }
   console.log(
     skip
-      ? "Only draft blog posts changed; skipping deploy."
+      ? 'Only draft blog posts changed; skipping deploy.'
       : contentOnly
-        ? "Only CMS content changed."
-        : "Code or configuration changed (or no previous commit to compare with).",
+        ? 'Only CMS content changed.'
+        : 'Code or configuration changed (or no previous commit to compare with).'
   )
-  if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `skip=${skip}\ncontent_only=${contentOnly}\n`)
+  if (process.env.GITHUB_OUTPUT)
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `skip=${skip}\ncontent_only=${contentOnly}\n`)
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

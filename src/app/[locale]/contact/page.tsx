@@ -1,24 +1,24 @@
-import type { Metadata } from "next"
-import { Phone, MapPin, Clock } from "lucide-react"
-import { PageHero } from "@/components/shared/page-hero"
-import { BookingButton } from "@/components/shared/booking-button"
-import { LineIcon } from "@/components/shared/line-icon"
-import { ContactFormDialog } from "@/components/contact/contact-form-dialog"
-import { localizedHreflangAlternates, pageSocialMetadata } from "@/lib/seo"
-import { getBusinessInfo } from "@/lib/data/site"
-import type { Locale } from "@/lib/i18n/config"
-import { nonDefaultLocales } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import { Clock, MapPin, Phone } from 'lucide-react'
+import type { Metadata } from 'next'
+import { ContactFormDialog } from '@/components/contact/contact-form-dialog'
+import { BookingButton } from '@/components/shared/booking-button'
+import { LineIcon } from '@/components/shared/line-icon'
+import { PageHero } from '@/components/shared/page-hero'
+import { localizedRoute } from '@/lib/data/routes'
+import { getBusinessInfo } from '@/lib/data/site'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-  return nonDefaultLocales.map((locale) => ({ locale }))
+  return nonDefaultLocales.map(locale => ({ locale }))
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
@@ -28,13 +28,13 @@ export async function generateMetadata({
   return {
     title: dict.contact.contactUs,
     description: dict.contact.metaDescription,
-    alternates: localizedHreflangAlternates("/contact/", locale as Locale),
+    alternates: localizedHreflangAlternates('/contact/', locale as Locale),
     ...pageSocialMetadata({
       title: dict.contact.contactUs,
       description: dict.contact.metaDescription,
-      path: "/contact/",
-      locale: locale as Locale,
-    }),
+      path: '/contact/',
+      locale: locale as Locale
+    })
   }
 }
 
@@ -51,8 +51,8 @@ export default async function ContactPage({ params }: Props) {
     <>
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", locale as Locale) },
-          { label: dict.nav.contact },
+          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.contact }
         ]}
         title={dict.contact.contactUs}
         description={dict.contact.heroDescription}
@@ -65,12 +65,10 @@ export default async function ContactPage({ params }: Props) {
             <div>
               <h2 className="text-2xl font-serif mb-6">{dict.common.sendMessage}</h2>
               <div className="rounded-lg border border-border bg-card p-8">
-                <p className="mb-6 text-muted-foreground">
-                  {dict.contact.inquiryFormDescription}
-                </p>
+                <p className="mb-6 text-muted-foreground">{dict.contact.inquiryFormDescription}</p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <BookingButton className="w-full sm:w-auto" locale={locale as Locale} />
-                  {locale === "en" ? <ContactFormDialog locale="en" /> : null}
+                  {locale === 'en' ? <ContactFormDialog locale="en" /> : null}
                 </div>
               </div>
             </div>
@@ -141,7 +139,7 @@ export default async function ContactPage({ params }: Props) {
                   <div>
                     <h3 className="font-semibold mb-1">{dict.footer.openHours}</h3>
                     <div className="text-muted-foreground text-sm space-y-1">
-                      {info.hours.map((item) => (
+                      {info.hours.map(item => (
                         <p key={item.day}>
                           {dict.days[item.day as keyof typeof dict.days] ?? item.day}: {item.hours}
                         </p>
@@ -153,7 +151,6 @@ export default async function ContactPage({ params }: Props) {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>

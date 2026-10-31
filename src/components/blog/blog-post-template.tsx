@@ -1,17 +1,17 @@
-import Link from "next/link"
-import ReactMarkdown, { type Components } from "react-markdown"
-import remarkGfm from "remark-gfm"
-import { PageHero } from "@/components/shared/page-hero"
-import { JsonLd } from "@/components/shared/json-ld"
-import { BlogDiscoverySection } from "@/components/blog/blog-discovery-section"
-import { BlogSidebar } from "@/components/blog/blog-sidebar"
-import { localizeBlogContentHref, type BlogPost } from "@/lib/data/blog-posts"
-import { getVideoBySlug } from "@/lib/data/videos"
-import type { Service } from "@/lib/data/services"
-import { blogPostingJsonLd } from "@/lib/structured-data"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/dictionaries"
-import { localizedRoute } from "@/lib/data/routes"
+import Link from 'next/link'
+import ReactMarkdown, { type Components } from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { BlogDiscoverySection } from '@/components/blog/blog-discovery-section'
+import { BlogSidebar } from '@/components/blog/blog-sidebar'
+import { JsonLd } from '@/components/shared/json-ld'
+import { PageHero } from '@/components/shared/page-hero'
+import { type BlogPost, localizeBlogContentHref } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import type { Service } from '@/lib/data/services'
+import { getVideoBySlug } from '@/lib/data/videos'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { blogPostingJsonLd } from '@/lib/structured-data'
 
 const videoEmbedPattern = /\{\{video:([a-z0-9-]+)\}\}/g
 
@@ -37,12 +37,12 @@ function splitFinalTakeaway(content: string) {
   const match = content.match(marker)
 
   if (!match || match.index === undefined) {
-    return { before: content, final: "" }
+    return { before: content, final: '' }
   }
 
   return {
     before: content.slice(0, match.index).trim(),
-    final: content.slice(match.index).trim(),
+    final: content.slice(match.index).trim()
   }
 }
 
@@ -53,7 +53,7 @@ function BlogVideoEmbed({ slug, locale }: { slug: string; locale: Locale }) {
     return null
   }
 
-  const displayTitle = locale === "ja" && video.titleJa ? video.titleJa : video.title
+  const displayTitle = locale === 'ja' && video.titleJa ? video.titleJa : video.title
 
   return (
     <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
@@ -76,9 +76,11 @@ function BlogVideoEmbed({ slug, locale }: { slug: string; locale: Locale }) {
 
 function markdownComponents(locale: Locale): Components {
   return {
-    a: ({ node: _node, href, ...props }) => <a href={href ? localizeBlogContentHref(href, locale) : href} {...props} />,
+    a: ({ node: _node, href, ...props }) => (
+      <a href={href ? localizeBlogContentHref(href, locale) : href} {...props} />
+    ),
     // The post title is the page's only <h1>
-    h1: ({ node: _node, ...props }) => <h2 {...props} />,
+    h1: ({ node: _node, ...props }) => <h2 {...props} />
   }
 }
 
@@ -87,7 +89,11 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
   const components = markdownComponents(locale)
 
   if (segments.length === 1) {
-    return <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>{content}</ReactMarkdown>
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+        {content}
+      </ReactMarkdown>
+    )
   }
 
   return (
@@ -98,13 +104,23 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
         }
 
         const markdown = segment.trim()
-        return markdown ? <ReactMarkdown key={index} remarkPlugins={[remarkGfm]} components={components}>{markdown}</ReactMarkdown> : null
+        return markdown ? (
+          <ReactMarkdown key={index} remarkPlugins={[remarkGfm]} components={components}>
+            {markdown}
+          </ReactMarkdown>
+        ) : null
       })}
     </>
   )
 }
 
-function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewModel; locale?: Locale }) {
+function BlogContent({
+  post,
+  locale = 'en' as Locale
+}: {
+  post: BlogPostViewModel
+  locale?: Locale
+}) {
   const content = splitFinalTakeaway(post.content)
 
   return (
@@ -116,7 +132,13 @@ function BlogContent({ post, locale = "en" as Locale }: { post: BlogPostViewMode
   )
 }
 
-function LatestPostsSection({ latestPosts, locale = "en" as Locale }: { latestPosts: BlogPost[]; locale?: Locale }) {
+function LatestPostsSection({
+  latestPosts,
+  locale = 'en' as Locale
+}: {
+  latestPosts: BlogPost[]
+  locale?: Locale
+}) {
   const dict = getDictionary(locale)
   if (latestPosts.length === 0) {
     return null
@@ -127,16 +149,21 @@ function LatestPostsSection({ latestPosts, locale = "en" as Locale }: { latestPo
       <div className="container mx-auto px-4">
         <h2 className="mb-8 font-serif text-2xl text-foreground">{dict.blog.readOurLatestPosts}</h2>
         <div className="grid max-w-5xl gap-6 md:grid-cols-3">
-          {latestPosts.slice(0, 3).map((post) => (
+          {latestPosts.slice(0, 3).map(post => (
             <Link
               key={post.slug}
               href={localizedRoute(`/blog/${post.slug}/`, locale)}
               className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#7A8F87] hover:shadow-md"
             >
               <p className="mb-2 text-xs text-muted-foreground">
-                {new Date(post.publishedAt).toLocaleDateString(locale === "ja" ? "ja-JP" : "en-US", { year: "numeric", month: "short", day: "numeric" })}
+                {new Date(post.publishedAt).toLocaleDateString(
+                  locale === 'ja' ? 'ja-JP' : 'en-US',
+                  { year: 'numeric', month: 'short', day: 'numeric' }
+                )}
               </p>
-              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#7A8F87]">{post.title}</h3>
+              <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#7A8F87]">
+                {post.title}
+              </h3>
             </Link>
           ))}
         </div>
@@ -150,7 +177,7 @@ export function BlogPostTemplate({
   relatedPosts,
   relatedServices,
   latestPosts,
-  locale = "en" as Locale,
+  locale = 'en' as Locale
 }: {
   post: BlogPostViewModel
   relatedPosts: BlogPost[]
@@ -163,25 +190,28 @@ export function BlogPostTemplate({
     <div className="bg-background">
       {post.author && (
         <JsonLd
-          data={blogPostingJsonLd({
-            slug: post.slug,
-            title: post.title,
-            excerpt: post.excerpt,
-            publishedAt: post.publishedAt ?? post.date,
-            featureImage: post.featureImage || undefined,
-            author: {
-              name: post.author.name,
-              role: post.author.role ?? "",
+          data={blogPostingJsonLd(
+            {
+              slug: post.slug,
+              title: post.title,
+              excerpt: post.excerpt,
+              publishedAt: post.publishedAt ?? post.date,
+              featureImage: post.featureImage || undefined,
+              author: {
+                name: post.author.name,
+                role: post.author.role ?? ''
+              }
             },
-          }, locale)}
+            locale
+          )}
         />
       )}
 
       <PageHero
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute("/", locale) },
-          { label: dict.blog.blog, href: localizedRoute("/blog/", locale) },
-          { label: dict.blog.article },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
+          { label: dict.blog.blog, href: localizedRoute('/blog/', locale) },
+          { label: dict.blog.article }
         ]}
         eyebrow={
           <Link
@@ -197,7 +227,9 @@ export function BlogPostTemplate({
             {post.readingTime && (
               <>
                 <span>&middot;</span>
-                <span>{post.readingTime} {dict.common.minRead}</span>
+                <span>
+                  {post.readingTime} {dict.common.minRead}
+                </span>
               </>
             )}
           </div>
@@ -207,7 +239,11 @@ export function BlogPostTemplate({
         {post.author && (
           <div className="flex items-center gap-3">
             {post.author.image ? (
-              <img src={post.author.image} alt={post.author.name} className="h-12 w-12 rounded-full object-cover" />
+              <img
+                src={post.author.image}
+                alt={post.author.name}
+                className="h-12 w-12 rounded-full object-cover"
+              />
             ) : (
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#7A8F87] font-medium text-white">
                 {post.author.name.charAt(0)}
@@ -215,7 +251,9 @@ export function BlogPostTemplate({
             )}
             <div>
               <span className="block font-medium text-foreground">{post.author.name}</span>
-              {post.author.role && <span className="text-sm text-muted-foreground">{post.author.role}</span>}
+              {post.author.role && (
+                <span className="text-sm text-muted-foreground">{post.author.role}</span>
+              )}
             </div>
           </div>
         )}
@@ -244,7 +282,11 @@ export function BlogPostTemplate({
               <BlogContent post={post} locale={locale} />
             </article>
 
-            <BlogSidebar relatedServices={relatedServices} relatedPosts={relatedPosts} locale={locale} />
+            <BlogSidebar
+              relatedServices={relatedServices}
+              relatedPosts={relatedPosts}
+              locale={locale}
+            />
           </div>
         </div>
       </section>

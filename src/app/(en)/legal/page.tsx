@@ -1,5 +1,5 @@
-import LegalPage, { generateMetadata as generateLocaleMetadata } from "@/app/[locale]/legal/page"
-import { englishLocaleParams } from "../route-helpers"
+import LegalPage, { generateMetadata as generateLocaleMetadata } from '@/app/[locale]/legal/page'
+import { englishLocaleParams } from '../route-helpers'
 
 export function generateMetadata() {
   return generateLocaleMetadata({ params: englishLocaleParams })
