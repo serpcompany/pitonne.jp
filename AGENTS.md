@@ -19,7 +19,6 @@ Node 24 and pnpm 10.14.0 (`packageManager` in `package.json`), then `pnpm instal
 - `pnpm vitest related --run <files>`: the tests that import the files you changed.
 - `pnpm vitest run <test-file>`: one test file.
 - `pnpm typecheck` and `pnpm exec eslint <files>` (or `pnpm lint`).
-- `pnpm test:parity` after dictionary or content changes.
 - The audit for what you touched; none needs a build: `pnpm audit:strings` (hardcoded English),
   `pnpm audit:meta` (title/description lengths), `pnpm audit:content`, `pnpm audit:routes`.
 - `pnpm dev` for the site; `pnpm cms` for Keystatic on local files at http://127.0.0.1:3000/keystatic.
@@ -48,7 +47,7 @@ Report evidence levels separately in the PR (local checks, CI, preview/deploy). 
 | Every change | `pnpm check` before pushing; CI on the final commit is the record |
 | Visible UI | One local run with `pnpm dev` in both `/` and `/ja/`, with a screenshot |
 | Redirects or headers (`public/_redirects`, `public/_headers`), trailing slashes, the `/keystatic/*` fallback | Before merge, a production-like preview: `DEPLOY_ENV=production pnpm build`, then `pnpm dlx wrangler@4.103.0 pages dev out` and `curl -I` the affected URLs (`pnpm start` does not apply `_redirects` or `_headers`). This is routing on a Ship site, so also `curl -I` the same URLs on https://pitonne.jp before the change and again after the Production deploy, and put both in the PR. |
-| CMS (`keystatic.config.ts`, `lib/blog-rules.ts`, `patches/@keystatic__core*`, blog/category schemas) | A local run of the affected editor flow with `pnpm cms`; after the deploy, https://pitonne.jp/keystatic loads |
+| CMS (`keystatic.config.ts`, `src/lib/blog-rules.ts`, `patches/@keystatic__core*`, blog/category schemas) | A local run of the affected editor flow with `pnpm cms`; after the deploy, https://pitonne.jp/keystatic loads |
 | Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `scripts/environment-headers.mjs`, the smoke scripts, `DEPLOY_ENV` handling, robots or sitemaps) | The production-like preview above and the PR preview; after merge, the Staging deploy and its smoke test (https://staging.pitonne.jp sends noindex), then after promotion the Production deploy and its smoke test (https://pitonne.jp returns 200, `robots.txt` allows crawling and lists the sitemap) |
 
 Same-repository PRs into `staging` (or `main`, for hotfixes) get a preview at `https://pr-<n>.pitonne-jp.pages.dev`

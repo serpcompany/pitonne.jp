@@ -8,18 +8,18 @@ function read(file) {
   return fs.readFileSync(path.join(root, file), "utf8")
 }
 
-const footer = read("components/footer.tsx")
-const header = read("components/header.tsx")
-const home = read("app/[locale]/page.tsx")
-const layout = read("app/layout.tsx")
-const siteData = read("lib/data/site.ts")
-const serviceDetailPage = read("app/[locale]/services/[service]/page.tsx")
-const serviceDetailTemplate = read("components/services/service-detail-template.tsx")
-const pageHero = read("components/shared/page-hero.tsx")
-const areaDetailPage = read("components/area-detail-page.tsx")
-const blogPostPage = read("app/[locale]/blog/[post]/page.tsx")
-const blogPostTemplate = read("components/blog/blog-post-template.tsx")
-const globalsCss = read("app/globals.css")
+const footer = read("src/components/footer.tsx")
+const header = read("src/components/header.tsx")
+const home = read("src/app/[locale]/page.tsx")
+const layout = read("src/app/layout.tsx")
+const siteData = read("src/lib/data/site.ts")
+const serviceDetailPage = read("src/app/[locale]/services/[service]/page.tsx")
+const serviceDetailTemplate = read("src/components/services/service-detail-template.tsx")
+const pageHero = read("src/components/shared/page-hero.tsx")
+const areaDetailPage = read("src/components/area-detail-page.tsx")
+const blogPostPage = read("src/app/[locale]/blog/[post]/page.tsx")
+const blogPostTemplate = read("src/components/blog/blog-post-template.tsx")
+const globalsCss = read("src/app/globals.css")
 
 const expectedBusinessInfo = [
   "03-6821-8285",
@@ -37,14 +37,14 @@ for (const value of expectedBusinessInfo) {
 
 for (const value of ["businessHours", "formatBusinessHours", "businessHoursDisplay", "hours: businessHoursDisplay"]) {
   if (!siteData.includes(value)) {
-    failures.push(`Business hours must be derived from the shared source in lib/data/site.ts: missing ${value}`)
+    failures.push(`Business hours must be derived from the shared source in src/lib/data/site.ts: missing ${value}`)
   }
 }
 
 for (const [file, source] of [
-  ["components/header.tsx", header],
-  ["components/footer.tsx", footer],
-  ["app/[locale]/page.tsx", home],
+  ["src/components/header.tsx", header],
+  ["src/components/footer.tsx", footer],
+  ["src/app/[locale]/page.tsx", home],
 ]) {
   if (source.includes("/services/medications")) {
     failures.push(`${file} links to non-canonical /services/medications`)
@@ -56,9 +56,9 @@ for (const [file, source] of [
 
 for (const disallowed of ["placeholder", "logoipsum", "glowence"]) {
   const matches = [
-    ["app/[locale]/page.tsx", home],
-    ["components/header.tsx", header],
-    ["components/footer.tsx", footer],
+    ["src/app/[locale]/page.tsx", home],
+    ["src/components/header.tsx", header],
+    ["src/components/footer.tsx", footer],
   ].flatMap(([file, source]) =>
     source.toLowerCase().includes(disallowed) ? [file] : []
   )

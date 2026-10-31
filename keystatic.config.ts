@@ -13,7 +13,7 @@ import {
 } from "@/lib/blog-rules"
 import type { Locale } from "@/lib/i18n/config"
 
-// Blog CMS (issue #64). Field rules come from lib/blog-rules.ts, which the zod schema in lib/data/blog-posts.ts also uses.
+// Blog CMS (issue #64). Field rules come from src/lib/blog-rules.ts, which the zod schema in src/lib/data/blog-posts.ts also uses.
 const slugPattern = { regex: BLOG_SLUG_PATTERN, message: "Use lowercase letters, numbers, and hyphens only" }
 
 // Keystatic applies `min` even to empty optional fields, so optional overrides use a pattern: empty or at least `min`
@@ -104,7 +104,7 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
 }
 
 // Category names and descriptions for both locales live in one file, content/blog-categories/<slug>.json.
-// The site reads it with JSON.parse (lib/data/blog-categories.ts), which applies the same rules.
+// The site reads it with JSON.parse (src/lib/data/blog-categories.ts), which applies the same rules.
 const blogCategories = collection({
   label: "Blog categories",
   path: "content/blog-categories/*",

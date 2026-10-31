@@ -18,7 +18,7 @@ function walk(dir) {
     }
     if (entry.name !== "page.tsx") continue
     const rel = path
-      .relative(path.join(root, "app"), path.dirname(fullPath))
+      .relative(path.join(root, "src/app"), path.dirname(fullPath))
       .split(path.sep)
       .filter((segment) => !/^\(.+\)$/.test(segment))
       .join("/")
@@ -35,7 +35,7 @@ function markdownFrontmatter(dir) {
 }
 
 function areaRoutes() {
-  const source = fs.readFileSync(path.join(root, "lib/data/areas.ts"), "utf8")
+  const source = fs.readFileSync(path.join(root, "src/lib/data/areas.ts"), "utf8")
   const routes = []
   let currentWard = ""
 
@@ -56,7 +56,7 @@ function areaRoutes() {
   return routes
 }
 
-walk(path.join(root, "app"))
+walk(path.join(root, "src/app"))
 
 const serviceRoutes = markdownFrontmatter("content/services").map((item) => item.canonicalPath)
 // Drafts are never built; JA-only posts are routes too
@@ -104,10 +104,10 @@ for (const [source, destination] of [
 }
 
 for (const duplicateRouteFile of [
-  "app/privacy-policy/page.tsx",
-  "app/terms-of-use/page.tsx",
-  "app/medical-disclaimer/page.tsx",
-  "app/legal/terms-and-conditions/page.tsx",
+  "src/app/privacy-policy/page.tsx",
+  "src/app/terms-of-use/page.tsx",
+  "src/app/medical-disclaimer/page.tsx",
+  "src/app/legal/terms-and-conditions/page.tsx",
 ]) {
   if (fs.existsSync(path.join(root, duplicateRouteFile))) {
     failures.push(`Remove duplicate route file: ${duplicateRouteFile}`)

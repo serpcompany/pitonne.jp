@@ -13,7 +13,7 @@ import { pathToFileURL } from "node:url"
 export const NOINDEX_MARKER = "# Non-production build: never index (scripts/environment-headers.mjs)"
 export const NOINDEX_BLOCK = `${NOINDEX_MARKER}\n/*\n  X-Robots-Tag: noindex, nofollow\n`
 
-/** Same rule as isProductionDeployment() in lib/seo.ts: production only when explicitly marked. */
+/** Same rule as isProductionDeployment() in src/lib/seo.ts: production only when explicitly marked. */
 export function isProductionEnv(env) {
   return env.DEPLOY_ENV === "production" || env.NEXT_PUBLIC_DEPLOY_ENV === "production"
 }

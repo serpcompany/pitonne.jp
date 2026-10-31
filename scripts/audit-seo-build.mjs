@@ -23,7 +23,7 @@ import path from "node:path"
 
 const OUT = path.resolve(process.argv[2] || "out")
 const SITE_URL = "https://pitonne.jp"
-const limits = JSON.parse(fs.readFileSync(new URL("../lib/seo-limits.json", import.meta.url), "utf8"))
+const limits = JSON.parse(fs.readFileSync(new URL("../src/lib/seo-limits.json", import.meta.url), "utf8"))
 const TITLE_RANGE = [limits.title.min, limits.title.max]
 const DESCRIPTION_RANGE = [limits.description.min, limits.description.max]
 const REQUIRED_OG = ["og:title", "og:description", "og:image", "og:url", "og:type"]

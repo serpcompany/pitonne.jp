@@ -16,7 +16,6 @@
     "typecheck": "next typegen && tsc --noEmit --incremental false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:parity": "vitest run tests/parity",
     "test:lighthouse": "lhci autorun",
     "audit:routes": "node scripts/audit-routes.mjs",
     "audit:content": "node scripts/audit-content.mjs",

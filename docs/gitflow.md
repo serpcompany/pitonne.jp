@@ -102,9 +102,9 @@ before its own `test` finishes.
 `DEPLOY_ENV` (and `NEXT_PUBLIC_DEPLOY_ENV`) is set per environment by `deploy.yml`: `production`, `staging` or
 `preview`. Anything but `production` is non-indexable (the safe default, also for local builds):
 
-- `robots.txt` disallows everything (`app/robots.ts`); production allows crawling except `/keystatic/` and lists
+- `robots.txt` disallows everything (`src/app/robots.ts`); production allows crawling except `/keystatic/` and lists
   `https://pitonne.jp/sitemap-index.xml`.
-- Pages have a `noindex, nofollow` meta robots tag (`deploymentRobots()` in `lib/seo.ts`), and analytics are off.
+- Pages have a `noindex, nofollow` meta robots tag (`deploymentRobots()` in `src/lib/seo.ts`), and analytics are off.
 - `pnpm build` adds `X-Robots-Tag: noindex, nofollow` for every path to `out/_headers`
   (`scripts/environment-headers.mjs`). Cloudflare adds that header on `*.pages.dev` aliases by itself, but not on
   `staging.pitonne.jp`. `pnpm audit:out` fails when robots.txt and `_headers` disagree. That check (and the deploy's

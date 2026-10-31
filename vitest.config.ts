@@ -10,7 +10,8 @@ export default defineConfig({
         test: {
           name: "node",
           environment: "node",
-          include: ["tests/**/*.test.{ts,mts,cts,js,mjs,cjs}"],
+          include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.mjs", "tools/**/*.test.ts"],
+          exclude: ["**/*.dom.test.tsx", "**/node_modules/**"],
         },
       },
       {
@@ -26,15 +27,15 @@ export default defineConfig({
               },
             },
           },
-          include: ["tests/**/*.test.{tsx,jsx}"],
-          setupFiles: ["./tests/setup.ts"],
+          include: ["src/**/*.dom.test.tsx"],
+          setupFiles: ["./src/test/setup.ts"],
         },
       },
     ],
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "."),
+      "@": path.resolve(__dirname, "src"),
     },
   },
 })

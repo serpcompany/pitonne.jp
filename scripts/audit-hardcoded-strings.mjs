@@ -1,7 +1,7 @@
 /**
  * Audit JSX/TSX files for hardcoded English strings that should use dict lookups.
  *
- * Scans app/[locale]/ and components/ (excluding components/ui/) for literal
+ * Scans src/app/[locale]/ and src/components/ (excluding src/components/ui/) for literal
  * English text in JSX that isn't coming from the i18n dictionary system.
  *
  * Usage: node scripts/audit-hardcoded-strings.mjs
@@ -14,9 +14,9 @@ const root = process.cwd()
 const findings = []
 
 // Directories to scan
-const scanDirs = ["app/[locale]", "components"]
+const scanDirs = ["src/app/[locale]", "src/components"]
 // Directories to skip
-const skipDirs = ["components/ui"]
+const skipDirs = ["src/components/ui"]
 
 // Lines containing these patterns are safe (using dict, locale logic, etc.)
 const safeLinePatterns = [

@@ -73,5 +73,5 @@ posts are moved to another category.
   team). The project's URLs must include every domain the CMS is opened from (currently `https://pitonne.jp`). Open the
   CMS only on https://pitonne.jp: https://staging.pitonne.jp/keystatic would also save to `main`, so it isn't a place
   to try changes.
-- **Rules**: field limits live in `lib/blog-rules.ts`, shared by `keystatic.config.ts` and the zod schemas in
-  `lib/data/blog-posts.ts` and `lib/data/blog-categories.ts`.
+- **Rules**: field limits live in `src/lib/blog-rules.ts`, shared by `keystatic.config.ts` and the zod schemas in
+  `src/lib/data/blog-posts.ts` and `src/lib/data/blog-categories.ts`.
