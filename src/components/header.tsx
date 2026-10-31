@@ -320,7 +320,9 @@ export function Header({
                       className="flex items-center justify-between w-full py-2 text-base font-medium text-foreground"
                       onClick={() =>
                         setMobileExpandedSection(
-                          mobileExpandedSection === item.hasDropdown ? null : item.hasDropdown!
+                          mobileExpandedSection === item.hasDropdown
+                            ? null
+                            : (item.hasDropdown ?? null)
                         )
                       }
                     >

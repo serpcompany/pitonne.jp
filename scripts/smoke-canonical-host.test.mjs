@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { job, readWorkflow, step } from '../tools/checks/workflows'
+import { expression, job, readWorkflow, step } from '../tools/checks/workflows'
 import {
   evaluate,
   passThroughChecks,
@@ -235,7 +235,7 @@ describe('canonical-host smoke test', () => {
       candidate.run?.includes('node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"')
     )
     expect(smoke).toBeDefined()
-    expect(smoke.env?.DEPLOYMENT_URL).toBe('${{ steps.deploy.outputs.deployment-url }}')
+    expect(smoke.env?.DEPLOYMENT_URL).toBe(expression('steps.deploy.outputs.deployment-url'))
     expect(smoke.if).toContain("env.DEPLOY_ENV == 'production'")
     expect(steps.indexOf(smoke)).toBeGreaterThan(steps.indexOf(step(pagesDeploy, 'deploy')))
   })

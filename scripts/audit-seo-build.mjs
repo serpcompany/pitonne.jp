@@ -128,6 +128,8 @@ for (const file of pages) {
     '/' +
     path
       .relative(OUT, file)
+      .split(path.sep)
+      .join('/')
       .replace(/index\.html$/, '')
       .replace(/\.html$/, '')
   if (urlPath.startsWith('/404') || urlPath.startsWith('/_not-found')) continue
@@ -267,7 +269,11 @@ const sitemapPaths = new Set(
   [...sitemapOwners.keys()].map(url => (url === SITE_URL ? '/' : url.slice(SITE_URL.length)))
 )
 for (const file of pages) {
-  const urlPath = '/' + path.relative(OUT, file).replace(/index\.html$/, '')
+  const urlPath = `/${path
+    .relative(OUT, file)
+    .split(path.sep)
+    .join('/')
+    .replace(/index\.html$/, '')}`
   if (urlPath.startsWith('/404') || urlPath.startsWith('/_not-found')) continue
   // A noindex page (or any page of a non-production build) need not be in a sitemap
   if (!sitemapPaths.has(urlPath) && indexable && !pageInfo.get(urlPath)?.noindex)
@@ -278,7 +284,7 @@ for (const file of allFiles) {
   if (/\.(jpe?g|png|webp|gif|avif)$/i.test(file) && fs.statSync(file).size > MAX_IMAGE_BYTES) {
     const megabytes = (fs.statSync(file).size / 1024 / 1024).toFixed(1)
     report(
-      '/' + path.relative(OUT, file),
+      `/${path.relative(OUT, file).split(path.sep).join('/')}`,
       `image is ${megabytes} MB (max ${MAX_IMAGE_BYTES / 1024 / 1024} MB)`
     )
   }

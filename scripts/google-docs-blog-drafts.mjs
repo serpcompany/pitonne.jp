@@ -82,7 +82,7 @@ function yamlEscape(value) {
 }
 
 function formatYamlList(key, values) {
-  return [key + ':', ...values.map(value => `  - ${yamlEscape(value)}`)]
+  return [`${key}:`, ...values.map(value => `  - ${yamlEscape(value)}`)]
 }
 
 function slugifyAscii(value) {
@@ -133,7 +133,7 @@ export function cleanContent(rawMarkdown) {
   markdown = markdown.replace(/!\[\]\[image\d*\]\n*/g, '')
   markdown = markdown.replace(/\n{3,}/g, '\n\n')
 
-  return markdown.trim() + '\n'
+  return `${markdown.trim()}\n`
 }
 
 function extractTitle(markdown) {
@@ -154,7 +154,7 @@ function extractExcerpt(markdown) {
     .trim()
 
   if (excerpt.length > 220) {
-    excerpt = excerpt.slice(0, 217).replace(/\s+\S*$/, '') + '...'
+    excerpt = `${excerpt.slice(0, 217).replace(/\s+\S*$/, '')}...`
   }
 
   return excerpt

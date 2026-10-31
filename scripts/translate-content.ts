@@ -50,29 +50,6 @@ const faqFields: Record<string, string> = {
   service: 'faqs'
 }
 
-// Fields to NEVER translate (slugs, paths, references)
-const preserveFields = new Set([
-  'slug',
-  'category',
-  'categorySlug',
-  'kind',
-  'parentSlug',
-  'canonicalPath',
-  'relatedServices',
-  'relatedServiceSlugs',
-  'image',
-  'imageSourcePath',
-  'featureImage',
-  'publishedAt',
-  'readingTime',
-  'featured'
-])
-
-async function translateText(text: string): Promise<string> {
-  const results = await translateBatch([text])
-  return results[0]
-}
-
 async function translateBatch(texts: string[]): Promise<string[]> {
   if (texts.length === 0) return []
 
@@ -201,12 +178,12 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     } else if (key.startsWith('array:')) {
       const [, field, index] = key.split(':')
       if (!jaFrontmatter[field]) jaFrontmatter[field] = [...frontmatter[field]]
-      jaFrontmatter[field][parseInt(index)] = value
+      jaFrontmatter[field][parseInt(index, 10)] = value
     } else if (key.startsWith('faq:')) {
       const [, field, index, subField] = key.split(':')
       if (!jaFrontmatter[field])
         jaFrontmatter[field] = frontmatter[field].map((f: Record<string, string>) => ({ ...f }))
-      jaFrontmatter[field][parseInt(index)][subField] = value
+      jaFrontmatter[field][parseInt(index, 10)][subField] = value
     } else if (key === 'author:name') {
       if (!jaFrontmatter.author) jaFrontmatter.author = { ...frontmatter.author }
       jaFrontmatter.author.name = value

@@ -16,6 +16,7 @@ import {
 } from '@/lib/data/blog-posts'
 import { localizedHreflangAlternates } from '@/lib/seo'
 import { sitemapEntriesForPath } from '@/lib/sitemaps'
+import { defined } from '@/test/defined'
 
 const SITE_URL = 'https://pitonne.jp'
 
@@ -166,13 +167,15 @@ describe('blog content model', () => {
   })
 
   it('localizes category names and descriptions from the category file', () => {
-    const iv = blogCategories.find(category => category.slug === 'iv-therapy')!
+    const iv = defined(blogCategories.find(category => category.slug === 'iv-therapy'))
     expect(iv.name).toEqual({ en: 'IV Therapy', ja: '点滴療法' })
     expect(iv.description.en).toMatch(/^Explore IV therapy articles/)
     expect(iv.description.ja).toMatch(/^点滴療法に関する情報/)
 
     for (const locale of ['en', 'ja'] as const) {
-      const listed = getAllCategories(locale).find(category => category.slug === 'iv-therapy')!
+      const listed = defined(
+        getAllCategories(locale).find(category => category.slug === 'iv-therapy')
+      )
       expect(listed).toMatchObject({
         name: iv.name[locale],
         description: iv.description[locale],
@@ -181,7 +184,7 @@ describe('blog content model', () => {
       expect(listed.ctaDescription).toBeTruthy()
       for (const post of getAllBlogPosts(locale)) {
         expect(post.category, post.sourcePath).toBe(
-          blogCategories.find(category => category.slug === post.categorySlug)!.name[locale]
+          defined(blogCategories.find(category => category.slug === post.categorySlug)).name[locale]
         )
       }
     }

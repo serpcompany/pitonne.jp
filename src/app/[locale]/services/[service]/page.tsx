@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ServiceDetailTemplate } from '@/components/services/service-detail-template'
 import { ServiceParentTemplate } from '@/components/services/service-parent-template'

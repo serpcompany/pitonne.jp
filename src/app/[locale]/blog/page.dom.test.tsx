@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import BlogPage from '@/app/[locale]/blog/page'
 import { getAllBlogPosts } from '@/lib/data/blog-posts'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { defined } from '@/test/defined'
 
 const dict = getDictionary('en')
 
@@ -25,7 +26,7 @@ describe('blog index page', () => {
       expect(post.featureImage).toMatch(/^\/images\/content\/blog\//)
       expect(post.featureImageAlt).toBeTruthy()
       expect(screen.getByRole('img', { name: post.featureImageAlt }).getAttribute('src')).toContain(
-        encodeURIComponent(post.featureImage!)
+        encodeURIComponent(defined(post.featureImage))
       )
     }
     expect(screen.getByRole('link', { name: dict.blog.all })).toHaveClass('bg-[#7A8F87]')

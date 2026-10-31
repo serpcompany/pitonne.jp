@@ -96,7 +96,7 @@ for (const file of walkContent('content')) {
 const serviceDetailUsesSharedHero = serviceDetailTemplate.includes('PageHero')
 const serviceDetailLinksToServices =
   serviceDetailTemplate.includes('dict.nav.services') &&
-  serviceDetailTemplate.includes('localizedRoute("/services/", locale)')
+  serviceDetailTemplate.includes("localizedRoute('/services/', locale)")
 
 if (
   !serviceDetailPage.includes('ServiceDetailTemplate') ||

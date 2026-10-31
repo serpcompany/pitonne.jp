@@ -13,6 +13,7 @@ import {
 } from '@/lib/data/services'
 import { businessInfo } from '@/lib/data/site'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { defined } from '@/test/defined'
 
 function normalizeText(value: string | null | undefined) {
   return value?.replace(/\s+/g, ' ').trim() ?? ''
@@ -20,15 +21,14 @@ function normalizeText(value: string | null | undefined) {
 
 describe('service page parity', () => {
   it('renders leaf services with breadcrumbs, sidebar, and the live booking URL', () => {
-    const service = getService('stem-cell-nasal-spray')
-    expect(service).toBeDefined()
+    const service = defined(getService('stem-cell-nasal-spray'))
 
     render(
       <ServiceDetailTemplate
-        service={service!}
-        parentService={getService(service!.parentSlug!)}
-        relatedServices={getServicesFromSlugs(service!.relatedServices)}
-        relatedPosts={getBlogPostsForService(service!.slug)}
+        service={service}
+        parentService={getService(defined(service.parentSlug))}
+        relatedServices={getServicesFromSlugs(service.relatedServices)}
+        relatedPosts={getBlogPostsForService(service.slug)}
       />
     )
 
@@ -54,16 +54,15 @@ describe('service page parity', () => {
   })
 
   it('renders parent services with markdown content and available treatments', () => {
-    const service = getService('iv-therapy')
-    expect(service).toBeDefined()
+    const service = defined(getService('iv-therapy'))
 
     render(
-      <ServiceParentTemplate service={service!} childServices={getChildServices(service!.slug)} />
+      <ServiceParentTemplate service={service} childServices={getChildServices(service.slug)} />
     )
 
-    const hero = screen.getByRole('heading', { level: 1, name: service!.name }).closest('section')
+    const hero = screen.getByRole('heading', { level: 1, name: service.name }).closest('section')
     expect(hero).not.toBeNull()
-    expect(normalizeText(hero?.textContent)).toContain(normalizeText(service!.fullDescription))
+    expect(normalizeText(hero?.textContent)).toContain(normalizeText(service.fullDescription))
     expect(screen.queryByRole('heading', { name: 'Overview' })).not.toBeInTheDocument()
     expect(screen.getByText(/partner clinic in Nishi Azabu/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Available Treatments' })).toBeInTheDocument()
@@ -153,8 +152,7 @@ describe('service page parity', () => {
   })
 
   it('loads service page copy from the shared service content docs', () => {
-    const service = getService('exosome-iv-drip')
-    expect(service).toBeDefined()
+    const service = defined(getService('exosome-iv-drip'))
     expect(service?.sourcePath).toBe('content/services/exosome-iv-drip.md')
     expect(service?.content).toContain('## Treatment Overview')
     expect(service?.content).toContain('## Physician-Guided Wellness Care')

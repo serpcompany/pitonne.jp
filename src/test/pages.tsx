@@ -22,13 +22,14 @@ import { localizedRoute } from '@/lib/data/routes'
 import { getServiceCategorySections, services } from '@/lib/data/services'
 import { type Locale, locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { defined } from '@/test/defined'
 
 export type PageCase = [name: string, locale: Locale, page: () => Promise<ReactElement>]
 type NamedPage = [name: string, page: () => Promise<ReactElement>]
 
 const firstArea = getAllAreas()[0]
-const parentService = services.find(service => service.kind === 'parent')!
-const leafService = services.find(service => service.kind === 'leaf')!
+const parentService = defined(services.find(service => service.kind === 'parent'))
+const leafService = defined(services.find(service => service.kind === 'leaf'))
 
 export function siteHeader(locale: Locale): ReactElement {
   const serviceNavigation = getServiceCategorySections(locale).map(section => ({

@@ -151,9 +151,10 @@ export function fallbackMetaDescription(
   if (!remainder) {
     return undefined
   }
-  return (
-    `${excerpt}${separator}${remainder}`.slice(0, META_DESCRIPTION_MAX_LENGTH - 1).trimEnd() + '…'
-  )
+  const extended = `${excerpt}${separator}${remainder}`
+    .slice(0, META_DESCRIPTION_MAX_LENGTH - 1)
+    .trimEnd()
+  return `${extended}…`
 }
 
 // The page renders the title as its only <h1>, so a body that starts with its own "# Title" line drops it
@@ -178,8 +179,9 @@ export function loadBlogPostsFromDirectory(
       const absolutePath = path.join(directory, fileName)
       const raw = fs.readFileSync(absolutePath, 'utf8')
       const parsed = matter(raw)
+      const fileSlug = fileName.replace(/\.md$/, '')
       const result = blogPostFrontmatterSchema.safeParse({
-        slug: fileName.replace(/\.md$/, ''),
+        slug: fileSlug,
         ...parsed.data
       })
 
@@ -215,7 +217,7 @@ export function loadBlogPostsFromDirectory(
       return [
         {
           ...frontmatter,
-          slug: slug!,
+          slug: fileSlug,
           category: category.name[locale],
           metaDescription:
             frontmatter.metaDescription ??

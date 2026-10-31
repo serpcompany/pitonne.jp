@@ -171,7 +171,7 @@ function scanFile(filePath) {
       findings.push({
         file: relPath,
         line: i + 1,
-        text: text.length > 80 ? text.slice(0, 80) + '...' : text
+        text: text.length > 80 ? `${text.slice(0, 80)}...` : text
       })
     }
   }

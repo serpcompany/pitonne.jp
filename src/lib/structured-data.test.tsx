@@ -1,4 +1,3 @@
-import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 import LocaleLayout from '@/app/[locale]/layout'
@@ -8,6 +7,7 @@ import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from '@/li
 import { getService, getServicesFromSlugs } from '@/lib/data/services'
 import { businessHours, isOpenBusinessHours } from '@/lib/data/site'
 import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { defined } from '@/test/defined'
 
 vi.mock('next/font/google', () => ({
   Inter: () => ({ variable: 'font-inter' }),
@@ -48,8 +48,9 @@ describe('structured data parity', () => {
       ])
     )
 
-    const businessSchema = schemas.find(schema => schema['@id'] === 'https://pitonne.jp/#business')
-    expect(businessSchema).toBeDefined()
+    const businessSchema = defined(
+      schemas.find(schema => schema['@id'] === 'https://pitonne.jp/#business')
+    )
     expect(businessSchema.openingHoursSpecification).toEqual(
       businessHours.filter(isOpenBusinessHours).map(item => ({
         '@type': 'OpeningHoursSpecification',
@@ -78,14 +79,13 @@ describe('structured data parity', () => {
   })
 
   it('renders Service JSON-LD on service detail pages', () => {
-    const service = getService('exosome-iv-drip')
-    expect(service).toBeDefined()
+    const service = defined(getService('exosome-iv-drip'))
 
     const markup = renderToStaticMarkup(
       <ServiceDetailTemplate
-        service={service!}
-        parentService={getService(service!.parentSlug!)}
-        relatedServices={getServicesFromSlugs(service!.relatedServices)}
+        service={service}
+        parentService={getService(defined(service.parentSlug))}
+        relatedServices={getServicesFromSlugs(service.relatedServices)}
         relatedPosts={[]}
         locale="en"
       />
@@ -103,34 +103,33 @@ describe('structured data parity', () => {
   })
 
   it('renders BlogPosting JSON-LD on blog post pages', () => {
-    const post = getBlogPostBySlug('iv-therapy-for-hangover')
-    expect(post).toBeDefined()
+    const post = defined(getBlogPostBySlug('iv-therapy-for-hangover'))
 
     const markup = renderToStaticMarkup(
       <BlogPostTemplate
         post={{
-          title: post!.title,
-          slug: post!.slug,
-          date: new Date(post!.publishedAt).toLocaleDateString('en-US', {
+          title: post.title,
+          slug: post.slug,
+          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           }),
-          content: post!.content,
-          excerpt: post!.excerpt,
-          readingTime: post!.readingTime,
-          category: post!.category,
-          categorySlug: post!.categorySlug,
-          author: post!.author,
-          featureImage: post!.featureImage,
-          relatedServiceSlugs: post!.relatedServiceSlugs,
-          tags: post!.tags
+          content: post.content,
+          excerpt: post.excerpt,
+          readingTime: post.readingTime,
+          category: post.category,
+          categorySlug: post.categorySlug,
+          author: post.author,
+          featureImage: post.featureImage,
+          relatedServiceSlugs: post.relatedServiceSlugs,
+          tags: post.tags
         }}
-        relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter(
-          candidate => candidate.slug !== post!.slug
+        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
+          candidate => candidate.slug !== post.slug
         )}
-        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
+        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
         locale="en"
       />
     )
@@ -140,8 +139,8 @@ describe('structured data parity', () => {
       expect.objectContaining({
         '@type': 'BlogPosting',
         '@id': 'https://pitonne.jp/blog/iv-therapy-for-hangover/#blog-posting',
-        headline: post!.title,
-        author: expect.objectContaining({ name: post!.author.name })
+        headline: post.title,
+        author: expect.objectContaining({ name: post.author.name })
       })
     )
   })

@@ -18,6 +18,7 @@ import { pitonneVideos } from '@/lib/data/videos'
 import { type Locale, locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { defined } from '@/test/defined'
 import {
   googleDriveImage,
   imageSource,
@@ -45,7 +46,7 @@ const manifest = JSON.parse(
 }
 
 function servicesFor(locale: Locale): Service[] {
-  return getAllServiceSlugs(locale).map(slug => getService(slug, locale)!)
+  return getAllServiceSlugs(locale).map(slug => defined(getService(slug, locale)))
 }
 
 function markdownImageSources(markdown: string): string[] {
@@ -82,7 +83,7 @@ describe('sheet image integration', () => {
     const assetEntries = manifest.entries.filter(entry => entry.localPath)
 
     for (const entry of assetEntries) {
-      const localPath = path.join(root, 'public', entry.localPath!)
+      const localPath = path.join(root, 'public', defined(entry.localPath))
       expect(fs.existsSync(localPath)).toBe(true)
       expect(fs.statSync(localPath).size).toBeGreaterThan(0)
     }
@@ -96,7 +97,7 @@ describe('sheet image integration', () => {
 
     for (const entry of usedServiceEntries) {
       const slug = serviceSlugFromRoute(entry)
-      expect(getService(slug!)?.image).toBe(entry.localPath)
+      expect(getService(defined(slug))?.image).toBe(entry.localPath)
       expect(entry.driveFilename).toBeTruthy()
     }
 
@@ -110,7 +111,7 @@ describe('sheet image integration', () => {
     expect(medicationImage).not.toMatch(
       /drive\.google\.com|lh3\.googleusercontent\.com|istockphoto\.com/
     )
-    expect(publicAssetExists(medicationImage!)).toBe(true)
+    expect(publicAssetExists(defined(medicationImage))).toBe(true)
   })
 
   it("stores blog feature images in Keystatic's per-slug folders", () => {
@@ -181,7 +182,9 @@ describe.each(locales)('sheet images on rendered templates (%s)', locale => {
       const hero = container.querySelector('h1')?.closest('section')
 
       expect(hero).toBeTruthy()
-      expect(Array.from(hero!.querySelectorAll('img'), imageSource)).toEqual([service.image])
+      expect(Array.from(defined(hero).querySelectorAll('img'), imageSource)).toEqual([
+        service.image
+      ])
       for (const source of renderedImageUrls(container))
         expect(publicAssetExists(source), source).toBe(true)
       unmount()

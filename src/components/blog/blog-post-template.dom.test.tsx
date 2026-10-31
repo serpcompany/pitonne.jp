@@ -11,6 +11,7 @@ import {
 } from '@/lib/data/blog-posts'
 import { getServicesFromSlugs } from '@/lib/data/services'
 import { getVideoBySlug } from '@/lib/data/videos'
+import { defined } from '@/test/defined'
 
 const migratedDraftSlugs = [
   'exosome-iv-tokyo-mobile-in-clinic-booking',
@@ -83,34 +84,33 @@ describe('blog post parity', () => {
   })
 
   it('renders markdown prose plus live discovery sections around the final takeaway', () => {
-    const post = getBlogPostBySlug('iv-therapy-for-dehydration')
-    expect(post).toBeDefined()
+    const post = defined(getBlogPostBySlug('iv-therapy-for-dehydration'))
 
     const { container } = render(
       <BlogPostTemplate
         post={{
-          title: post!.title,
-          slug: post!.slug,
-          date: new Date(post!.publishedAt).toLocaleDateString('en-US', {
+          title: post.title,
+          slug: post.slug,
+          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           }),
-          content: post!.content,
-          excerpt: post!.excerpt,
-          readingTime: post!.readingTime,
-          category: post!.category,
-          categorySlug: post!.categorySlug,
-          author: post!.author,
-          featureImage: post!.featureImage,
-          relatedServiceSlugs: post!.relatedServiceSlugs,
-          tags: post!.tags
+          content: post.content,
+          excerpt: post.excerpt,
+          readingTime: post.readingTime,
+          category: post.category,
+          categorySlug: post.categorySlug,
+          author: post.author,
+          featureImage: post.featureImage,
+          relatedServiceSlugs: post.relatedServiceSlugs,
+          tags: post.tags
         }}
-        relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter(
-          candidate => candidate.slug !== post!.slug
+        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
+          candidate => candidate.slug !== post.slug
         )}
-        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
+        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
       />
     )
 
@@ -125,7 +125,7 @@ describe('blog post parity', () => {
     expect(screen.queryByText('Share This')).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'X' })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Facebook' })).not.toBeInTheDocument()
-    expect(screen.getByRole('img', { name: post!.title })).toHaveClass(
+    expect(screen.getByRole('img', { name: post.title })).toHaveClass(
       'max-h-[420px]',
       'object-cover'
     )
@@ -141,34 +141,33 @@ describe('blog post parity', () => {
   })
 
   it('renders blog video markers as YouTube embeds', () => {
-    const post = getBlogPostBySlug('iv-therapy-for-hangover-in-tokyo')
-    expect(post).toBeDefined()
+    const post = defined(getBlogPostBySlug('iv-therapy-for-hangover-in-tokyo'))
 
     const { container } = render(
       <BlogPostTemplate
         post={{
-          title: post!.title,
-          slug: post!.slug,
-          date: new Date(post!.publishedAt).toLocaleDateString('en-US', {
+          title: post.title,
+          slug: post.slug,
+          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           }),
-          content: post!.content,
-          excerpt: post!.excerpt,
-          readingTime: post!.readingTime,
-          category: post!.category,
-          categorySlug: post!.categorySlug,
-          author: post!.author,
-          featureImage: post!.featureImage,
-          relatedServiceSlugs: post!.relatedServiceSlugs,
-          tags: post!.tags
+          content: post.content,
+          excerpt: post.excerpt,
+          readingTime: post.readingTime,
+          category: post.category,
+          categorySlug: post.categorySlug,
+          author: post.author,
+          featureImage: post.featureImage,
+          relatedServiceSlugs: post.relatedServiceSlugs,
+          tags: post.tags
         }}
-        relatedPosts={getBlogPostsByCategory(post!.categorySlug).filter(
-          candidate => candidate.slug !== post!.slug
+        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
+          candidate => candidate.slug !== post.slug
         )}
-        relatedServices={getServicesFromSlugs(post!.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post!.slug)}
+        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
+        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
       />
     )
 
@@ -286,14 +285,13 @@ describe('blog post parity', () => {
   })
 
   it('renders a descriptive localized alt text for a supplied featured image', () => {
-    const post = getBlogPostBySlug('blood-tests-before-regular-iv-therapy-tokyo', 'ja')
-    expect(post).toBeDefined()
+    const post = defined(getBlogPostBySlug('blood-tests-before-regular-iv-therapy-tokyo', 'ja'))
 
     render(
       <BlogPostTemplate
         post={{
-          ...post!,
-          date: new Date(post!.publishedAt).toLocaleDateString('ja-JP')
+          ...post,
+          date: new Date(post.publishedAt).toLocaleDateString('ja-JP')
         }}
         relatedPosts={[]}
         relatedServices={[]}
@@ -306,7 +304,7 @@ describe('blog post parity', () => {
       screen.getByRole('img', {
         name: featuredImageMetadata['blood-tests-before-regular-iv-therapy-tokyo'].altJa
       })
-    ).toHaveAttribute('src', post!.featureImage)
+    ).toHaveAttribute('src', post.featureImage)
   })
 
   it('renders full pitonne.jp links as relative, localized paths', () => {
@@ -321,12 +319,11 @@ describe('blog post parity', () => {
   })
 
   it('resolves relative links in Japanese posts to Japanese pages', () => {
-    const post = getBlogPostBySlug('mobile-iv-therapy-tokyo-home-hotel-clinic', 'ja')
-    expect(post).toBeDefined()
+    const post = defined(getBlogPostBySlug('mobile-iv-therapy-tokyo-home-hotel-clinic', 'ja'))
 
     const { container } = render(
       <BlogPostTemplate
-        post={{ ...post!, date: post!.publishedAt }}
+        post={{ ...post, date: post.publishedAt }}
         relatedPosts={[]}
         relatedServices={[]}
         latestPosts={[]}

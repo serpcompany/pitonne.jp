@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import ContactPage from '@/app/[locale]/contact/page'
 import { getBusinessInfo } from '@/lib/data/site'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { defined } from '@/test/defined'
 
 const dict = getDictionary('en')
 const info = getBusinessInfo('en')
@@ -31,9 +32,8 @@ describe('contact page', () => {
     )
     expect(screen.queryByText('Nishi-Azabu, Tokyo')).not.toBeInTheDocument()
 
-    const saturdayHours = info.hours.find(item => item.day === 'Saturday')
-    expect(saturdayHours).toBeDefined()
-    expect(screen.getByText(`${saturdayHours!.day}: ${saturdayHours!.hours}`)).toBeInTheDocument()
+    const saturdayHours = defined(info.hours.find(item => item.day === 'Saturday'))
+    expect(screen.getByText(`${saturdayHours.day}: ${saturdayHours.hours}`)).toBeInTheDocument()
   })
 
   it.each([

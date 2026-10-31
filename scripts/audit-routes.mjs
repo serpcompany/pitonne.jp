@@ -43,14 +43,14 @@ function areaRoutes() {
   let currentWard = ''
 
   for (const line of source.split('\n')) {
-    const wardMatch = line.match(/^ {4}slug: "([^"]+)"/)
+    const wardMatch = line.match(/^ {4}slug: '([^']+)'/)
     if (wardMatch) {
       currentWard = wardMatch[1]
       routes.push(`/areas-served/${currentWard}/`)
       continue
     }
 
-    const areaMatch = line.match(/^ {8}slug: "([^"]+)"/)
+    const areaMatch = line.match(/^ {8}slug: '([^']+)'/)
     if (areaMatch && currentWard) {
       routes.push(`/areas-served/${currentWard}/${areaMatch[1]}/`)
     }

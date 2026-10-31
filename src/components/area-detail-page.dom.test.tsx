@@ -2,24 +2,24 @@ import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { AreaDetailPage } from '@/components/area-detail-page'
 import { getArea } from '@/lib/data/areas'
+import { defined } from '@/test/defined'
 
 function renderHirooAreaDetail() {
-  const area = getArea('minato', 'hiroo')
-  expect(area).toBeDefined()
+  const area = defined(getArea('minato', 'hiroo'))
 
   render(
     <AreaDetailPage
-      areaName={area!.area.name}
-      areaNameJa={area!.area.nameJa}
-      wardName={area!.ward.name}
-      wardNameJa={area!.ward.nameJa}
-      wardSlug={area!.ward.slug}
-      description={area!.area.description}
-      descriptionJa={area!.area.descriptionJa}
-      highlights={area!.area.highlights}
-      highlightsJa={area!.area.highlightsJa}
-      landmarks={area!.area.landmarks}
-      landmarksJa={area!.area.landmarksJa}
+      areaName={area.area.name}
+      areaNameJa={area.area.nameJa}
+      wardName={area.ward.name}
+      wardNameJa={area.ward.nameJa}
+      wardSlug={area.ward.slug}
+      description={area.area.description}
+      descriptionJa={area.area.descriptionJa}
+      highlights={area.area.highlights}
+      highlightsJa={area.area.highlightsJa}
+      landmarks={area.area.landmarks}
+      landmarksJa={area.area.landmarksJa}
       otherAreas={[]}
     />
   )

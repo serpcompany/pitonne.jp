@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   allText,
   branches,
+  expression,
   job,
   needs,
   readWorkflow,
@@ -19,7 +20,7 @@ const deploy = readWorkflow('deploy.yml')
 const sync = readWorkflow('sync-staging.yml')
 const promote = readWorkflow('promote.yml')
 const pagesDeploy = job(deploy, 'deploy')
-const cloudflareTokenOnly = { CLOUDFLARE_API_TOKEN: '${{ secrets.CLOUDFLARE_API_TOKEN }}' }
+const cloudflareTokenOnly = { CLOUDFLARE_API_TOKEN: expression('secrets.CLOUDFLARE_API_TOKEN') }
 
 function permissionGrants(workflow: Workflow, exceptJobs: string[] = []): Record<string, string>[] {
   const jobGrants = Object.entries(workflow.jobs)
@@ -34,7 +35,7 @@ describe('CI and deploy workflows', () => {
   it('tests and deploys pushes to staging and main', () => {
     expect(ci.on.push?.branches).toEqual(expect.arrayContaining(['staging', 'main']))
     expect(job(ci, 'deploy').with?.environment).toBe(
-      "${{ github.ref_name == 'main' && 'production' || 'staging' }}"
+      expression("github.ref_name == 'main' && 'production' || 'staging'")
     )
   })
 
@@ -95,16 +96,15 @@ describe('CI and deploy workflows', () => {
     )
     expect(preview.with).toMatchObject({
       environment: 'preview',
-      pr: '${{ github.event.pull_request.number }}',
-      ref: '${{ github.event.pull_request.head.sha }}'
+      pr: expression('github.event.pull_request.number'),
+      ref: expression('github.event.pull_request.head.sha')
     })
   })
 
   it('cancels superseded PR runs but never a push run', () => {
     expect(ci.concurrency).toEqual({
-      group:
-        "${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}",
-      'cancel-in-progress': "${{ github.event_name == 'pull_request' }}"
+      group: `${expression('github.workflow')}-${expression("github.event_name == 'pull_request' && github.ref || github.run_id")}`,
+      'cancel-in-progress': expression("github.event_name == 'pull_request'")
     })
   })
 
@@ -119,8 +119,7 @@ describe('CI and deploy workflows', () => {
 
   it('serializes deploys per target and environment without cancelling a running one', () => {
     expect(pagesDeploy.concurrency).toEqual({
-      group:
-        "deploy-pages-${{ inputs.environment == 'preview' && format('pr-{0}', inputs.pr) || inputs.environment || (github.ref_name == 'main' && 'production') || github.ref_name }}",
+      group: `deploy-pages-${expression("inputs.environment == 'preview' && format('pr-{0}', inputs.pr) || inputs.environment || (github.ref_name == 'main' && 'production') || github.ref_name")}`,
       'cancel-in-progress': false
     })
   })
@@ -131,7 +130,9 @@ describe('CI and deploy workflows', () => {
     expect(resolve).toContain('staging) [ "$GITHUB_REF" = refs/heads/staging ]')
     expect(resolve).toContain('branch="pr-$PR_NUMBER"')
     expect(resolve).toContain('echo "DEPLOY_ENV=$TARGET"')
-    expect(step(pagesDeploy, 'deploy').with?.command).toContain('--branch=${{ env.PAGES_BRANCH }}')
+    expect(step(pagesDeploy, 'deploy').with?.command).toContain(
+      `--branch=${expression('env.PAGES_BRANCH')}`
+    )
     expect(allText(deploy)).not.toMatch(/--branch[= ]main/)
   })
 
@@ -171,7 +172,7 @@ describe('CI and deploy workflows', () => {
     ).toHaveLength(3)
     expect(allText(ci)).not.toContain('RELEASE_DEPLOY_KEY')
     expect(step(pagesDeploy, 'deploy').with?.gitHubToken).toBe(
-      "${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}"
+      expression("env.DEPLOY_ENV != 'preview' && github.token || ''")
     )
   })
 })
@@ -203,7 +204,7 @@ describe('staging sync and promotion workflows', () => {
     for (const workflow of [sync, promote]) {
       const pushers = Object.values(workflow.jobs).filter(owner =>
         owner.steps?.some(
-          candidate => candidate.with?.['ssh-key'] === '${{ secrets.RELEASE_DEPLOY_KEY }}'
+          candidate => candidate.with?.['ssh-key'] === expression('secrets.RELEASE_DEPLOY_KEY')
         )
       )
       expect(pushers.length).toBeGreaterThan(0)

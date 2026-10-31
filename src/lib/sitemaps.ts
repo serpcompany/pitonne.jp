@@ -150,9 +150,13 @@ export function sitemapEntriesByGroup(
   return Object.fromEntries(
     sitemapGroups.map(group => {
       // Each URL is listed in exactly one sitemap
-      const unique = paths[group].filter(({ path }) =>
-        seen.has(path) ? false : (seen.add(path), true)
-      )
+      const unique = paths[group].filter(({ path }) => {
+        if (seen.has(path)) {
+          return false
+        }
+        seen.add(path)
+        return true
+      })
       const entries = unique.flatMap(({ path, locales: pathLocales, video }) =>
         sitemapEntriesForPath(path, pathLocales, origin, video)
       )

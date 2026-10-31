@@ -12,6 +12,7 @@ import {
   slashedFileRedirect
 } from '@/lib/canonical-host'
 import { SITE_URL } from '@/lib/seo'
+import { defined } from '@/test/defined'
 import { onRequest } from '../../functions/_middleware'
 
 const location = (url: string, headers: Record<string, string> = {}) =>
@@ -270,10 +271,11 @@ describe('slashed file redirect', () => {
   const assetServer =
     (asked: string[] = []) =>
     async (request?: Request) => {
-      const { pathname } = new URL(request!.url)
-      asked.push(`${request!.method} ${pathname}`)
+      const asking = defined(request)
+      const { pathname } = new URL(asking.url)
+      asked.push(`${asking.method} ${pathname}`)
       // A followed redirect would hide the rule behind the target's content
-      expect(request!.redirect).toBe('manual')
+      expect(asking.redirect).toBe('manual')
       const rule = rules[pathname]
       return rule
         ? new Response(null, { status: rule[0], headers: { location: rule[1] } })
@@ -386,7 +388,7 @@ describe('Pages middleware', () => {
 
   it('folds a legacy file rule into the slashed-file 308 on pitonne.jp', async () => {
     const legacy = async (request?: Request) =>
-      new URL(request!.url).pathname === '/videos-sitemap.xml'
+      new URL(defined(request).url).pathname === '/videos-sitemap.xml'
         ? new Response(null, { status: 301, headers: { location: '/sitemap-videos.xml' } })
         : new Response('static asset')
     const response = await onRequest({

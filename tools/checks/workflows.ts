@@ -99,3 +99,7 @@ export function textValues(value: unknown): string[] {
 export function allText(value: unknown): string {
   return textValues(value).join('\n')
 }
+
+export function expression(body: string): string {
+  return `\${{ ${body} }}`
+}
