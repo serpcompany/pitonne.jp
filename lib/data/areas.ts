@@ -1,4 +1,4 @@
-export interface Area {
+interface Area {
   slug: string
   name: string
   nameJa: string
@@ -10,7 +10,7 @@ export interface Area {
   landmarksJa: string[]
 }
 
-export interface Ward {
+interface Ward {
   slug: string
   name: string
   nameJa: string

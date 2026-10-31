@@ -47,23 +47,6 @@ export function localizedCanonicalUrl(path: string, locale: Locale): string {
   return canonicalUrl(normalizedPath)
 }
 
-export function localizedPath(path: string, locale: Locale): string {
-  if (locale === defaultLocale) return normalizePath(path)
-  return `/ja${normalizePath(path)}`
-}
-
-export function hreflangAlternates(path: string) {
-  const normalizedPath = normalizePath(path)
-  return {
-    canonical: canonicalUrl(normalizedPath),
-    languages: {
-      en: canonicalUrl(normalizedPath),
-      ja: `${SITE_URL}/ja${normalizedPath}`,
-      "x-default": canonicalUrl(normalizedPath),
-    },
-  }
-}
-
 // availableLocales limits hreflang to the locales the page exists in (e.g. a blog post with no translation).
 export function localizedHreflangAlternates(path: string, locale: Locale, availableLocales: readonly Locale[] = locales) {
   const normalizedPath = normalizePath(path)
@@ -83,8 +66,8 @@ export function localizedHreflangAlternates(path: string, locale: Locale, availa
 type OpenGraphImages = NonNullable<NonNullable<Metadata["openGraph"]>["images"]>
 
 // Shared with scripts/audit-meta-lengths.mjs and scripts/audit-seo-build.mjs (Ahrefs Site Audit ranges)
-export const TITLE_SUFFIX = seoLimits.titleSuffix
-export const TITLE_MAX = seoLimits.title.max
+const TITLE_SUFFIX = seoLimits.titleSuffix
+const TITLE_MAX = seoLimits.title.max
 
 export function fitsTitleLimit(title: string): boolean {
   return title.length + TITLE_SUFFIX.length <= TITLE_MAX

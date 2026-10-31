@@ -39,7 +39,7 @@ const serviceFrontmatterSchema = z.object({
   imageSourcePath: z.string().optional(),
 })
 
-export interface FAQ {
+interface FAQ {
   question: string
   answer: string
 }
@@ -72,7 +72,7 @@ export interface ServiceCategorySection {
   serviceSlugs: string[]
 }
 
-export const serviceCategorySections: ServiceCategorySection[] = [
+const serviceCategorySections: ServiceCategorySection[] = [
   {
     slug: "iv-therapy",
     title: "IV Therapy",
@@ -177,14 +177,6 @@ export function getService(slug: string, locale: Locale = "en"): Service | undef
 
 export function getServicesFromSlugs(slugs: string[], locale: Locale = "en"): Service[] {
   return slugs.map((slug) => getService(slug, locale)).filter((service): service is Service => Boolean(service))
-}
-
-export function getServicesByCategory(category: Service["category"], locale: Locale = "en"): Service[] {
-  return getServicesForLocale(locale).filter((service) => service.category === category && service.kind === "leaf")
-}
-
-export function getParentServices(locale: Locale = "en"): Service[] {
-  return getServicesForLocale(locale).filter((service) => service.kind === "parent")
 }
 
 export function getChildServices(parentSlug: string, locale: Locale = "en"): Service[] {

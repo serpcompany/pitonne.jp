@@ -10,7 +10,7 @@ export const BLOG_CATEGORIES_SUBDIR = "content/blog-categories"
 
 const description = z.string().trim().min(META_DESCRIPTION_MIN_LENGTH).max(META_DESCRIPTION_MAX_LENGTH)
 
-export const blogCategoryFileSchema = z.object({
+const blogCategoryFileSchema = z.object({
   name: z.string().trim().min(1),
   nameJa: z.string().trim().min(1),
   // The category page's meta description, so it must fit the audit:meta range

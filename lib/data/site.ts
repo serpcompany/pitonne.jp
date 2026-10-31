@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config"
 
-export type BusinessDay =
+type BusinessDay =
   | "Monday"
   | "Tuesday"
   | "Wednesday"
@@ -9,18 +9,18 @@ export type BusinessDay =
   | "Saturday"
   | "Sunday"
 
-export type OpenBusinessHours = {
+type OpenBusinessHours = {
   day: BusinessDay
   opens: string
   closes: string
 }
 
-export type ClosedBusinessHours = {
+type ClosedBusinessHours = {
   day: BusinessDay
   closed: true
 }
 
-export type BusinessHoursEntry = OpenBusinessHours | ClosedBusinessHours
+type BusinessHoursEntry = OpenBusinessHours | ClosedBusinessHours
 
 export const businessHours: readonly BusinessHoursEntry[] = [
   { day: "Monday", opens: "09:00", closes: "17:00" },
@@ -34,17 +34,6 @@ export const businessHours: readonly BusinessHoursEntry[] = [
 
 export function isOpenBusinessHours(entry: BusinessHoursEntry): entry is OpenBusinessHours {
   return !("closed" in entry)
-}
-
-function formatEnglishTime(time: string) {
-  const [rawHour, minute] = time.split(":").map(Number)
-  const period = rawHour >= 12 ? "PM" : "AM"
-  const hour = rawHour % 12 || 12
-  return `${hour}:${minute.toString().padStart(2, "0")} ${period}`
-}
-
-export function formatBusinessHours(entry: BusinessHoursEntry) {
-  return isOpenBusinessHours(entry) ? `${formatEnglishTime(entry.opens)} - ${formatEnglishTime(entry.closes)}` : "Closed"
 }
 
 export const businessHoursDisplay = [

@@ -31,7 +31,7 @@ export type ServiceNavCategory = {
 // serviceNavigation is generated server-side and passed to Header as a prop
 // This empty default is never used at runtime — the real data comes from layout.tsx
 
-export const areaNavigation = wards.map((ward) => ({
+const areaNavigation = wards.map((ward) => ({
   name: ward.name,
   nameJa: ward.nameJa,
   href: `/areas-served/${ward.slug}/`,

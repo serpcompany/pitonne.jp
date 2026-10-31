@@ -22,7 +22,7 @@ function blogContentDirectory(locale: Locale): string {
 }
 
 
-export const blogPostFrontmatterSchema = z
+const blogPostFrontmatterSchema = z
   .object({
     // Defaults to the filename (Keystatic stores the slug only as the filename)
     slug: z.string().regex(BLOG_SLUG_PATTERN, "slug must be lowercase kebab-case").optional(),
@@ -271,17 +271,6 @@ export function localizeBlogContentHref(rawHref: string, locale: Locale): string
 
 export function getBlogPostsByCategory(categorySlug: string, locale: Locale = "en"): BlogPost[] {
   return getAllBlogPosts(locale).filter((post) => post.categorySlug === categorySlug)
-}
-
-export function getFeaturedPosts(locale: Locale = "en"): BlogPost[] {
-  return getAllBlogPosts(locale).filter((post) => post.featured)
-}
-
-export function getRelatedPosts(currentSlug: string, limit: number = 3, locale: Locale = "en"): BlogPost[] {
-  const currentPost = getBlogPostBySlug(currentSlug, locale)
-  if (!currentPost) return []
-
-  return getBlogPostsByCategory(currentPost.categorySlug, locale).filter((post) => post.slug !== currentSlug).slice(0, limit)
 }
 
 export function getRelatedServiceSlugsForPost(post: { relatedServiceSlugs?: string[]; categorySlug: string }): string[] {

@@ -11,7 +11,7 @@ import { normalizePath, SITE_URL } from "@/lib/seo"
 
 // Order is the order of the index. A URL belongs to the first group that lists it.
 export const sitemapGroups = ["pages", "services", "areas", "blog", "categories", "videos"] as const
-export type SitemapGroup = (typeof sitemapGroups)[number]
+type SitemapGroup = (typeof sitemapGroups)[number]
 
 export const SITEMAP_INDEX_FILE = "sitemap-index.xml"
 export const sitemapFile = (group: SitemapGroup) => `sitemap-${group}.xml`
@@ -19,7 +19,7 @@ export const sitemapFile = (group: SitemapGroup) => `sitemap-${group}.xml`
 // sitemaps.org limit per file. Past it, add sitemap-<group>-2.xml beside the first file and list it in the index.
 export const MAX_SITEMAP_URLS = 50_000
 
-export interface SitemapVideo {
+interface SitemapVideo {
   thumbnailUrl: string
   title: string
   description: string
@@ -28,7 +28,7 @@ export interface SitemapVideo {
   publicationDate: string
 }
 
-export interface SitemapEntry {
+interface SitemapEntry {
   url: string
   changeFrequency: "weekly" | "monthly"
   priority: number
@@ -49,7 +49,7 @@ export function sitemapOrigin(): string {
 }
 
 // The English homepage is the bare origin (no trailing slash); every other page ends in a slash.
-export function sitemapUrl(path: string, locale: Locale, origin: string = SITE_URL): string {
+function sitemapUrl(path: string, locale: Locale, origin: string = SITE_URL): string {
   const normalizedPath = normalizePath(path)
   if (locale !== defaultLocale) return `${origin}/${locale}${normalizedPath}`
   return normalizedPath === "/" ? origin : `${origin}${normalizedPath}`

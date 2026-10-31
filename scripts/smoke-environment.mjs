@@ -77,7 +77,7 @@ export function isZoneHost(url) {
   return !new URL(url).hostname.endsWith(".pages.dev")
 }
 
-export async function probe(url) {
+async function probe(url) {
   const response = await fetch(url, { headers: SMOKE_HEADERS, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) })
   return { status: response.status, headers: response.headers, body: await response.text() }
 }

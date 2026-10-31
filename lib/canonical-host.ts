@@ -9,8 +9,8 @@
 // Self-contained on purpose: Wrangler bundles this file into the Function and doesn't resolve the `@/` alias.
 
 export const CANONICAL_ORIGIN = "https://pitonne.jp"
-export const CANONICAL_HOST = "pitonne.jp"
-export const PAGES_HOST = "pitonne-jp.pages.dev"
+const CANONICAL_HOST = "pitonne.jp"
+const PAGES_HOST = "pitonne-jp.pages.dev"
 export const SMOKE_TEST_HEADER = "x-pitonne-smoke-test"
 
 const NON_CANONICAL_HOSTS = new Set([`www.${CANONICAL_HOST}`, PAGES_HOST])

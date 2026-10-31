@@ -18,7 +18,7 @@ export interface MarkdownPage {
   sourcePath: string
 }
 
-export type LegalPageKey = "privacyPolicy" | "termsConditions" | "medicalDisclaimer"
+type LegalPageKey = "privacyPolicy" | "termsConditions" | "medicalDisclaimer"
 
 const legalPagePaths: Record<LegalPageKey, string> = {
   privacyPolicy: "legal/privacy-policy.md",
@@ -34,9 +34,9 @@ function normalizePageContent(content: string) {
     .trim()
 }
 
-export function getMarkdownPage(relativePath: string): MarkdownPage
-export function getMarkdownPage(relativePath: string, locale: Locale): MarkdownPage | null
-export function getMarkdownPage(relativePath: string, locale: Locale = "en"): MarkdownPage | null {
+function getMarkdownPage(relativePath: string): MarkdownPage
+function getMarkdownPage(relativePath: string, locale: Locale): MarkdownPage | null
+function getMarkdownPage(relativePath: string, locale: Locale = "en"): MarkdownPage | null {
   let sourcePath: string
   let absolutePath: string
 

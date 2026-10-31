@@ -67,8 +67,8 @@ export const BLOG_DRAFT_SOURCES = [
   },
 ]
 
-export const BLOG_DRAFT_OUT_DIR = path.join(process.cwd(), "tmp", "blog-drafts")
-export const BLOG_DRAFT_PUBLISHED_AT = "2026-05-31"
+const BLOG_DRAFT_OUT_DIR = path.join(process.cwd(), "tmp", "blog-drafts")
+const BLOG_DRAFT_PUBLISHED_AT = "2026-05-31"
 
 export function buildGoogleDocExportUrl({ docId, tabId }) {
   const url = new URL(`https://docs.google.com/document/d/${docId}/export`)
@@ -85,7 +85,7 @@ function formatYamlList(key, values) {
   return [key + ":", ...values.map((value) => `  - ${yamlEscape(value)}`)]
 }
 
-export function slugifyAscii(value) {
+function slugifyAscii(value) {
   return value
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -109,7 +109,7 @@ function makeSlug(source, title, index, usedSlugs) {
   return candidate
 }
 
-export function estimateReadingTime(markdown) {
+function estimateReadingTime(markdown) {
   const wordCount = markdown
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/[#>*_`[\]()]|https?:\/\/\S+/g, " ")
@@ -135,11 +135,11 @@ export function cleanContent(rawMarkdown) {
   return markdown.trim() + "\n"
 }
 
-export function extractTitle(markdown) {
+function extractTitle(markdown) {
   return markdown.match(/^#\s+(.+?)\s*$/m)?.[1]?.trim() ?? null
 }
 
-export function extractExcerpt(markdown) {
+function extractExcerpt(markdown) {
   const paragraphs = markdown
     .split(/\n{2,}/)
     .map((paragraph) => paragraph.trim())
@@ -198,7 +198,7 @@ export function buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown }) {
   }
 }
 
-export async function fetchDocMarkdown(source, fetchImpl = fetch) {
+async function fetchDocMarkdown(source, fetchImpl = fetch) {
   const url = buildGoogleDocExportUrl(source)
   const response = await fetchImpl(url, { redirect: "follow" })
 

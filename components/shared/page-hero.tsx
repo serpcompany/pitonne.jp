@@ -3,7 +3,7 @@ import { Breadcrumbs, type BreadcrumbItem } from "@/components/shared/breadcrumb
 
 type PageHeroSize = "standard" | "compact"
 
-export interface PageHeroProps {
+interface PageHeroProps {
   breadcrumbs?: BreadcrumbItem[]
   eyebrow?: ReactNode
   title: ReactNode

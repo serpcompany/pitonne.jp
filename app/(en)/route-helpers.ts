@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config"
 
-export const englishLocale: Locale = "en"
+const englishLocale: Locale = "en"
 export const englishLocaleParams = Promise.resolve({ locale: englishLocale })
 
 export type PageProps<T extends Record<string, string> = Record<string, never>> = {

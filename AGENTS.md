@@ -24,10 +24,6 @@ Node 24 and pnpm 10.14.0 (`packageManager` in `package.json`), then `pnpm instal
   `pnpm audit:meta` (title/description lengths), `pnpm audit:content`, `pnpm audit:routes`.
 - `pnpm dev` for the site; `pnpm cms` for Keystatic on local files at http://127.0.0.1:3000/keystatic.
 
-Every `next dev` script (`dev`, `cms`, `cms:cloud`) rewrites `next-env.d.ts` to import `.next/dev/types/...`. Don't
-commit that change. `pnpm build` writes the committed form back, so `pnpm check` restores it once it reaches the build
-step; if `check` stops earlier, the file stays modified. Run `git checkout next-env.d.ts` to restore it.
-
 ## Finish gate
 
 ```sh
