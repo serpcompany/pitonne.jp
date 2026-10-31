@@ -1,8 +1,8 @@
-import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import VideosPage, { generateMetadata as videosGenerateMetadata } from "@/app/[locale]/videos/page"
 import WatchPage, { generateMetadata, generateStaticParams } from "@/app/[locale]/watch/[video]/page"
+import { GET as videoSitemap } from "@/app/sitemap-videos.xml/route"
 import { videoObjectJsonLd, videoBreadcrumbJsonLd, videoListJsonLd } from "@/lib/structured-data"
 import { getVideoBySlug, pitonneVideos } from "@/lib/data/videos"
 import { getDictionary } from "@/lib/i18n/dictionaries"
@@ -164,8 +164,7 @@ describe("Pitonne video pages", () => {
   })
 
   it("serves a Google video sitemap", async () => {
-    const { GET } = await import("@/app/sitemap-videos.xml/route")
-    const response = await GET()
+    const response = await videoSitemap()
     const xml = await response.text()
 
     expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")

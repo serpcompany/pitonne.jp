@@ -1,8 +1,7 @@
-import fs from "node:fs"
-import path from "node:path"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import { PageHero } from "@/components/shared/page-hero"
+import { heroPageCases } from "../pages"
 
 describe("shared page hero", () => {
   it("renders the reusable left-aligned hero contract", () => {
@@ -31,30 +30,19 @@ describe("shared page hero", () => {
     expect(document.querySelector("section > div > div")).toHaveClass("max-w-6xl")
   })
 
-  it("keeps non-home routes from owning local hero markup", () => {
-    const files = [
-      "app/[locale]/about/page.tsx",
-      "app/[locale]/contact/page.tsx",
-      "app/[locale]/blog/page.tsx",
-      "app/[locale]/areas-served/page.tsx",
-      "app/[locale]/blog/category/[category]/page.tsx",
-      "app/[locale]/areas-served/[ward]/page.tsx",
-      "app/[locale]/legal/page.tsx",
-      "app/[locale]/legal/privacy-policy/page.tsx",
-      "app/[locale]/legal/terms-conditions/page.tsx",
-      "app/[locale]/legal/disclaimer/page.tsx",
-      "components/services/services-index-template.tsx",
-      "components/services/service-parent-template.tsx",
-      "components/services/service-detail-template.tsx",
-      "components/area-detail-page.tsx",
-      "components/blog/blog-post-template.tsx",
-    ]
+  it.each(heroPageCases)("renders the %s page (%s) through the shared hero", async (_name, _locale, page) => {
+    const { container } = render(await page())
+    const headings = container.querySelectorAll("h1")
+    const breadcrumbs = container.querySelectorAll('nav[aria-label="Breadcrumb"]')
 
-    const offenders = files.filter((file) => {
-      const source = fs.readFileSync(path.join(process.cwd(), file), "utf8")
-      return source.includes("Hero Section") || source.includes("<nav className=\"text-sm text-muted-foreground mb-8\"")
-    })
+    expect(headings).toHaveLength(1)
+    expect(breadcrumbs).toHaveLength(1)
 
-    expect(offenders).toEqual([])
+    const hero = headings[0].closest("section")
+    expect(hero).toHaveClass("bg-[#faf9f7]")
+    expect(headings[0].parentElement).toHaveClass("max-w-6xl")
+    expect(headings[0].parentElement?.parentElement).toHaveClass("container")
+    expect(headings[0].parentElement?.parentElement?.parentElement).toBe(hero)
+    expect(breadcrumbs[0].parentElement).toBe(headings[0].parentElement)
   })
 })

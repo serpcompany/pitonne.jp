@@ -7,9 +7,6 @@ import { describe, expect, it } from "vitest"
 const retiredEmail = ["pitonne.am", "gmail.com"].join("@")
 const retiredPhoneGroups = ["786", "814", "0323"]
 
-// Matches the number with or without +1, in any mix of spaces, dots, dashes and parentheses:
-// "+1 786 814 0323", "7868140323", "786-814-0323", "(786) 814-0323", "tel:+17868140323".
-// The digit lookarounds stop it matching inside longer numbers such as SVG path coordinates.
 const separator = "[\\s.()-]*"
 const retiredPhonePattern = new RegExp(
   `(?<!\\d)(?:\\+?1${separator})?${retiredPhoneGroups.join(separator)}(?!\\d)`,
@@ -44,8 +41,6 @@ const binaryExtensions = new Set([
 ])
 
 function listTextFiles(directory: string): string[] {
-  if (!fs.existsSync(directory)) return []
-
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const fullPath = path.join(directory, entry.name)
     if (entry.isDirectory()) return listTextFiles(fullPath)

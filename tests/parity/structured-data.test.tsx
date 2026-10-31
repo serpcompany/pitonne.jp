@@ -1,11 +1,13 @@
 import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
+import LocaleLayout from "@/app/[locale]/layout"
 import { BlogPostTemplate } from "@/components/blog/blog-post-template"
 import { ServiceDetailTemplate } from "@/components/services/service-detail-template"
 import { getBlogPostBySlug, getBlogPostsByCategory, getAllBlogPosts } from "@/lib/data/blog-posts"
 import { businessHours, isOpenBusinessHours } from "@/lib/data/site"
 import { getService, getServicesFromSlugs } from "@/lib/data/services"
+import { businessJsonLd, websiteJsonLd } from "@/lib/structured-data"
 
 vi.mock("next/font/google", () => ({
   Inter: () => ({ variable: "font-inter" }),
@@ -20,7 +22,6 @@ function jsonLdFrom(markup: string) {
 
 describe("structured data parity", () => {
   it("renders organization and website JSON-LD in the root layout", async () => {
-    const { default: LocaleLayout } = await import("@/app/[locale]/layout")
     const markup = renderToStaticMarkup(
       await LocaleLayout({
         children: <div>Body</div>,
@@ -71,9 +72,7 @@ describe("structured data parity", () => {
     expect(websiteSchema).not.toHaveProperty("availableLanguage")
   })
 
-  it("writes the Japanese homepage URL with its trailing slash", async () => {
-    const { businessJsonLd, websiteJsonLd } = await import("@/lib/structured-data")
-
+  it("writes the Japanese homepage URL with its trailing slash", () => {
     expect(businessJsonLd("ja")).toMatchObject({ url: "https://pitonne.jp/ja/" })
     expect(websiteJsonLd("ja")).toMatchObject({ url: "https://pitonne.jp/ja/" })
   })

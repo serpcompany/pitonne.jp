@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import FaqsPage, { generateMetadata } from "@/app/[locale]/faqs/page"
 import { getDictionary } from "@/lib/i18n/dictionaries"
+import { sitemapEntries } from "@/lib/sitemaps"
 
 const SITE_URL = "https://pitonne.jp"
 const dict = getDictionary("en")
@@ -26,7 +27,6 @@ describe("FAQs page", () => {
   })
 
   it("exposes FAQ metadata and sitemap entry", async () => {
-    const { sitemapEntries } = await import("@/lib/sitemaps")
     const urls = sitemapEntries("pages").map((entry) => entry.url)
 
     const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en" }) })

@@ -3,7 +3,16 @@
 import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
+import { SaxesParser } from "saxes"
 import { afterEach, describe, expect, it } from "vitest"
+import { GET as areasSitemap } from "@/app/sitemap-areas.xml/route"
+import { GET as blogSitemap } from "@/app/sitemap-blog.xml/route"
+import { GET as categoriesSitemap } from "@/app/sitemap-categories.xml/route"
+import { GET as sitemapIndex } from "@/app/sitemap-index.xml/route"
+import { GET as pagesSitemap } from "@/app/sitemap-pages.xml/route"
+import { GET as servicesSitemap } from "@/app/sitemap-services.xml/route"
+import { GET as videosSitemap } from "@/app/sitemap-videos.xml/route"
+import { GET as sitemapAlias } from "@/app/sitemap.xml/route"
 import { getBlogPostLocales, getAllBlogPostSlugs } from "@/lib/data/blog-posts"
 import { locales } from "@/lib/i18n/config"
 import {
@@ -18,31 +27,53 @@ import {
 } from "@/lib/sitemaps"
 
 const SITE_URL = "https://pitonne.jp"
-const childRoutes: Record<(typeof sitemapGroups)[number], () => Promise<{ GET: () => Response }>> = {
-  pages: () => import("@/app/sitemap-pages.xml/route"),
-  services: () => import("@/app/sitemap-services.xml/route"),
-  areas: () => import("@/app/sitemap-areas.xml/route"),
-  blog: () => import("@/app/sitemap-blog.xml/route"),
-  categories: () => import("@/app/sitemap-categories.xml/route"),
-  videos: () => import("@/app/sitemap-videos.xml/route"),
+const childRoutes: Record<(typeof sitemapGroups)[number], () => Response> = {
+  pages: pagesSitemap,
+  services: servicesSitemap,
+  areas: areasSitemap,
+  blog: blogSitemap,
+  categories: categoriesSitemap,
+  videos: videosSitemap,
 }
 const root = process.cwd()
 const byGroup = sitemapEntriesByGroup()
 const allEntries = Object.values(byGroup).flat()
 
-function parseXml(xml: string): Document {
-  const document = new DOMParser().parseFromString(xml, "application/xml")
-  expect(document.getElementsByTagName("parsererror")).toHaveLength(0)
-  return document
+type XmlElement = { name: string; text: string }
+
+function parseXml(xml: string) {
+  const parser = new SaxesParser({ xmlns: true })
+  const elements: XmlElement[] = []
+  const open: XmlElement[] = []
+  let root = ""
+  const appendText = (text: string) => {
+    for (const element of open) element.text += text
+  }
+
+  parser.on("opentag", (tag) => {
+    const element = { name: tag.name, text: "" }
+    if (elements.length === 0) root = tag.local
+    elements.push(element)
+    open.push(element)
+  })
+  parser.on("closetag", () => {
+    open.pop()
+  })
+  parser.on("text", appendText)
+  parser.on("cdata", appendText)
+  parser.write(xml).close()
+
+  return { root, elements }
 }
 
-const textOf = (document: Document, tag: string) => Array.from(document.getElementsByTagName(tag)).map((node) => node.textContent)
+const textOf = (document: { elements: XmlElement[] }, tag: string) =>
+  document.elements.filter((element) => element.name === tag).map((element) => element.text)
 
 describe("sitemap index", () => {
   it("lists one root-level sitemap-<group>.xml per content group", () => {
     const document = parseXml(sitemapIndexXml())
 
-    expect(document.documentElement.localName).toBe("sitemapindex")
+    expect(document.root).toBe("sitemapindex")
     expect(textOf(document, "loc")).toEqual(sitemapGroups.map((group) => `${SITE_URL}/sitemap-${group}.xml`))
     for (const group of sitemapGroups) {
       expect(sitemapFile(group)).toMatch(/^sitemap-[a-z0-9-]+\.xml$/)
@@ -50,12 +81,9 @@ describe("sitemap index", () => {
   })
 
   it("serves /sitemap.xml as the same XML as /sitemap-index.xml", async () => {
-    const { GET: index } = await import("@/app/sitemap-index.xml/route")
-    const { GET: alias } = await import("@/app/sitemap.xml/route")
-
-    const indexResponse = index()
+    const indexResponse = sitemapIndex()
     expect(indexResponse.headers.get("content-type")).toBe("application/xml; charset=utf-8")
-    expect(await alias().text()).toBe(await indexResponse.text())
+    expect(await sitemapAlias().text()).toBe(await indexResponse.text())
   })
 
   it("has a route, cache headers and no legacy duplicate for every child sitemap", () => {
@@ -74,12 +102,11 @@ describe("sitemap index", () => {
 
   it("serves every child sitemap as a well-formed URL set", async () => {
     for (const group of sitemapGroups) {
-      const { GET } = await childRoutes[group]()
-      const response = GET()
+      const response = childRoutes[group]()
       const document = parseXml(await response.text())
 
       expect(response.headers.get("content-type")).toBe("application/xml; charset=utf-8")
-      expect(document.documentElement.localName).toBe("urlset")
+      expect(document.root).toBe("urlset")
       expect(textOf(document, "loc")).toEqual(byGroup[group].map((entry) => entry.url))
     }
   })

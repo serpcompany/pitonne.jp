@@ -1,25 +1,38 @@
 import fs from "node:fs"
+import { createRequire } from "node:module"
 import path from "node:path"
 import { describe, expect, it } from "vitest"
+import { job, readWorkflow } from "../workflows"
+
+type LighthouseConfig = {
+  ci: {
+    collect: { url: string[]; settings: { skipAudits: string[] } }
+    assert: { assertions: Record<string, unknown> }
+  }
+}
+
+const root = process.cwd()
+const lighthouseConfig = createRequire(import.meta.url)(path.join(root, "lighthouserc.cjs")) as LighthouseConfig
 
 describe("Lighthouse CI setup", () => {
-  it("adds Lighthouse CI to package scripts and CI workflow", () => {
-    const root = process.cwd()
+  it("runs Lighthouse CI from a package script in the CI test job", () => {
     const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")) as {
       scripts?: Record<string, string>
       devDependencies?: Record<string, string>
     }
-    const workflow = fs.readFileSync(path.join(root, ".github/workflows/ci.yml"), "utf8")
-    const lighthouserc = fs.readFileSync(path.join(root, "lighthouserc.cjs"), "utf8")
 
     expect(packageJson.scripts?.["test:lighthouse"]).toContain("lhci autorun")
     expect(packageJson.devDependencies).toHaveProperty("@lhci/cli")
-    expect(workflow).toContain("pnpm test:lighthouse")
-    expect(lighthouserc).toContain("http://localhost:3000/")
-    expect(lighthouserc).toContain("http://localhost:3000/blog/")
-    expect(lighthouserc).toContain('skipAudits: ["color-contrast", "third-party-cookies"]')
-    expect(lighthouserc).toContain('"categories:best-practices": ["error", { minScore: 0.95 }]')
-    expect(lighthouserc).not.toContain('"inspector-issues"')
-    expect(lighthouserc).not.toContain('"errors-in-console"')
+    expect(job(readWorkflow("ci.yml"), "test").steps?.map((step) => step.run)).toContain("pnpm test:lighthouse")
+  })
+
+  it("audits the home page and blog with the agreed skipped audits and best-practices threshold", () => {
+    const { collect, assert } = lighthouseConfig.ci
+
+    expect(collect.url).toEqual(expect.arrayContaining(["http://localhost:3000/", "http://localhost:3000/blog/"]))
+    expect(collect.settings.skipAudits).toEqual(["color-contrast", "third-party-cookies"])
+    expect(assert.assertions["categories:best-practices"]).toEqual(["error", { minScore: 0.95 }])
+    expect(JSON.stringify(lighthouseConfig)).not.toContain("inspector-issues")
+    expect(JSON.stringify(lighthouseConfig)).not.toContain("errors-in-console")
   })
 })

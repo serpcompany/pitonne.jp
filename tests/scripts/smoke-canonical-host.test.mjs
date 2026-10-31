@@ -1,5 +1,3 @@
-import fs from "node:fs"
-import path from "node:path"
 import { describe, expect, it, vi } from "vitest"
 import {
   SMOKE_HEADERS,
@@ -11,18 +9,17 @@ import {
   slashedFileChecks,
   smokeChecks,
 } from "../../scripts/smoke-canonical-host.mjs"
+import { job, readWorkflow, step } from "../workflows"
 
 const deploymentUrl = "https://d49a67b6.pitonne-jp.pages.dev"
 
 describe("canonical-host smoke test", () => {
   const allChecks = smokeChecks({ deploymentUrl, marker: "abc1234" })
-  // `fresh` (the new deployment URL's longer retry window) is covered on its own below
   const checks = allChecks.map(({ fresh: _fresh, ...check }) => check)
   const fileChecks = [
     ...slashedFileChecks("https://pitonne.jp", "abc1234"),
     ...slashedFileChecks(deploymentUrl, "abc1234", SMOKE_HEADERS),
   ]
-  // The host redirects; slashed-file checks (`/robots.txt/`) are covered on their own below.
   const isSlashedFile = (check) => /\.\w+\/$/.test(new URL(check.url).pathname)
   const redirects = checks.filter((check) => check.expect.status === 308 && !isSlashedFile(check))
 
@@ -172,7 +169,6 @@ describe("canonical-host smoke test", () => {
 
     const subset = [allChecks[0], ...fresh.slice(0, 2)]
     expect(await runChecks(subset, { attempts: 6, delayMs: 0, probeFn, now, freshMs: 100 })).toBe(false)
-    // The window opens at the first fresh check, which retries until 100 ms later; the next one is past it
     expect(subset.map((check) => calls.get(check.url))).toEqual([6, 10, 2])
 
     calls.clear()
@@ -190,8 +186,12 @@ describe("canonical-host smoke test", () => {
   })
 
   it("runs after every production deploy", () => {
-    const workflow = fs.readFileSync(path.join(process.cwd(), ".github", "workflows", "deploy.yml"), "utf8")
-    expect(workflow).toContain('node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"')
-    expect(workflow).toContain("steps.deploy.outputs.deployment-url")
+    const pagesDeploy = job(readWorkflow("deploy.yml"), "deploy")
+    const steps = pagesDeploy.steps ?? []
+    const smoke = steps.find((candidate) => candidate.run?.includes('node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"'))
+    expect(smoke).toBeDefined()
+    expect(smoke.env?.DEPLOYMENT_URL).toBe("${{ steps.deploy.outputs.deployment-url }}")
+    expect(smoke.if).toContain("env.DEPLOY_ENV == 'production'")
+    expect(steps.indexOf(smoke)).toBeGreaterThan(steps.indexOf(step(pagesDeploy, "deploy")))
   })
 })

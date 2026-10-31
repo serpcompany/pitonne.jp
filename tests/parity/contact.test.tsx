@@ -6,6 +6,9 @@ import { getDictionary } from "@/lib/i18n/dictionaries"
 
 const dict = getDictionary("en")
 const info = getBusinessInfo("en")
+const retiredPhoneGroups = ["786", "814", "0323"]
+const retiredPhoneHref = `tel:+1${retiredPhoneGroups.join("")}`
+const retiredPhoneText = `+1 ${retiredPhoneGroups.join(" ")}`
 
 describe("contact page", () => {
   it("opens the secure GHL contact form instead of linking to the legacy inquiry site", async () => {
@@ -37,8 +40,8 @@ describe("contact page", () => {
       "href",
       "tel:03-6821-8285",
     )
-    expect(container).not.toHaveTextContent("+1 786 814 0323")
-    expect(container.querySelector('a[href="tel:+17868140323"]')).not.toBeInTheDocument()
+    expect(container).not.toHaveTextContent(retiredPhoneText)
+    expect(container.querySelector(`a[href="${retiredPhoneHref}"]`)).not.toBeInTheDocument()
   })
 
   it("does not expose the retired Gmail address", async () => {
