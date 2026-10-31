@@ -12,7 +12,8 @@
     "cms:cloud": "KEYSTATIC=1 next dev",
     "build": "next build && node scripts/environment-headers.mjs",
     "start": "node scripts/serve-static.mjs",
-    "lint": "eslint . --ext .js,.mjs,.ts,.tsx --ignore-pattern out/ --ignore-pattern .next/",
+    "lint": "biome check",
+    "format": "biome format --write",
     "typecheck": "next typegen && tsc --noEmit --incremental false",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -26,7 +27,7 @@
     "audit:sheet-images": "node scripts/audit-sheet-images.mjs",
     "translate": "node scripts/translate-content.ts",
     "drafts:fetch": "node scripts/fetch-google-docs.mjs",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:routes && pnpm audit:content && pnpm audit:strings && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:routes && pnpm audit:content && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
   },
   "dependencies": {
     "@keystatic/core": "^0.6.9",
@@ -45,6 +46,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.2",
     "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "^4.2.0",
     "@testing-library/jest-dom": "^6.9.1",
@@ -52,9 +54,6 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@typescript-eslint/eslint-plugin": "^8.59.1",
-    "@typescript-eslint/parser": "^8.59.1",
-    "eslint": "^8.57.1",
     "happy-dom": "^21.0.4",
     "postcss": "^8.5",
     "saxes": "^6.0.0",

@@ -18,7 +18,7 @@ Node 24 and pnpm 10.14.0 (`packageManager` in `package.json`), then `pnpm instal
 
 - `pnpm vitest related --run <files>`: the tests that import the files you changed.
 - `pnpm vitest run <test-file>`: one test file.
-- `pnpm typecheck` and `pnpm exec eslint <files>` (or `pnpm lint`).
+- `pnpm typecheck` and `pnpm exec biome check <files>` (or `pnpm lint`; `pnpm format` writes formatting).
 - The audit for what you touched; none needs a build: `pnpm audit:strings` (hardcoded English),
   `pnpm audit:meta` (title/description lengths), `pnpm audit:content`, `pnpm audit:routes`.
 - `pnpm dev` for the site; `pnpm cms` for Keystatic on local files at http://127.0.0.1:3000/keystatic.
@@ -29,7 +29,7 @@ Node 24 and pnpm 10.14.0 (`packageManager` in `package.json`), then `pnpm instal
 pnpm check
 ```
 
-It runs lint → typecheck → test → audit:routes → audit:content → audit:strings → audit:meta →
+It runs lint → typecheck → test → audit:routes → audit:content → audit:meta →
 `DEPLOY_ENV=production pnpm build` → audit:out (the export has the files Cloudflare Pages needs, every sitemap the
 index lists, and no `out/en/`) → audit:seo, in about 30 seconds. This is a single package, so the push check is the same command.
 

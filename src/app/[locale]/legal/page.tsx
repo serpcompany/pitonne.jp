@@ -90,7 +90,7 @@ export default async function LegalPage({ params }: Props) {
                   {page.description}
                 </p>
                 <span className="text-[#7A8F87] text-sm">
-                  {dict.common.readMore} &rarr;
+                  {dict.common.readMore}&rarr;
                 </span>
               </Link>
             ))}
