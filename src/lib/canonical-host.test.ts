@@ -66,7 +66,6 @@ describe('canonical path', () => {
     ['/ja/index.txt', '/ja/index.txt'],
     ['/sitemap.xml/', '/sitemap.xml'],
     ['/images/content/blog/x/featureImage.JPG', '/images/content/blog/x/featureImage.JPG'],
-    // Dotted segments that aren't known files, and paths whose form is never changed
     ['/products/aws.amazon.com', '/products/aws.amazon.com'],
     ['/_next/static/chunks/app.js', '/_next/static/chunks/app.js'],
     ['/api/health', '/api/health'],
@@ -76,7 +75,6 @@ describe('canonical path', () => {
     ['/keystatic', '/keystatic'],
     ['/keystatic/', '/keystatic/'],
     ['/API/x', '/API/x'],
-    // Only the first segment exempts a path
     ['/docs/api', '/docs/api/']
   ])('%s -> %s', (input, expected) => {
     expect(canonicalPath(input)).toBe(expected)
@@ -156,11 +154,9 @@ describe('canonical host redirect', () => {
     expect(await legacy('https://main.pitonne-jp.pages.dev/old/?a=1', '/new/?b=2', 308)).toBe(
       'https://pitonne.jp/new/?b=2'
     )
-    // Pages' own slash redirect also applies on paths the Function never re-slashes, as it does on pitonne.jp
     expect(await legacy('https://pitonne-jp.pages.dev/keystatic', '/keystatic/', 308)).toBe(
       'https://pitonne.jp/keystatic/'
     )
-    // Relative targets resolve against the request; a target on another host isn't followed.
     expect(await legacy('https://pitonne-jp.pages.dev/x/y', 'z')).toBe('https://pitonne.jp/x/z/')
     expect(await legacy('https://pitonne-jp.pages.dev/out/', 'https://example.com/')).toBe(
       'https://pitonne.jp/out/'
@@ -221,22 +217,18 @@ describe('slashed file redirect', () => {
       'https://pitonne.jp/sitemap.xml?a=1&b=%E3%83%86'
     ],
     ['https://pitonne.jp/ja/index.TXT/', 'https://pitonne.jp/ja/index.TXT'],
-    // The rule itself; on Pages `_routes.json` keeps `/favicon.ico/` off the Function, so it stays a 404 there
     ['https://pitonne.jp/favicon.ico/', 'https://pitonne.jp/favicon.ico'],
-    // Preview aliases keep their own host
     [
       'https://pr-92.pitonne-jp.pages.dev/robots.txt/',
       'https://pr-92.pitonne-jp.pages.dev/robots.txt'
     ],
     ['http://localhost:8788/robots.txt/', 'http://localhost:8788/robots.txt'],
-    // Stays on the request's host: never a protocol-relative Location
     ['https://pitonne.jp//evil.com/x.js/', 'https://pitonne.jp//evil.com/x.js']
   ])('%s -> %s', (url, expected) => {
     expect(slashedFileLocation(url)).toBe(expected)
   })
 
   it.each([
-    // Files without a slash and pages, slashed or not
     'https://pitonne.jp/robots.txt',
     'https://pitonne.jp/sitemap.xml?a=1',
     'https://pitonne.jp/',
@@ -244,10 +236,8 @@ describe('slashed file redirect', () => {
     'https://pitonne.jp/about',
     'https://pitonne.jp/about//',
     'https://pitonne.jp/ja/blog/iv-therapy-for-jet-lag/',
-    // A dotted segment that isn't a known file is a page
     'https://pitonne.jp/products/aws.amazon.com/',
     'https://pitonne.jp/blog/v1.2/',
-    // Paths whose form the Function never changes
     'https://pitonne.jp/api/x.json/',
     'https://pitonne.jp/api/',
     'https://pitonne.jp/_next/static/chunks/app.js/',
@@ -258,7 +248,6 @@ describe('slashed file redirect', () => {
     expect(slashedFileLocation(url)).toBeNull()
   })
 
-  // A stand-in for the asset server: `_redirects` rules keyed by the path it is asked about, else 200.
   const rules: Record<string, [number, string]> = {
     '/videos-sitemap.xml': [301, '/sitemap-videos.xml'],
     '/en/robots.txt': [301, '/robots.txt'],
@@ -274,7 +263,6 @@ describe('slashed file redirect', () => {
       const asking = defined(request)
       const { pathname } = new URL(asking.url)
       asked.push(`${asking.method} ${pathname}`)
-      // A followed redirect would hide the rule behind the target's content
       expect(asking.redirect).toBe('manual')
       const rule = rules[pathname]
       return rule
@@ -310,7 +298,6 @@ describe('slashed file redirect', () => {
   })
 
   it.each([
-    // Temporary rules stay temporary, other hosts aren't followed, and a rule that re-adds the slash can't loop
     ['https://pitonne.jp/temporary.xml/', 'https://pitonne.jp/temporary.xml'],
     ['https://pitonne.jp/offsite.xml/', 'https://pitonne.jp/offsite.xml'],
     ['https://pitonne.jp/reslash.xml/', 'https://pitonne.jp/reslash.xml']
@@ -437,7 +424,6 @@ describe('_routes.json', () => {
   it("runs the Function on every path that isn't excluded", () => {
     expect(routes.version).toBe(1)
     expect(routes.include).toEqual(['/*'])
-    // Cloudflare's limit is 100 include + exclude rules
     expect(routes.include.length + routes.exclude.length).toBeLessThanOrEqual(100)
   })
 

@@ -13,13 +13,11 @@ import {
 } from '@/lib/blog-rules'
 import type { Locale } from '@/lib/i18n/config'
 
-// Blog CMS (issue #64). Field rules come from src/lib/blog-rules.ts, which the zod schema in src/lib/data/blog-posts.ts also uses.
 const slugPattern = {
   regex: BLOG_SLUG_PATTERN,
   message: 'Use lowercase letters, numbers, and hyphens only'
 }
 
-// Keystatic applies `min` even to empty optional fields, so optional overrides use a pattern: empty or at least `min`
 function optionalMinLength(min: number, label: string) {
   return {
     regex: new RegExp(`^(|[\\s\\S]{${min},})$`),
@@ -28,7 +26,6 @@ function optionalMinLength(min: number, label: string) {
 }
 
 function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
-  // Each locale keeps its own image folder so editing one locale never deletes or replaces the other's image
   const imageFolder = locale === 'ja' ? 'images/content/blog/ja' : 'images/content/blog'
 
   return collection({
@@ -80,7 +77,6 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         defaultValue: { kind: 'today' },
         validation: { isRequired: true }
       }),
-      // Stores the bare category slug (the filename in content/blog-categories), shared by both locales
       categorySlug: fields.relationship({
         label: 'Category',
         description: 'Listed by slug. To add a category, create it under Blog categories first.',
@@ -128,15 +124,12 @@ function blogCollection(label: string, path: `${string}/*`, locale: Locale) {
         extension: 'md',
         description:
           "Start with your first paragraph; don't repeat the title (it's already the page's main heading). Use Heading 2 for sections and Heading 3–4 inside them.",
-        // The post title is the page's only H1
         options: { heading: [2, 3, 4] }
       })
     }
   })
 }
 
-// Category names and descriptions for both locales live in one file, content/blog-categories/<slug>.json.
-// The site reads it with JSON.parse (src/lib/data/blog-categories.ts), which applies the same rules.
 const blogCategories = collection({
   label: 'Blog categories',
   path: 'content/blog-categories/*',
@@ -177,8 +170,6 @@ const blogCategories = collection({
   }
 })
 
-// The deployed CMS (and `pnpm cms:cloud`) signs in through Keystatic Cloud and commits straight to main (the Keystatic
-// Cloud app bypasses the main ruleset), which deploys the site. `pnpm cms` edits local files instead.
 const useLocal = process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'local'
 
 export default config({

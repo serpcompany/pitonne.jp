@@ -17,10 +17,7 @@ module.exports = {
       settings: {
         chromeFlags: '--headless --no-sandbox',
         preset: 'desktop',
-        // The accepted LeadConnector integration currently sets third-party cookies.
         skipAudits: ['color-contrast', 'third-party-cookies'],
-        // Score only this repo's code: tags injected via Google Tag Manager (e.g. the LeadConnector
-        // chat widget) behave differently between runs and made the gate flaky.
         blockedUrlPatterns: ['*googletagmanager.com*', '*leadconnectorhq.com*', '*msgsndr.com*']
       }
     },
