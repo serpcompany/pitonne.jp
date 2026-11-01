@@ -231,13 +231,21 @@ async function serveStaging(
   return serve()
 }
 
+const STAGING_DEPLOYMENT_HOSTS = new Set([STAGING_HOST, `${STAGING_BRANCH}.${PAGES_HOST}`])
+
+function servesStaging(request: Request, env: FunctionEnv): boolean {
+  return (
+    env.CF_PAGES_BRANCH === STAGING_BRANCH ||
+    STAGING_DEPLOYMENT_HOSTS.has(normalizeHost(new URL(request.url).hostname))
+  )
+}
+
 export async function handleRequest(
   request: Request,
   next: AssetServer,
   env: FunctionEnv = {}
 ): Promise<Response> {
-  if (env.CF_PAGES_BRANCH === STAGING_BRANCH)
-    return serveStaging(request, next, env.STAGING_PASSWORD)
+  if (servesStaging(request, env)) return serveStaging(request, next, env.STAGING_PASSWORD)
   return (
     (await canonicalHostRedirect(request, next)) ??
     (await slashedFileRedirect(request, next)) ??

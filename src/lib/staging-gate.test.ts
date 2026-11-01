@@ -221,12 +221,25 @@ describe('staging canonical host', () => {
     expect(response.status).toBe(200)
   })
 
-  it('keeps the production host rules on every other deployment', async () => {
+  it('keeps the production host rules for every other host on other deployments', async () => {
     for (const env of [{ CF_PAGES_BRANCH: 'main' }, { CF_PAGES_BRANCH: PREVIEW_BRANCH }, {}]) {
-      const alias = await serve('https://staging.pitonne-jp.pages.dev/ja/', {}, env)
-      expect(alias.response.status).toBe(200)
       const hash = await serve('https://d49a67b6.pitonne-jp.pages.dev/ja/', {}, env)
       expect(hash.response.headers.get('location')).toBe('https://pitonne.jp/ja/')
     }
+  })
+
+  it.each([
+    {},
+    { CF_PAGES_BRANCH: 'main' }
+  ])('gates the staging hosts when CF_PAGES_BRANCH is %j', async branch => {
+    for (const env of [branch, { ...branch, STAGING_PASSWORD: PASSWORD }]) {
+      expectChallenge((await serve(`${STAGING_ORIGIN}/ja/`, {}, env)).response)
+      const alias = await serve('https://staging.pitonne-jp.pages.dev/ja/', {}, env)
+      expect(alias.response.status).toBe(308)
+      expect(alias.response.headers.get('location')).toBe(`${STAGING_ORIGIN}/ja/`)
+    }
+    const env = { ...branch, STAGING_PASSWORD: PASSWORD }
+    const verified = await serve(page, { authorization: basic(`editor:${PASSWORD}`) }, env)
+    expect(verified.response.status).toBe(200)
   })
 })
