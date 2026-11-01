@@ -21,15 +21,11 @@ export const canonicalRoutes = {
   medicalDisclaimer: '/legal/disclaimer/'
 }
 
-// Type for service navigation used in header
 export type ServiceNavCategory = {
   name: string
   href: string
   items: { name: string; href: string }[]
 }
-
-// serviceNavigation is generated server-side and passed to Header as a prop
-// This empty default is never used at runtime — the real data comes from layout.tsx
 
 const areaNavigation = wards.map(ward => ({
   name: ward.name,

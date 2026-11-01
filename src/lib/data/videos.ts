@@ -4,7 +4,6 @@ export interface PitonneVideo {
   titleJa?: string
   description: string
   descriptionJa?: string
-  // SEO overrides for the watch page <title>/meta description (YouTube descriptions are too long)
   metaTitle?: string
   metaDescription?: string
   metaDescriptionJa?: string

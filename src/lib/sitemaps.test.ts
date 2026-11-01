@@ -1,5 +1,3 @@
-// Structure and invariants of the sitemap index pattern. Editors add blog posts at any time, so nothing here
-// depends on how many posts exist or which ones; every check holds for whatever content is in the repo.
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
@@ -102,7 +100,6 @@ describe('sitemap index', () => {
       expect(fs.existsSync(path.join(root, 'src', 'app', file, 'route.ts'))).toBe(true)
       expect(headers).toContain(`/${file}\n  Content-Type: application/xml; charset=utf-8`)
     }
-    // The old video sitemap redirects instead of listing the watch pages a second time
     expect(redirects).toMatch(/^\/videos-sitemap\.xml \/sitemap-videos\.xml 301$/m)
   })
 
@@ -129,7 +126,6 @@ describe('sitemap URLs', () => {
     for (const group of sitemapGroups) {
       expect(byGroup[group].length).toBeLessThanOrEqual(MAX_SITEMAP_URLS)
     }
-    // Groups defined in code always have URLs; blog and categories come from the CMS and may be empty (a valid urlset)
     for (const group of ['pages', 'services', 'areas', 'videos'] as const) {
       expect(byGroup[group].length).toBeGreaterThan(0)
     }

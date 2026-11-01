@@ -1,6 +1,3 @@
-// Sitemap index pattern (serpcompany/serp docs/engineering/websites/features/xml-sitemaps.md):
-// /sitemap-index.xml lists one root-level URL set per content group, /sitemap-<group>.xml.
-// /sitemap.xml serves the same XML as the index for clients that still request it.
 import { getAllAreas, wards } from '@/lib/data/areas'
 import {
   getAllBlogPostSlugs,
@@ -14,14 +11,12 @@ import { pitonneVideos } from '@/lib/data/videos'
 import { defaultLocale, type Locale, locales } from '@/lib/i18n/config'
 import { normalizePath, SITE_URL } from '@/lib/seo'
 
-// Order is the order of the index. A URL belongs to the first group that lists it.
 export const sitemapGroups = ['pages', 'services', 'areas', 'blog', 'categories', 'videos'] as const
 type SitemapGroup = (typeof sitemapGroups)[number]
 
 export const SITEMAP_INDEX_FILE = 'sitemap-index.xml'
 export const sitemapFile = (group: SitemapGroup) => `sitemap-${group}.xml`
 
-// sitemaps.org limit per file. Past it, add sitemap-<group>-2.xml beside the first file and list it in the index.
 export const MAX_SITEMAP_URLS = 50_000
 
 interface SitemapVideo {
@@ -43,19 +38,16 @@ interface SitemapEntry {
 
 interface SitemapPath {
   path: string
-  // Locales the page is published in; blog posts and categories can be single-locale
   locales: readonly Locale[]
   video?: (locale: Locale) => SitemapVideo
 }
 
-// The production origin, or the local dev server under `next dev`, so local sitemaps link to local pages.
 export function sitemapOrigin(): string {
   return process.env.NODE_ENV === 'development'
     ? `http://localhost:${process.env.PORT ?? 3000}`
     : SITE_URL
 }
 
-// The English homepage is the bare origin (no trailing slash); every other page ends in a slash.
 function sitemapUrl(path: string, locale: Locale, origin: string = SITE_URL): string {
   const normalizedPath = normalizePath(path)
   if (locale !== defaultLocale) return `${origin}/${locale}${normalizedPath}`
@@ -149,7 +141,6 @@ export function sitemapEntriesByGroup(
 
   return Object.fromEntries(
     sitemapGroups.map(group => {
-      // Each URL is listed in exactly one sitemap
       const unique = paths[group].filter(({ path }) => {
         if (seen.has(path)) {
           return false

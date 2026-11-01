@@ -25,8 +25,6 @@ export function normalizePath(path: string): string {
   return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`
 }
 
-// The English homepage is written as the bare origin (https://pitonne.jp, no trailing slash); every other page
-// ends in a slash. See the SERP URL trailing-slash standard.
 export function canonicalUrl(path: string): string {
   const normalizedPath = normalizePath(path)
   return normalizedPath === '/' ? SITE_URL : `${SITE_URL}${normalizedPath}`
@@ -48,7 +46,6 @@ export function localizedCanonicalUrl(path: string, locale: Locale): string {
   return canonicalUrl(normalizedPath)
 }
 
-// availableLocales limits hreflang to the locales the page exists in (e.g. a blog post with no translation).
 export function localizedHreflangAlternates(
   path: string,
   locale: Locale,
@@ -72,7 +69,6 @@ export function localizedHreflangAlternates(
 
 type OpenGraphImages = NonNullable<NonNullable<Metadata['openGraph']>['images']>
 
-// Shared with scripts/audit-meta-lengths.mjs and scripts/audit-seo-build.mjs (Ahrefs Site Audit ranges)
 const TITLE_SUFFIX = seoLimits.titleSuffix
 const TITLE_MAX = seoLimits.title.max
 
@@ -80,8 +76,6 @@ export function fitsTitleLimit(title: string): boolean {
   return title.length + TITLE_SUFFIX.length <= TITLE_MAX
 }
 
-// Next.js replaces (does not merge) the layout's openGraph/twitter when a page sets its own,
-// so every page sets both with the full set of tags.
 export function pageSocialMetadata({
   title,
   description,

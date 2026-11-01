@@ -27,7 +27,6 @@ const serviceFrontmatterSchema = z.object({
   parentSlug: z.string().min(1).optional(),
   canonicalPath: z.string().startsWith('/').endsWith('/'),
   shortDescription: z.string().min(1),
-  // Optional SEO overrides for <title> / meta description
   metaTitle: z.string().min(1).optional(),
   metaDescription: z.string().min(1).optional(),
   fullDescription: z.string().min(1),

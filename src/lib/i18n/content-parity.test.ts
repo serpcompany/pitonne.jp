@@ -15,8 +15,6 @@ function getMdFiles(dir: string): string[] {
 }
 
 describe('i18n content file parity', () => {
-  // Blog posts may be published in one locale only (GitHub issue #64): the missing locale gets no page,
-  // index entry, or hreflang. Services and legal pages stay strictly paired.
   it('pairs blog translations by identical filename and slug', () => {
     const en = getMdFiles('content/blog')
     const ja = getMdFiles('content/blog/ja')
@@ -28,7 +26,6 @@ describe('i18n content file parity', () => {
     ] as const) {
       for (const file of files) {
         const { data } = matter(fs.readFileSync(path.join(root, dir, file), 'utf8'))
-        // The filename is the slug (Keystatic doesn't store it in frontmatter)
         expect(data.slug, `${dir}/${file}`).toBeUndefined()
         expect(file, `${dir}/${file}`).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/)
       }

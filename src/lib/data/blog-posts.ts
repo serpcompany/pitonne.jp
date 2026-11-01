@@ -27,10 +27,8 @@ function blogContentDirectory(locale: Locale): string {
 }
 
 const blogPostFrontmatterSchema = z.object({
-  // Defaults to the filename (Keystatic stores the slug only as the filename)
   slug: z.string().regex(BLOG_SLUG_PATTERN, 'slug must be lowercase kebab-case').optional(),
   title: z.string().min(1),
-  // Optional SEO overrides for <title> / meta description when the on-page title or excerpt is too long or short
   metaTitle: z.string().trim().min(META_TITLE_MIN_LENGTH).max(META_TITLE_MAX_LENGTH).optional(),
   metaDescription: z
     .string()
@@ -38,10 +36,7 @@ const blogPostFrontmatterSchema = z.object({
     .min(META_DESCRIPTION_MIN_LENGTH)
     .max(META_DESCRIPTION_MAX_LENGTH)
     .optional(),
-  // Also the default meta/OG/Twitter description
   excerpt: z.string().trim().min(EXCERPT_MIN_LENGTH).max(EXCERPT_MAX_LENGTH),
-  // Keystatic writes unquoted YAML dates, which gray-matter parses as Date objects at UTC midnight. A timestamp
-  // with a time or timezone is rejected rather than converted, since converting could shift it to another day.
   publishedAt: z.preprocess(
     value =>
       value instanceof Date && value.toISOString().endsWith('T00:00:00.000Z')
@@ -51,20 +46,17 @@ const blogPostFrontmatterSchema = z.object({
       .string({ message: 'publishedAt must be a date (YYYY-MM-DD) without a time' })
       .regex(/^\d{4}-\d{2}-\d{2}$/)
   ),
-  // Must match a category file in content/blog-categories (checked when the post is loaded)
   categorySlug: z.string().regex(BLOG_SLUG_PATTERN, 'categorySlug must be lowercase kebab-case'),
   author: z.object({
     name: z.string().min(1),
     role: z.string().min(1)
   }),
-  // Computed from the body when omitted; set only to override the estimate
   readingTime: z.number().int().positive().optional(),
   featureImage: z.string().min(1).optional(),
   featureImageAlt: z.string().trim().min(1).optional(),
   featured: z.boolean().optional(),
   relatedServiceSlugs: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
-  // Drafts are excluded from every build (production, staging, and PR previews)
   draft: z.boolean().optional()
 })
 
@@ -92,7 +84,6 @@ export interface BlogPost {
 }
 
 const WORDS_PER_MINUTE = 200
-// Japanese has no word spaces, so it is estimated from characters read per minute
 const JA_CHARACTERS_PER_MINUTE = 500
 
 function plainText(markdown: string): string {
@@ -114,8 +105,6 @@ export function estimateReadingTime(markdown: string, locale: Locale): number {
   return Math.max(1, Math.ceil(minutes))
 }
 
-// A short excerpt is still the meta description, extended with the post's own opening sentences (verbatim, same
-// language) to reach the audit:meta range. A too-short excerpt must never block publishing a CMS save.
 export function fallbackMetaDescription(
   excerpt: string,
   markdown: string,
@@ -146,7 +135,6 @@ export function fallbackMetaDescription(
     }
   }
 
-  // No sentence fits: cut the next one at the limit rather than leave the description short
   const remainder = sentences.join(separator)
   if (!remainder) {
     return undefined
@@ -157,7 +145,6 @@ export function fallbackMetaDescription(
   return `${extended}…`
 }
 
-// The page renders the title as its only <h1>, so a body that starts with its own "# Title" line drops it
 export function withoutLeadingTitleHeading(markdown: string): string {
   return markdown.replace(/^#[ \t]+[^\n]*\n*/, '')
 }
@@ -200,7 +187,6 @@ export function loadBlogPostsFromDirectory(
         )
       }
 
-      // Checked for drafts too, so deleting or renaming a category in the CMS can't silently orphan any post
       const category = categories.find(candidate => candidate.slug === frontmatter.categorySlug)
       if (!category) {
         throw new Error(
@@ -224,7 +210,6 @@ export function loadBlogPostsFromDirectory(
             fallbackMetaDescription(frontmatter.excerpt, content, locale),
           readingTime: readingTime ?? estimateReadingTime(content, locale),
           featureImage: frontmatter.featureImage || undefined,
-          // Alt text is optional in the CMS; an image without it is described by the post title
           featureImageAlt: frontmatter.featureImage
             ? frontmatter.featureImageAlt || frontmatter.title
             : undefined,
@@ -264,12 +249,10 @@ export function getBlogPostBySlug(slug: string, locale: Locale = 'en'): BlogPost
   return getPostsForLocale(locale).find(post => post.slug === slug)
 }
 
-// A post may be published in one locale only; the missing locale has no page, index entry, or hreflang.
 export function getBlogPostLocales(slug: string): Locale[] {
   return locales.filter(locale => blogPostsByLocale[locale].some(post => post.slug === slug))
 }
 
-// Blog post and category paths published in this locale that are missing in another locale
 export function getUntranslatedBlogPaths(locale: Locale): string[] {
   const posts = blogPostsByLocale[locale]
   const untranslatedPosts = posts
@@ -293,9 +276,6 @@ export function getBlogCategoryLocales(categorySlug: string): Locale[] {
   )
 }
 
-// Blog markdown links to locale-neutral paths (/blog/..., /contact/); JA posts resolve them to /ja/...,
-// except for blog posts that have no Japanese version, which keep pointing at the English page.
-// Editors often paste full https://pitonne.jp/... links; they render as locale-neutral relative paths
 export function localizeBlogContentHref(rawHref: string, locale: Locale): string {
   const href = rawHref.replace(/^https?:\/\/(?:www\.)?pitonne\.jp(?=\/|$)/i, '') || '/'
   if (locale === 'en' || !href.startsWith('/') || href.startsWith('//')) return href
@@ -339,8 +319,6 @@ export function getBlogPostsForService(
   return matchingPosts.length > 0 ? matchingPosts : getAllBlogPosts(locale).slice(0, limit)
 }
 
-// Categories that have at least one post in this locale (only those get a category page), with names and
-// descriptions from content/blog-categories
 export function getAllCategories(
   locale: Locale = 'en'
 ): { name: string; description: string; ctaDescription?: string; slug: string; count: number }[] {

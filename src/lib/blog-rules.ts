@@ -1,6 +1,3 @@
-// Blog content rules shared by the zod schema (lib/data/blog-posts.ts) and the Keystatic config.
-// No Node imports: keystatic.config.ts also runs in the browser.
-
 import type { Locale } from '@/lib/i18n/config'
 import seoLimits from '@/lib/seo-limits.json'
 
@@ -8,10 +5,8 @@ export const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 export const EXCERPT_MIN_LENGTH = 70
 export const EXCERPT_MAX_LENGTH = 160
 
-// The rendered meta description (metaDescription ?? excerpt) must fit the audit:meta range
 export const META_DESCRIPTION_MIN_LENGTH = seoLimits.description.min
 export const META_DESCRIPTION_MAX_LENGTH = seoLimits.description.max
-// metaTitle is rendered with the " | Pitonne" suffix, which counts toward the audit:meta range
 export const META_TITLE_MIN_LENGTH = seoLimits.title.min - seoLimits.titleSuffix.length
 export const META_TITLE_MAX_LENGTH = seoLimits.title.max - seoLimits.titleSuffix.length
 
@@ -20,7 +15,6 @@ export const BLOG_AUTHOR_DEFAULTS: Record<Locale, { name: string; role: string }
   ja: { name: 'ピトン・メディカル・チーム', role: 'ウェルネス専門家' }
 }
 
-// Must list every file in content/services (checked by tests/parity/blog-content-model.test.ts)
 export const BLOG_RELATED_SERVICE_OPTIONS = [
   { label: 'AGA Medication', value: 'androgenetic-alopecia' },
   { label: 'Blood Tests', value: 'blood-tests' },

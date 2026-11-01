@@ -155,7 +155,6 @@ describe('blog content model', () => {
     expect(blogCategories.map(category => `${category.slug}.json`)).toEqual(categoryFiles.sort())
 
     const categorySlugs = blogCategories.map(category => category.slug)
-    // Read the raw frontmatter so drafts are covered too
     for (const dir of ['content/blog', 'content/blog/ja']) {
       for (const file of fs
         .readdirSync(path.join(process.cwd(), dir))
@@ -247,7 +246,6 @@ describe('blog content model', () => {
     })
     expect(loadBlogPostsFromDirectory(dir, 'ja', 'content/blog/ja')[0].category).toBe('血液検査')
 
-    // A category created in the CMS works without any code change
     const categories = loadBlogCategoriesFromDirectory(
       writeCategories({ 'nutrition.json': validCategory })
     )
@@ -258,7 +256,6 @@ describe('blog content model', () => {
       loadBlogPostsFromDirectory(nutrition, 'ja', 'content/blog/ja', categories)[0].category
     ).toBe('栄養')
 
-    // Unknown categories fail the build, drafts included, naming the post and the slug
     expect(() => loadBlogPostsFromDirectory(nutrition, 'en', 'content/blog')).toThrow(
       'content/blog/example-post.md has categorySlug "nutrition", but content/blog-categories/nutrition.json does not exist'
     )

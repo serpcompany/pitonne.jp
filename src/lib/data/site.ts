@@ -56,7 +56,6 @@ export const businessInfo = {
   phone: '03-6821-8285',
   siteUrl: 'https://pitonne.jp',
   bookingUrl: 'https://api.leadconnectorhq.com/booking/pitonne/bp/english',
-  // LINE official account, offered on the Japanese site only
   lineUrl: null as string | null,
   hours: businessHoursDisplay,
   description:

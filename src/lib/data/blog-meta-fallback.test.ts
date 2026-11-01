@@ -3,7 +3,7 @@ import { META_DESCRIPTION_MAX_LENGTH, META_DESCRIPTION_MIN_LENGTH } from '@/lib/
 import { fallbackMetaDescription } from '@/lib/data/blog-posts'
 import { defined } from '@/test/defined'
 
-const shortJa = '短い抜粋です。'.repeat(10) // 70 characters
+const shortJa = '短い抜粋です。'.repeat(10)
 const bodyJa = `## 見出し\n\n${'本文の最初の文です。'.repeat(3)}\n\n${'二つ目の段落の文です。'.repeat(10)}`
 
 describe('fallbackMetaDescription', () => {

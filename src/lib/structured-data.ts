@@ -97,7 +97,6 @@ export function blogPostingJsonLd(
     dateModified: post.publishedAt,
     image: post.featureImage ? absoluteUrl(post.featureImage) : undefined,
     inLanguage: locale === 'ja' ? 'ja' : 'en',
-    // Link original and translation via Schema.org translationOfWork/workTranslation
     ...(locale === 'ja'
       ? { translationOfWork: { '@type': 'BlogPosting', '@id': `${enUrl}#blog-posting` } }
       : { workTranslation: { '@type': 'BlogPosting', '@id': `${jaUrl}#blog-posting` } }),
@@ -151,7 +150,6 @@ export function videoListJsonLd(videos: PitonneVideo[]): WithContext<ItemList> {
   }
 }
 
-// The breadcrumb follows the page's locale, matching the visible Breadcrumbs on /watch/ and /ja/watch/
 export function videoBreadcrumbJsonLd(
   video: PitonneVideo,
   locale: Locale = 'en'

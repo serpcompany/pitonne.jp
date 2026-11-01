@@ -36,7 +36,6 @@ describe('structured data parity', () => {
           '@type': 'MedicalBusiness',
           '@id': 'https://pitonne.jp/#business',
           name: 'Pitonne',
-          // The English homepage is the bare origin, without a trailing slash (#91)
           url: 'https://pitonne.jp',
           telephone: '03-6821-8285'
         }),
@@ -65,7 +64,6 @@ describe('structured data parity', () => {
       })
     )
 
-    // schema.org: inLanguage/availableLanguage are not valid on MedicalBusiness or WebSite (Ahrefs validation error)
     const websiteSchema = schemas.find(schema => schema['@id'] === 'https://pitonne.jp/#website')
     expect(businessSchema).not.toHaveProperty('inLanguage')
     expect(businessSchema).not.toHaveProperty('availableLanguage')

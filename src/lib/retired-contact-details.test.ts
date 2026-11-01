@@ -2,8 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-// Contact details the clinic no longer uses (issue #115). Both are built from parts so this file
-// never contains them literally and a repo-wide grep only finds the absence assertions.
 const retiredEmail = ['pitonne.am', 'gmail.com'].join('@')
 const retiredPhoneGroups = ['786', '814', '0323']
 
@@ -14,7 +12,6 @@ const retiredPhonePattern = new RegExp(
 
 const scannedDirectories = ['src', 'content', 'public']
 
-// Binary and raster files can't contain readable contact details; SVG is text and is scanned.
 const binaryExtensions = new Set([
   '.png',
   '.jpg',

@@ -8,8 +8,6 @@ import {
 } from '@/lib/blog-rules'
 import type { Locale } from '@/lib/i18n/config'
 
-// Blog categories are edited in the CMS (the blogCategories collection in keystatic.config.ts) and stored as
-// content/blog-categories/<slug>.json. The filename is the slug that posts store in `categorySlug`.
 export const BLOG_CATEGORIES_SUBDIR = 'content/blog-categories'
 
 const description = z
@@ -21,10 +19,8 @@ const description = z
 const blogCategoryFileSchema = z.object({
   name: z.string().trim().min(1),
   nameJa: z.string().trim().min(1),
-  // The category page's meta description, so it must fit the audit:meta range
   description,
   descriptionJa: description,
-  // Optional text for the category page's contact section; falls back to the site's generic contact text
   ctaDescription: z.string().trim().min(1).optional(),
   ctaDescriptionJa: z.string().trim().min(1).optional()
 })
