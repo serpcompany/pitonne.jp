@@ -27,7 +27,8 @@ export const stagingNote = `GitHub links a closing keyword only on a pull reques
 const whereGitHubLinksNothing = [
   /^[ \t]*(([`~])\2{2,})(?:(?<=~)[^\n]*|[^`\n]*)\n[\s\S]*?(?:^[ \t]*\1\2*[ \t]*$|(?![\s\S]))/gm,
   /(?<!`)(`+)(?!`)(?:(?!\n[ \t]*\n)[\s\S])*?(?<!`)\1(?!`)/g,
-  /<!--[\s\S]*?-->/g
+  /<!--[\s\S]*?-->/g,
+  /^[ \t]{0,3}>.*$/gm
 ]
 const closingKeyword =
   /(?<![\w-])(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?):?[ \t]+(?:([\w.-]+\/[\w.-]+)#|https:\/\/github\.com\/([\w.-]+\/[\w.-]+)\/issues\/|#)(\d{1,9})\b/gi
@@ -291,7 +292,7 @@ export function testsOf(folder) {
 const retryAfter = [5, 15]
 
 export function gitHubApi({ token, api = 'https://api.github.com', pause = pauseFor }) {
-  async function call(method, path, body) {
+  async function call(method, path, body, { retry = true } = {}) {
     for (let attempt = 0; ; attempt++) {
       const response = await fetch(`${api}${path}`, {
         method,
@@ -304,13 +305,14 @@ export function gitHubApi({ token, api = 'https://api.github.com', pause = pause
         body: body ? JSON.stringify(body) : undefined,
         signal: AbortSignal.timeout(30_000)
       }).catch(error => ({ ok: false, status: 0, error }))
-      const retryable = response.status === 0 || response.status === 429 || response.status >= 500
+      const retryable =
+        retry && (response.status === 0 || response.status === 429 || response.status >= 500)
       if (response.ok || !retryable || attempt >= retryAfter.length) return response
       await pause(retryAfter[attempt] * 1000)
     }
   }
-  async function answer(method, path, body) {
-    const response = await call(method, path, body)
+  async function answer(method, path, body, options) {
+    const response = await call(method, path, body, options)
     if (!response.ok) {
       const why = response.status
         ? `returned ${response.status}`
@@ -353,8 +355,16 @@ export function gitHubApi({ token, api = 'https://api.github.com', pause = pause
       }
       return files
     },
+    async pullsOfCommit(repository, sha) {
+      return (await answer('GET', `/repos/${repository}/commits/${sha}/pulls?per_page=100`)).json()
+    },
     async comment(repository, number, body) {
-      await answer('POST', `/repos/${repository}/issues/${number}/comments`, { body })
+      await answer(
+        'POST',
+        `/repos/${repository}/issues/${number}/comments`,
+        { body },
+        { retry: false }
+      )
     },
     async close(repository, number) {
       await answer('PATCH', `/repos/${repository}/issues/${number}`, {

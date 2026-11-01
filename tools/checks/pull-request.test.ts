@@ -150,11 +150,20 @@ describe('issue-link', () => {
     ['in a fenced block', 'Before\n```md\nCloses #14\n```\nafter'],
     ['in a fence that is never closed', 'Before\n```\nCloses #14\nto the end'],
     ['in an HTML comment', ['<!', '-- Closes #20 --', '>'].join('')],
+    ['in a quote', 'The issue says:\n> Closes #15'],
+    ['in a quote within a quote', 'Quoted:\n   > > Fixes #16'],
     ['too large to be an issue', 'Closes #99999999999'],
     ['after a word that only ends like a keyword', 'a bug-fix #17, a hotfix #21, a prefix #6'],
     ['after a word that closes nothing', 'Part of #3, refs #4, encloses #5']
   ])('reads no issue from a number %s, where GitHub links nothing', (_, body) => {
     expect(closingReferences(body, repository)).toEqual([])
+  })
+
+  it('reads the keywords around a quote, and one after a > that starts no quote', () => {
+    expect(closingReferences('Closes #7\n> Closes #8\nFixes #9, since a > b', repository)).toEqual([
+      { repository: '', number: 7 },
+      { repository: '', number: 9 }
+    ])
   })
 
   it('passes a pull request into staging that names an open issue, without asking GitHub to link it', async () => {

@@ -88,20 +88,18 @@ describe('the Pull request workflow', () => {
 describe('the Close issues workflow', () => {
   const job = closing.jobs.close
 
-  it('runs when a pull request into staging closes, and closes issues only when it merged', () => {
-    expect(closing.on).toEqual({
-      pull_request_target: { types: ['closed'], branches: [closedOnMergeInto] }
+  it('runs on every push to staging, where a merged pull request lands, and on nothing else', () => {
+    expect(closing.on).toEqual({ push: { branches: [closedOnMergeInto] } })
+    expect(closing.concurrency).toBeUndefined()
+    const pushed = simulate(closing, {
+      github: { event_name: 'push', repository, ref_name: closedOnMergeInto, event: {} }
     })
-    const merged = (value: boolean) =>
-      simulate(closing, opened('octocat', { merged: value, base: { ref: closedOnMergeInto } }))
-        .results.close
-    expect(merged(true)).toBe('success')
-    expect(merged(false)).toBe('skipped')
+    expect(pushed.results.close).toBe('success')
   })
 
-  it('runs the base branch’s own script with the job’s token, which may only write issues', () => {
+  it('runs the pushed commit’s own script with the job’s token, which may only write issues', () => {
     expect(closing.permissions).toEqual({ contents: 'read' })
-    expect(job.permissions).toEqual({ contents: 'read', issues: 'write' })
+    expect(job.permissions).toEqual({ contents: 'read', 'pull-requests': 'read', issues: 'write' })
     const [checkout] = job.steps ?? []
     expect(checkout.with?.ref).toBeUndefined()
     expect(checkout.with).toMatchObject({ 'persist-credentials': false })

@@ -75,6 +75,12 @@ describe('every workflow', () => {
     expect(JSON.stringify(workflow)).not.toMatch(/(read|write)-all/)
   })
 
+  test.each(
+    workflows
+  )('%s never starts on pull_request_target, which runs the default branch’s copy', file => {
+    expect(Object.keys(readWorkflow(file).on ?? {}), file).not.toContain('pull_request_target')
+  })
+
   test.each(workflows)('%s never puts an expression in a shell script', file => {
     for (const [id, job] of jobsOf(file)) {
       for (const step of stepsOf(job)) expect(step.run ?? '', `${file}: ${id}`).not.toContain('${{')

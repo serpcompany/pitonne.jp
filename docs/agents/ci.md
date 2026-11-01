@@ -12,7 +12,7 @@ change a workflow's section in the same pull request as the workflow. The flow t
 | Promote to Production | `promote.yml` | By hand | [`ci-deploys.md`](ci-deploys.md#promoteyml) |
 | Sync staging | `sync-staging.yml` | Every push to `main`; by hand | [`ci-deploys.md`](ci-deploys.md#sync-stagingyml) |
 | Pull request | `pull-request.yml` | Every pull request, again when its title or body is edited | [`ci-pull-requests.md`](ci-pull-requests.md#pull-request) |
-| Close issues | `close-issues.yml` | A pull request into `staging` closing | [`ci-pull-requests.md`](ci-pull-requests.md#close-issues) |
+| Close issues | `close-issues.yml` | Every push to `staging` | [`ci-pull-requests.md`](ci-pull-requests.md#close-issues) |
 | Code review | `code-review.yml` | Every push to a pull request that isn't a draft | [`ci-pull-requests.md`](ci-pull-requests.md#code-review) |
 
 Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only

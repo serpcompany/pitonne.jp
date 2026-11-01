@@ -37,8 +37,9 @@ release-please's, and promotions and merge-backs between this repository's `main
 `@serpcompany/verify`. This repository is public and serp is private, so it can't call serp's
 action, and the packaged `issue-link` asks only GitHub's closing-issue links, which fail every
 pull request into `staging`. So `tools/checks/pull-request.mjs` holds the four rules, word for word
-from `@serpcompany/verify`'s `dist/pull-request/rules.js` but for the `staging` case, with its
-tests in `tools/checks/pull-request.test.ts`. Update it when the package's rules change.
+from `@serpcompany/verify`'s `dist/pull-request/rules.js` but for the `staging` case and quotes: a
+closing keyword in a quote (`> Closes #12`) counts for neither `issue-link` nor the closing. Its
+tests are in `tools/checks/pull-request.test.ts`. Update it when the package's rules change.
 
 **How it runs.** Each job checks out that one script (and `verify.json` for `fix-test`) and runs
 it with the runner's Node: no install, so it reports in seconds and works before the
@@ -55,14 +56,19 @@ of this repository its description names with a closing keyword, with a comment 
 pull request and its commit. GitHub does that only for pull requests into the default branch,
 `main`, so without it every issue a merged pull request finishes would stay open.
 
-- It starts on `pull_request_target`, so a fork's merged pull request closes its issues too: that
-  event runs `staging`'s own copy of the workflow and of `tools/checks/close-issues.mjs`, never
-  the pull request's, and the job checks out nothing else and runs nothing from it.
-- Its job runs only when the pull request merged, with the job's own token, which may write
-  issues and nothing else.
+- It starts on each push to `staging` and runs the pushed commit's own
+  `tools/checks/close-issues.mjs`, checking out nothing else. For each pushed commit it asks
+  GitHub which pull requests the commit belongs to, and keeps one only when it merged into
+  `staging` as that very commit, as a squash merge does. A sync from `main`, a CMS save or a
+  hotfix that comes back from `main` closes nothing.
+- It doesn't start on `pull_request_target`: since 2025-12-08 that event always runs the default
+  branch's copy of a workflow, so it would run `main`'s, which has no such job until a promotion.
+- Its job reads the pull requests and writes issues, with the job's own token.
 - An issue already closed, a number that isn't an issue, and an issue in another repository are
-  left alone, with a note in the log. The keywords are read as `issue-link` reads them, in the
-  same script, so what the check accepted is what closes.
+  left alone, with a note in the log. When an issue can't be closed, it goes on with the rest,
+  names each failure and fails at the end. It never sends the request that posts a comment twice,
+  so no issue gets two. The keywords are read as `issue-link` reads them, in the same script, so
+  what the check accepted is what closes.
 
 ## Code review
 
