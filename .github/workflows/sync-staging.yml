@@ -1,16 +1,5 @@
 name: Sync staging
 
-# Keeps `staging` from falling behind `main`. CMS saves (Keystatic Cloud) and hotfixes land on `main` directly, so after
-# every push to `main` this merges `main` into `staging`: a fast-forward when `staging` has nothing new, a merge commit
-# otherwise. Promotions (`staging` -> `main`) then stay fast-forwards.
-#
-# No loops and no extra production deploy: this runs only on pushes to `main` and only ever pushes `staging`. The push
-# to `staging` runs CI there, which deploys Staging. A promotion pushes `main` to a commit `staging` already contains,
-# so the run after it finds nothing to do.
-#
-# It pushes with the RELEASE_DEPLOY_KEY deploy key, a bypass actor on the `staging` ruleset (a bypass skips every rule
-# of the ruleset, including required checks and force-push protection; this job never forces). A push with
-# GITHUB_TOKEN would not start CI on `staging`, so Staging would not redeploy.
 on:
   push:
     branches:
@@ -29,7 +18,6 @@ jobs:
     name: Merge main into staging
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # RELEASE_DEPLOY_KEY is a secret of the `release` environment, which only main and staging runs can use
     environment: release
     steps:
       - name: Check deploy key
@@ -50,7 +38,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Retry when someone pushes to staging between the fetch and the push
           for attempt in 1 2 3; do
             git fetch --prune origin
             if ! git rev-parse -q --verify refs/remotes/origin/staging > /dev/null; then

@@ -1,11 +1,5 @@
 name: CI
 
-# Tests every PR and every push to staging and main, and deploys (via .github/workflows/deploy.yml):
-# - a push to `staging` to Staging (https://staging.pitonne.jp), a push to `main` to Production (https://pitonne.jp);
-# - same-repository PRs into `staging` or `main` to a `pr-<n>` preview, after the test job passes.
-# A code push's own deploy waits for the test job; CMS content saves deploy as soon as they build (see `changes`).
-# Every deploy uploads the branch tip, so code already on the branch also goes live with the next content deploy; a
-# failing test or deploy on main opens an alert issue instead of blocking content (see `alert`).
 on:
   pull_request:
   push:
@@ -13,7 +7,6 @@ on:
       - staging
       - main
 
-# A new push to a PR cancels that PR's older run; every push to staging and main gets its own run.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -43,12 +36,6 @@ jobs:
       - run: pnpm audit:seo
       - run: pnpm test:lighthouse
 
-  # Classifies the push. A separate job, so a skipped deploy never joins the deploy concurrency group.
-  # - skip: only draft blog posts changed (a draft saved from the CMS), so the built site is unchanged.
-  # - fast: deploy without waiting for this run's `test`, because either
-  #   - only CMS content changed: content saves go live as soon as they build, whatever `test` says (a failing `test`
-  #     alerts instead; see `alert`). Code reaches main only through tested PRs and promotions; or
-  #   - this exact commit already passed `test`, e.g. a promotion of a commit tested on staging.
   changes:
     name: Classify changes
     if: github.event_name == 'push'
@@ -75,14 +62,12 @@ jobs:
             fast=true
             echo "Only CMS content changed; deploying without waiting for test."
           else
-            # An API error falls back to waiting for test; it never skips the deploy
             passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=test" \
               --jq '[.check_runs[] | select(.conclusion == "success")] | length') || passed=0
             if [ "${passed:-0}" -gt 0 ]; then fast=true; echo "This commit already passed test; deploying now."; fi
           fi
           echo "fast=$fast" >> "$GITHUB_OUTPUT"
 
-  # CMS content and already-tested commits: deploy now, so publishing stays quick
   deploy-content:
     name: Deploy content
     needs: changes
@@ -97,7 +82,6 @@ jobs:
     secrets:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-  # Code pushes: this run's deploy waits for the test job (it still uploads the branch tip)
   deploy:
     name: Deploy
     needs: [changes, test]
@@ -112,10 +96,6 @@ jobs:
     secrets:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-  # A failing test on main never blocks publishing, so it has to reach a person: the run is red, and one open issue
-  # collects every failure (with a mention of the owner) until someone fixes main and closes it.
-  # Alerts when main's test fails or a Production deploy fails (CMS commits come from a bot, so nobody gets the
-  # failure email). One alert job at a time, so two red runs can't open duplicate issues.
   alert:
     name: Alert on red main
     needs: [test, changes, deploy-content, deploy]
@@ -156,7 +136,6 @@ jobs:
             gh issue create --title "$TITLE" --body "$body"
           fi
 
-  # Forked PRs get no secrets and no preview. Previews are non-indexable and never use the main or staging aliases.
   preview:
     name: Deploy PR preview
     needs: test

@@ -1,11 +1,5 @@
 name: Deploy
 
-# Builds the static export and uploads it to Cloudflare Pages, then smoke-tests the environment.
-# - CI (.github/workflows/ci.yml) calls it after each push to `staging` (Staging) or `main` (Production), and for PR
-#   previews (`pr-<n>`).
-# - A manual run (Actions > Deploy > Run workflow) redeploys the current tip of the branch it's run from: `main` to
-#   Production, `staging` to Staging. It skips CI's test gate.
-# Staging and Production deploys always upload the branch tip, so an older commit never replaces a newer one (scripts/deploy-target.mjs).
 on:
   workflow_call:
     inputs:
@@ -21,7 +15,6 @@ on:
         description: Commit to deploy (defaults to the triggering commit)
         type: string
         required: false
-    # Only the Cloudflare token; the release deploy key never reaches deploys or PR previews
     secrets:
       CLOUDFLARE_API_TOKEN:
         required: true
@@ -37,8 +30,6 @@ jobs:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # One deploy per target and environment at a time; a newer queued deploy replaces an older queued one, and a running
-    # deploy is never cancelled. Staging, Production and each PR preview are separate groups.
     concurrency:
       group: deploy-pages-${{ inputs.environment == 'preview' && format('pr-{0}', inputs.pr) || inputs.environment || (github.ref_name == 'main' && 'production') || github.ref_name }}
       cancel-in-progress: false
@@ -50,8 +41,6 @@ jobs:
       PR_NUMBER: ${{ inputs.pr }}
       DEPLOY_SHA: ${{ inputs.ref || github.sha }}
     steps:
-      # Production deploys only from main and Staging only from staging; previews only to their own pr-<n> alias.
-      # So no PR or other branch can ever reach the `main` or `staging` aliases (pitonne.jp, staging.pitonne.jp).
       - name: Resolve environment
         run: |
           fail() { echo "::error::$1"; exit 1; }
@@ -76,9 +65,6 @@ jobs:
           ref: ${{ env.DEPLOY_SHA }}
           fetch-depth: 0
 
-      # Inside the concurrency group, so no other deploy of this environment runs between this check and the upload.
-      # Always uploads the branch tip, so a queued older deploy still publishes every newer CMS save. If this step
-      # fails, the deploy goes ahead with the triggering commit: publishing beats a missed optimisation.
       - name: Choose the commit to deploy
         id: target
         if: env.DEPLOY_ENV != 'preview'
@@ -124,7 +110,6 @@ jobs:
         if: steps.target.outputs.skip != 'true'
         run: pnpm build
 
-      # Production must be indexable; every other environment must not be
       - name: Verify static output
         if: steps.target.outputs.skip != 'true'
         run: |
@@ -147,7 +132,6 @@ jobs:
           packageManager: pnpm
           wranglerVersion: "4.103.0"
           command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.PAGES_BRANCH }} --commit-hash=${{ env.DEPLOY_SHA }}
-          # GitHub deployment records for Staging and Production; the Cloudflare Pages app comments on PR previews
           gitHubToken: ${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}
 
       - name: Smoke-test canonical host redirects
@@ -156,9 +140,6 @@ jobs:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"
 
-      # Production allows crawling and lists its sitemap; Staging and previews send noindex and disallow crawling.
-      # Production is checked on the pages.dev production alias (with the smoke-test header) and pitonne.jp, never on
-      # the hash deployment URL: Cloudflare adds X-Robots-Tag: noindex to every hash URL, Production's included.
       - name: Smoke-test environment behaviour
         if: steps.target.outputs.skip != 'true'
         env:
