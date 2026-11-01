@@ -15,13 +15,13 @@ importers:
     dependencies:
       '@keystatic/core':
         specifier: ^0.6.9
-        version: 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
+        version: 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
       '@keystatic/next':
         specifier: ^5.0.5
-        version: 5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@next/third-parties':
         specifier: 16.2.4
-        version: 16.2.4(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        version: 16.2.4(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-dialog':
         specifier: 1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -36,7 +36,7 @@ importers:
         version: 0.564.0(react@19.2.4)
       next:
         specifier: 16.2.4
-        version: 16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19
         version: 19.2.4
@@ -62,9 +62,6 @@ importers:
       '@lhci/cli':
         specifier: ^0.15.1
         version: 0.15.1
-      '@playwright/test':
-        specifier: 1.64.1
-        version: 1.64.1
       '@serpcompany/verify':
         specifier: ^0.1.1
         version: 0.1.1(@biomejs/biome@2.4.2)
@@ -92,6 +89,9 @@ importers:
       lefthook:
         specifier: ^2.2.2
         version: 2.2.2
+      playwright:
+        specifier: 1.64.1
+        version: 1.64.1
       postcss:
         specifier: ^8.5
         version: 8.5.6
@@ -1200,11 +1200,6 @@ packages:
 
   '@paulirish/trace_engine@0.0.53':
     resolution: {integrity: sha512-PUl/vlfo08Oj804VI5nDPeSk9vyslnBlVzDDwFt8SUVxY8+KdGMkra/vrXjEEHe8gb7+RqVTfOIlGw0nyrEelA==}
-
-  '@playwright/test@1.64.1':
-    resolution: {integrity: sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg==}
-    engines: {node: '>=20'}
-    hasBin: true
 
   '@poppinss/colors@4.1.6':
     resolution: {integrity: sha512-H9xkIdFswbS8n1d6vmRd8+c10t2Qe+rZITbbDHHkQixH5+2x1FDGmi/0K+WgWiqQFKPSlIYB7jlH6Kpfn6Fleg==}
@@ -4672,6 +4667,18 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.20.0:
+    resolution: {integrity: sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   ws@8.21.0:
     resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
     engines: {node: '>=10.0.0'}
@@ -5321,7 +5328,7 @@ snapshots:
 
   '@juggle/resize-observer@3.4.0': {}
 
-  '@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
+  '@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@emotion/cache': 11.14.0
@@ -5341,9 +5348,9 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       react-stately: 3.48.0(react@19.2.4)
     optionalDependencies:
-      next: 16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
-  '@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
+  '@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@braintree/sanitize-url': 6.0.4
@@ -5352,7 +5359,7 @@ snapshots:
       '@internationalized/date': 3.12.4
       '@internationalized/number': 3.6.8
       '@internationalized/string': 3.2.10
-      '@keystar/ui': 0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
+      '@keystar/ui': 0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
       '@markdoc/markdoc': 0.4.0(@types/react@19.2.14)(react@19.2.4)
       '@react-types/shared': 3.36.1(react@19.2.4)
       '@sindresorhus/slugify': 1.1.2
@@ -5412,13 +5419,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@keystatic/next@5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@keystatic/next@5.0.5(@keystatic/core@0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
-      '@keystatic/core': 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
+      '@keystatic/core': 0.6.9(patch_hash=099fa7c5da921bcef95146d8eaf4356b7d4b212175887c784fca07e51e65119c)(@keystar/ui@0.10.0(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4))(react-aria@3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-stately@3.48.0(react@19.2.4))(react@19.2.4)
       '@types/react': 19.2.14
       chokidar: 3.6.0
-      next: 16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
       server-only: 0.0.1
@@ -5504,9 +5511,9 @@ snapshots:
   '@next/swc-win32-x64-msvc@16.2.4':
     optional: true
 
-  '@next/third-parties@16.2.4(next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)':
+  '@next/third-parties@16.2.4(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)':
     dependencies:
-      next: 16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react: 19.2.4
       third-party-capital: 1.0.20
 
@@ -5646,10 +5653,6 @@ snapshots:
     dependencies:
       legacy-javascript: 0.0.4
       third-party-web: 0.30.0
-
-  '@playwright/test@1.64.1':
-    dependencies:
-      playwright: 1.64.1
 
   '@poppinss/colors@4.1.6':
     dependencies:
@@ -8225,7 +8228,7 @@ snapshots:
 
   netmask@2.1.1: {}
 
-  next@16.2.4(@playwright/test@1.64.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@next/env': 16.2.4
       '@swc/helpers': 0.5.15
@@ -8244,7 +8247,6 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.2.4
       '@next/swc-win32-arm64-msvc': 16.2.4
       '@next/swc-win32-x64-msvc': 16.2.4
-      '@playwright/test': 1.64.1
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.34.5
     transitivePeerDependencies:
@@ -8614,7 +8616,7 @@ snapshots:
       devtools-protocol: 0.0.1595872
       typed-query-selector: 2.12.2
       webdriver-bidi-protocol: 0.4.1
-      ws: 8.22.1
+      ws: 8.20.0
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -9559,6 +9561,8 @@ snapshots:
       typedarray-to-buffer: 3.1.5
 
   ws@7.5.10: {}
+
+  ws@8.20.0: {}
 
   ws@8.21.0: {}
 

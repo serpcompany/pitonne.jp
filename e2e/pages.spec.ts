@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import type { Page } from 'playwright/test'
 import { getBusinessInfo } from '../src/lib/data/site'
 import { expect, follow, goTo, heading, test, text } from './fixtures'
 

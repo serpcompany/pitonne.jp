@@ -1,4 +1,4 @@
-import { test as base, expect, type Locator, type Page } from '@playwright/test'
+import { test as base, expect, type Locator, type Page } from 'playwright/test'
 import { deployEnvironment, isIndexable, siteOrigin } from '../src/lib/deploy-environment.mts'
 import en from '../src/lib/i18n/dictionaries/en.json'
 import ja from '../src/lib/i18n/dictionaries/ja.json'

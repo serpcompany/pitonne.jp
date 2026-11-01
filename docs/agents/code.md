@@ -58,6 +58,11 @@ The site keeps shadcn's `new-york` style on Radix (`components.json`), where SER
 standard sets `base-nova` on Base UI. It was kept on 2026-10-31 because moving would change the UI.
 Don't add `base-nova` components beside it; a move to `base-nova` is one change of its own.
 
+Tailwind 4 reads every file git doesn't ignore, since `src/app/globals.css` names no `@source`:
+docs, workflows and tests too. A word there that names a utility the site doesn't use yet adds
+that rule to the site's CSS, so keep such words out of those files until `globals.css` limits
+what Tailwind reads; comparing a production build's CSS before and after shows one.
+
 ## Tests
 
 - Vitest runs two projects (`vitest.config.ts`): `*.dom.test.tsx` files in happy-dom, with
@@ -66,7 +71,7 @@ Don't add `base-nova` components beside it; a move to `base-nova` is one change 
   asserts a post count, that every post has an image or tags, or a post's text.
 - A test has 30 seconds (`testTimeout`), so a slow test fails rather than hangs.
 - **Browser journeys** are Playwright specs in `e2e/`. Each imports `test` and `expect` from
-  `e2e/fixtures.ts`, never from `@playwright/test`, so a console error or an uncaught page error
+  `e2e/fixtures.ts`, never from `playwright/test`, so a console error or an uncaught page error
   fails it. A journey waits for what it needs with web-first assertions
   (`await expect(locator).toBeVisible()`), never `page.waitForTimeout` or a timer, and nothing
   retries it. SERP's wait check reads only Swift UI tests so far, so

@@ -58,6 +58,10 @@ uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, 
   send, so export the value the build used; `pnpm build` and `pnpm test:e2e` with neither test
   a preview build. Once per machine, `pnpm exec playwright install chromium` downloads the
   browser; point `PLAYWRIGHT_BROWSERS_PATH` at a disk with room if the default one is full.
+- **The `playwright` package,** not `@playwright/test`, which only re-exports it: `next` names
+  `@playwright/test` as an optional peer, so installing it renames `next`'s folder in pnpm's
+  store, and Turbopack, which numbers modules by their path, then builds different JavaScript.
+  `tools/checks/e2e.test.ts` fails if it comes back.
 - **Two widths:** the `desktop` project (1440×900) and the `phone` project (Pixel 7). `retries`
   is 0, and any console error or uncaught page error fails the journey (`e2e/fixtures.ts`).
   Requests to other hosts (Google Tag Manager, the LeadConnector form, the map) get an empty

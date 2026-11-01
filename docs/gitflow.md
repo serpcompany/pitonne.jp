@@ -40,7 +40,7 @@ An agent runs `gh` and pushes only as the organization's app
      with the URL. Previews build with `DEPLOY_ENV=preview`: robots.txt disallows everything and
      pages send `noindex`. Forked PRs get no secrets and no preview.
 4. The `Code review` workflow has Claude review each push once `verify` and `test` pass, and
-   posts its findings inline ([`agents/ci-pull-requests.md`](agents/ci-pull-requests.md#code-review)).
+   posts each finding on its line ([`agents/ci-pull-requests.md`](agents/ci-pull-requests.md#code-review)).
    Until it runs (it needs the `CLAUDE_CODE_OAUTH_TOKEN` secret and its workflow on `main`), a
    fresh agent reviews the PR once CI is green. Reply to every finding as fixed (with the
    commit) or declined (with the reason). Only blocking findings start another round. Record the

@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from 'playwright/test'
 
 const port = Number(process.env.E2E_PORT ?? 8791)
 const baseURL = `http://127.0.0.1:${port}`

@@ -100,13 +100,13 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
   dictionaries and tests), run on Sonnet at medium effort.
 - **What it does:** it reads every patch, starts three reviewers in parallel (bugs, the
   repository's rules, and the issue, tests and docs), keeps the real new findings, posts each as
-  an inline comment marked **blocking** or **suggestion**, and writes a summary that says how
-  many of the changed files it read. The workflow posts the summary, or updates the earlier one,
+  a comment on its line, marked **blocking** or **suggestion**, and writes a summary that says
+  how many of the changed files it read. The workflow posts the summary, or updates the earlier one,
   as `github-actions[bot]`, and keeps the transcript for a week.
 - **Time and failure:** the wait has 25 minutes and the review 20, inside the job's 60. The job
   fails only when no review ran or its summary couldn't be posted; findings never turn it red.
   Every review thread is resolved before the pull request merges.
 - **Permissions:** it reads contents, checks, issues and packages, writes pull request comments,
   and mints the OIDC token `claude-code-action` exchanges for its own app's token, which posts
-  the inline findings as `claude[bot]`. It needs the `CLAUDE_CODE_OAUTH_TOKEN` secret, and notes
-  that it skipped without it.
+  the findings on their lines as `claude[bot]`. It needs the `CLAUDE_CODE_OAUTH_TOKEN` secret,
+  and notes that it skipped without it.

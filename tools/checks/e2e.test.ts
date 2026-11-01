@@ -32,7 +32,14 @@ describe('the browser journeys', () => {
   it('serve with the wrangler the deploy uploads with, and pin Playwright to its browsers', () => {
     const deploy = step(job(readWorkflow('deploy.yml'), 'deploy'), 'deploy')
     expect(packageJson.devDependencies.wrangler).toBe(deploy.with?.wranglerVersion)
-    expect(packageJson.devDependencies['@playwright/test']).toMatch(/^\d+\.\d+\.\d+$/)
+    expect(packageJson.devDependencies.playwright).toMatch(/^\d+\.\d+\.\d+$/)
+  })
+
+  it("take the runner from playwright, since next's optional peer @playwright/test would change the built site's JavaScript", () => {
+    expect(packageJson.devDependencies).not.toHaveProperty('@playwright/test')
+    expect(fs.readFileSync('pnpm-lock.yaml', 'utf8')).not.toMatch(
+      /^ {2}next@[^:]*@playwright\/test/m
+    )
   })
 
   test.each(
@@ -40,7 +47,7 @@ describe('the browser journeys', () => {
   )('%s takes test and expect from the fixtures, which fail on any console or page error', name => {
     const imports = [...read(name).matchAll(/from '([^']+)'/g)].map(found => found[1])
     expect(imports).toContain('./fixtures')
-    expect(read(name)).not.toMatch(/import \{[^}]*\btest\b[^}]*\} from '@playwright\/test'/)
+    expect(read(name)).not.toMatch(/import \{[^}]*\btest\b[^}]*\} from '@?playwright\/test'/)
   })
 
   test.each(files)('%s waits for conditions, never for a fixed time', name => {

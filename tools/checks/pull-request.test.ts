@@ -146,7 +146,7 @@ describe('issue-link', () => {
   })
 
   test.each([
-    ['in inline code', 'Write `Closes #13` in the body.'],
+    ['in a code span', 'Write `Closes #13` in the body.'],
     ['in a fenced block', 'Before\n```md\nCloses #14\n```\nafter'],
     ['in a fence that is never closed', 'Before\n```\nCloses #14\nto the end'],
     ['in an HTML comment', ['<!', '-- Closes #20 --', '>'].join('')],
