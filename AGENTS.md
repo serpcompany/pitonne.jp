@@ -52,6 +52,8 @@ apply; where this repository differs, the last section says so, and it wins.
 
 | Doc | Read it for |
 | --- | --- |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | How the site is built and served, from content to the deployed environments |
+| [`CONTEXT.md`](CONTEXT.md) | Terms that are easy to confuse, such as canonical route, promotion and the content fast path |
 | [`content.md`](docs/agents/content.md) | Text and dictionaries, Japanese copy, services and legal pages, areas, videos and business data |
 | [`docs/i18n.md`](docs/i18n.md) | How the two locales are built: routes, dictionaries, the data layer, adding a page |
 | [`blog.md`](docs/agents/blog.md) | Blog posts, their frontmatter and categories, and Keystatic |

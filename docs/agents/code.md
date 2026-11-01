@@ -1,6 +1,8 @@
 # Code layout and conventions
 
-Where code lives, the conventions every change follows, and the checks that hold them.
+Where code lives, the conventions every change follows, and the checks that hold them. How the
+parts fit together is in [`ARCHITECTURE.md`](../../ARCHITECTURE.md); the words used for the
+site's parts are in [`CONTEXT.md`](../../CONTEXT.md).
 
 ## Where code lives
 
