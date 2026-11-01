@@ -71,12 +71,9 @@ pull request and its commit. GitHub does that only for pull requests into the de
 standard sets, after serp's own `review.yml`, which this repository can't call.
 
 - **Whose:** every push to a pull request from this repository that isn't a draft, a person's or
-  the `serp-agent` app's. Drafts, forks (which get no secrets), `claude[bot]`, Dependabot and
-  Renovate are skipped. A new push cancels the review of the one before.
-- **The changes job** reads the pull request's files, checking nothing out. When the pull
-  request changes `code-review.yml` itself, it skips the review with a notice that a person
-  reviews it: `claude-code-action` runs only when its workflow is the default branch's copy.
-  That also means no review runs until this workflow is on `main`.
+  the `serp-agent` app's, including one that changes `code-review.yml`, which reviews it with its
+  own copy. Drafts, forks (which get no secrets), `claude[bot]`, Dependabot and Renovate are
+  skipped. A new push cancels the review of the one before.
 - **Once the fast checks pass:** the review job waits, up to 20 minutes, for `verify` and `test`
   on the pull request's head commit, so no tokens go to a change that fails lint, types or the
   tests. When either fails it reviews nothing and says so; the next push that passes is reviewed.
@@ -106,7 +103,23 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
 - **Time and failure:** the wait has 25 minutes and the review 20, inside the job's 60. The job
   fails only when no review ran or its summary couldn't be posted; findings never turn it red.
   Every review thread is resolved before the pull request merges.
-- **Permissions:** it reads contents, checks, issues and packages, writes pull request comments,
-  and mints the OIDC token `claude-code-action` exchanges for its own app's token, which posts
-  the findings on their lines as `claude[bot]`. It needs the `CLAUDE_CODE_OAUTH_TOKEN` secret,
-  and notes that it skipped without it.
+- **Permissions:** it reads contents, checks, issues and packages and writes pull request
+  comments. `claude-code-action` gets the job's own token (`github_token`), so it exchanges no
+  OIDC token for the Claude app's, checks no workflow file, and posts the findings, like the
+  summary, as `github-actions[bot]`. It needs the `CLAUDE_CODE_OAUTH_TOKEN` secret, and notes
+  that it skipped without it.
+- **What the reviewer can do:** it loads only user settings (`--setting-sources user`), never
+  the checkout's `.claude/` hooks, which run `node_modules/.bin/serp-verify`, a file a pull
+  request can add. Its tools are those of zenbujapanese-monorepo's review: reading files; viewing
+  the pull request, its diff and its issue with the GitHub CLI; the line-comment tool; writing the
+  summary; and reviewers of its own. It runs no git, whose `--output=` could write
+  `.git/config`. `.git` and `/proc` are denied to it (`--disallowedTools`): the action writes its
+  token into `.git/config` as the remote's URL, whatever the checkout does
+  (`persist-credentials: false`), and `/proc` holds the process's environment, with the Claude
+  token.
+- **Where it differs from zenbujapanese-monorepo's review,** which posts as `claude[bot]` with
+  the Claude app's token: here a token limited to the job's permissions, which expires with the
+  job, posts, so a reviewer steered by text injected into a pull request or its issue can
+  comment, but can't push, open a pull request or edit an issue. The issue's text still reaches
+  the reviewer's system prompt, through `@serpcompany/verify`'s context script: marking it as
+  untrusted there is an upstream ask.

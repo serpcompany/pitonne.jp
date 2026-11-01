@@ -183,9 +183,9 @@ this table beside the workflows that use it.
 | `cloudflare/wrangler-action` | `9acf94ace14e7dc412b076f2c5c20b8ce93c79cd` | v3.15.0 | `deploy.yml` |
 | `anthropics/claude-code-action` | `6b6870e649b5ff408753befeaee5fc7989d4e6a9` | v1.0.258 | `code-review.yml` |
 
-`claude-code-action` is the version zenbujapanese-monorepo's review runs. It runs only when its
-workflow is the default branch's, so a pull request that moves the pin can't try it: the first
-review after a promotion is its test.
+`claude-code-action` is the version zenbujapanese-monorepo's review runs. It runs with the job's
+own token, so no app checks the workflow file, and a pull request that moves the pin reviews
+itself with the new version.
 
 ## Owner steps
 
@@ -198,9 +198,9 @@ Nothing in the repository can do these; an owner does them once:
    add the app's ID as the Actions variable `SERP_AGENT_APP_ID` and a private key made for CI as
    the Actions secret `SERP_AGENT_PRIVATE_KEY` (or organization ones that cover this repository),
    and install the app on `serpcompany/serp`. Until then `verify` skips those links with a note.
-3. **Claude's review:** install the Claude GitHub app (github.com/apps/claude) on
-   `serpcompany/pitonne.jp`, so `claude-code-action` can post as `claude[bot]`, and add the
-   Actions secret `CLAUDE_CODE_OAUTH_TOKEN`, made with `claude setup-token` on the account that
-   pays for the reviews. Until the secret is set, `Code review` notes that it skipped.
+3. **Claude's review:** add the Actions secret `CLAUDE_CODE_OAUTH_TOKEN`, made with
+   `claude setup-token` on the account that pays for the reviews. The review posts with the job's
+   own token, so it needs no GitHub app. Until the secret is set, `Code review` notes that it
+   skipped.
 4. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
    `staging` and `main` rulesets beside `test`, and optionally `e2e` and `lighthouse`.

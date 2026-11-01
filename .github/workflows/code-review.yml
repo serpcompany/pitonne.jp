@@ -12,39 +12,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  changes:
+  review:
     if: >-
       !github.event.pull_request.draft &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       !contains(fromJSON('["claude[bot]","dependabot[bot]","renovate[bot]"]'), github.event.pull_request.user.login)
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      pull-requests: read
-    outputs:
-      reviewable: ${{ steps.files.outputs.reviewable }}
-    steps:
-      - name: Find out whether the pull request changes this workflow
-        id: files
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          WORKFLOW_REF: ${{ github.workflow_ref }}
-        run: |
-          workflow=${WORKFLOW_REF%%@*}
-          workflow=${workflow#"$GITHUB_REPOSITORY/"}
-          changed=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --paginate \
-            --jq '.[] | .filename, (.previous_filename // empty)')
-          if printf '%s\n' "$changed" | grep -Fxq "$workflow"; then
-            echo "::notice title=Claude doesn't review this pull request::It changes $workflow, and the review runs only when that file is the default branch's. A person reviews it (docs/agents/ci-pull-requests.md, Code review)."
-            echo "reviewable=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "reviewable=true" >> "$GITHUB_OUTPUT"
-          fi
-
-  review:
-    needs: changes
-    if: needs.changes.outputs.reviewable == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -53,7 +25,6 @@ jobs:
       issues: read
       packages: read
       pull-requests: write
-      id-token: write
     env:
       HAS_REVIEW_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -61,7 +32,7 @@ jobs:
       BASE_REF: ${{ github.event.pull_request.base.ref }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       SUMMARY_FILE: tmp/review-summary.md
-      REVIEW_BOT: claude[bot]
+      REVIEW_BOT: github-actions[bot]
       SUMMARY_BOT: github-actions[bot]
     steps:
       - name: Skip while the CLAUDE_CODE_OAUTH_TOKEN secret isn't set
@@ -109,6 +80,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         if: steps.fast.outputs.passed == 'true'
@@ -179,12 +151,13 @@ jobs:
           CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1"
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
           allowed_bots: "claude[bot],serp-agent[bot],Copilot"
           classify_inline_comments: "false"
           prompt: |
-            Review pull request #${{ github.event.pull_request.number }} in ${{ github.repository }} as a fresh reviewer. The checkout is the whole repository at its head commit, ${{ github.event.pull_request.head.sha }}, with its history. Read only: don't edit, commit, push, approve or merge.
+            Review pull request #${{ github.event.pull_request.number }} in ${{ github.repository }} as a fresh reviewer. The checkout is the whole repository at its head commit, ${{ github.event.pull_request.head.sha }}. Read only: don't edit, commit, push, approve or merge.
 
-            Your instructions also hold this repository's rules as they are on the base branch, the change (one patch per changed file, with an index), the issue it closes, and the findings posted on earlier commits. Review against those copies of the rules.
+            Your instructions also hold this repository's rules as they are on the base branch, the change (one patch per changed file, with an index), the issue it closes, and the findings posted on earlier commits. Review against those copies of the rules. You can't run git, and .git is closed to you: the patches show the change, and gh pr view, gh pr diff and gh issue view show the pull request, its commits and its issue.
 
             1. Read the index, then every patch it lists, with Read, a long patch in parts. Read what each change depends on, such as callers, types, tests and the doc AGENTS.md routes the area to, with Read, Grep and Glob.
             2. Start three reviewers with the Agent tool in one message, and tell each to read the whole change itself:
@@ -198,10 +171,12 @@ jobs:
           claude_args: >-
             --model ${{ steps.role.outputs.model }}
             --effort ${{ steps.role.outputs.effort }}
+            --setting-sources user
             --strict-mcp-config
             --append-system-prompt-file ${{ runner.temp }}/review-context.md
             --append-subagent-system-prompt-file ${{ runner.temp }}/review-context.md
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh issue view:*),Bash(git log:*),Bash(git diff:*),Bash(git show:*),Write,Agent,Task,Read,Glob,Grep"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Write,Agent,Task,Read,Glob,Grep"
+            --disallowedTools "Read(./.git/**),Edit(./.git/**),Read(//proc/**)"
 
       - name: Take the scripts again, so nothing the reviewer wrote runs with the token
         if: ${{ !cancelled() && steps.fast.outputs.passed == 'true' }}

@@ -22,17 +22,17 @@ const pullRequest = (
         head: { repo: { full_name: fork ? 'someone/pitonne.jp' : repository } }
       }
     }
-  },
-  outputs: { changes: { reviewable: 'true' } }
+  }
 })
+
+const claudeArgs = String(claude.with?.claude_args)
+const toolList = (flag: string) =>
+  new RegExp(`${flag} "([^"]+)"`).exec(claudeArgs)?.[1].split(',') ?? []
 
 describe('the Code review workflow', () => {
   it('reviews every push to a ready pull request from this repository, a person’s or an agent’s', () => {
     for (const login of ['octocat', 'serp-agent[bot]'])
-      expect(simulate(review, pullRequest(login)).results).toEqual({
-        changes: 'success',
-        review: 'success'
-      })
+      expect(simulate(review, pullRequest(login)).results).toEqual({ review: 'success' })
     expect(review.on.pull_request?.types).toEqual([
       'opened',
       'synchronize',
@@ -46,34 +46,61 @@ describe('the Code review workflow', () => {
   })
 
   it('skips drafts, forks, Claude’s own pull requests and dependency updates', () => {
-    const skipped = { changes: 'skipped', review: 'skipped' }
+    const skipped = { review: 'skipped' }
     expect(simulate(review, pullRequest('octocat', { draft: true })).results).toEqual(skipped)
     expect(simulate(review, pullRequest('octocat', { fork: true })).results).toEqual(skipped)
     for (const login of ['claude[bot]', 'dependabot[bot]', 'renovate[bot]'])
       expect(simulate(review, pullRequest(login)).results).toEqual(skipped)
   })
 
-  it('lets a person review a pull request that changes this workflow, which the action would refuse', () => {
-    const files = step(job(review, 'changes'), 'files')
-    expect(files.run).toContain('grep -Fxq "$workflow"')
-    expect(files.env?.WORKFLOW_REF).toBe(expression('github.workflow_ref'))
-    expect(job(review, 'changes').permissions).toEqual({ 'pull-requests': 'read' })
-    expect(reviewer.if).toBe("needs.changes.outputs.reviewable == 'true'")
+  it('reviews a pull request that changes this workflow too, since no app checks the workflow file', () => {
+    expect(Object.keys(review.jobs)).toEqual(['review'])
+    expect(reviewer.needs).toBeUndefined()
+    expect(JSON.stringify(review)).not.toContain('workflow_ref')
   })
 
-  it('writes only the pull request’s comments, and signs in to Claude with its own app', () => {
+  it('posts with the job’s own token, which can write only the pull request’s comments', () => {
     expect(review.permissions).toEqual({ contents: 'read' })
     expect(reviewer.permissions).toEqual({
       contents: 'read',
       checks: 'read',
       issues: 'read',
       packages: 'read',
-      'pull-requests': 'write',
-      'id-token': 'write'
+      'pull-requests': 'write'
     })
     expect(claude.uses).toMatch(/^anthropics\/claude-code-action@[0-9a-f]{40}$/)
     expect(claude.with?.claude_code_oauth_token).toBe(expression('secrets.CLAUDE_CODE_OAUTH_TOKEN'))
-    expect(claude.with?.github_token).toBeUndefined()
+    expect(claude.with?.github_token).toBe(expression('github.token'))
+    expect(reviewer.env).toMatchObject({
+      REVIEW_BOT: 'github-actions[bot]',
+      SUMMARY_BOT: 'github-actions[bot]'
+    })
+  })
+
+  it('loads no project settings, and lets the reviewer read, comment and start reviewers, never run git or open .git', () => {
+    expect(claudeArgs).toContain('--setting-sources user')
+    expect(toolList('--allowedTools')).toEqual([
+      'mcp__github_inline_comment__create_inline_comment',
+      'Bash(gh pr view:*)',
+      'Bash(gh pr diff:*)',
+      'Bash(gh issue view:*)',
+      'Write',
+      'Agent',
+      'Task',
+      'Read',
+      'Glob',
+      'Grep'
+    ])
+    expect(toolList('--disallowedTools')).toEqual([
+      'Read(./.git/**)',
+      'Edit(./.git/**)',
+      'Read(//proc/**)'
+    ])
+    const checkout = step(
+      reviewer,
+      "Check out the whole repository, with its history, at the pull request's head"
+    )
+    expect(checkout.with?.['persist-credentials']).toBe(false)
   })
 
   it('starts only once verify and test passed on the head commit, and reviews nothing after a failure', () => {
