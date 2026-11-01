@@ -1,32 +1,65 @@
 # GitHub Actions
 
 The workflows are in `.github/workflows/`. Workflow files hold no comments, so what starts each
-one, what it runs and why it's built that way are here; change a workflow's section in the same
-pull request as the workflow. The flow they implement (which push deploys what, and when) is in
-[`docs/gitflow.md`](../gitflow.md#what-ci-deploys), and the tests that hold the workflows to it are
-`tools/checks/deploy-workflows.test.ts` and `tools/checks/lighthouse-ci.test.ts`.
+one, what it runs and why it's built that way are here and in [`ci-deploys.md`](ci-deploys.md);
+change a workflow's section in the same pull request as the workflow. The flow they implement
+(which push deploys what, and when) is in [`docs/gitflow.md`](../gitflow.md#what-ci-deploys).
 
-| Workflow | File | Starts on |
-| --- | --- | --- |
-| CI | `ci.yml` | Every pull request; every push to `staging` and `main` |
-| Deploy | `deploy.yml` | Called by CI; by hand from `main` or `staging` |
-| Promote to Production | `promote.yml` | By hand |
-| Sync staging | `sync-staging.yml` | Every push to `main`; by hand |
+| Workflow | File | Starts on | Section |
+| --- | --- | --- | --- |
+| CI | `ci.yml` | Every pull request; every push to `staging` and `main` | [Below](#ciyml) |
+| Deploy | `deploy.yml` | Called by CI; by hand from `main` or `staging` | [`ci-deploys.md`](ci-deploys.md#deployyml) |
+| Promote to Production | `promote.yml` | By hand | [`ci-deploys.md`](ci-deploys.md#promoteyml) |
+| Sync staging | `sync-staging.yml` | Every push to `main`; by hand | [`ci-deploys.md`](ci-deploys.md#sync-stagingyml) |
 
-Every job runs on `ubuntu-latest`. The jobs that install set up pnpm 10.14.0 and Node 24 and run
-`pnpm install --frozen-lockfile`. They don't yet authenticate to GitHub Packages, which
-installing the private `@serpcompany/verify` needs, and no workflow runs `pnpm verify` yet.
+Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only
+read: each write is granted to the one job that needs it. No `run:` script holds a `${{ }}`
+expression; values reach scripts through `env:`. These tests hold the workflows to this doc:
+
+| Test | Holds |
+| --- | --- |
+| `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install, no expressions in scripts |
+| `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
+| `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
+
+## Checks a merge waits for
+
+The `staging` and `main` rulesets require `test`. Once `verify` is on both branches, the owner
+adds it to both (owner steps, [below](#owner-steps)). CI starts on every pull request, with no
+`paths` filter, so its checks always report.
+
+## Installing the private package
+
+`@serpcompany/verify` is a private package on GitHub Packages, so each job that installs grants
+`packages: read`, `actions/setup-node` sends the `@serpcompany` scope to
+`https://npm.pkg.github.com`, and the install step alone gets the job's own token as
+`NODE_AUTH_TOKEN`. That token reads the package only once the package's settings give this
+repository Read under Manage Actions access, an owner step; until then the install fails, and the
+step after it says what to grant. No other token can stand in: GitHub Packages takes only Actions'
+own token or a personal access token (classic), no app's. Node comes from `.node-version` and pnpm
+from `packageManager` in `package.json`; `actions/setup-node` caches the pnpm store.
 
 ## ci.yml
 
 **Concurrency.** A new push to a pull request cancels that pull request's older run; every push
-to `staging` and `main` gets a run of its own, so none is cancelled. The workflow reads contents
-only; the jobs that call `deploy.yml` add `checks: read` and `deployments: write`.
+to `staging` and `main` gets a run of its own, so none is cancelled.
+
+**`verify`** runs `pnpm verify`, every shared check at the `@serpcompany/verify` the lockfile
+pins, including actionlint on these workflows. It checks out the commit with its parent
+(`fetch-depth: 2`) and names the parent `SERP_VERIFY_BASE` (`HEAD^1`), so the checks' lists can
+only shrink. On a pull request into `staging` that parent is `staging`'s tip: the run checks out
+the merge commit GitHub makes, whose first parent is the base branch. When the repository has the
+`serp-agent` app's key, the job makes the app's short-lived token, narrowed to reading contents,
+issues and pull requests, and hands it to the docs check as `SERP_VERIFY_GITHUB_TOKEN`, so links
+into serp's private repositories are checked. Without the key, as on a pull request from a fork,
+it passes no token, and the docs check skips those links with a note, as it does locally without
+one. It lives in CI, rather than a workflow of its own, so the code deploy can need it.
 
 **`test`** runs, one step each: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm audit:meta`,
 `DEPLOY_ENV=production pnpm build`, `pnpm audit:out`, `pnpm audit:seo` and
 `pnpm test:lighthouse`. These are the steps of `pnpm check` after `pnpm verify`, plus Lighthouse,
 listed rather than calling `pnpm check`, so a step added to one is added to the other by hand.
+It restores `.next/cache` for the production build.
 
 Lighthouse CI (`lighthouserc.cjs`) serves `out/` with `pnpm start` and audits eight pages once
 each, with the desktop preset. Accessibility and best practices must score 0.95 and SEO 0.9;
@@ -42,23 +75,24 @@ joins the deploy concurrency group. Its outputs:
 - `skip`: the push changes only blog posts that are drafts before and after, such as a draft
   saved in the CMS, so the built site doesn't change and nothing deploys.
   `scripts/draft-only-change.mjs <before> <after>` decides it.
-- `fast`: deploy without waiting for this run's `test`, because either the push changes only the
+- `fast`: deploy without waiting for this run's checks, because either the push changes only the
   files Keystatic edits (`content/blog/`, `content/blog-categories/` and the feature images under
   `public/images/content/blog/`; the same script decides it), or this exact commit already passed
-  `test`, looked up through GitHub's check-runs API, such as a promotion of a commit tested on
-  `staging`. An API error means waiting for `test`, never skipping the deploy.
+  every check (`CHECKS` in the step: `verify` and `test`), looked up through GitHub's check-runs
+  API, such as a promotion of a commit tested on `staging`. An API error means waiting for the
+  checks, never skipping the deploy.
 
 **`deploy-content`** ("Deploy content") runs when the push isn't skipped and is `fast`: CMS
 content and already-tested commits deploy at once. **`deploy`** runs when it isn't skipped and
-isn't `fast`: a code push's deploy waits for `test`. Both call `deploy.yml` for Production on
-`main` and Staging on `staging`, and both upload the branch tip.
+isn't `fast`: a code push's deploy needs `verify` and `test`. Both call `deploy.yml` for
+Production on `main` and Staging on `staging`, and both upload the branch tip.
 
-**`alert`** ("Alert on red main") runs when, on a push to `main`, `test`, the classification or a
-Production deploy failed. A failing `test` never holds back a CMS save, and CMS commits come from
-a bot, so nobody gets the failure email: the job opens one issue titled "CI is failing on main"
-that mentions the owner's account, or comments on the open one, until someone fixes `main` and
-closes it. It runs one at a time (`alert-red-main`, never cancelled), so two red runs can't open
-two issues. It needs `issues: write`.
+**`alert`** ("Alert on red main") runs when, on a push to `main`, a check, the classification or
+a Production deploy failed. A failing check never holds back a CMS save, and CMS commits come
+from a bot, so nobody gets the failure email: the job opens one issue titled "CI is failing on
+main" that mentions the owner's account, or comments on the open one, until someone fixes `main`
+and closes it. It runs one at a time (`alert-red-main`, never cancelled), so two red runs can't
+open two issues. It needs `issues: write`.
 
 **`preview`** ("Deploy PR preview") needs `test` and runs only for same-repository pull requests
 into `staging` or `main`: a forked pull request gets no secrets and no preview. It deploys the
@@ -66,117 +100,40 @@ pull request's head commit to its `pr-<n>` alias.
 
 ## deploy.yml
 
-A reusable workflow that builds the export, uploads it to Cloudflare Pages and smoke-tests the
-environment. Run by hand (Actions → Deploy → Run workflow), it uploads the current tip of the
-branch it runs from, `main` to Production or `staging` to Staging, and skips CI's `test` gate.
-The job has 30 minutes. It receives one secret, `CLOUDFLARE_API_TOKEN`; the release deploy key
-never reaches a deploy or a preview.
+Builds the export for its environment, uploads it to Cloudflare Pages and smoke-tests it, one
+deploy per target and environment at a time, always the branch tip. Its steps, its smoke tests
+and their retry times are in [`ci-deploys.md`](ci-deploys.md#deployyml).
 
-- **Concurrency:** one group per target and environment (`deploy-pages-production`,
-  `deploy-pages-staging`, `deploy-pages-pr-<n>`), never cancelled. A running deploy is never
-  cancelled, a Staging push never cancels a Production deploy, and GitHub keeps only the newest
-  queued deploy of a group.
-- **Resolve environment:** Production deploys only from `main`, Staging only from `staging`, and a
-  preview only for a pull request, to its own `pr-<n>` alias, so nothing else can reach the
-  Production or Staging aliases. It sets `DEPLOY_ENV`, `NEXT_PUBLIC_DEPLOY_ENV` and the Pages
-  branch.
-- **Choose the commit to deploy** (Staging and Production): deploys queue out of commit order,
-  since a CMS save deploys at once while a code commit waits for its `test`. So, inside the
-  concurrency group, `scripts/deploy-target.mjs <branch> <sha>` fetches the branch and picks its
-  tip as it is now, and every deploy publishes everything committed so far: a queued older deploy
-  never puts back an older site, and rapid CMS saves all go live. `main` and `staging` only move
-  forward, so the tip is the newest state. There is deliberately no "already live" skip:
-  GitHub's deployment records name the branch, not the uploaded commit, and redeploying the same
-  tree is harmless. When the tip isn't the commit the run started for, the next step checks the
-  tip out before anything is installed or built.
-  - If the fetch fails, it deploys the tip the job's checkout fetched a moment earlier, with a
-    warning: deploys of one environment run one at a time, so no deploy before this one saw a
-    newer tip.
-  - If it can read no tip at all, the step fails and nothing deploys, rather than deploy the
-    commit the run started for, which could be older than what is live
-    (`scripts/deploy-target.test.mjs` runs each case against a scratch clone).
-- **Build and verify:** `pnpm build`, then `pnpm audit:out`, then the environment's own output:
-  Production's `robots.txt` doesn't disallow crawling and its `_headers` send no `noindex`;
-  Staging's `_headers` send no `noindex` and its `robots.txt` disallows `*`, names
-  `AhrefsSiteAudit` and lists Staging's sitemap; a preview's do both.
-- **Upload:** `wrangler pages deploy out` (wrangler 4.103.0) to the `pitonne-jp` project with the
-  branch and commit. For Staging and Production it passes the job's token so GitHub records a
-  deployment; for previews the Cloudflare Pages app comments on the pull request instead.
+## Pinned actions
 
-**Smoke tests.** The checks of a page's content send the smoke-test header, so a deployment URL
-is served instead of redirected; the redirect and password checks leave it off.
+Each workflow runs every action at a commit, never a tag, which can be moved to new code: the
+deploy jobs hold the Cloudflare token, and every install holds a token that reads the private
+package. Each commit is the one its tag named on 2026-11-01. `checkout`, `setup-node`
+and `pnpm/action-setup` moved then from `v4` to the majors SERP's standards use; `wrangler-action`
+stays at the commit `v3` named, so the deploy runs the code it ran before. To move one, pin the
+new release's commit and change its row here in the same pull request;
+`tools/checks/workflow-rules.test.ts` fails on an action that isn't pinned, or isn't in this table
+beside the workflows that use it.
 
-- **Production:** `scripts/smoke-canonical-host.mjs <deployment-url>` checks the host redirects
-  ([`hosts.md`](hosts.md)): each non-canonical host gives one 308 to https://pitonne.jp with the
-  path and query, a `_redirects` rule is folded into that hop, a file URL with a slash gives one
-  308 to the file, and behind the Function the Keystatic app, a legacy 301, the sitemap's content
-  type and a 404 still come from the static files. Then
-  `scripts/smoke-environment.mjs production` on `pitonne-jp.pages.dev` and
-  https://pitonne.jp: `/` and `/ja/` answer 200 without `noindex`, `robots.txt` allows crawling
-  and lists the sitemap index, a missing page answers 404 with one `noindex` tag and a link home,
-  the sitemap index loads, and no response asks for a password. Not on the deployment URL:
-  Cloudflare sends `noindex` on every `<hash>.pitonne-jp.pages.dev`, Production's too.
-- **Staging:** `smoke-environment.mjs staging` on the `staging` alias, the deployment URL and
-  https://staging.pitonne.jp. On each, `/` and `/ja/` answer 200 with `noindex` and a Staging
-  canonical, `robots.txt` disallows crawling, and a missing page answers 404. On
-  staging.pitonne.jp, without the header: `/`, `/ja/` and `/favicon.ico` answer 401 with a Basic
-  challenge, `no-store` and `noindex`; with the password, `/` and `/ja/` answer 200 with no
-  `noindex` and a Staging canonical; `/robots.txt` answers 200, disallows `*` and lists Staging's
-  sitemap. On the other two, `/contact` without the header answers 308 to
-  https://staging.pitonne.jp/contact/, which proves the branch variable reached the Function.
-- **Previews:** `smoke-environment.mjs preview` on the `pr-<n>` alias and the deployment URL: the
-  page, `robots.txt` and 404 checks, with `noindex` in both the header and the meta tag.
+| Action | Commit | Version | Used in |
+| --- | --- | --- | --- |
+| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `deploy.yml`, `promote.yml`, `sync-staging.yml` |
+| `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `deploy.yml` |
+| `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `ci.yml`, `deploy.yml` |
+| `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |
+| `actions/create-github-app-token` | `64ab729a6294000f5aa4a4bc0b73d1f32bc45510` | v3.3.0 | `ci.yml` |
+| `cloudflare/wrangler-action` | `9acf94ace14e7dc412b076f2c5c20b8ce93c79cd` | v3.15.0 | `deploy.yml` |
 
-The branded hosts sit behind Bot Fight Mode, which may challenge the runner: a challenge there is
-a warning, any other wrong answer still fails. The pages.dev hosts are always checked.
+## Owner steps
 
-**Retries.** A new deployment takes a while to replace the old one at the edge, and a brand-new
-deployment URL can answer 404 for some paths for over a minute while others work (seen on
-2026-10-06, [issue #109](https://github.com/serpcompany/pitonne.jp/issues/109)). Each request
-times out after 10 seconds and retries 5 seconds later.
+Nothing in the repository can do these; an owner does them once:
 
-- `smoke-environment.mjs` keeps retrying each origin's checks until 120 seconds after its first
-  check started, with at least 2 tries each.
-- `smoke-canonical-host.mjs` gives its first check 12 tries, every later one 2, and the deployment
-  URL's checks until 120 seconds after the first of them started.
-- If every request hung until its timeout, Production's smoke tests would take about 22 minutes
-  (about 14 for the host checks and 4 per origin for the environment checks) and Staging's about
-  14, inside the job's 30 minutes.
-
-**A late deploy, 2026-10-27.** Run 40513860827, a promotion push to `main`, had GitHub create its
-deploy job 19 minutes after its only prerequisite finished. No concurrency group, queue or
-environment rule held it, and in 13 other push runs the deploy started 2 to 60 seconds after its
-prerequisites. It was a delay on GitHub's side, so nothing in the workflows changed.
-
-## promote.yml
-
-Promotes Staging to Production by fast-forwarding `main` to `staging`, so `main` receives exactly
-the commits tested and deployed on Staging, never a squash. The push to `main` runs CI there,
-which deploys at once, since the commit already passed `test`. It runs one at a time
-(`promote-production`) and has 10 minutes.
-
-- It refuses when `main` has commits `staging` lacks (Sync staging hasn't caught up, or failed on
-  a conflict), and when the `staging` commit hasn't passed `test`. When `main` is already at
-  `staging`, it succeeds with nothing to promote.
-- It pushes with `RELEASE_DEPLOY_KEY`, a deploy key that bypasses the `main` ruleset, so the
-  ruleset checks nothing about this push, required checks included: the checks above are what
-  protect `main`. A push with Actions' own token wouldn't start CI, so Production wouldn't deploy.
-- The key is a secret of the `release` environment, which only `main` and `staging` can use.
-- The push isn't forced, so git only ever fast-forwards `main`, and it pushes the commit it
-  checked: a CMS save landing in between makes it fail safely.
-
-## sync-staging.yml
-
-Keeps `staging` from falling behind `main`. CMS saves and hotfixes land on `main` directly, so
-after every push to `main` it merges `main` into `staging`: a fast-forward when `staging` has
-nothing new, otherwise a merge commit, `chore: merge main into staging`. Promotions then stay
-fast-forwards. It runs one at a time (`sync-staging`) and has 10 minutes.
-
-- It can't loop and never deploys Production: it runs only on pushes to `main` and only ever
-  pushes `staging`, whose CI then redeploys Staging. After a promotion, `staging` already
-  contains `main`, so it does nothing.
-- It pushes with the same deploy key from the `release` environment, for the same reason as
-  `promote.yml`, and never forces.
-- When someone pushes to `staging` between its fetch and its push, it tries again, up to three
-  times. On a merge conflict it aborts and fails with the commands an admin runs to resolve it
-  locally ([`docs/gitflow.md`](../gitflow.md#content-cms-saves-go-straight-to-main)).
+1. **Read access to the package:** in serpcompany's `@serpcompany/verify` package settings,
+   Manage Actions access, add `serpcompany/pitonne.jp` with the Read role. Until then every job
+   that installs fails, with a note saying so.
+2. **The `serp-agent` app's key**, so `verify` checks links into serp's private repositories:
+   add the app's ID as the Actions variable `SERP_AGENT_APP_ID` and a private key made for CI as
+   the Actions secret `SERP_AGENT_PRIVATE_KEY` (or organization ones that cover this repository),
+   and make sure the app is installed on `serpcompany/serp`. Until then `verify` skips those links
+   with a note.
+3. **Required checks:** add `verify` to the `staging` and `main` rulesets beside `test`.

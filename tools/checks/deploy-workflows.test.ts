@@ -20,6 +20,7 @@ const sync = readWorkflow('sync-staging.yml')
 const promote = readWorkflow('promote.yml')
 const pagesDeploy = job(deploy, 'deploy')
 const cloudflareTokenOnly = { CLOUDFLARE_API_TOKEN: expression('secrets.CLOUDFLARE_API_TOKEN') }
+const CHECKS = ['verify', 'test']
 
 function permissionGrants(workflow: Workflow, exceptJobs: string[] = []): Record<string, string>[] {
   const jobGrants = Object.entries(workflow.jobs)
@@ -38,9 +39,9 @@ describe('CI and deploy workflows', () => {
     )
   })
 
-  it('deploys code changes only after the test job passes', () => {
+  it('deploys code changes only after every check passes', () => {
     const gated = job(ci, 'deploy')
-    expect(needs(gated)).toEqual(['changes', 'test'])
+    expect(needs(gated)).toEqual(['changes', ...CHECKS])
     expect(gated.if).toContain("needs.changes.outputs.fast != 'true'")
     expect(allText(gated)).not.toContain('always()')
   })
@@ -55,22 +56,21 @@ describe('CI and deploy workflows', () => {
     expect(allText(changes)).not.toContain('BEFORE')
   })
 
-  it('deploys a commit that already passed test (a promotion) without retesting it', () => {
-    const changes = scripts(job(ci, 'changes'))
-    expect(changes).toContain('commits/$GITHUB_SHA/check-runs?check_name=test')
-    expect(changes).toContain('select(.conclusion == "success")')
-    expect(changes).toContain('|| passed=0')
+  it('deploys a commit that already passed every check (a promotion) without checking it again', () => {
+    const fast = step(job(ci, 'changes'), 'fast')
+    expect(fast.env?.CHECKS?.split(' ')).toEqual(CHECKS)
+    expect(fast.run).toContain('commits/$GITHUB_SHA/check-runs?check_name=$check')
+    expect(fast.run).toContain('select(.conclusion == "success")')
+    expect(fast.run).toContain('|| passed=0')
   })
 
-  it('alerts the owner when test or a Production deploy fails on main instead of blocking publishing', () => {
+  it('alerts the owner when a check or a Production deploy fails on main instead of blocking publishing', () => {
     const alert = job(ci, 'alert')
-    expect(needs(alert)).toEqual(['test', 'changes', 'deploy-content', 'deploy'])
+    expect(needs(alert).sort()).toEqual(['changes', ...CHECKS, 'deploy-content', 'deploy'].sort())
     expect(alert.if).toContain(
       "always() && github.event_name == 'push' && github.ref_name == 'main'"
     )
-    for (const id of ['test', 'changes', 'deploy-content', 'deploy']) {
-      expect(alert.if).toContain(`needs.${id}.result == 'failure'`)
-    }
+    expect(alert.if).toContain("contains(needs.*.result, 'failure')")
     expect(alert.concurrency?.group).toBe('alert-red-main')
     expect(alert.permissions).toMatchObject({ issues: 'write' })
     expect(scripts(alert)).toContain('@devinschumacher')
@@ -217,7 +217,10 @@ describe('staging sync and promotion workflows', () => {
     expect(promote.on).not.toHaveProperty('push')
     const script = workflowScripts(promote)
     expect(script).toContain('git merge-base --is-ancestor origin/main origin/staging')
-    expect(script).toContain('check-runs?check_name=test')
+    expect(script).toContain('check-runs?check_name=$check')
+    expect(step(job(promote, 'promote'), 'Check staging can be promoted').env?.CHECKS).toBe(
+      CHECKS.join(' ')
+    )
     expect(script).toContain('git push origin "$STAGING_SHA:refs/heads/main"')
     expect(allText(promote)).not.toMatch(/--force|\+refs|-f /)
   })

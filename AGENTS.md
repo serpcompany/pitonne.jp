@@ -36,8 +36,8 @@ apply; where this repository differs, the last section says so, and it wins.
 - **Agent hooks:** `.claude/settings.json` checks each file an agent edits and the turn's changes
   before it ends, and asks before deploys, pushes to `main` or `staging`, and GitHub writes
   ([`verification.md`](docs/agents/verification.md#agent-hooks)).
-- **CI:** `ci.yml` lists those steps itself, plus Lighthouse, and doesn't run `pnpm verify` yet.
-  CI on the final commit is the record ([`ci.md`](docs/agents/ci.md)).
+- **CI:** `verify` and `test` run all of `pnpm check`, with Lighthouse, on every pull request and
+  push; CI on the final commit is the record ([`ci.md`](docs/agents/ci.md)).
 - **Proof in the running site:** the [`verify-site`](.claude/skills/verify-site/SKILL.md) skill runs
   the dev server, the local CMS or the production-like preview, and checks it with `curl -I` and
   screenshots.

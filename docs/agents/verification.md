@@ -39,8 +39,8 @@ would match no commit.
   rebase or lockfile change), cite that run instead of repeating it.
 - **A fix re-runs what it could have broken:** the check that failed and the tests for the code
   you changed, not every suite again.
-- **CI on the final commit is the record** of what CI runs. CI lists its steps itself rather than
-  calling `pnpm check`, and runs Lighthouse too ([`ci.md`](ci.md#ciyml)).
+- **CI on the final commit is the record** of what CI runs, which is all of it
+  ([below](#where-ci-runs-what)).
 - **Docker installed but not running** fails the shared checks' linters step: `@serpcompany/verify`
   0.1.1 reads Docker's "failed to connect to the docker API" as actionlint failing, instead of
   falling back. Start Docker, or run with Docker's folder off `PATH` and an installed actionlint
@@ -83,6 +83,23 @@ uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, 
   (`Failed to load resource: the server responded with a status of 404` for
   `/services/__next.!KGVuKQ.services.txt` and the like), one because a link never navigated,
   and one on an aborted page load. Run them in WSL or another Linux shell, or let CI run them.
+
+## Where CI runs what
+
+CI runs the whole finish gate, split into jobs, on every pull request and every push to `staging`
+and `main` ([`ci.md`](ci.md#ciyml)), so CI on the final commit is the record of it:
+
+| Check | Locally | In CI |
+| --- | --- | --- |
+| SERP's shared checks | `pnpm verify`; the git hooks | `verify` |
+| Lint, types, unit tests, `audit:meta` | The inner loop; `pnpm check` | `test` |
+| The production build, `audit:out`, `audit:seo` | `pnpm check` | `test`; each deploy also builds its own environment |
+| Lighthouse | `pnpm test:lighthouse` after a build | `test` |
+| Browser journeys | `pnpm test:e2e` after a build | Not yet |
+| Each environment as deployed | `verify-site` | Each deploy's smoke test |
+
+CI lists `pnpm check`'s steps rather than calling it, so a step added to one is added to the
+other by hand.
 
 ## Git hooks
 

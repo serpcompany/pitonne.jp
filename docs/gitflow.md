@@ -30,7 +30,9 @@ An agent runs `gh` and pushes only as the organization's app
    ([`agents/verification.md`](agents/verification.md#evidence)). Hotfixes are the only PRs into
    `main`.
    - The `staging` ruleset requires a PR, the `test` check, an up-to-date branch, and squash
-     merging.
+     merging. CI also runs `verify` on every PR; the owner adds it, and the pull request checks,
+     to the required checks once they're on both branches
+     ([`agents/ci.md`](agents/ci.md#checks-a-merge-waits-for)).
    - Same-repository PRs get a Cloudflare Pages preview at `pr-<n>.pitonne-jp.pages.dev` once the
      `test` job passes. New commits replace it, and the Cloudflare Pages app keeps one PR comment
      with the URL. Previews build with `DEPLOY_ENV=preview`: robots.txt disallows everything and
@@ -46,12 +48,12 @@ An agent runs `gh` and pushes only as the organization's app
    receives exactly the commits tested on Staging. Agents never promote. Either:
    - run **Actions → Promote to Production → Run workflow** (`.github/workflows/promote.yml`). It
      refuses when `main` has commits `staging` lacks or when the `staging` commit hasn't passed
-     `test`; or
+     every check (`verify` and `test`); or
    - as an admin: `git fetch origin && git push origin origin/staging:main`. The admin bypass skips
      every `main` rule, including the required `test` check, so check first that `staging`'s
      latest CI run is green.
-8. The push to `main` runs CI. The promoted commit already passed `test` on `staging`, so it
-   deploys to Production right away (no retest wait), then gets smoke-tested.
+8. The push to `main` runs CI. The promoted commit already passed every check on `staging`, so
+   it deploys to Production right away (no retest wait), then gets smoke-tested.
 
 **Hotfixes** follow the same flow with a PR into `main`. Sync staging (below) merges them back into
 `staging` right away.
@@ -95,12 +97,12 @@ fast-forwards.
 `.github/workflows/ci.yml` runs on every PR and every push to `staging` and `main`; the build,
 upload and smoke tests live in `.github/workflows/deploy.yml`, which CI calls.
 
-| Push | Deploys | Waits for `test`? |
+| Push | Deploys | Waits for the checks? |
 | --- | --- | --- |
 | Only draft blog posts changed | Nothing (the built site is unchanged) | – |
 | Only CMS content changed | Now (`Deploy content` job), as soon as the build succeeds | No, never |
-| A commit that already passed `test` (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
-| Any other change | After `test` passes on this run (`Deploy` job) | Yes, for this run's deploy |
+| A commit that already passed every check (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
+| Any other change | After this run's checks pass (`Deploy` job) | Yes, for this run's deploy |
 
 Every row uploads the branch tip, so code already on the branch also goes live with the next
 content deploy, even before its own `test` finishes.

@@ -11,6 +11,7 @@ export type WorkflowStep = {
   env?: Record<string, string>
   with?: Record<string, string | number | boolean>
   'continue-on-error'?: boolean | string
+  'timeout-minutes'?: number
 }
 
 type WorkflowConcurrency = {
@@ -30,10 +31,11 @@ export type WorkflowJob = {
   uses?: string
   with?: Record<string, string | number | boolean>
   secrets?: Record<string, string> | 'inherit'
+  'timeout-minutes'?: number
   steps?: WorkflowStep[]
 }
 
-type WorkflowTrigger = { branches?: string[] } | null
+type WorkflowTrigger = { branches?: string[]; types?: string[]; paths?: string[] } | null
 
 export type Workflow = {
   name: string
@@ -43,10 +45,17 @@ export type Workflow = {
   jobs: Record<string, WorkflowJob>
 }
 
+const workflowsFolder = path.join(process.cwd(), '.github', 'workflows')
+
+export function workflowFiles(): string[] {
+  return fs
+    .readdirSync(workflowsFolder)
+    .filter(name => /\.ya?ml$/.test(name))
+    .sort()
+}
+
 export function readWorkflow(file: string): Workflow {
-  return parse(
-    fs.readFileSync(path.join(process.cwd(), '.github', 'workflows', file), 'utf8')
-  ) as Workflow
+  return parse(fs.readFileSync(path.join(workflowsFolder, file), 'utf8')) as Workflow
 }
 
 export function job(workflow: Workflow, id: string): WorkflowJob {
