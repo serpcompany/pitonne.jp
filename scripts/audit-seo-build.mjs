@@ -1,23 +1,4 @@
 #!/usr/bin/env node
-/**
- * Post-build SEO audit of the static export in out/ (run after `pnpm build`).
- *
- * Mirrors the Ahrefs Site Audit checks that previously failed for pitonne.jp:
- * - <title> 15–70 chars and meta description 110–160 chars
- * - exactly one <h1> per page
- * - complete Open Graph tags, with og:url matching the canonical URL
- * - at most one canonical and one og:url tag, both inside <head>
- * - internal links that resolve to a page (no 404s, no redirects)
- * - the sitemap index pattern: robots.txt advertises only /sitemap-index.xml, which lists root-level
- *   /sitemap-<group>.xml URL sets; /sitemap.xml serves the same XML as the index
- * - every indexable page is listed in exactly one child sitemap; every sitemap URL (and hreflang alternate) is a page,
- *   equals that page's canonical URL, and is not noindex
- * - the homepage is listed as the bare origin; every other sitemap URL ends in a slash
- * - no oversized image files
- *
- * Usage: node scripts/audit-seo-build.mjs [outDir]
- */
-
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -42,7 +23,6 @@ function walk(dir, files = []) {
   for (const name of fs.readdirSync(dir)) {
     const fullPath = path.join(dir, name)
     if (fs.statSync(fullPath).isDirectory()) {
-      // _next holds build assets; keystatic is the noindex CMS app, not a site page
       if (name !== '_next' && fullPath !== path.join(OUT, 'keystatic')) walk(fullPath, files)
     } else {
       files.push(fullPath)
@@ -52,14 +32,12 @@ function walk(dir, files = []) {
 }
 
 const HTML_ENTITIES = { amp: '&', quot: '"', '#x27': "'", '#39': "'", lt: '<', gt: '>' }
-// Single pass so "&amp;quot;" decodes to "&quot;", not '"'
 const decode = value =>
   value.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, entity) => HTML_ENTITIES[entity])
 
 const SITE = new URL(SITE_URL)
 const SITE_HOSTS = new Set([SITE.hostname, `www.${SITE.hostname}`])
 
-// Parse a link against the page it appears on and compare hosts exactly (not by string prefix).
 function classifyLink(href, baseUrl) {
   let url
   try {
@@ -97,7 +75,7 @@ function resolveInternal(href) {
   try {
     pathname = decodeURI(href.split('#')[0].split('?')[0])
   } catch {
-    return 'broken' // malformed percent-encoding
+    return 'broken'
   }
   if (!pathname) return 'ok'
   if (
@@ -112,14 +90,13 @@ function resolveInternal(href) {
   if (pathname.endsWith('/'))
     return fs.existsSync(path.join(target, 'index.html')) ? 'ok' : 'broken'
   if (fs.existsSync(target) && fs.statSync(target).isFile()) return 'ok'
-  if (fs.existsSync(path.join(target, 'index.html'))) return 'redirect' // missing trailing slash
+  if (fs.existsSync(path.join(target, 'index.html'))) return 'redirect'
   return 'broken'
 }
 
 const allFiles = walk(OUT)
 const pages = allFiles.filter(file => file.endsWith('.html'))
 const findings = []
-// Canonical URL and robots noindex of each page, keyed by URL path, for the sitemap checks
 const pageInfo = new Map()
 const report = (urlPath, message) => findings.push(`${urlPath}: ${message}`)
 
@@ -158,8 +135,6 @@ for (const file of pages) {
   const missingOg = REQUIRED_OG.filter(key => !metaContent(html, key))
   if (missingOg.length > 0) report(urlPath, `missing Open Graph tags: ${missingOg.join(', ')}`)
   const ogUrl = metaContent(html, 'og:url')
-  // The homepage writes its canonical and og:url by hand (#91), so check what Next's metadata API used to guarantee:
-  // a page that has these tags has exactly one of each, inside <head>
   const head = (html.match(/<head[\s>][\s\S]*?<\/head>/) || [''])[0]
   for (const [label, pattern] of [
     ['canonical', /<link[^>]*\srel="canonical"[^>]*>/g],
@@ -191,7 +166,6 @@ const readOut = file =>
   fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), 'utf8') : null
 const locs = xml => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
 
-// Non-production builds disallow everything and noindex every page, so noindex checks apply only to indexable builds
 const indexable = !/^Disallow:\s*\/\s*$/im.test(readOut('robots.txt') || '')
 const robotsSitemaps = [...(readOut('robots.txt') || '').matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(
   ([, url]) => url
@@ -239,7 +213,6 @@ const isPage = url => {
 }
 for (const sitemap of childSitemaps) {
   const xml = readOut(sitemap)
-  // A sitemap index never points at another sitemap index
   if (!/<urlset[\s>]/.test(xml) || /<sitemapindex[\s>]/.test(xml))
     report(`/${sitemap}`, 'is not a <urlset>')
   for (const url of locs(xml)) {
@@ -275,7 +248,6 @@ for (const file of pages) {
     .join('/')
     .replace(/index\.html$/, '')}`
   if (urlPath.startsWith('/404') || urlPath.startsWith('/_not-found')) continue
-  // A noindex page (or any page of a non-production build) need not be in a sitemap
   if (!sitemapPaths.has(urlPath) && indexable && !pageInfo.get(urlPath)?.noindex)
     report(urlPath, 'is not listed in any sitemap')
 }

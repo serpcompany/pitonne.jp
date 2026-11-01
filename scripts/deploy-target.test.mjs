@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { chooseDeploy } from './deploy-target.mjs'
 
-// A linear history: S (code, promoted) <- C1 (CMS save) <- C2 (CMS save) <- D (code) <- C3 (CMS save)
-const ORDER = ['S', 'C1', 'C2', 'D', 'C3']
+const LINEAR_HISTORY_OLDEST_FIRST = ['S', 'C1', 'C2', 'D', 'C3']
 const relation = (a, b) => {
-  const [i, j] = [ORDER.indexOf(a), ORDER.indexOf(b)]
+  const [i, j] = [LINEAR_HISTORY_OLDEST_FIRST.indexOf(a), LINEAR_HISTORY_OLDEST_FIRST.indexOf(b)]
   if (i === j) return 'equal'
   return i < j ? 'ancestor' : 'descendant'
 }

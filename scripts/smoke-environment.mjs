@@ -1,11 +1,4 @@
 #!/usr/bin/env node
-// Post-deploy smoke test of environment-specific behaviour (issue #78, SERP environment-configuration standard):
-// - production allows crawling, lists its sitemap, and sends no noindex;
-// - staging and PR previews disallow crawling in robots.txt and send noindex (X-Robots-Tag header and meta robots).
-// Every request carries the smoke-test header, so a deployment URL is served instead of 308ing to pitonne.jp.
-// URLs on pages.dev must pass. Branded hosts (pitonne.jp, staging.pitonne.jp) sit behind Bot Fight Mode, which may
-// challenge the CI runner: a challenge there is a warning, any other wrong answer still fails.
-// Usage: node scripts/smoke-environment.mjs <production|staging|preview> <url> [url...]
 import { pathToFileURL } from 'node:url'
 
 import { SMOKE_HEADERS } from './smoke-canonical-host.mjs'
@@ -13,10 +6,6 @@ import { SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 export const SITEMAP_LINE = 'Sitemap: https://pitonne.jp/sitemap-index.xml'
 const ENVIRONMENTS = new Set(['production', 'staging', 'preview'])
 
-// A new deployment takes a while to reach the edge, and a brand-new deployment URL can answer 404 for over a minute,
-// for some paths while others already work (seen 2026-10-06 on Staging, issue #109). So every check on an origin keeps
-// retrying until SETTLE_MS after that origin's first check starts, and gets at least ATTEMPTS tries. Worst case, with
-// every request hanging until its timeout, per origin: 135 s + 3 x 2 x 15 s, about 4 minutes; 3 origins on Staging.
 const ATTEMPTS = 2
 const SETTLE_MS = 120_000
 const RETRY_DELAY_MS = 5000
@@ -26,7 +15,6 @@ const metaRobots = html => html.match(/<meta[^>]+name="robots"[^>]*content="([^"
 const hasNoindex = value => /\bnoindex\b/i.test(value ?? '')
 const disallowsAll = robots => /^Disallow:\s*\/\s*$/m.test(robots)
 
-/** The checks for one origin. Each check names what it wants and returns an error message, or null when it passes. */
 export function environmentChecks(environment, origin) {
   const production = environment === 'production'
   const page = path => ({
@@ -76,7 +64,6 @@ export function environmentChecks(environment, origin) {
   return checks
 }
 
-/** Branded hosts may challenge the CI runner (Bot Fight Mode); pages.dev hosts never do. */
 export function isZoneHost(url) {
   return !new URL(url).hostname.endsWith('.pages.dev')
 }
@@ -89,10 +76,6 @@ async function probe(url) {
   return { status: response.status, headers: response.headers, body: await response.text() }
 }
 
-/**
- * Runs one check, retrying while it fails: at least `attempts` tries, and until `until` (a Date.now() time).
- * Returns { ok, warning?, message }.
- */
 export async function run(
   check,
   { attempts = ATTEMPTS, until = 0, delayMs = RETRY_DELAY_MS, probeFn = probe, now = Date.now } = {}

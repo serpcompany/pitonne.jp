@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-// Downloads configured Google Docs tabs as markdown blog review drafts.
-
 import { BLOG_DRAFT_SOURCES, writeBlogDrafts } from './google-docs-blog-drafts.mjs'
 
 async function main() {

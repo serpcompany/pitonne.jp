@@ -97,7 +97,6 @@ describe('environment smoke test', () => {
       environmentChecks('staging', origin)
     )
     expect(await runChecks(checks, { delayMs: 0, probeFn, now, settleMs: 100 })).toBe(false)
-    // Each origin's window opens at its first check, which retries until 100 ms later; the rest are past it
     expect(checks.map(check => calls.get(check.url))).toEqual([10, 2, 2, 10, 2, 2])
 
     calls.clear()

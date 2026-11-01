@@ -1,51 +1,37 @@
-/**
- * Translate English markdown content files to Japanese using DeepL API.
- *
- * Usage:
- *   npx tsx scripts/translate-content.ts              # translate all missing
- *   npx tsx scripts/translate-content.ts --force       # re-translate everything
- *   npx tsx scripts/translate-content.ts --dry-run     # preview without writing
- *   npx tsx scripts/translate-content.ts --file content/blog/iv-therapy-for-fatigue.md
- */
-
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY
 const DEEPL_API_URL = 'https://api-free.deepl.com/v2/translate'
+const DELAY_BETWEEN_FILES_MS = 200
 
 if (!DEEPL_API_KEY) {
   console.error('Error: DEEPL_API_KEY environment variable is required')
   process.exit(1)
 }
 
-// Parse CLI args
 const args = process.argv.slice(2)
 const force = args.includes('--force')
 const dryRun = args.includes('--dry-run')
 const fileArgIndex = args.indexOf('--file')
 const singleFile = fileArgIndex !== -1 ? args[fileArgIndex + 1] : null
 
-// Content directories to translate
 const contentDirs = [
   { dir: 'content/services', type: 'service' },
   { dir: 'content/blog', type: 'blog' }
 ]
 
-// Fields to translate per content type
 const translatableFields: Record<string, string[]> = {
   service: ['title', 'shortDescription', 'fullDescription'],
   blog: ['title', 'excerpt']
 }
 
-// Array fields that contain translatable strings
 const translatableArrayFields: Record<string, string[]> = {
   service: ['benefits', 'keyPoints'],
   blog: ['tags']
 }
 
-// FAQ fields (array of objects with question/answer)
 const faqFields: Record<string, string> = {
   service: 'faqs'
 }
@@ -82,23 +68,19 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
   const jaDir = path.join(dir, 'ja')
   const jaPath = path.join(jaDir, fileName)
 
-  // Check if translation already exists
   if (!force && fs.existsSync(jaPath)) {
     console.log(`  SKIP ${filePath} (translation exists, use --force to overwrite)`)
     return
   }
 
-  // Read and parse the English file
   const raw = fs.readFileSync(absolutePath, 'utf8')
   const parsed = matter(raw)
   const frontmatter = { ...parsed.data }
   const bodyContent = parsed.content.trim()
 
-  // Collect all texts to translate in a single batch
   const textsToTranslate: string[] = []
   const textKeys: string[] = []
 
-  // Simple string fields
   const simpleFields = translatableFields[contentType] || []
   for (const field of simpleFields) {
     if (frontmatter[field] && typeof frontmatter[field] === 'string') {
@@ -107,7 +89,6 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  // Array fields (arrays of strings)
   const arrayFields = translatableArrayFields[contentType] || []
   for (const field of arrayFields) {
     if (Array.isArray(frontmatter[field])) {
@@ -120,7 +101,6 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  // FAQ fields (arrays of {question, answer})
   const faqField = faqFields[contentType]
   if (faqField && Array.isArray(frontmatter[faqField])) {
     for (let i = 0; i < frontmatter[faqField].length; i++) {
@@ -136,7 +116,6 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  // Author name/role for blog posts
   if (contentType === 'blog' && frontmatter.author) {
     if (frontmatter.author.name) {
       textsToTranslate.push(frontmatter.author.name)
@@ -148,7 +127,6 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  // Body content
   if (bodyContent) {
     textsToTranslate.push(bodyContent)
     textKeys.push('body')
@@ -160,11 +138,9 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     return
   }
 
-  // Translate all texts in a batch
   console.log(`  Translating ${filePath} (${textsToTranslate.length} segments)...`)
   const translated = await translateBatch(textsToTranslate)
 
-  // Apply translations back
   const jaFrontmatter = { ...frontmatter }
   let jaBody = bodyContent
 
@@ -195,7 +171,6 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  // Write the Japanese file
   if (!fs.existsSync(jaDir)) {
     fs.mkdirSync(jaDir, { recursive: true })
   }
@@ -211,7 +186,6 @@ async function main() {
   console.log('')
 
   if (singleFile) {
-    // Determine content type from path
     const type = singleFile.includes('/blog/')
       ? 'blog'
       : singleFile.includes('/services/')
@@ -238,8 +212,7 @@ async function main() {
     for (const file of files) {
       const filePath = `${dir}/${file}`
       await translateMarkdownFile(filePath, type)
-      // Small delay to avoid rate limiting
-      await new Promise(resolve => setTimeout(resolve, 200))
+      await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_FILES_MS))
     }
   }
 

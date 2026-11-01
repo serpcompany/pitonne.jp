@@ -1,11 +1,8 @@
-// Checks the static export in out/ for the files Cloudflare Pages needs. Run after `pnpm build`.
-// It checks that every sitemap file exists; audit:seo reads them and checks their URLs.
 import fs from 'node:fs'
 import path from 'node:path'
 
 const OUT = path.join(process.cwd(), 'out')
 const SITEMAP_INDEX = 'sitemap-index.xml'
-// _routes.json keeps static files off the canonical-host Function (functions/_middleware.ts)
 const required = [
   'index.html',
   'ja/index.html',
@@ -16,10 +13,8 @@ const required = [
   SITEMAP_INDEX,
   'sitemap.xml'
 ]
-// English is the default locale and is served without a prefix; an out/en/ folder means a duplicate site.
-const forbidden = ['en']
+const defaultLocaleFolders = ['en']
 
-// Every child sitemap the index lists (/sitemap-<group>.xml at the root) must be in the export
 const indexPath = path.join(OUT, SITEMAP_INDEX)
 const childSitemaps = fs.existsSync(indexPath)
   ? [
@@ -27,8 +22,6 @@ const childSitemaps = fs.existsSync(indexPath)
     ].map(([, file]) => file)
   : []
 
-// Paths excluded in _routes.json never reach the canonical-host Function, so they answer 200 on pages.dev. Only static
-// files may live there, never an exported page.
 function htmlUnder(relative) {
   const full = path.join(OUT, relative)
   if (!fs.existsSync(full)) return []
@@ -47,8 +40,6 @@ const htmlInExcludedRoutes = excludedRoutes.flatMap(rule =>
   htmlUnder(rule.replace(/^\//, '').replace(/\*$/, ''))
 )
 
-// Indexability must agree: a build whose robots.txt disallows everything (anything but production) also sends
-// X-Robots-Tag: noindex from _headers (scripts/environment-headers.mjs), and a production build never does.
 const read = file =>
   fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), 'utf8') : null
 const robots = read('robots.txt')
@@ -71,7 +62,7 @@ const failures = [
   ...[...required, ...childSitemaps]
     .filter(file => !fs.existsSync(path.join(OUT, file)))
     .map(file => `missing out/${file}`),
-  ...forbidden
+  ...defaultLocaleFolders
     .filter(file => fs.existsSync(path.join(OUT, file)))
     .map(file => `unexpected out/${file}`),
   ...htmlInExcludedRoutes.map(
