@@ -31,6 +31,9 @@ apply; where this repository differs, the last section says so, and it wins.
   minutes.
 - **Git hooks:** before a commit, Biome and the comment, size and secrets checks on the staged
   files; before a push, the full `serp-verify`, and `pnpm lint`, `pnpm typecheck` and `pnpm test`.
+- **Agent hooks:** `.claude/settings.json` checks each file an agent edits and the turn's changes
+  before it ends, and asks before deploys, pushes to `main` or `staging`, and GitHub writes
+  ([`verification.md`](docs/agents/verification.md#agent-hooks)).
 - **CI:** `ci.yml` lists those steps itself, plus Lighthouse, and doesn't run `pnpm verify` yet.
   CI on the final commit is the record ([`ci.md`](docs/agents/ci.md)).
 - **Proof in the running site:** the [`verify-site`](.claude/skills/verify-site/SKILL.md) skill runs

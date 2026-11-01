@@ -53,6 +53,21 @@ would match no commit.
 run on the staged files. Before each push, the full `serp-verify` runs, and `pnpm lint`,
 `pnpm typecheck` and `pnpm test`, with no build. Fix what they report rather than skipping them.
 
+## Agent hooks
+
+`.claude/settings.json` gives Claude Code SERP's two hooks. After each file an agent writes or
+edits, `serp-verify hook` runs the comment, size, layer and secrets checks on it and hands any
+finding back to the agent to fix. Before a turn ends, `serp-verify stop-hook` runs them on every
+file changed since the last commit, and the docs check on the whole repository, and holds the
+turn open until the agent fixes or explains them. It reports the same findings only once per
+session, and keeps that record in the ignored `tmp/agent/`. Without an install, both hooks say
+to run `pnpm install` (see Setup in [`AGENTS.md`](../../AGENTS.md#setup)).
+
+The same file asks before an agent deploys or changes the Cloudflare Pages project with
+`wrangler`, pushes to `main` or `staging`, runs, re-runs or cancels a workflow, merges a pull
+request, changes a secret, a variable or the repository, or writes through `gh api`. Deleting the
+Pages project is denied.
+
 ## Waiting
 
 - Anything that can take more than a couple of minutes runs in the background, with a time limit
