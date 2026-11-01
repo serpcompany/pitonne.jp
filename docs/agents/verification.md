@@ -60,7 +60,8 @@ run on the staged files. Before each push, the full `serp-verify` runs, and `pnp
 
 ## Evidence
 
-A pull request reports each level apart: build, automated tests, the running site, the deployed
+The [`verify-site`](../../.claude/skills/verify-site/SKILL.md) skill runs each setup below and
+checks it. A pull request reports each level apart: build, automated tests, the running site, the deployed
 site, and the owner's acceptance. A lower level never proves a higher one. Every change has the
 build and tests, from the finish gate or CI. Beyond that:
 

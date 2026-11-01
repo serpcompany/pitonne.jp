@@ -32,6 +32,9 @@ apply; where this repository differs, the last section says so, and it wins.
   files; before a push, the full `serp-verify`, and `pnpm lint`, `pnpm typecheck` and `pnpm test`.
 - **CI:** `ci.yml` lists those steps itself, plus Lighthouse, and doesn't run `pnpm verify` yet.
   CI on the final commit is the record ([`ci.md`](docs/agents/ci.md)).
+- **Proof in the running site:** the [`verify-site`](.claude/skills/verify-site/SKILL.md) skill runs
+  the dev server, the local CMS or the production-like preview, and checks it with `curl -I` and
+  screenshots.
 - What each level runs, how to wait, and the evidence each kind of change needs:
   [`verification.md`](docs/agents/verification.md).
 

@@ -16,6 +16,11 @@
     },
     "prose": [".heic"]
   },
+  "docs": {
+    "skills": {
+      "catalog": "AGENTS.md"
+    }
+  },
   "dependencies": {
     "parts": [
       {
