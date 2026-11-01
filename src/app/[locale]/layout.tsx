@@ -52,8 +52,6 @@ export async function generateMetadata({
       template: `%s | ${SITE_NAME}`
     },
     description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
-    // No alternates or openGraph.url here: with trailingSlash on, the metadata API would write the homepage as
-    // https://pitonne.jp/. Every other page sets its own; the homepage renders its tags itself (HomepageHeadTags).
     openGraph: {
       title: dict.common.siteTitle,
       description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,

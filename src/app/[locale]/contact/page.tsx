@@ -59,7 +59,6 @@ export default async function ContactPage({ params }: Props) {
         description={dict.contact.heroDescription}
       />
 
-      {/* Contact Content */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12">
@@ -74,7 +73,6 @@ export default async function ContactPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Contact Info */}
             <div>
               <h2 className="text-2xl font-serif mb-6">{dict.contact.getInTouch}</h2>
 

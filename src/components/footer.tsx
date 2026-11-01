@@ -17,7 +17,6 @@ import { getBusinessInfo } from '@/lib/data/site'
 import type { Locale } from '@/lib/i18n/config'
 import type { Dictionary } from '@/lib/i18n/dictionaries'
 
-// Custom SVG icons for platforms not in lucide
 function TikTokIcon({ className }: { className?: string }) {
   return (
     <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -50,7 +49,6 @@ function ApplePodcastIcon({ className }: { className?: string }) {
   )
 }
 
-// Main social links (shown as icons)
 const socialLinks = [
   { name: 'Google Maps', href: 'https://maps.app.goo.gl/WjMLKSkNw7t2oc5T6', icon: MapPin },
   { name: 'YouTube', href: 'https://www.youtube.com/@PitonneStemCellIVTherapy', icon: Youtube },
@@ -67,7 +65,6 @@ const socialLinks = [
   { name: 'Pinterest', href: 'https://www.pinterest.com/pitonne1184am/', icon: Pin }
 ]
 
-// Podcast links
 const podcastLinks = [
   {
     name: 'Spotify',
@@ -184,7 +181,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="bg-[#2d2d2d] text-white">
       <div className="container mx-auto px-4 py-12 lg:py-16">
-        {/* Google Maps Embed */}
         <div className="mb-10">
           <div className="rounded-lg overflow-hidden border border-white/10">
             <iframe
@@ -211,7 +207,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         <div className="grid gap-y-8 gap-x-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-x-20">
-          {/* Company Info */}
           <div>
             <Link href={localizedRoute('/', locale)}>
               <img
@@ -238,7 +233,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
               {dict.footer.quickLinks}
@@ -257,7 +251,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </ul>
           </div>
 
-          {/* Services */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
               {dict.nav.services}
@@ -282,7 +275,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </ul>
           </div>
 
-          {/* Areas Served */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
               {dict.footer.areasServed}
@@ -308,9 +300,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </div>
 
-        {/* Social & Podcast Links */}
         <div className="mt-12 pt-8 border-t border-white/10">
-          {/* Social Links Row */}
           <div className="mb-6">
             <p className="text-xs text-white/70 uppercase tracking-wider mb-3">
               {dict.footer.followUs}
@@ -332,7 +322,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </div>
           </div>
 
-          {/* Podcast Links Row */}
           <div className="mb-6">
             <p className="text-xs text-white/70 uppercase tracking-wider mb-3">
               {dict.footer.listenPodcast}
@@ -355,7 +344,6 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/70">
               &copy; {new Date().getFullYear()} {dict.footer.businessName}. {dict.footer.websiteBy}{' '}

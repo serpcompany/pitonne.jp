@@ -55,9 +55,7 @@ export default async function HomePage({ params }: Props) {
     <>
       <HomepageHeadTags locale={locale as Locale} />
 
-      {/* Hero Section */}
       <section className="relative flex min-h-[calc(100svh-73px)] items-center overflow-hidden bg-[#faf9f7]">
-        {/* Decorative Leaf Elements */}
         <div className="absolute left-0 bottom-0 w-32 h-48 opacity-60">
           <Image
             src="/images/Leaf-3.png"
@@ -93,11 +91,9 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Who We Are Section */}
       <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Clinic Image */}
             <div className="relative">
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
                 <Image
@@ -108,7 +104,6 @@ export default async function HomePage({ params }: Props) {
                   sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               </div>
-              {/* Decorative leaf */}
               <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-16 h-32 opacity-30 hidden lg:block">
                 <svg
                   aria-hidden="true"
@@ -137,7 +132,6 @@ export default async function HomePage({ params }: Props) {
               </div>
             </div>
 
-            {/* Content */}
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4 px-3 py-1.5 bg-[#f5ebe0] rounded-full inline-block">
                 {dict.home.whoWeAre}
@@ -172,7 +166,6 @@ export default async function HomePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Services Section */}
       <section className="py-20 lg:py-28 bg-[#faf9f7]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -236,9 +229,7 @@ export default async function HomePage({ params }: Props) {
         </section>
       ) : null}
 
-      {/* Blog Section */}
       <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
-        {/* Decorative leaf */}
         <div className="absolute right-0 top-20 w-32 h-48 opacity-30 hidden lg:block">
           <svg aria-hidden="true" viewBox="0 0 120 180" className="w-full h-full text-[#d4c4a8]">
             <path

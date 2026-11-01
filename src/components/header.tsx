@@ -29,7 +29,6 @@ function LanguageSwitcher({
   const pathname = usePathname() ?? '/'
   const targetLocale: Locale = locale === 'en' ? 'ja' : 'en'
   const neutralPath = normalizePath(pathname.replace(/^\/ja(?=\/|$)/, '') || '/')
-  // Single-locale blog posts and categories have no page in the other locale, so switch to that locale's blog index
   const targetPath = localizedRoute(
     untranslatedPaths.includes(neutralPath) ? canonicalRoutes.blog : neutralPath,
     targetLocale
@@ -54,7 +53,6 @@ export function Header({
   locale: Locale
   dict: Dictionary
   serviceNavigation: ServiceNavCategory[]
-  // Paths in this locale that have no translation in the other locale
   untranslatedPaths?: string[]
 }) {
   const servicesMenu = { categories: serviceNavigation }
@@ -105,7 +103,6 @@ export function Header({
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border">
       <nav className="container mx-auto flex items-center justify-between px-4 py-4 lg:px-8">
-        {/* Logo */}
         <Link href={localizedRoute('/', locale)} className="flex items-center">
           <img
             src="/images/pitt-wordlogo-blk-32.svg"
@@ -114,7 +111,6 @@ export function Header({
           />
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden xl:flex items-center gap-8">
           {navigation.map(item => (
             <div
@@ -132,7 +128,6 @@ export function Header({
                 {item.hasDropdown && <ChevronDown className="h-4 w-4" />}
               </Link>
 
-              {/* About Menu */}
               {item.hasDropdown === 'about' && activeDropdown === 'about' && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-48">
                   <div className="rounded-lg border border-border bg-white p-3 shadow-xl">
@@ -152,7 +147,6 @@ export function Header({
                 </div>
               )}
 
-              {/* Services Mega Menu */}
               {item.hasDropdown === 'services' && activeDropdown === 'services' && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[760px]">
                   <div className="bg-white rounded-lg shadow-xl border border-border p-6">
@@ -192,7 +186,6 @@ export function Header({
                 </div>
               )}
 
-              {/* Areas Mega Menu */}
               {item.hasDropdown === 'areas' && activeDropdown === 'areas' && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[700px]">
                   <div className="bg-white rounded-lg shadow-xl border border-border p-6">
@@ -238,7 +231,6 @@ export function Header({
           ))}
         </div>
 
-        {/* Language Switcher & Phone & CTA */}
         <div className="hidden xl:flex items-center gap-6">
           <LanguageSwitcher
             locale={locale}
@@ -296,7 +288,6 @@ export function Header({
           </ContactButton>
         </div>
 
-        {/* Mobile menu button */}
         <button
           type="button"
           className="xl:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
@@ -311,11 +302,9 @@ export function Header({
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-border bg-white max-h-[80vh] overflow-y-auto">
           <div className="container mx-auto px-4 py-4 space-y-1">
-            {/* Language Switcher - Mobile */}
             <div className="pb-3 mb-1 border-b border-border">
               <LanguageSwitcher
                 locale={locale}
@@ -347,7 +336,6 @@ export function Header({
                       />
                     </button>
 
-                    {/* Mobile About Dropdown */}
                     {item.hasDropdown === 'about' && mobileExpandedSection === 'about' && (
                       <div className="pl-4 pb-2 space-y-1">
                         {aboutMenu.items.map(link => (
@@ -363,7 +351,6 @@ export function Header({
                       </div>
                     )}
 
-                    {/* Mobile Services Dropdown */}
                     {item.hasDropdown === 'services' && mobileExpandedSection === 'services' && (
                       <div className="pl-4 pb-2 space-y-3">
                         {servicesMenu.categories.map(category => (
@@ -392,7 +379,6 @@ export function Header({
                       </div>
                     )}
 
-                    {/* Mobile Areas Dropdown */}
                     {item.hasDropdown === 'areas' && mobileExpandedSection === 'areas' && (
                       <div className="pl-4 pb-2 space-y-3">
                         {areasMenu.wards.map(ward => (

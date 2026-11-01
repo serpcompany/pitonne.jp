@@ -19,7 +19,6 @@ describe('blog index page', () => {
   it('renders supplied featured images with descriptive alt text and accessible active category contrast', async () => {
     render(await BlogPage({ params: Promise.resolve({ locale: 'en' }) }))
 
-    // Editors add posts in the CMS, with or without a feature image, so check every post that has one
     const postsWithImages = getAllBlogPosts().filter(post => post.featureImage)
     expect(postsWithImages.length).toBeGreaterThan(0)
     for (const post of postsWithImages) {

@@ -74,7 +74,6 @@ export default async function BlogPage({ params }: Props) {
         description={dict.blog.heroDescription}
       />
 
-      {/* Categories */}
       <section className="py-8 bg-card border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center gap-3">
@@ -98,7 +97,6 @@ export default async function BlogPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Featured Post */}
       {featuredPost && (
         <section className="py-12 bg-card">
           <div className="container mx-auto px-4">
@@ -162,7 +160,6 @@ export default async function BlogPage({ params }: Props) {
         </section>
       )}
 
-      {/* Blog Posts Grid */}
       <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-serif text-foreground mb-8">{dict.blog.latestArticles}</h2>
@@ -215,7 +212,6 @@ export default async function BlogPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Newsletter Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-serif text-foreground mb-6">{dict.blog.stayInformed}</h2>

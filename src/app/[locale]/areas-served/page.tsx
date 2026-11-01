@@ -54,7 +54,6 @@ export default async function AreasServedPage({ params }: Props) {
         description={dict.areas.heroDescription}
       />
 
-      {/* Wards Grid */}
       <section className="py-16 lg:py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="space-y-12">
@@ -99,7 +98,6 @@ export default async function AreasServedPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Service Areas Info */}
       <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -129,7 +127,6 @@ export default async function AreasServedPage({ params }: Props) {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-16 lg:py-20 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-serif text-foreground mb-6">

@@ -1,5 +1,3 @@
-// LINE brand icon (green tile, white speech bubble); colors follow LINE's brand guidelines. Decorative: the
-// surrounding link carries the accessible name.
 export function LineIcon({ className = '' }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true" focusable="false">

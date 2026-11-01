@@ -74,7 +74,6 @@ export default async function LegalPage({ params }: Props) {
         description={dict.legal.legalDescription}
       />
 
-      {/* Legal Pages Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="grid md:grid-cols-3 gap-6">
@@ -95,7 +94,6 @@ export default async function LegalPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section className="py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="font-serif text-2xl text-[#1a1a1a] mb-4">

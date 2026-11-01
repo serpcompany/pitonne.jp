@@ -82,7 +82,6 @@ export default async function BlogCategoryPage({ params }: Props) {
         description={categoryDescription}
       />
 
-      {/* Category Navigation */}
       <section className="py-6 bg-card border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center gap-3">
@@ -109,7 +108,6 @@ export default async function BlogCategoryPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Blog Posts */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           {categoryPosts.length > 0 ? (
@@ -172,7 +170,6 @@ export default async function BlogCategoryPage({ params }: Props) {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-12 md:py-16 bg-[#f5ebe0]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl font-serif text-foreground mb-4">{dict.blog.haveQuestions}</h2>

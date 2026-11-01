@@ -76,7 +76,6 @@ export default async function WardPage({ params }: Props) {
         description={typedLocale === 'ja' ? ward.descriptionJa : ward.description}
       />
 
-      {/* Areas Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="font-serif text-3xl text-foreground mb-8 text-center">
@@ -124,7 +123,6 @@ export default async function WardPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Map Section */}
       <section className="py-16 bg-card">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="mb-8 text-center">
@@ -158,7 +156,6 @@ export default async function WardPage({ params }: Props) {
       />
       <LatestPostsSection locale={typedLocale} />
 
-      {/* Back Link */}
       <section className="py-8 border-t border-border">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <Link

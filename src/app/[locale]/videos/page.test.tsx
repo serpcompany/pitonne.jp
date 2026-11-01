@@ -119,7 +119,6 @@ describe('Pitonne video pages', () => {
       ]
     })
 
-    // /ja/watch/* breadcrumbs point at the Japanese pages, with the Japanese labels
     const ja = getDictionary('ja')
     expect(videoBreadcrumbJsonLd(video, 'ja')).toMatchObject({
       itemListElement: [

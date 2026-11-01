@@ -98,12 +98,10 @@ export default async function BlogPostPage({ params }: Props) {
     notFound()
   }
 
-  // Get related posts from same category
   const relatedPosts = getBlogPostsByCategory(post.categorySlug, typedLocale)
     .filter(p => p.slug !== postSlug)
     .slice(0, 3)
 
-  // Resolve related services from frontmatter slugs
   const relatedServices = getServicesFromSlugs(post.relatedServiceSlugs ?? [], typedLocale)
 
   return (

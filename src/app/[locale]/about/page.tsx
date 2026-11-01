@@ -75,11 +75,9 @@ export default async function AboutPage({ params }: Props) {
         description={dict.about.heroDescription}
       />
 
-      {/* Why We Exist Section */}
       <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4">
                 {dict.about.commitment}
@@ -88,7 +86,6 @@ export default async function AboutPage({ params }: Props) {
               <p className="text-muted-foreground">{dict.about.whyWeExistContent}</p>
             </div>
 
-            {/* Clinic Reception Image */}
             <div className="relative">
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img
@@ -97,7 +94,6 @@ export default async function AboutPage({ params }: Props) {
                   className="w-full h-full object-cover"
                 />
               </div>
-              {/* Decorative leaf */}
               <div className="absolute -right-6 top-0 w-16 h-24 opacity-40 hidden lg:block">
                 <svg
                   aria-hidden="true"
@@ -129,7 +125,6 @@ export default async function AboutPage({ params }: Props) {
         </div>
       </section>
 
-      {/* How We Support You Section */}
       <section className="py-20 lg:py-28 bg-[#f5ebe0]">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -158,7 +153,6 @@ export default async function AboutPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Team Section */}
       <section className="py-20 lg:py-28 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -172,7 +166,6 @@ export default async function AboutPage({ params }: Props) {
           <div className="grid md:grid-cols-3 gap-8">
             {team.map(member => (
               <div key={member.name} className="bg-[#faf9f7] rounded-lg p-6 border border-border">
-                {/* Team Member Photo */}
                 <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
                   <img
                     src={member.image}
