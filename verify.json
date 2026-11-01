@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@serpcompany/verify/verify.schema.json",
+  "files": {
+    "generated": {
+      "patches/*.patch": "pnpm patch-commit (pnpm patch <package>, then pnpm patch-commit on the folder it prints)",
+      "content/blog/**": "Keystatic, the CMS at /keystatic (docs/cms.md), which saves each post from its editor",
+      "content/blog-categories/**": "Keystatic, the CMS at /keystatic (docs/cms.md), which saves each category from its editor"
+    },
+    "names": {
+      "_headers": "hash-lines",
+      "_redirects": "hash-lines"
+    },
+    "extensions": {
+      ".xsl": "xml"
+    },
+    "prose": [".heic"]
+  },
+  "dependencies": {
+    "parts": [
+      {
+        "folder": ".",
+        "sources": ["src", "functions", "scripts", "tools", "keystatic.config.ts"],
+        "testCode": "(\\.test\\.[cm]?[jt]sx?$|^src/test/|^tools/checks/)",
+        "entries": [
+          "^src/app/(|.*/)(page|layout|route|not-found|global-not-found|error|global-error|loading|template|default|sitemap|robots|manifest|icon|opengraph-image)(\\.keystatic)?\\.tsx?$",
+          "^functions/_middleware\\.ts$",
+          "^scripts/[^/]+\\.(mjs|ts)$"
+        ],
+        "reachableWithin": "^(src|functions|scripts)/",
+        "runtime": {
+          "path": "^(src/|functions/)",
+          "pathNot": "(\\.test\\.[cm]?[jt]sx?$|^src/test/)"
+        }
+      }
+    ]
+  }
+}

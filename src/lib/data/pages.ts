@@ -4,7 +4,9 @@ import matter from 'gray-matter'
 import { z } from 'zod'
 import type { Locale } from '@/lib/i18n/config'
 
-const pageContentDirectory = path.join(/*turbopackIgnore: true*/ process.cwd(), 'content', 'pages')
+function pageContentPath(relativePath: string) {
+  return path.join(process.cwd(), 'content', 'pages', relativePath)
+}
 
 const pageFrontmatterSchema = z.object({
   title: z.string().min(1),
@@ -45,14 +47,14 @@ function getMarkdownPage(relativePath: string, locale: Locale = 'en'): MarkdownP
     const file = path.basename(relativePath)
     const jaRelativePath = dir === '.' ? `ja/${file}` : `${dir}/ja/${file}`
     sourcePath = `content/pages/${jaRelativePath}`
-    absolutePath = path.join(pageContentDirectory, jaRelativePath)
+    absolutePath = pageContentPath(jaRelativePath)
 
     if (!fs.existsSync(absolutePath)) {
       return null
     }
   } else {
     sourcePath = `content/pages/${relativePath}`
-    absolutePath = path.join(pageContentDirectory, relativePath)
+    absolutePath = pageContentPath(relativePath)
   }
 
   const parsed = matter(fs.readFileSync(absolutePath, 'utf8'))

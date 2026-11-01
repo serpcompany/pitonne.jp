@@ -15,7 +15,9 @@ standards, with one documented exception: CMS saves go straight to Production.
 1. Branch from `origin/staging` as `issue-<n>-<slug>`, in its own worktree:
    `git worktree add -b issue-<n>-<slug> ../pitonne.jp-worktrees/issue-<n>-<slug> origin/staging`.
 2. Open a PR into **`staging`** (`gh pr create --base staging`). GitHub's default branch is still `main` (see
-   [Why `main` stays the default branch](#why-main-stays-the-default-branch)), so pick the base explicitly.
+   [Why `main` stays the default branch](#why-main-stays-the-default-branch)), so pick the base explicitly. An agent
+   runs `gh` as the organization's app
+   ([Agent GitHub Identity](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/agent-harness/agent-github-identity.md)).
    - The `staging` ruleset requires a PR, the `test` check, an up-to-date branch, and squash merging.
    - Same-repository PRs get a Cloudflare Pages preview at `pr-<n>.pitonne-jp.pages.dev` after the `test` job passes.
      New commits replace it, and the Cloudflare Pages app keeps one PR comment with the URL. Previews build with

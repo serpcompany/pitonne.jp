@@ -287,7 +287,6 @@ describe('blog post parity', () => {
       expect(post.sourcePath).toBe(`content/blog/${post.slug}.md`)
       expect(post.content).not.toContain('# タブ 2')
       expect(`${post.title}\n${post.excerpt}\n${post.content}`).not.toMatch(japaneseScript)
-      // Related services are optional (getRelatedServiceSlugsForPost falls back by category) and the CMS doesn't set tags
     }
   })
 })

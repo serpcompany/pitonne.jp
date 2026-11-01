@@ -9,6 +9,8 @@ import { routeHref } from '@/test/route-href'
 
 const legacyEnglishLegalLinks = ['Privacy Policy', 'Terms of Use', 'Medical Disclaimer']
 
+const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
 function openingHours(info: ReturnType<typeof getBusinessInfo>) {
   return info.hours.filter(entry => /\d/.test(entry.hours))
 }
@@ -16,11 +18,7 @@ function openingHours(info: ReturnType<typeof getBusinessInfo>) {
 describe('footer and CTA data parity', () => {
   it('uses live business hours and legal routes', () => {
     expect(businessHours).toEqual([
-      { day: 'Monday', opens: '09:00', closes: '17:00' },
-      { day: 'Tuesday', opens: '09:00', closes: '17:00' },
-      { day: 'Wednesday', opens: '09:00', closes: '17:00' },
-      { day: 'Thursday', opens: '09:00', closes: '17:00' },
-      { day: 'Friday', opens: '09:00', closes: '17:00' },
+      ...weekdays.map(day => ({ day, opens: '09:00', closes: '17:00' })),
       { day: 'Saturday', opens: '09:00', closes: '13:00' },
       { day: 'Sunday', closed: true }
     ])

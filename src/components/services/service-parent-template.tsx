@@ -1,14 +1,11 @@
 import Link from 'next/link'
-import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
 import { ServiceCardGrid } from '@/components/services/service-card-grid'
-import { JsonLd } from '@/components/shared/json-ld'
-import { PageHero } from '@/components/shared/page-hero'
+import { ServicePage } from '@/components/services/service-page'
 import { SiteMarkdown } from '@/components/shared/site-markdown'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { serviceJsonLd } from '@/lib/structured-data'
 
 export function ServiceParentTemplate({
   service,
@@ -21,16 +18,11 @@ export function ServiceParentTemplate({
 }) {
   const dict = getDictionary(locale)
   return (
-    <div className="bg-background">
-      <JsonLd data={serviceJsonLd(service, locale)} />
-
-      <PageHero
-        locale={locale}
-        breadcrumbs={serviceBreadcrumbs(service, locale)}
-        title={service.name}
-        description={service.fullDescription}
-      >
-        {service.image && (
+    <ServicePage
+      service={service}
+      description={service.fullDescription}
+      hero={
+        service.image && (
           <div className="overflow-hidden rounded-lg border border-border">
             <img
               src={service.image}
@@ -38,9 +30,10 @@ export function ServiceParentTemplate({
               className="max-h-[420px] w-full object-cover"
             />
           </div>
-        )}
-      </PageHero>
-
+        )
+      }
+      locale={locale}
+    >
       <section className="bg-card py-16 md:py-20">
         <div className="container mx-auto px-4">
           {service.content && (
@@ -63,6 +56,6 @@ export function ServiceParentTemplate({
           <ServiceCardGrid services={childServices} cardClassName="bg-background" />
         </div>
       </section>
-    </div>
+    </ServicePage>
   )
 }

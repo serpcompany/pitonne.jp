@@ -1,7 +1,8 @@
 # Blog CMS
 
 The blog is edited in [Keystatic](https://keystatic.com) at **https://pitonne.jp/keystatic**. Background and the
-decision record are in [ADR 0001](adr/0001-blog-cms.md).
+decision record are in [ADR 0001](adr/0001-blog-cms.md); [ADR 0002](adr/0002-payload-d1.md) records why moving the blog
+to Payload CMS on Cloudflare D1 was a no-go.
 
 ## For editors
 

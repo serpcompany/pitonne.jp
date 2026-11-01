@@ -1,13 +1,10 @@
-import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
-import { JsonLd } from '@/components/shared/json-ld'
-import { PageHero } from '@/components/shared/page-hero'
+import { ServicePage } from '@/components/services/service-page'
 import { RelatedSidebar } from '@/components/shared/related-sidebar'
 import { SiteMarkdown } from '@/components/shared/site-markdown'
 import type { BlogPost } from '@/lib/data/blog-posts'
 import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { serviceJsonLd } from '@/lib/structured-data'
 
 export function ServiceDetailTemplate({
   service,
@@ -24,16 +21,12 @@ export function ServiceDetailTemplate({
 }) {
   const dict = getDictionary(locale)
   return (
-    <div className="bg-background">
-      <JsonLd data={serviceJsonLd(service, locale)} />
-
-      <PageHero
-        locale={locale}
-        breadcrumbs={serviceBreadcrumbs(service, locale, parentService)}
-        title={service.name}
-        description={service.shortDescription}
-      />
-
+    <ServicePage
+      service={service}
+      parentService={parentService}
+      description={service.shortDescription}
+      locale={locale}
+    >
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -78,6 +71,6 @@ export function ServiceDetailTemplate({
           </div>
         </div>
       </section>
-    </div>
+    </ServicePage>
   )
 }
