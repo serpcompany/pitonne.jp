@@ -24,18 +24,34 @@ export const otherBase = (base, defaultBranch) =>
 
 export const stagingNote = `GitHub links a closing keyword only on a pull request into the default branch, so on one into ${closedOnMergeInto} this check reads the keywords itself, and the Close issues workflow closes this repository's issues they name when the pull request merges (docs/agents/ci-pull-requests.md, Close issues).`
 
+const quoteLine = /^[ \t]{0,3}>/
+const startsABlock = /^[ \t]{0,3}(?:#{1,6}(?:[ \t]|$)|[-*+][ \t]|1[.)][ \t]|```|~~~)/
+
+function withoutQuotes(text) {
+  let quoting = false
+  return text
+    .split('\n')
+    .map(line => {
+      if (quoteLine.test(line)) quoting = true
+      else if (!line.trim() || startsABlock.test(line)) quoting = false
+      return quoting ? '' : line
+    })
+    .join('\n')
+}
+
 const whereGitHubLinksNothing = [
   /^[ \t]*(([`~])\2{2,})(?:(?<=~)[^\n]*|[^`\n]*)\n[\s\S]*?(?:^[ \t]*\1\2*[ \t]*$|(?![\s\S]))/gm,
+  /<code\b[^>]*>[\s\S]*?<\/code>/gi,
   /(?<!`)(`+)(?!`)(?:(?!\n[ \t]*\n)[\s\S])*?(?<!`)\1(?!`)/g,
   /<!--[\s\S]*?-->/g,
-  /^[ \t]{0,3}>.*$/gm
+  withoutQuotes
 ]
 const closingKeyword =
   /(?<![\w-])(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?):?[ \t]+(?:([\w.-]+\/[\w.-]+)#|https:\/\/github\.com\/([\w.-]+\/[\w.-]+)\/issues\/|#)(\d{1,9})\b/gi
 
 export function closingReferences(body, ownRepository = '') {
   const text = whereGitHubLinksNothing.reduce(
-    (rest, pattern) => rest.replace(pattern, ' '),
+    (rest, pattern) => (typeof pattern === 'function' ? pattern(rest) : rest.replace(pattern, ' ')),
     String(body ?? '')
   )
   const named = new Map()
@@ -196,10 +212,14 @@ async function issuesNamedInto(pull, context) {
     return []
   })
   if (wrong.length) return fail(`${wrong.join('\n')}\n\n${issueRule}\n\n${stagingNote}`)
+  const closes = own.map(({ number }) => `#${number}`).join(' ')
+  if (own.every(({ state }) => state === 'closed'))
+    return fail(
+      `Every issue it names is already closed (${closes}), so it finishes none.\n\n${issueRule}\n\n${stagingNote}`
+    )
   const closed = own
     .filter(({ state }) => state === 'closed')
     .map(({ number }) => `::warning::#${number} is already closed.`)
-  const closes = own.map(({ number }) => `#${number}`).join(' ')
   return pass(
     [`Closes ${closes}, which the Close issues workflow closes when this merges into ${pull.base}.`]
       .concat(closed, byHand)

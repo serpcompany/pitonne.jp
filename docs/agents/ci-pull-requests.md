@@ -19,8 +19,9 @@ each as a job of its own, named for its check, so each can be required on its ow
   names an issue of this repository: GitHub links keywords only on pull requests into the default
   branch, which is `main` ([`gitflow.md`](../gitflow.md#why-main-stays-the-default-branch)), and
   the [Close issues](#close-issues) workflow closes them at the merge. An issue already closed
-  passes with a warning, and so does one in another repository named beside one of this
-  repository's, since it has to be closed by hand. Into `main`, it asks
+  passes with a warning beside an open one, and fails when every issue named is closed, since the
+  pull request then finishes none. One in another repository named beside one of this
+  repository's passes with a warning, since it has to be closed by hand. Into `main`, it asks
   GitHub which issues it linked, three times, five seconds apart, since GitHub links them a
   moment after the event. A stacked pull request is told why nothing links until it's retargeted.
 - **`fix-test`:** a pull request titled `fix:`, or from a `fix/` branch, changes a file that
@@ -37,9 +38,12 @@ release-please's, and promotions and merge-backs between this repository's `main
 `@serpcompany/verify`. This repository is public and serp is private, so it can't call serp's
 action, and the packaged `issue-link` asks only GitHub's closing-issue links, which fail every
 pull request into `staging`. So `tools/checks/pull-request.mjs` holds the four rules, word for word
-from `@serpcompany/verify`'s `dist/pull-request/rules.js` but for the `staging` case and quotes: a
-closing keyword in a quote (`> Closes #12`) counts for neither `issue-link` nor the closing. Its
-tests are in `tools/checks/pull-request.test.ts`. Update it when the package's rules change.
+from `@serpcompany/verify`'s `dist/pull-request/rules.js` but for three things: the `staging`
+case; a closing keyword in a quote (`> Closes #12`, and a line that continues the quote with no
+blank line between) or in a `<code>` tag, which counts for neither `issue-link` nor the closing;
+and an `issue-link` that names only closed issues, which fails. Indented text still counts, since
+it can be a list item's second line as well as code. Its tests are in
+`tools/checks/pull-request.test.ts`. Update it when the package's rules change.
 
 **How it runs.** Each job checks out that one script (and `verify.json` for `fix-test`) and runs
 it with the runner's Node: no install, so it reports in seconds and works before the

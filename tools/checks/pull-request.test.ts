@@ -152,6 +152,9 @@ describe('issue-link', () => {
     ['in an HTML comment', ['<!', '-- Closes #20 --', '>'].join('')],
     ['in a quote', 'The issue says:\n> Closes #15'],
     ['in a quote within a quote', 'Quoted:\n   > > Fixes #16'],
+    ['on a line that lazily continues a quote', '> The issue says\nFixes #5'],
+    ['in a code tag', 'Write <code>Closes #13</code> in the body.'],
+    ['in a code tag with attributes, over two lines', '<CODE class="x">Fixes\n#4</CODE>'],
     ['too large to be an issue', 'Closes #99999999999'],
     ['after a word that only ends like a keyword', 'a bug-fix #17, a hotfix #21, a prefix #6'],
     ['after a word that closes nothing', 'Part of #3, refs #4, encloses #5']
@@ -159,8 +162,26 @@ describe('issue-link', () => {
     expect(closingReferences(body, repository)).toEqual([])
   })
 
+  it('reads a keyword after a blank line, a heading or a list item ends the quote', () => {
+    for (const body of [
+      '> The issue says\n\nFixes #5',
+      '> The issue says\n## Fixes #5',
+      '> The issue says\n- Fixes #5',
+      '> The issue says\n1. Fixes #5'
+    ])
+      expect(closingReferences(body, repository), body).toEqual([{ repository: '', number: 5 }])
+  })
+
+  it('reads a keyword in indented text, which can be code or a list item’s second line', () => {
+    expect(closingReferences('- One change\n    Closes #9', repository)).toEqual([
+      { repository: '', number: 9 }
+    ])
+  })
+
   it('reads the keywords around a quote, and one after a > that starts no quote', () => {
-    expect(closingReferences('Closes #7\n> Closes #8\nFixes #9, since a > b', repository)).toEqual([
+    expect(
+      closingReferences('Closes #7\n> Closes #8\n\nFixes #9, since a > b', repository)
+    ).toEqual([
       { repository: '', number: 7 },
       { repository: '', number: 9 }
     ])
@@ -175,15 +196,24 @@ describe('issue-link', () => {
   })
 
   it('warns about an issue that is already closed or lives in another repository', async () => {
-    const { api } = fakeApi({ states: { 12: 'closed' } })
+    const { api } = fakeApi({ states: { 12: 'closed', 13: 'open' } })
     const verdict = await check(
       'issue-link',
-      pull({ body: 'Closes #12\nCloses serpcompany/serp#7' }),
+      pull({ body: 'Closes #12\nCloses #13\nCloses serpcompany/serp#7' }),
       api
     )
     expect(verdict.passed).toBe(true)
     expect(verdict.message).toContain('::warning::#12 is already closed.')
     expect(verdict.message).toContain('::warning::Close serpcompany/serp#7 by hand')
+  })
+
+  it('fails a pull request into staging whose every issue is already closed', async () => {
+    const { api } = fakeApi({ states: { 12: 'closed', 14: 'closed' } })
+    const verdict = await check('issue-link', pull({ body: 'Closes #12\nFixes #14' }), api)
+    expect(verdict.passed).toBe(false)
+    expect(verdict.message).toContain(
+      'Every issue it names is already closed (#12 #14), so it finishes none.'
+    )
   })
 
   it('fails a pull request into staging that names a missing issue or a pull request', async () => {
