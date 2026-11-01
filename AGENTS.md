@@ -49,7 +49,7 @@ Report evidence levels separately in the PR (local checks, CI, preview/deploy). 
 | Visible UI | One local run with `pnpm dev` in both `/` and `/ja/`, with a screenshot |
 | Redirects or headers (`public/_redirects`, `public/_headers`), trailing slashes, the `/keystatic/*` fallback | Before merge, a production-like preview: `DEPLOY_ENV=production pnpm build`, then `pnpm dlx wrangler@4.103.0 pages dev out` and `curl -I` the affected URLs (`pnpm start` does not apply `_redirects` or `_headers`). This is routing on a Ship site, so also `curl -I` the same URLs on https://pitonne.jp before the change and again after the Production deploy, and put both in the PR. |
 | CMS (`keystatic.config.ts`, `src/lib/blog-rules.ts`, `patches/@keystatic__core*`, blog/category schemas) | A local run of the affected editor flow with `pnpm cms`; after the deploy, https://pitonne.jp/keystatic loads |
-| Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `scripts/environment-headers.mjs`, the smoke scripts, `DEPLOY_ENV` handling, robots or sitemaps) | The production-like preview above and the PR preview; after merge, the Staging deploy and its smoke test (https://staging.pitonne.jp sends noindex), then after promotion the Production deploy and its smoke test (https://pitonne.jp returns 200, `robots.txt` allows crawling and lists the sitemap) |
+| Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `scripts/environment-headers.mjs`, the smoke scripts, `DEPLOY_ENV` handling, robots or sitemaps) | The production-like preview above and the PR preview; for the Staging gate, also `DEPLOY_ENV=staging pnpm build` served with `--binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword`; after merge, the Staging deploy and its smoke test (https://staging.pitonne.jp answers 401 without the password and serves Staging canonicals with it), then after promotion the Production deploy and its smoke test (https://pitonne.jp returns 200, `robots.txt` allows crawling and lists the sitemap) |
 
 Same-repository PRs into `staging` (or `main`, for hotfixes) get a preview at `https://pr-<n>.pitonne-jp.pages.dev`
 once the `test` job passes (the `preview` job in `ci.yml`). It is non-indexable, so it's evidence for behaviour, not
@@ -86,7 +86,10 @@ and again when handing back. If CI, a deploy or Sync staging failed, fixing it c
 - Tests check rules, not content snapshots. Editors add and change posts at any time, so don't assert post counts,
   that every post has an image or tags, or the text of a post.
 - Trailing-slash exceptions to the [URL trailing-slash standard](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/url-trailing-slash.md):
-  the slashed form of a path excluded in `public/_routes.json` (`/images/x.jpg/`, `/favicon.ico/`) never reaches the
-  Function and returns 404, and `/keystatic/*` is left as requested (the Keystatic router reads a slash as a segment).
+  on Production and PR previews, the slashed form of a path excluded in `public/_routes.json` (`/images/x.jpg/`,
+  `/favicon.ico/`) never reaches the Function and returns 404 (Staging routes every path through the Function, so there
+  it 308s once the password is given), and `/keystatic/*` is left as requested (the Keystatic router reads a slash as a segment).
+- Staging's password gate exempts only smoke-test header requests (`x-pitonne-smoke-test`) and `/robots.txt`. The site
+  receives no webhooks. Keep the list explicit; it lives in `src/lib/canonical-host.ts`.
 - Don't rewrite reviewed Japanese copy (content, dictionaries, frontmatter). Add to it instead, and flag
   AI-written Japanese in the PR for native review.

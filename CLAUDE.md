@@ -48,11 +48,13 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 - **Route localization**: `src/lib/data/routes.ts` — `localizedRoute(path, locale)`
 - **Business data**: `src/lib/data/site.ts` — `getBusinessInfo(locale)`
 - **Content data**: `src/lib/data/blog-posts.ts`, `src/lib/data/services.ts` (accept `locale` param)
-- **Area data**: `src/lib/data/areas.ts` (co-located en/ja fields)
+- **Area data**: `src/lib/data/areas.ts`, one file per ward in `src/lib/data/wards/` (co-located en/ja fields)
+- **Deploy environment**: `src/lib/deploy-environment.mts` — `deployEnvironment()`, `siteOrigin()`
 - **Sitemaps**: `src/lib/sitemaps.ts`. `/sitemap-index.xml` is the entry point and lists one root-level child per content
   group (`/sitemap-pages.xml`, `-services`, `-areas`, `-blog`, `-categories`, `-videos`), each served by
   `src/app/sitemap-<group>.xml/route.ts`. `/sitemap.xml` serves the same XML as the index; `/videos-sitemap.xml` 301s to
-  `/sitemap-videos.xml`. The English homepage is listed as `https://pitonne.jp` (no slash); every other URL ends in `/`.
+  `/sitemap-videos.xml`. The English homepage is listed as the build's origin with no slash (`https://pitonne.jp` on
+  Production); every other URL ends in `/`.
   A new route type goes in an existing group or a new group (add it to `sitemapGroups`, a route file and `public/_headers`).
 - **i18n docs**: `docs/i18n.md`
 
@@ -65,18 +67,28 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
   promoted commit that passed on `staging` deploys at once), but code already on the branch also goes live with the
   next CMS save. CMS content saves deploy as soon as they build and are never blocked by `test`; a failing `test` or
   deploy on `main` opens a "CI is failing on main" alert issue instead. Each deploy is smoke-tested: Production allows
-  crawling and lists its sitemap; Staging and PR previews send noindex.
-- `DEPLOY_ENV` is `production`, `staging` or `preview`. Only `production` is indexable; every other build (and any
-  build without `DEPLOY_ENV`) disallows crawling in `robots.txt`, has a noindex meta robots tag, and sends
-  `X-Robots-Tag: noindex` (`scripts/environment-headers.mjs`). Test with `isProductionDeployment()` from `src/lib/seo.ts`,
-  never for a specific non-production value.
+  crawling, lists its sitemap and never asks for a password; Staging answers 401 without the password; PR previews
+  send noindex.
+- `DEPLOY_ENV` is `production`, `staging` or `preview`, read only by `src/lib/deploy-environment.mts`; a missing,
+  unknown or conflicting value means `preview`. Branch on `isIndexable()`, `hasAnalytics()`, `hasPasswordGate()` and
+  `siteOrigin()` from that file, never on a specific value.
+  - Production (https://pitonne.jp) is indexable and has analytics.
+  - Staging sits behind HTTP Basic auth in `functions/_middleware.ts`, per SERP's
+    [staging-access standard](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/staging-access.md)
+    (password `stagingpassword`, a plain variable in `wrangler.toml`). Behind the gate it is built like Production on
+    its own origin, https://staging.pitonne.jp: indexable, with Staging canonicals, hreflang, JSON-LD and sitemaps,
+    and a `robots.txt` that admits only `AhrefsSiteAudit`. Responses that skip the password (smoke-test header
+    requests and `/robots.txt`, the only exemptions) and 401s send `X-Robots-Tag: noindex`.
+  - PR previews (and any build without `DEPLOY_ENV`) disallow crawling in `robots.txt`, have a noindex meta robots
+    tag, and send `X-Robots-Tag: noindex` (`scripts/environment-headers.mjs`).
 
 ## Audits and parity tests
 
 `pnpm check` and CI run these (see [AGENTS.md](AGENTS.md)). The SEO audits mirror the Ahrefs Site Audit checks:
 - `pnpm audit:meta` — blog/service `<title>` 15–70 chars (incl. " | Pitonne") and meta description 110–160 chars.
   Use the optional `metaTitle` / `metaDescription` frontmatter instead of editing the visible title/excerpt.
-- `pnpm audit:seo` — run after `pnpm build`; checks every page in `out/` for title/description length, exactly one `<h1>`
+- `pnpm audit:seo` — run after `pnpm build`, with the build's `DEPLOY_ENV` exported (it audits against that
+  environment's origin); checks every page in `out/` for title/description length, exactly one `<h1>`
   (the CMS offers only H2–H4, and a body that starts with `# Title` has that line dropped), complete Open Graph tags (use `pageOpenGraph()` from `src/lib/seo.ts`),
   broken or redirecting internal links, images over 5 MB, and the sitemap index pattern: `robots.txt` lists only
   `/sitemap-index.xml`, every indexable page is in exactly one child sitemap, and every sitemap URL is a page that isn't
@@ -98,3 +110,5 @@ Key parity tests:
 - Content is markdown in `content/{blog,services,pages}/` with `ja/` subdirectories
 - Use `canonicalRoutes` from `src/lib/data/routes.ts` for all internal paths
 - SEO helpers in `src/lib/seo.ts`: `localizedCanonicalUrl`, `localizedHreflangAlternates`
+- Import layers (Biome `noRestrictedImports`): `src/lib` never imports `src/components` or `src/app`, and
+  `src/components` never imports `src/app`
