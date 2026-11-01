@@ -3,6 +3,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
 import type { Locale } from '@/lib/i18n/config'
+import { localizedRoute } from './routes'
 
 function serviceContentDirectory(locale: Locale): string {
   if (locale === 'ja') {
@@ -190,12 +191,10 @@ export function getServiceCategorySections(
   return serviceCategorySections.map(section => {
     const localizedTitle =
       locale === 'ja' ? (serviceCategoryTitlesJa[section.title] ?? section.title) : section.title
-    const localizedHref = locale === 'ja' ? `/ja${section.href}` : section.href
-
     return {
       ...section,
       title: localizedTitle,
-      href: localizedHref,
+      href: localizedRoute(section.href, locale),
       services: getServicesFromSlugs(section.serviceSlugs, locale)
     }
   })

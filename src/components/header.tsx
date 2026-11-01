@@ -20,17 +20,19 @@ import { normalizePath } from '@/lib/seo'
 function LanguageSwitcher({
   locale,
   labels,
-  untranslatedPaths
+  untranslatedPaths,
+  path
 }: {
   locale: Locale
   labels: HeaderText['languageSwitcher']
   untranslatedPaths: string[]
+  path?: string
 }) {
   const pathname = usePathname() ?? '/'
   const targetLocale: Locale = locale === 'en' ? 'ja' : 'en'
   const neutralPath = normalizePath(pathname.replace(/^\/ja(?=\/|$)/, '') || '/')
   const targetPath = localizedRoute(
-    untranslatedPaths.includes(neutralPath) ? canonicalRoutes.blog : neutralPath,
+    path ?? (untranslatedPaths.includes(neutralPath) ? canonicalRoutes.blog : neutralPath),
     targetLocale
   )
 
@@ -75,12 +77,14 @@ export function Header({
   locale,
   text,
   serviceNavigation,
-  untranslatedPaths = []
+  untranslatedPaths = [],
+  languageSwitcherPath
 }: {
   locale: Locale
   text: HeaderText
   serviceNavigation: ServiceNavCategory[]
   untranslatedPaths?: string[]
+  languageSwitcherPath?: string
 }) {
   const servicesMenu = { categories: serviceNavigation }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -249,6 +253,7 @@ export function Header({
             locale={locale}
             labels={text.languageSwitcher}
             untranslatedPaths={untranslatedPaths}
+            path={languageSwitcherPath}
           />
           <div
             role="none"
@@ -323,6 +328,7 @@ export function Header({
                 locale={locale}
                 labels={text.languageSwitcher}
                 untranslatedPaths={untranslatedPaths}
+                path={languageSwitcherPath}
               />
             </div>
 

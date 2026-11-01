@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { SMOKE_HEADERS } from './smoke-canonical-host.mjs'
+import { MISSING_PAGE_PATH, SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 import {
   environmentChecks,
   isZoneHost,
@@ -24,15 +24,31 @@ const byPath = environment =>
   )
 
 describe('environment smoke test', () => {
-  it('checks pages in both locales and robots.txt everywhere, and the sitemap index on production', () => {
-    expect(Object.keys(byPath('staging'))).toEqual(['/', '/ja/', '/robots.txt'])
-    expect(Object.keys(byPath('preview'))).toEqual(['/', '/ja/', '/robots.txt'])
-    expect(Object.keys(byPath('production'))).toEqual([
-      '/',
-      '/ja/',
-      '/robots.txt',
-      '/sitemap-index.xml'
-    ])
+  it('checks pages in both locales, robots.txt and a missing page everywhere, and the sitemap index on production', () => {
+    const everywhere = ['/', '/ja/', '/robots.txt', MISSING_PAGE_PATH]
+    expect(Object.keys(byPath('staging'))).toEqual(everywhere)
+    expect(Object.keys(byPath('preview'))).toEqual(everywhere)
+    expect(Object.keys(byPath('production'))).toEqual([...everywhere, '/sitemap-index.xml'])
+  })
+
+  it('requires a missing page to answer 404 with one noindex robots tag and a link home', () => {
+    const notFound = (robots, home = '/') =>
+      `<html><head>${robots.map(content => `<meta name="robots" content="${content}"/>`).join('')}</head><body><a class="logo" href="${home}">Home</a></body></html>`
+    for (const environment of ['production', 'staging', 'preview']) {
+      const missing = byPath(environment)[MISSING_PAGE_PATH]
+      expect(missing.redirect).toBe('manual')
+      expect(missing.verify(response(404, notFound(['noindex'])))).toBeNull()
+      expect(missing.verify(response(200, notFound(['noindex'])))).toMatch(/status 200/)
+      expect(missing.verify(response(308, ''))).toMatch(/status 308/)
+      expect(missing.verify(response(404, notFound([])))).toMatch(/0 meta robots/)
+      expect(missing.verify(response(404, notFound(['noindex', 'noindex, follow'])))).toMatch(
+        /2 meta robots/
+      )
+      expect(missing.verify(response(404, notFound(['index, follow'])))).toMatch(/with noindex/)
+      expect(missing.verify(response(404, notFound(['noindex'], '/about/')))).toMatch(
+        /no link to the home page/
+      )
+    }
   })
 
   it('requires production to allow crawling, list its sitemap and send no noindex', () => {
@@ -97,7 +113,7 @@ describe('environment smoke test', () => {
       environmentChecks('staging', origin)
     )
     expect(await runChecks(checks, { delayMs: 0, probeFn, now, settleMs: 100 })).toBe(false)
-    expect(checks.map(check => calls.get(check.url))).toEqual([10, 2, 2, 10, 2, 2])
+    expect(checks.map(check => calls.get(check.url))).toEqual([10, 2, 2, 2, 10, 2, 2, 2])
 
     calls.clear()
     clock = 0
@@ -119,6 +135,17 @@ describe('environment smoke test', () => {
     const robots = byPath('staging')['/robots.txt']
     expect(await run(robots, { attempts: 1 })).toMatchObject({ ok: true })
     expect(fetchSpy.mock.calls[0][1].headers).toEqual(SMOKE_HEADERS)
+    expect(fetchSpy.mock.calls[0][1].redirect).toBeUndefined()
+    fetchSpy.mockRestore()
+  })
+
+  it('fetches the missing page without following redirects', async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response(null, { status: 308, headers: { location: '/' } }))
+    const missing = byPath('production')[MISSING_PAGE_PATH]
+    expect(await run(missing, { attempts: 1 })).toMatchObject({ ok: false })
+    expect(fetchSpy.mock.calls[0][1]).toMatchObject({ headers: SMOKE_HEADERS, redirect: 'manual' })
     fetchSpy.mockRestore()
   })
 })

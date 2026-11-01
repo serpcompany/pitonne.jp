@@ -88,10 +88,12 @@ export async function generateMetadata({
 
 export default async function LocaleLayout({
   children,
-  params
+  params,
+  ...headerOptions
 }: Readonly<{
   children: React.ReactNode
   params: Promise<{ locale: string }>
+  languageSwitcherPath?: string
 }>) {
   const { locale } = await params
   const typedLocale = locale as Locale
@@ -127,6 +129,7 @@ export default async function LocaleLayout({
             }))
           }))}
           untranslatedPaths={getUntranslatedBlogPaths(typedLocale)}
+          {...headerOptions}
         />
         <main className="min-h-screen">{children}</main>
         <Footer locale={typedLocale} dict={dict} />

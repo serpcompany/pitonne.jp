@@ -32,7 +32,7 @@ const firstArea = getAllAreas()[0]
 const parentService = defined(services.find(service => service.kind === 'parent'))
 const leafService = defined(services.find(service => service.kind === 'leaf'))
 
-export function siteHeader(locale: Locale): ReactElement {
+export function siteHeader(locale: Locale, languageSwitcherPath?: string): ReactElement {
   const serviceNavigation = getServiceCategorySections(locale).map(section => ({
     name: section.title,
     href: section.href,
@@ -43,7 +43,12 @@ export function siteHeader(locale: Locale): ReactElement {
   }))
 
   return (
-    <Header locale={locale} text={getHeaderText(locale)} serviceNavigation={serviceNavigation} />
+    <Header
+      locale={locale}
+      text={getHeaderText(locale)}
+      serviceNavigation={serviceNavigation}
+      languageSwitcherPath={languageSwitcherPath}
+    />
   )
 }
 

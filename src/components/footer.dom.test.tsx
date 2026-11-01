@@ -5,12 +5,9 @@ import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { businessHours, businessHoursDisplay, businessInfo, getBusinessInfo } from '@/lib/data/site'
 import { locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { routeHref } from '@/test/route-href'
 
 const legacyEnglishLegalLinks = ['Privacy Policy', 'Terms of Use', 'Medical Disclaimer']
-
-function routeHref(path: string) {
-  return expect.stringMatching(new RegExp(`^${path.replace(/\/$/, '')}/?$`))
-}
 
 function openingHours(info: ReturnType<typeof getBusinessInfo>) {
   return info.hours.filter(entry => /\d/.test(entry.hours))

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { runMain } from './run-main.mjs'
-import { SMOKE_HEADERS } from './smoke-canonical-host.mjs'
+import { MISSING_PAGE_PATH, SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 
 export const SITEMAP_LINE = 'Sitemap: https://pitonne.jp/sitemap-index.xml'
 const ENVIRONMENTS = new Set(['production', 'staging', 'preview'])
@@ -10,7 +10,9 @@ const SETTLE_MS = 120_000
 const RETRY_DELAY_MS = 5000
 const REQUEST_TIMEOUT_MS = 10_000
 
-const metaRobots = html => html.match(/<meta[^>]+name="robots"[^>]*content="([^"]*)"/i)?.[1] ?? null
+const robotsMetaTags = html =>
+  [...html.matchAll(/<meta[^>]+name="robots"[^>]*content="([^"]*)"/gi)].map(match => match[1])
+const metaRobots = html => robotsMetaTags(html)[0] ?? null
 const hasNoindex = value => /\bnoindex\b/i.test(value ?? '')
 const disallowsAll = robots => /^Disallow:\s*\/\s*$/m.test(robots)
 
@@ -50,7 +52,20 @@ export function environmentChecks(environment, origin) {
     }
   }
 
-  const checks = [page('/'), page('/ja/'), robots]
+  const missingPage = {
+    url: `${origin}${MISSING_PAGE_PATH}`,
+    redirect: 'manual',
+    verify({ status, body }) {
+      if (status !== 404) return `status ${status}, expected 404`
+      const tags = robotsMetaTags(body)
+      if (tags.length !== 1 || !hasNoindex(tags[0]))
+        return `has ${tags.length} meta robots tags (${tags.join('; ')}), expected one with noindex`
+      if (!/<a\s[^>]*href="\/"/.test(body)) return 'has no link to the home page'
+      return null
+    }
+  }
+
+  const checks = [page('/'), page('/ja/'), robots, missingPage]
   if (production) {
     checks.push({
       url: `${origin}/sitemap-index.xml`,
@@ -67,9 +82,10 @@ export function isZoneHost(url) {
   return !new URL(url).hostname.endsWith('.pages.dev')
 }
 
-async function probe(url) {
+async function probe(url, { redirect } = {}) {
   const response = await fetch(url, {
     headers: SMOKE_HEADERS,
+    redirect,
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
   })
   return { status: response.status, headers: response.headers, body: await response.text() }
@@ -82,7 +98,7 @@ export async function run(
   let message = null
   for (let attempt = 1; ; attempt++) {
     try {
-      const response = await probeFn(check.url)
+      const response = await probeFn(check.url, { redirect: check.redirect })
       if (isZoneHost(check.url) && response.headers.has('cf-mitigated')) {
         return {
           ok: true,

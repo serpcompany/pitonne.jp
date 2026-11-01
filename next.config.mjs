@@ -20,6 +20,9 @@ export default function nextConfig(phase) {
     },
     images: {
       unoptimized: true
+    },
+    experimental: {
+      globalNotFound: true
     }
   }
 }

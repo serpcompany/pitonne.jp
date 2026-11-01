@@ -6,6 +6,7 @@ export const PAGES_ORIGIN = 'https://pitonne-jp.pages.dev'
 export const WWW_ORIGIN = 'https://www.pitonne.jp'
 export const SMOKE_TEST_HEADER = 'x-pitonne-smoke-test'
 export const SMOKE_HEADERS = { [SMOKE_TEST_HEADER]: '1' }
+export const MISSING_PAGE_PATH = '/no-such-page-smoke-test/'
 
 const ATTEMPTS = 12
 const LATER_ATTEMPTS = 2
@@ -43,7 +44,7 @@ export function passThroughChecks(origin, headers = SMOKE_HEADERS) {
       headers,
       expect: { status: 200, contentType: 'application/xml' }
     },
-    { url: `${origin}/no-such-page-smoke-test/`, headers, expect: { status: 404 } }
+    { url: `${origin}${MISSING_PAGE_PATH}`, headers, expect: { status: 404 } }
   ]
 }
 

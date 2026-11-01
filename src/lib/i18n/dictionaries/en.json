@@ -443,6 +443,11 @@
     "disclaimerDescription": "Important medical and health-related disclaimers.",
     "disclaimerMeta": "Read the medical disclaimer for Pitonne wellness services in Tokyo: website content is general information and is not a substitute for advice from a physician."
   },
+  "notFound": {
+    "metaTitle": "Page Not Found | Pitonne",
+    "heading": "Page Not Found",
+    "message": "Sorry, the page you're looking for doesn't exist."
+  },
   "languageSwitcher": {
     "en": "English",
     "ja": "日本語",

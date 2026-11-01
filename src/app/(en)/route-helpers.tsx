@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import type { Locale } from '@/lib/i18n/config'
 
-const englishLocale: Locale = 'en'
+export const englishLocale: Locale = 'en'
 export const englishLocaleParams = Promise.resolve({ locale: englishLocale })
 
 type Params = Record<string, string>

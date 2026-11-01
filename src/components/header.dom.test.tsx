@@ -5,14 +5,11 @@ import { getBusinessInfo } from '@/lib/data/site'
 import { type Locale, locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { siteHeader } from '@/test/pages'
+import { routeHref } from '@/test/route-href'
 
 const retiredPhoneGroups = ['786', '814', '0323']
 const retiredPhoneHref = `tel:+1${retiredPhoneGroups.join('')}`
 const retiredPhoneText = `+1 ${retiredPhoneGroups.join(' ')}`
-
-function routeHref(path: string) {
-  return expect.stringMatching(new RegExp(`^${path.replace(/\/$/, '')}/?$`))
-}
 
 function renderHeader(locale: Locale) {
   return render(siteHeader(locale))
@@ -101,6 +98,16 @@ describe.each(locales)('header navigation (%s)', locale => {
 
     expect(container.querySelector(`a[href="${retiredPhoneHref}"]`)).not.toBeInTheDocument()
     expect(container).not.toHaveTextContent(retiredPhoneText)
+  })
+
+  it('points the language switcher at a given path in the other language', () => {
+    const other = locales.find(candidate => candidate !== locale) ?? locale
+    render(siteHeader(locale, canonicalRoutes.faqs))
+
+    expect(screen.getByRole('link', { name: dict.languageSwitcher[other] })).toHaveAttribute(
+      'href',
+      routeHref(localizedRoute(canonicalRoutes.faqs, other))
+    )
   })
 
   it('labels the menu toggle with the dictionary text for the locale', () => {

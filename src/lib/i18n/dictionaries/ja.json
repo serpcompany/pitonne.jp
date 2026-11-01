@@ -443,6 +443,11 @@
     "disclaimerDescription": "重要な医療・健康に関する免責事項。",
     "disclaimerMeta": "Pitonneウェルネスサービスの医療免責事項。本ウェブサイトの情報は一般的な情報提供を目的としたものであり、医師による診察や医学的な助言に代わるものではありません。サービスをご利用いただく前に、必ず内容をご確認ください。"
   },
+  "notFound": {
+    "metaTitle": "ページが見つかりません | Pitonne",
+    "heading": "ページが見つかりません",
+    "message": "申し訳ございませんが、お探しのページは存在しません。"
+  },
   "languageSwitcher": {
     "en": "English",
     "ja": "日本語",
