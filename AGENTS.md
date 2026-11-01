@@ -64,13 +64,17 @@ apply; where this repository differs, the last section says so, and it wins.
 | [`verification.md`](docs/agents/verification.md) | Commands, the finish gate, git hooks, evidence, and the tests that hold the rules |
 | [`ci.md`](docs/agents/ci.md) | Each GitHub Actions workflow: what starts it, what it runs, and why |
 | [`gitflow.md`](docs/gitflow.md) | Branches, promotion, CMS saves, deploys and the repository settings |
-| [`docs/adr/`](docs/adr/) | Decisions and their reasons: Keystatic for the blog, no Payload on D1 |
+| [`docs/adr/`](docs/adr/) | Decisions and their reasons: Keystatic for the blog, no Payload on D1, the static export, the layout |
 
 Staging's password gate exempts only smoke-test header requests and `/robots.txt`; the site
 receives no webhooks ([`environments.md`](docs/agents/environments.md#the-staging-gate)).
 
 ## Where this differs from SERP's standards
 
+- **A static export on Cloudflare Pages,** not Workers through OpenNext
+  ([ADR 0003](docs/adr/0003-static-export-on-cloudflare-pages.md)).
+- **Code in `src/` at the root,** with `content/`, `public/` and `keystatic.config.ts` beside it,
+  not in `apps/web/` ([ADR 0004](docs/adr/0004-repository-layout.md)).
 - **CMS saves go straight to Production:** Keystatic commits to `main`, which deploys without a
   promotion and without waiting for `test`
   ([`gitflow.md`](docs/gitflow.md#content-cms-saves-go-straight-to-main),

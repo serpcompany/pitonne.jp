@@ -19,7 +19,7 @@ Where code lives, the conventions every change follows, and the checks that hold
 | `functions/_middleware.ts` | The Cloudflare Pages Function, which calls `src/lib/canonical-host.ts` |
 | `scripts/` | Build, audit, deploy and smoke-test scripts, each with its tests beside it |
 | `tools/checks/` | Tests that hold the workflows and the Lighthouse setup to their rules |
-| `content/`, `public/`, `keystatic.config.ts` | Content, static files and the CMS config, at the root |
+| `content/`, `public/`, `keystatic.config.ts` | Content, static files and the CMS config, at the root ([ADR 0004](../adr/0004-repository-layout.md)) |
 
 `@/*` resolves to `src/` (`tsconfig.json`). Wrangler bundles `src/lib/canonical-host.ts` into the
 Function without that alias, so the file imports nothing.
