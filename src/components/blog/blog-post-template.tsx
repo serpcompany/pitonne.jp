@@ -5,6 +5,7 @@ import { BlogDiscoverySection } from '@/components/blog/blog-discovery-section'
 import { BlogSidebar } from '@/components/blog/blog-sidebar'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
+import { blogContentParts } from '@/lib/blog-content-parts'
 import { type BlogPost, localizeBlogContentHref } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Service } from '@/lib/data/services'
@@ -12,8 +13,6 @@ import { getVideoBySlug } from '@/lib/data/videos'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { blogPostingJsonLd } from '@/lib/structured-data'
-
-const videoEmbedPattern = /\{\{video:([a-z0-9-]+)\}\}/g
 
 export interface BlogPostViewModel {
   slug: string
@@ -85,10 +84,10 @@ function markdownComponents(locale: Locale): Components {
 }
 
 function MarkdownContent({ content, locale }: { content: string; locale: Locale }) {
-  const segments = content.split(videoEmbedPattern)
+  const parts = blogContentParts(content)
   const components = markdownComponents(locale)
 
-  if (segments.length === 1) {
+  if (parts.length === 1) {
     return (
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {content}
@@ -96,17 +95,10 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
     )
   }
 
-  let offset = 0
-  const parts = segments.map((segment, index) => {
-    const part = { segment, key: `${index % 2 === 1 ? 'video' : 'text'}-${offset}` }
-    offset += segment.length
-    return part
-  })
-
   return (
     <>
-      {parts.map(({ segment, key }) => {
-        if (key.startsWith('video-')) {
+      {parts.map(({ kind, key, segment }) => {
+        if (kind === 'video') {
           return <BlogVideoEmbed key={key} slug={segment} locale={locale} />
         }
 
