@@ -34,7 +34,7 @@ The `staging` and `main` rulesets require `test`. Once these workflows are on bo
 owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and may add `e2e` and
 `lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
 required workflow starts on every pull request, with no `paths` filter, so its check always
-reports: a docs-only change skips work inside the jobs, never the jobs. `Code review` isn't a
+reports: a docs-only pull request skips work inside the jobs, never the jobs. `Code review` isn't a
 required check, as SERP's standard sets: its findings are review threads, and the merge waits for
 every thread to be resolved instead.
 
@@ -59,8 +59,11 @@ to `staging` and `main` gets a run of its own, so none is cancelled. It starts o
 `scripts/draft-only-change.mjs <before> <after>` compares the pushed commits, or a pull
 request's merge commit with its base:
 
-- `docs`: every changed file is a doc (`docs/`, a root `*.md`, or a skill under
-  `.claude/skills/`), which the build never reads.
+- `docs` (pull requests): every changed file is a doc (`docs/`, a root `*.md`, or a skill under
+  `.claude/skills/`), which the build never reads. A push is never docs-only: its checks also
+  stand for the commits under it, which promotion and the fast path trust, so a docs commit on
+  top of one that failed `e2e` must fail `e2e` too. A push builds and runs both suites unless
+  its tree has receipts.
 - `skip` (pushes): the push changes only blog posts that are drafts before and after, such as a
   draft saved in the CMS, so the built site doesn't change and nothing deploys.
 - `fast` (pushes): deploy without waiting for this run's checks, because either the push changes
@@ -89,9 +92,9 @@ the code deploy can need it.
 the production export, runs `pnpm audit:out` and `pnpm audit:seo` on it, and hands it to `e2e`
 and `lighthouse` as the `site-production` artifact. These are the steps of `pnpm check` after
 `pnpm verify`, listed rather than calling `pnpm check`, so a step added to one is added to the
-other by hand. It skips the build and the audits on a docs-only change, and on a push whose tree
-has both suites' receipts. It needs `changes`, and fails when `changes` didn't succeed: a skipped
-required check would count as passed.
+other by hand. It skips the build and the audits on a docs-only pull request, and on a push
+whose tree has both suites' receipts. It needs `changes`, and fails when `changes` didn't
+succeed: a skipped required check would count as passed.
 
 **`e2e`** runs the browser journeys ([`verification.md`](verification.md#browser-journeys)) on
 that export: it installs Chromium (`~/.cache/ms-playwright` is cached under the lockfile's hash),
@@ -108,7 +111,8 @@ Google Tag Manager, LeadConnector and msgsndr, so only this repository's code is
 load through GTM, such as the LeadConnector chat widget, behaved differently between runs.
 
 Both are slow suites, so a draft pull request skips them (`draft == false`), and a docs-only
-change or a receipt skips their steps, never the jobs, so the deploy that needs them still runs.
+pull request or a receipt skips their steps, never the jobs, so the deploy that needs them still
+runs.
 
 ### Receipts
 

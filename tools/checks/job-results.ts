@@ -7,6 +7,7 @@ type Result = 'success' | 'failure' | 'skipped'
 export type Scenario = {
   github: { [key: string]: Value }
   outputs?: Record<string, Record<string, string>>
+  steps?: Record<string, Record<string, Record<string, string>>>
   failing?: readonly string[]
   vars?: Record<string, string>
   secrets?: Record<string, string>
@@ -123,6 +124,21 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
     return results[id]
   }
 
+  function outputsOf(id: string): Record<string, string> {
+    const given = scenario.outputs?.[id]
+    if (given) return given
+    const steps = Object.fromEntries(
+      Object.entries(scenario.steps?.[id] ?? {}).map(([step, outputs]) => [step, { outputs }])
+    )
+    const scope = { github: scenario.github, steps }
+    return Object.fromEntries(
+      Object.entries(workflow.jobs[id]?.outputs ?? {}).map(([name, value]) => [
+        name,
+        interpolate(String(value), scope)
+      ])
+    )
+  }
+
   function scopeOf(id: string): { [key: string]: Value } {
     const scope: { [key: string]: Value } = {
       github: scenario.github,
@@ -133,7 +149,7 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
           each,
           {
             result: resultOf(each),
-            outputs: resultOf(each) === 'success' ? (scenario.outputs?.[each] ?? {}) : {}
+            outputs: resultOf(each) === 'success' ? outputsOf(each) : {}
           }
         ])
       )

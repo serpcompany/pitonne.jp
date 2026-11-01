@@ -97,9 +97,9 @@ and `main` ([`ci.md`](ci.md#ciyml)), so CI on the final commit is the record of 
 | --- | --- | --- |
 | SERP's shared checks | `pnpm verify`; the git hooks | `verify` |
 | Lint, types, unit tests, `audit:meta` | The inner loop; `pnpm check` | `test` |
-| The production build, `audit:out`, `audit:seo` | `pnpm check` | `test`, except on a docs-only change or a tree that passed the slow suites; each deploy builds its own environment |
-| Browser journeys | `pnpm test:e2e` after a build | `e2e`, on `test`'s build; not on drafts |
-| Lighthouse | `pnpm test:lighthouse` after a build | `lighthouse`, on `test`'s build; not on drafts |
+| The production build, `audit:out`, `audit:seo` | `pnpm check` | `test`, except on a docs-only pull request or a pushed tree that passed the slow suites; each deploy builds its own environment |
+| Browser journeys | `pnpm test:e2e` after a build | `e2e`, on `test`'s build; not on drafts or docs-only pull requests |
+| Lighthouse | `pnpm test:lighthouse` after a build | `lighthouse`, on `test`'s build; not on drafts or docs-only pull requests |
 | Each environment as deployed | `verify-site` | Each deploy's smoke test |
 
 CI lists `pnpm check`'s steps rather than calling it, so a step added to one is added to the

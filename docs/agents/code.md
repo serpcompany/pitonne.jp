@@ -60,8 +60,9 @@ Don't add `base-nova` components beside it; a move to `base-nova` is one change 
 
 Tailwind builds the site's CSS from `src/` and `content/` only (`source(none)` and the two
 `@source` lines in `src/app/globals.css`), so a doc, workflow, test or script can name a utility
-without adding it to the site, and CI can skip the build for a docs-only change. Class names
-anywhere else, such as a new top-level folder of components, need an `@source` line of their own.
+without adding it to the site, and CI can skip the build for a docs-only pull request. Class
+names anywhere else, such as a new top-level folder of components, need an `@source` line of
+their own.
 
 ## Tests
 

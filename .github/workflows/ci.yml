@@ -25,7 +25,7 @@ jobs:
       checks: read
       actions: read
     outputs:
-      docs: ${{ steps.classify.outputs.docs_only }}
+      docs: ${{ github.event_name == 'pull_request' && steps.classify.outputs.docs_only || 'false' }}
       skip: ${{ steps.classify.outputs.skip }}
       fast: ${{ steps.fast.outputs.fast }}
       tree: ${{ steps.receipts.outputs.tree }}

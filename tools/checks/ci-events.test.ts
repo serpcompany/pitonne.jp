@@ -7,14 +7,15 @@ const repository = 'serpcompany/pitonne.jp'
 
 type Classified = { docs?: boolean; skip?: boolean; fast?: boolean; receipts?: boolean }
 
-const outputs = ({ docs = false, skip = false, fast = false, receipts = false }: Classified) => ({
+const steps = ({ docs = false, skip = false, fast = false, receipts = false }: Classified) => ({
   changes: {
-    docs: String(docs),
-    skip: String(skip),
-    fast: String(fast),
-    tree: 'a1b2c3',
-    e2e: receipts ? 'passed' : 'run',
-    lighthouse: receipts ? 'passed' : 'run'
+    classify: { docs_only: String(docs), skip: String(skip) },
+    fast: { fast: String(fast) },
+    receipts: {
+      tree: 'a1b2c3',
+      e2e: receipts ? 'passed' : 'run',
+      lighthouse: receipts ? 'passed' : 'run'
+    }
   }
 })
 
@@ -36,14 +37,14 @@ function pullRequest(
         }
       }
     },
-    outputs: outputs(classified),
+    steps: steps(classified),
     failing
   }
 }
 
 const push = (branch: string, classified: Classified = {}, failing: string[] = []): Scenario => ({
   github: { event_name: 'push', repository, ref_name: branch, event: {} },
-  outputs: outputs(classified),
+  steps: steps(classified),
   failing
 })
 
@@ -105,6 +106,18 @@ describe('what CI runs on a pull request into staging', () => {
 describe('what CI runs on a push', () => {
   it('checks a code push to staging in full, then deploys Staging', () => {
     expect(ran(push('staging'))).toEqual([...checks, 'deploy'])
+  })
+
+  it('builds and drives a docs-only push like any other, since its checks vouch for the commits under it', () => {
+    const docs = run(push('staging', { docs: true }))
+    expect(ran(push('staging', { docs: true }))).toEqual([...checks, 'deploy'])
+    expect(docs.stepRuns('test', 'Build the production export')).toBe(true)
+    expect(
+      docs.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
+    ).toBe(true)
+    expect(docs.stepRuns('lighthouse', 'Score eight pages with Lighthouse')).toBe(true)
+    const tested = run(push('staging', { docs: true, receipts: true }))
+    expect(tested.stepRuns('test', 'Build the production export')).toBe(false)
   })
 
   it('skips the slow suites and the check build on a tree whose receipts it found', () => {
