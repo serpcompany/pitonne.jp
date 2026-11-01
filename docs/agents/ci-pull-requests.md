@@ -131,6 +131,14 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
   token into `.git/config` as the remote's URL, whatever the checkout does
   (`persist-credentials: false`), and `/proc` holds the process's environment, with the Claude
   token.
+- **What the reviewer can write:** only `tmp/review-summary.md`. Claude Code checks every
+  file-editing tool, the Write tool included, against `Edit(path)` rules, and never matches a
+  `Write(path)` rule, while a bare `Write` would allow every path. So the one allow rule is
+  `Edit(./tmp/review-summary.md)`. The action runs Claude Code headless in its default mode, which
+  denies any write no rule allows. Its permission docs don't say whether an allow rule reaches
+  past the working directory, so the runner's folders that later steps use are denied outright:
+  `_temp`, which holds `$GITHUB_ENV` (and so `BASH_ENV`) and the review's scripts, `_actions`, the
+  tool cache with Node, and the dot folders in its home, such as `~/.local/bin`.
 - **Where it differs from zenbujapanese-monorepo's review,** which posts as `claude[bot]` with
   the Claude app's token: here a token limited to the job's permissions, which expires with the
   job, posts, so a reviewer steered by text injected into a pull request or its issue can

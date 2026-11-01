@@ -175,8 +175,8 @@ jobs:
             --strict-mcp-config
             --append-system-prompt-file ${{ runner.temp }}/review-context.md
             --append-subagent-system-prompt-file ${{ runner.temp }}/review-context.md
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Write,Agent,Task,Read,Glob,Grep"
-            --disallowedTools "Read(./.git/**),Edit(./.git/**),Read(//proc/**)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Edit(./tmp/review-summary.md),Agent,Task,Read,Glob,Grep"
+            --disallowedTools "Read(./.git/**),Edit(./.git/**),Read(//proc/**),Edit(//home/runner/work/_temp/**),Edit(//home/runner/work/_actions/**),Edit(//opt/hostedtoolcache/**),Edit(~/.*/**)"
 
       - name: Take the scripts again, so nothing the reviewer wrote runs with the token
         if: ${{ !cancelled() && steps.fast.outputs.passed == 'true' }}

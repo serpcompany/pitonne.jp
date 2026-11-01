@@ -84,7 +84,7 @@ describe('the Code review workflow', () => {
       'Bash(gh pr view:*)',
       'Bash(gh pr diff:*)',
       'Bash(gh issue view:*)',
-      'Write',
+      'Edit(./tmp/review-summary.md)',
       'Agent',
       'Task',
       'Read',
@@ -94,8 +94,14 @@ describe('the Code review workflow', () => {
     expect(toolList('--disallowedTools')).toEqual([
       'Read(./.git/**)',
       'Edit(./.git/**)',
-      'Read(//proc/**)'
+      'Read(//proc/**)',
+      'Edit(//home/runner/work/_temp/**)',
+      'Edit(//home/runner/work/_actions/**)',
+      'Edit(//opt/hostedtoolcache/**)',
+      'Edit(~/.*/**)'
     ])
+    expect(reviewer.env?.SUMMARY_FILE).toBe('tmp/review-summary.md')
+    expect(toolList('--allowedTools')).not.toContain('Write')
     const checkout = step(
       reviewer,
       "Check out the whole repository, with its history, at the pull request's head"
