@@ -24,6 +24,7 @@
     "audit:sheet-images": "node scripts/audit-sheet-images.mjs",
     "translate": "node scripts/translate-content.ts",
     "drafts:fetch": "node scripts/fetch-google-docs.mjs",
+    "verify": "serp-verify",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
     "@lhci/cli": "^0.15.1",
+    "@serpcompany/verify": "^0.1.1",
     "@tailwindcss/postcss": "^4.2.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -52,6 +54,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "happy-dom": "^21.0.4",
+    "lefthook": "^2.2.2",
     "postcss": "^8.5",
     "saxes": "^6.0.0",
     "schema-dts": "^2.1.0",
