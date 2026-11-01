@@ -108,8 +108,9 @@ which deploys at once, since the commit already passed its checks. It runs one a
 
 - It refuses when `main` has commits `staging` lacks (Sync staging hasn't caught up, or failed on
   a conflict), and when the `staging` commit hasn't passed each of CI's checks (`CHECKS` in the
-  step: `verify`, `test`, `e2e` and `lighthouse`). When `main` is already at `staging`, it
-  succeeds with nothing to promote.
+  step: `verify`, `test`, `e2e` and `lighthouse`) in CI's run for its push to `staging`, as
+  `scripts/ci-passed.mjs` checks ([`ci.md`](ci.md#ciyml)); when GitHub can't be asked, it
+  refuses too. When `main` is already at `staging`, it succeeds with nothing to promote.
 - It pushes with `RELEASE_DEPLOY_KEY`, a deploy key that bypasses the `main` ruleset, so the
   ruleset checks nothing about this push, required checks included: the checks above are what
   protect `main`. A push with Actions' own token wouldn't start CI, so Production wouldn't deploy.

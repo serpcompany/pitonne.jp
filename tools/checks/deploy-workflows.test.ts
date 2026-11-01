@@ -56,12 +56,20 @@ describe('CI and deploy workflows', () => {
     expect(allText(changes)).not.toContain('BEFORE')
   })
 
-  it('deploys a commit that already passed every check (a promotion) without checking it again', () => {
-    const fast = step(job(ci, 'changes'), 'fast')
+  it('deploys a commit that already passed every check in CI for a push (a promotion) without checking it again', () => {
+    const changes = job(ci, 'changes')
+    const fast = step(changes, 'fast')
     expect(fast.env?.CHECKS?.split(' ')).toEqual(CHECKS)
-    expect(fast.run).toContain('commits/$GITHUB_SHA/check-runs?check_name=$check')
-    expect(fast.run).toContain('select(.conclusion == "success")')
-    expect(fast.run).toContain('|| passed=0')
+    expect(fast.env?.GITHUB_TOKEN).toBe(expression('github.token'))
+    expect(fast.run).toContain(
+      'elif node scripts/ci-passed.mjs checks "$GITHUB_SHA" staging,main "$CHECKS"; then'
+    )
+    expect(step(changes, 'receipts').run).toContain(
+      'if [ "$GITHUB_EVENT_NAME" = push ] && node scripts/ci-passed.mjs receipt "$suite" "$tree"; then'
+    )
+    expect(changes.permissions).toEqual({ contents: 'read', checks: 'read', actions: 'read' })
+    for (const workflow of [ci, promote])
+      expect(allText(workflow)).not.toMatch(/check-runs|actions\/artifacts/)
   })
 
   it('alerts the owner when a check or a Production deploy fails on main instead of blocking publishing', () => {
@@ -217,10 +225,19 @@ describe('staging sync and promotion workflows', () => {
     expect(promote.on).not.toHaveProperty('push')
     const script = workflowScripts(promote)
     expect(script).toContain('git merge-base --is-ancestor origin/main origin/staging')
-    expect(script).toContain('check-runs?check_name=$check')
-    expect(step(job(promote, 'promote'), 'Check staging can be promoted').env?.CHECKS).toBe(
-      CHECKS.join(' ')
+    expect(script).toContain(
+      'if ! node scripts/ci-passed.mjs checks "$staging" staging "$CHECKS"; then'
     )
+    const check = step(job(promote, 'promote'), 'Check staging can be promoted')
+    expect(check.env).toEqual({
+      GITHUB_TOKEN: expression('github.token'),
+      CHECKS: CHECKS.join(' ')
+    })
+    expect(promote.permissions).toEqual({ contents: 'read', checks: 'read', actions: 'read' })
+    const checkout = job(promote, 'promote').steps?.find(each =>
+      each.uses?.startsWith('actions/checkout@')
+    )
+    expect(checkout?.with?.['sparse-checkout']).toBeUndefined()
     expect(script).toContain('git push origin "$STAGING_SHA:refs/heads/main"')
     expect(allText(promote)).not.toMatch(/--force|\+refs|-f /)
   })

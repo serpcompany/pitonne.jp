@@ -42,7 +42,7 @@ jobs:
       - id: fast
         if: github.event_name == 'push'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
           CHECKS: verify test e2e lighthouse
         run: |
@@ -50,29 +50,22 @@ jobs:
           if [ "$CONTENT_ONLY" = true ]; then
             fast=true
             echo "Only CMS content changed; deploying without waiting for the checks."
-          else
-            missing=""
-            for check in $CHECKS; do
-              passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=$check" \
-                --jq '[.check_runs[] | select(.conclusion == "success")] | length') || passed=0
-              [ "${passed:-0}" -gt 0 ] || missing="$missing $check"
-            done
-            if [ -z "$missing" ]; then fast=true; echo "This commit already passed $CHECKS; deploying now."; fi
+          elif node scripts/ci-passed.mjs checks "$GITHUB_SHA" staging,main "$CHECKS"; then
+            fast=true
+            echo "This commit already passed $CHECKS in CI for a push to staging or main; deploying now."
           fi
           echo "fast=$fast" >> "$GITHUB_OUTPUT"
       - id: receipts
         env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY_ID: ${{ github.repository_id }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           tree=$(git rev-parse 'HEAD^{tree}')
           echo "tree=$tree" >> "$GITHUB_OUTPUT"
           for suite in e2e lighthouse; do
             state=run
-            if [ "$GITHUB_EVENT_NAME" = push ]; then
-              found=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=passed-$suite-$tree" --jq \
-                "[.artifacts[] | select(.expired | not) | select(.workflow_run.head_repository_id == $REPOSITORY_ID)] | length") || found=0
-              if [ "${found:-0}" -gt 0 ]; then state=passed; echo "$suite passed on this tree ($tree) before, so its steps skip."; fi
+            if [ "$GITHUB_EVENT_NAME" = push ] && node scripts/ci-passed.mjs receipt "$suite" "$tree"; then
+              state=passed
+              echo "$suite passed on this tree ($tree) before, so its steps skip."
             fi
             echo "$suite=$state" >> "$GITHUB_OUTPUT"
           done

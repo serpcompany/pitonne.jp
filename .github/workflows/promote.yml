@@ -10,6 +10,7 @@ concurrency:
 permissions:
   contents: read
   checks: read
+  actions: read
 
 jobs:
   promote:
@@ -34,7 +35,7 @@ jobs:
 
       - name: Check staging can be promoted
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           CHECKS: verify test e2e lighthouse
         run: |
           git fetch --prune origin
@@ -48,14 +49,10 @@ jobs:
             echo "::error::main has commits staging doesn't have. Let Sync staging finish (or resolve its conflict), then run this again."
             exit 1
           fi
-          for check in $CHECKS; do
-            passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$staging/check-runs?check_name=$check" \
-              --jq '[.check_runs[] | select(.conclusion == "success")] | length')
-            if [ "${passed:-0}" -eq 0 ]; then
-              echo "::error::staging ($staging) hasn't passed CI's $check job; wait for it or fix it first."
-              exit 1
-            fi
-          done
+          if ! node scripts/ci-passed.mjs checks "$staging" staging "$CHECKS"; then
+            echo "::error::staging ($staging) hasn't passed each of $CHECKS in CI's run for its push to staging; wait for it or fix it first."
+            exit 1
+          fi
           echo "STAGING_SHA=$staging" >> "$GITHUB_ENV"
           {
             echo "### Promoting to Production"
