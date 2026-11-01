@@ -9,7 +9,6 @@ concurrency:
 
 permissions:
   contents: read
-  checks: read
   actions: read
 
 jobs:

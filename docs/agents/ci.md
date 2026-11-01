@@ -24,7 +24,7 @@ expression; values reach scripts through `env:`. These tests hold the workflows 
 | `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install, no expressions in scripts |
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
-| `scripts/ci-passed.test.mjs` | Which check runs and receipts count as passed |
+| `scripts/ci-passed.test.mjs` | Which CI runs and receipts count as passed |
 | `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `close-issues.test.ts` | The pull request checks and the issue closing |
 | `tools/checks/code-review.test.ts` | Who gets a review, when, and with which model |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
@@ -71,10 +71,11 @@ request's merge commit with its base:
   only the files Keystatic edits (`content/blog/`, `content/blog-categories/` and the feature
   images under `public/images/content/blog/`), or this exact commit already passed every check
   (`verify`, `test`, `e2e` and `lighthouse`) in CI for a push to `staging` or `main`, such as a
-  promotion of a commit tested on `staging`. `scripts/ci-passed.mjs` decides it: a successful
-  check run counts only when GitHub Actions made it, for this commit, in the run its link names,
-  and that run is `ci.yml`'s for a push to one of those branches. A pull request's run tested a
-  merge commit, never this one, so it doesn't count. An API error means waiting for the checks.
+  promotion of a commit tested on `staging`. `scripts/ci-passed.mjs` decides it from CI's own
+  jobs, never from check runs, which any workflow with `checks: write` can make: it lists
+  `ci.yml`'s push runs of this commit on those branches and needs one whose four jobs all
+  succeeded, in their latest attempts. A pull request's run tested a merge commit, never this
+  one, so it doesn't count. An API error means waiting for the checks.
 - `e2e` and `lighthouse` (pushes): `passed` when the pushed tree has a receipt for that suite
   ([below](#receipts)), otherwise `run`.
 
@@ -119,14 +120,17 @@ runs.
 
 ### Receipts
 
-When `e2e` or `lighthouse` passes in a run of this repository (not a fork's), it uploads
-`passed-<suite>-<tree>`, where `<tree>` is `git rev-parse HEAD^{tree}` of the commit it tested,
-kept 30 days. On a push, `changes` looks one up for the pushed tree with
-`scripts/ci-passed.mjs`: an unexpired one counts only when this repository's run (not a fork's)
-uploaded it, and that run is `ci.yml`'s, for a push or a pull request, so no other workflow can
-leave one. A match skips that suite's steps, and an error looking means running it. The `staging`
-ruleset requires up-to-date branches, so a squash merge usually lands the tree its pull request
-run tested, and a promotion lands the tree `staging` tested.
+When `e2e` or `lighthouse` passes in a run for a push, it uploads `passed-<suite>-<tree>`, where
+`<tree>` is `git rev-parse HEAD^{tree}` of the commit it tested, kept 30 days. On a push,
+`changes` looks one up for the pushed tree with `scripts/ci-passed.mjs`: an unexpired one counts
+only when this repository's `ci.yml` uploaded it in a run for a push to `staging` or `main`. A
+match skips that suite's steps, and an error looking means running it. So a promotion, which
+lands the tree `staging` tested, skips both suites.
+
+A pull request's run uploads none, and a feature branch's push run's receipts never count: those
+runs execute the branch's own code, `ci.yml` aside. A step there can write `BASH_ENV` to
+`$GITHUB_ENV` or rewrite an action the job runs later, and so upload a receipt named for any tree,
+however honest `ci.yml` is. So a squash merge into `staging` runs both suites again.
 
 ### One build per commit and environment
 

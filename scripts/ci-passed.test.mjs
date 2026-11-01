@@ -1,19 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { runAgainstGitHub } from '../tools/checks/github-stub'
-import {
-  checksPassed,
-  ciWorkflow,
-  gitHubReader,
-  isCiRun,
-  receiptPassed,
-  runIdOf
-} from './ci-passed.mjs'
+import { checksPassed, ciWorkflow, gitHubReader, isCiPush, receiptPassed } from './ci-passed.mjs'
 
 const repository = 'serpcompany/pitonne.jp'
 const repositoryId = 1228099867
 const sha = '651a854324ed4cc4f9800ac5d7d79ef483213601'
 const tree = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
-const jobUrl = run => `https://github.com/${repository}/actions/runs/${run}/job/9${run}`
+const checks = ['verify', 'test', 'e2e', 'lighthouse']
 
 const ciRun = (id, more = {}) => ({
   id,
@@ -24,13 +17,14 @@ const ciRun = (id, more = {}) => ({
   ...more
 })
 
-const checkRun = (run, more = {}) => ({
-  conclusion: 'success',
-  head_sha: sha,
-  app: { slug: 'github-actions' },
-  details_url: jobUrl(run),
-  ...more
-})
+const job = (name, conclusion = 'success') => ({ name, conclusion })
+const allPassed = () => checks.map(name => job(name))
+
+const runsPath = `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
+const jobsPath = id => `/repos/${repository}/actions/runs/${id}/jobs?filter=latest&per_page=100`
+const runPath = id => `/repos/${repository}/actions/runs/${id}`
+const artifactsPath = suite =>
+  `/repos/${repository}/actions/artifacts?name=passed-${suite}-${tree}&per_page=100`
 
 function fakeGitHub(answers) {
   const asked = []
@@ -46,140 +40,111 @@ function fakeGitHub(answers) {
   }
 }
 
-const checkRunsPath = check =>
-  `/repos/${repository}/commits/${sha}/check-runs?check_name=${check}&per_page=100`
-const runPath = id => `/repos/${repository}/actions/runs/${id}`
-const artifactsPath = suite =>
-  `/repos/${repository}/actions/artifacts?name=passed-${suite}-${tree}&per_page=100`
-
-async function passedWith(checkRuns, runs, { checks = ['test'], branches = ['staging'] } = {}) {
-  const answers = Object.fromEntries(
-    checks.map(check => [checkRunsPath(check), { check_runs: checkRuns }])
-  )
-  for (const run of runs) answers[runPath(run.id)] = run
+async function passedWith(runs, jobsOf, { branches = ['staging'], names = checks } = {}) {
+  const answers = { [runsPath]: { workflow_runs: runs } }
+  for (const run of runs) answers[jobsPath(run.id)] = { jobs: jobsOf(run.id) }
   const log = []
-  const { read } = fakeGitHub(answers)
+  const { read, asked } = fakeGitHub(answers)
   const passed = await checksPassed(read, {
     repository,
     sha,
-    checks,
+    checks: names,
     branches,
     log: line => log.push(line)
   })
-  return { passed, log }
+  return { passed, log, asked }
 }
 
-describe('a check counts as passed only when CI ran it for a push of that commit', () => {
-  it('counts a successful check run of a ci.yml push run on the branch, at that commit', async () => {
-    const { passed, log } = await passedWith([checkRun(1)], [ciRun(1)])
+describe('a commit counts as passed only when one CI push run on staging or main passed every job', () => {
+  it('counts a ci.yml push run on the branch, at that commit, whose named jobs all succeeded', async () => {
+    const { passed, log, asked } = await passedWith([ciRun(1)], allPassed)
     expect(passed).toBe(true)
-    expect(log).toEqual([`test passed on ${sha} in CI's push run 1 on staging.`])
-  })
-
-  it('needs every check it names', async () => {
-    const answers = {
-      [checkRunsPath('verify')]: { check_runs: [checkRun(1)] },
-      [checkRunsPath('test')]: { check_runs: [] },
-      [runPath(1)]: ciRun(1)
-    }
-    const log = []
-    const { read } = fakeGitHub(answers)
-    const passed = await checksPassed(read, {
-      repository,
-      sha,
-      checks: ['verify', 'test'],
-      branches: ['staging'],
-      log: line => log.push(line)
-    })
-    expect(passed).toBe(false)
-    expect(log.at(-1)).toBe(
-      `test didn't pass on ${sha} in a run of ${ciWorkflow} for a push to staging.`
-    )
+    expect(log).toEqual([`${checks.join(', ')} passed on ${sha} in CI's push run 1 on staging.`])
+    expect(asked).toEqual([runsPath, jobsPath(1)])
   })
 
   it.each([
-    [
-      'a pull request run, which tested a merge commit',
-      [checkRun(1)],
-      [ciRun(1, { event: 'pull_request' })]
-    ],
-    ['another workflow', [checkRun(1)], [ciRun(1, { path: '.github/workflows/other.yml' })]],
-    ['a push to another branch', [checkRun(1)], [ciRun(1, { head_branch: 'issue-12-form' })]],
-    ['a run of another commit', [checkRun(1)], [ciRun(1, { head_sha: 'f'.repeat(40) })]],
-    ['a check run that failed', [checkRun(1, { conclusion: 'failure' })], [ciRun(1)]],
-    ['a check run another app made', [checkRun(1, { app: { slug: 'some-app' } })], [ciRun(1)]],
-    [
-      'a details link into another repository',
-      [checkRun(1, { details_url: 'https://github.com/someone/pitonne.jp/actions/runs/1/job/91' })],
-      [ciRun(1)]
-    ],
-    ['no check run at all', [], []]
-  ])('never counts %s', async (_, checkRuns, runs) => {
-    expect((await passedWith(checkRuns, runs)).passed).toBe(false)
+    ['a run of another workflow', ciRun(1, { path: '.github/workflows/other.yml' })],
+    ['a pull request run, which tested a merge commit', ciRun(1, { event: 'pull_request' })],
+    ['a push to another branch', ciRun(1, { head_branch: 'issue-12-form' })],
+    ['a run of another commit', ciRun(1, { head_sha: 'f'.repeat(40) })]
+  ])('never counts %s, whatever its jobs say', async (_, run) => {
+    const { passed, asked } = await passedWith([run], allPassed)
+    expect(passed).toBe(false)
+    expect(asked).toEqual([runsPath])
   })
 
-  it('takes a run on any branch it is given, such as staging or main for the fast path', async () => {
+  it('needs every named job to succeed, in one run', async () => {
+    const failed = await passedWith([ciRun(1)], () => [
+      ...allPassed().slice(0, 2),
+      job('e2e', 'failure')
+    ])
+    expect(failed.passed).toBe(false)
+    expect(failed.log.at(-1)).toBe(
+      `${checks.join(', ')} didn't all pass on ${sha} in one run of ${ciWorkflow} for a push to staging.`
+    )
+    const split = await passedWith([ciRun(1), ciRun(2)], id =>
+      id === 1 ? allPassed().slice(0, 2) : allPassed().slice(2)
+    )
+    expect(split.passed).toBe(false)
+  })
+
+  it('looks past a run that doesn’t count to one that does', async () => {
+    const runs = [ciRun(1, { head_branch: 'issue-12-form' }), ciRun(2, { head_branch: 'main' })]
+    const { passed, asked } = await passedWith(runs, allPassed, { branches: ['staging', 'main'] })
+    expect(passed).toBe(true)
+    expect(asked).toEqual([runsPath, jobsPath(2)])
+  })
+
+  it('takes only the branches it is given: staging and main for the fast path, staging for promote', async () => {
     const onMain = [ciRun(1, { head_branch: 'main' })]
-    expect(
-      (await passedWith([checkRun(1)], onMain, { branches: ['staging', 'main'] })).passed
-    ).toBe(true)
-    expect((await passedWith([checkRun(1)], onMain, { branches: ['staging'] })).passed).toBe(false)
-  })
-
-  it('looks past a check run that doesn’t count to one that does', async () => {
-    const runs = [ciRun(1, { event: 'pull_request' }), ciRun(2)]
-    expect((await passedWith([checkRun(1), checkRun(2)], runs)).passed).toBe(true)
+    expect((await passedWith(onMain, allPassed, { branches: ['staging', 'main'] })).passed).toBe(
+      true
+    )
+    expect((await passedWith(onMain, allPassed, { branches: ['staging'] })).passed).toBe(false)
   })
 
   it('says not passed when GitHub can’t be asked', async () => {
-    const { read } = fakeGitHub({ [checkRunsPath('test')]: new Error('GET … returned 502') })
+    const { read } = fakeGitHub({ [runsPath]: new Error('GET … returned 502') })
     const log = []
     const passed = await checksPassed(read, {
       repository,
       sha,
-      checks: ['test'],
+      checks,
       branches: ['staging'],
       log: line => log.push(line)
     })
     expect(passed).toBe(false)
     expect(log[0]).toBe(
-      `::warning::Couldn't tell whether test passed on ${sha}: GET … returned 502`
+      `::warning::Couldn't tell whether ${checks.join(', ')} passed on ${sha}: GET … returned 502`
     )
   })
 
   it('passes nothing for an empty list of checks or branches', async () => {
-    expect((await passedWith([checkRun(1)], [ciRun(1)], { checks: [] })).passed).toBe(false)
-    expect((await passedWith([checkRun(1)], [ciRun(1)], { branches: [] })).passed).toBe(false)
+    expect((await passedWith([ciRun(1)], allPassed, { names: [] })).passed).toBe(false)
+    expect((await passedWith([ciRun(1)], allPassed, { branches: [] })).passed).toBe(false)
+  })
+
+  it('knows a CI push by its workflow file, event, branch and commit', () => {
+    expect(isCiPush(ciRun(1), { sha })).toBe(true)
+    expect(isCiPush(ciRun(1, { head_branch: 'main' }))).toBe(true)
+    expect(isCiPush(ciRun(1, { head_branch: 'issue-12-form' }))).toBe(false)
+    expect(isCiPush(null)).toBe(false)
   })
 })
 
-describe('reading a run and a check run', () => {
-  it('takes the run from a job link of this repository on this server only', () => {
-    expect(runIdOf(jobUrl(40513860827), { repository })).toBe('40513860827')
-    expect(runIdOf(jobUrl(7), { repository, server: 'https://ghe.example.com' })).toBeNull()
-    expect(runIdOf('not a link', { repository })).toBeNull()
-    expect(runIdOf(`https://github.com/${repository}/actions/runs/7`, { repository })).toBeNull()
-  })
-
-  it('knows a CI run by its workflow file, event, branch and commit', () => {
-    expect(isCiRun(ciRun(1), { events: ['push'], branches: ['staging'], sha })).toBe(true)
-    expect(isCiRun(ciRun(1), { events: ['pull_request'] })).toBe(false)
-    expect(isCiRun(null, { events: ['push'] })).toBe(false)
-  })
-})
-
-describe('a receipt counts only when CI uploaded it in a run of this repository', () => {
+describe('a receipt counts only when CI uploaded it in a push run on staging or main', () => {
   const artifact = (id, more = {}) => ({
     name: `passed-e2e-${tree}`,
     expired: false,
-    workflow_run: { id, head_repository_id: repositoryId },
+    workflow_run: { id, head_repository_id: repositoryId, head_branch: 'staging' },
     ...more
   })
 
   async function receipt(artifacts, runs) {
     const answers = { [artifactsPath('e2e')]: { artifacts } }
     for (const run of runs) answers[runPath(run.id)] = run
-    const { read } = fakeGitHub(answers)
+    const { read, asked } = fakeGitHub(answers)
     const log = []
     const passed = await receiptPassed(read, {
       repository,
@@ -188,24 +153,51 @@ describe('a receipt counts only when CI uploaded it in a run of this repository'
       tree,
       log: line => log.push(line)
     })
-    return { passed, log }
+    return { passed, log, asked }
   }
 
-  it.each([
-    ['push', ciRun(1)],
-    ['pull_request', ciRun(1, { event: 'pull_request', head_branch: 'issue-12-form' })]
-  ])('counts one from a ci.yml %s run', async (_, run) => {
-    expect((await receipt([artifact(1)], [run])).passed).toBe(true)
+  it.each(['staging', 'main'])('counts one from a ci.yml push run on %s', async branch => {
+    const run = ciRun(1, { head_branch: branch })
+    const found = await receipt(
+      [
+        artifact(1, {
+          workflow_run: { id: 1, head_repository_id: repositoryId, head_branch: branch }
+        })
+      ],
+      [run]
+    )
+    expect(found.passed).toBe(true)
+    expect(found.log).toEqual([`e2e passed on tree ${tree} in CI's push run 1 on ${branch}.`])
   })
 
   it.each([
-    ['another workflow’s', [artifact(1)], [ciRun(1, { path: '.github/workflows/upload.yml' })]],
-    ['a fork’s', [artifact(1, { workflow_run: { id: 1, head_repository_id: 1 } })], [ciRun(1)]],
-    ['an expired', [artifact(1, { expired: true })], [ciRun(1)]],
-    ['another event’s', [artifact(1)], [ciRun(1, { event: 'workflow_dispatch' })]],
-    ['another name’s', [artifact(1, { name: 'passed-e2e-0000' })], [ciRun(1)]]
-  ])('never counts %s', async (_, artifacts, runs) => {
-    expect((await receipt(artifacts, runs)).passed).toBe(false)
+    [
+      'a push to a feature branch, whose ci.yml is whatever that branch says',
+      artifact(1, {
+        workflow_run: { id: 1, head_repository_id: repositoryId, head_branch: 'issue-12-form' }
+      }),
+      ciRun(1, { head_branch: 'issue-12-form' })
+    ],
+    [
+      'a pull request run, even with ci.yml unchanged, since the pull request’s code ran in it',
+      artifact(1),
+      ciRun(1, { event: 'pull_request' })
+    ],
+    [
+      'a pull request run that edited ci.yml',
+      artifact(1),
+      ciRun(1, { event: 'pull_request', path: ciWorkflow, head_branch: 'issue-12-form' })
+    ],
+    ['another workflow’s', artifact(1), ciRun(1, { path: '.github/workflows/upload.yml' })],
+    [
+      'a fork’s',
+      artifact(1, { workflow_run: { id: 1, head_repository_id: 1, head_branch: 'staging' } }),
+      ciRun(1)
+    ],
+    ['an expired one', artifact(1, { expired: true }), ciRun(1)],
+    ['one with another name', artifact(1, { name: 'passed-e2e-0000' }), ciRun(1)]
+  ])('never counts %s', async (_, uploaded, run) => {
+    expect((await receipt([uploaded], [run])).passed).toBe(false)
   })
 
   it('says not passed when GitHub can’t be asked', async () => {
@@ -257,32 +249,26 @@ describe('the GitHub reader', () => {
 })
 
 describe('the command line', () => {
-  const environment = {
-    GITHUB_REPOSITORY_ID: String(repositoryId),
-    GITHUB_SERVER_URL: 'https://github.com'
-  }
+  const environment = { GITHUB_REPOSITORY_ID: String(repositoryId) }
+  const answering =
+    answers =>
+    ({ path }) =>
+      answers[path] ? { status: 200, body: answers[path] } : undefined
 
-  it('exits 0 when every check passed in CI, and 1 when GitHub refuses', async () => {
+  it('exits 0 when every check passed in a CI push run, and 1 when GitHub refuses', async () => {
     const answers = {
-      [checkRunsPath('verify')]: { check_runs: [checkRun(5)] },
-      [checkRunsPath('test')]: { check_runs: [checkRun(5)] },
-      [runPath(5)]: ciRun(5)
+      [runsPath]: { workflow_runs: [ciRun(5)] },
+      [jobsPath(5)]: { jobs: [job('verify'), job('test')] }
     }
     const passed = await runAgainstGitHub(
       'scripts/ci-passed.mjs',
       ['checks', sha, 'staging,main', 'verify test'],
-      {
-        event: {},
-        env: environment,
-        route: ({ path }) => (answers[path] ? { status: 200, body: answers[path] } : undefined)
-      }
+      { event: {}, env: environment, route: answering(answers) }
     )
     expect(passed.status).toBe(0)
     expect(passed.requests.map(({ method, path }) => `${method} ${path}`)).toEqual([
-      `GET ${checkRunsPath('verify')}`,
-      `GET ${runPath(5)}`,
-      `GET ${checkRunsPath('test')}`,
-      `GET ${runPath(5)}`
+      `GET ${runsPath}`,
+      `GET ${jobsPath(5)}`
     ])
     const refused = await runAgainstGitHub(
       'scripts/ci-passed.mjs',
@@ -293,30 +279,29 @@ describe('the command line', () => {
     expect(refused.output).toContain("::warning::Couldn't tell whether verify passed")
   })
 
-  it('exits 0 for a receipt CI uploaded, and 2 when it is run wrongly', async () => {
+  it('exits 0 for a receipt CI uploaded on staging, and 2 when it is run wrongly', async () => {
     const answers = {
       [artifactsPath('lighthouse')]: {
         artifacts: [
           {
             name: `passed-lighthouse-${tree}`,
             expired: false,
-            workflow_run: { id: 6, head_repository_id: repositoryId }
+            workflow_run: { id: 6, head_repository_id: repositoryId, head_branch: 'staging' }
           }
         ]
       },
       [runPath(6)]: ciRun(6)
     }
-    const route = ({ path }) => (answers[path] ? { status: 200, body: answers[path] } : undefined)
     const found = await runAgainstGitHub('scripts/ci-passed.mjs', ['receipt', 'lighthouse', tree], {
       event: {},
       env: environment,
-      route
+      route: answering(answers)
     })
     expect(found.status).toBe(0)
     const wrong = await runAgainstGitHub('scripts/ci-passed.mjs', ['checks', sha, 'staging'], {
       event: {},
       env: environment,
-      route
+      route: answering(answers)
     })
     expect(wrong.status).toBe(2)
   })

@@ -95,11 +95,12 @@ describe('what CI runs on a pull request into staging', () => {
     })
   })
 
-  it('records a receipt only for a run of this repository', () => {
-    expect(run(pullRequest({})).stepRuns('e2e', 'Record that this tree passed')).toBe(true)
-    expect(run(pullRequest({ fork: true })).stepRuns('e2e', 'Record that this tree passed')).toBe(
-      false
-    )
+  it('records no receipt, since the pull request’s own code ran in the job that would', () => {
+    for (const scenario of [pullRequest({}), pullRequest({ fork: true })])
+      for (const suite of ['e2e', 'lighthouse'])
+        expect(run(scenario).stepRuns(suite, 'Record that this tree passed')).toBe(false)
+    for (const suite of ['e2e', 'lighthouse'])
+      expect(run(push('staging')).stepRuns(suite, 'Record that this tree passed')).toBe(true)
   })
 })
 

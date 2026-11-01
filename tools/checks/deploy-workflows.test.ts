@@ -68,7 +68,7 @@ describe('CI and deploy workflows', () => {
     expect(step(changes, 'receipts').run).toContain(
       'if [ "$GITHUB_EVENT_NAME" = push ] && node scripts/ci-passed.mjs receipt "$suite" "$tree"; then'
     )
-    expect(changes.permissions).toEqual({ contents: 'read', checks: 'read', actions: 'read' })
+    expect(changes.permissions).toEqual({ contents: 'read', actions: 'read' })
     for (const workflow of [ci, promote])
       expect(allText(workflow)).not.toMatch(/check-runs|actions\/artifacts/)
   })
@@ -245,7 +245,7 @@ describe('staging sync and promotion workflows', () => {
       GITHUB_TOKEN: expression('github.token'),
       CHECKS: CHECKS.join(' ')
     })
-    expect(promote.permissions).toEqual({ contents: 'read', checks: 'read', actions: 'read' })
+    expect(promote.permissions).toEqual({ contents: 'read', actions: 'read' })
     const checkout = job(promote, 'promote').steps?.find(each =>
       each.uses?.startsWith('actions/checkout@')
     )

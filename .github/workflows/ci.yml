@@ -22,7 +22,6 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
-      checks: read
       actions: read
     outputs:
       docs: ${{ github.event_name == 'pull_request' && steps.classify.outputs.docs_only || 'false' }}
@@ -174,7 +173,7 @@ jobs:
       packages: read
     env:
       RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.e2e != 'passed' }}
-      RECEIPT: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+      RECEIPT: ${{ github.event_name == 'push' }}
       TREE: ${{ needs.changes.outputs.tree }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -247,7 +246,7 @@ jobs:
       packages: read
     env:
       RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.lighthouse != 'passed' }}
-      RECEIPT: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+      RECEIPT: ${{ github.event_name == 'push' }}
       TREE: ${{ needs.changes.outputs.tree }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09

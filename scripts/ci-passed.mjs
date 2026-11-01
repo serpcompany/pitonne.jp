@@ -30,55 +30,43 @@ export function gitHubReader({ token, api = 'https://api.github.com', pause = pa
   }
 }
 
-export function runIdOf(detailsUrl, { repository, server = 'https://github.com' }) {
-  let url
-  try {
-    url = new URL(String(detailsUrl ?? ''))
-  } catch {
-    return null
-  }
-  if (url.origin !== new URL(server).origin) return null
-  const found = /^\/([^/]+\/[^/]+)\/actions\/runs\/(\d+)\/job\/\d+$/.exec(url.pathname)
-  return found && found[1].toLowerCase() === repository.toLowerCase() ? found[2] : null
-}
+export const protectedBranches = ['staging', 'main']
 
-export const isCiRun = (run, { events, branches = null, sha = null }) =>
+export const isCiPush = (run, { branches = protectedBranches, sha = null } = {}) =>
   run?.path === ciWorkflow &&
-  events.includes(run.event) &&
-  (branches === null || branches.includes(run.head_branch)) &&
+  run.event === 'push' &&
+  branches.includes(run.head_branch) &&
   (sha === null || run.head_sha === sha)
 
-async function passedIn(read, { repository, sha, check, branches, server }) {
-  const listed = await read(
-    `/repos/${repository}/commits/${sha}/check-runs?check_name=${encodeURIComponent(check)}&per_page=100`
-  )
-  for (const checkRun of listed.check_runs ?? []) {
-    if (checkRun.conclusion !== 'success' || checkRun.head_sha !== sha) continue
-    if (checkRun.app?.slug !== 'github-actions') continue
-    const id = runIdOf(checkRun.details_url, { repository, server })
-    if (!id) continue
-    const run = await read(`/repos/${repository}/actions/runs/${id}`)
-    if (isCiRun(run, { events: ['push'], branches, sha })) return run
-  }
-  return null
-}
+const passedJobs = (jobs, checks) =>
+  checks.filter(check => jobs.some(job => job.name === check && job.conclusion === 'success'))
 
-export async function checksPassed(read, { repository, sha, checks, branches, server, log }) {
+export async function checksPassed(read, { repository, sha, checks, branches, log }) {
   if (!checks.length || !branches.length) return false
-  const missing = []
-  for (const check of checks) {
-    const run = await passedIn(read, { repository, sha, check, branches, server }).catch(error => {
-      log(`::warning::Couldn't tell whether ${check} passed on ${sha}: ${error.message}`)
-      return null
-    })
-    if (run) log(`${check} passed on ${sha} in CI's push run ${run.id} on ${run.head_branch}.`)
-    else missing.push(check)
-  }
-  if (missing.length)
-    log(
-      `${missing.join(', ')} didn't pass on ${sha} in a run of ${ciWorkflow} for a push to ${branches.join(' or ')}.`
+  try {
+    const listed = await read(
+      `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
     )
-  return missing.length === 0
+    for (const run of listed.workflow_runs ?? []) {
+      if (!isCiPush(run, { branches, sha })) continue
+      const { jobs = [] } = await read(
+        `/repos/${repository}/actions/runs/${run.id}/jobs?filter=latest&per_page=100`
+      )
+      if (passedJobs(jobs, checks).length === checks.length) {
+        log(
+          `${checks.join(', ')} passed on ${sha} in CI's push run ${run.id} on ${run.head_branch}.`
+        )
+        return true
+      }
+    }
+  } catch (error) {
+    log(`::warning::Couldn't tell whether ${checks.join(', ')} passed on ${sha}: ${error.message}`)
+    return false
+  }
+  log(
+    `${checks.join(', ')} didn't all pass on ${sha} in one run of ${ciWorkflow} for a push to ${branches.join(' or ')}.`
+  )
+  return false
 }
 
 export async function receiptPassed(read, { repository, repositoryId, suite, tree, log }) {
@@ -90,9 +78,10 @@ export async function receiptPassed(read, { repository, repositoryId, suite, tre
     for (const artifact of listed.artifacts ?? []) {
       if (artifact.name !== name || artifact.expired) continue
       if (String(artifact.workflow_run?.head_repository_id) !== String(repositoryId)) continue
+      if (!protectedBranches.includes(artifact.workflow_run?.head_branch)) continue
       const run = await read(`/repos/${repository}/actions/runs/${artifact.workflow_run.id}`)
-      if (isCiRun(run, { events: ['push', 'pull_request'] })) {
-        log(`${suite} passed on tree ${tree} in CI's ${run.event} run ${run.id}.`)
+      if (isCiPush(run)) {
+        log(`${suite} passed on tree ${tree} in CI's push run ${run.id} on ${run.head_branch}.`)
         return true
       }
     }
@@ -125,7 +114,6 @@ async function main([what, ...given]) {
       sha,
       checks,
       branches: branches.split(',').filter(Boolean),
-      server: environment.GITHUB_SERVER_URL,
       log
     })
   } else if (what === 'receipt' && given.length === 2) {
