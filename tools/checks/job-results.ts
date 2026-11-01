@@ -124,13 +124,15 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
     return results[id]
   }
 
+  const stepsOf = (id: string) =>
+    Object.fromEntries(
+      Object.entries(scenario.steps?.[id] ?? {}).map(([step, outputs]) => [step, { outputs }])
+    )
+
   function outputsOf(id: string): Record<string, string> {
     const given = scenario.outputs?.[id]
     if (given) return given
-    const steps = Object.fromEntries(
-      Object.entries(scenario.steps?.[id] ?? {}).map(([step, outputs]) => [step, { outputs }])
-    )
-    const scope = { github: scenario.github, steps }
+    const scope = { github: scenario.github, steps: stepsOf(id) }
     return Object.fromEntries(
       Object.entries(workflow.jobs[id]?.outputs ?? {}).map(([name, value]) => [
         name,
@@ -144,6 +146,7 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
       github: scenario.github,
       vars: scenario.vars ?? {},
       secrets: scenario.secrets ?? {},
+      steps: stepsOf(id),
       needs: Object.fromEntries(
         needed(id).map(each => [
           each,

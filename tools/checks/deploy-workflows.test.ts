@@ -65,9 +65,11 @@ describe('CI and deploy workflows', () => {
     expect(fast.run).toContain(
       'elif node scripts/ci-passed.mjs checks "$GITHUB_SHA" staging,main "$CHECKS"; then'
     )
-    expect(step(changes, 'receipts').run).toContain(
-      'if [ "$GITHUB_EVENT_NAME" = push ] && node scripts/ci-passed.mjs receipt "$suite" "$tree"; then'
+    const receipts = step(changes, 'receipts')
+    expect(receipts.if).toBe(
+      "github.event_name == 'push' && steps.classify.outputs.content_only != 'true'"
     )
+    expect(receipts.run).toContain('if node scripts/ci-passed.mjs receipt "$suite" "$TREE"; then')
     expect(changes.permissions).toEqual({ contents: 'read', actions: 'read' })
     for (const workflow of [ci, promote])
       expect(allText(workflow)).not.toMatch(/check-runs|actions\/artifacts/)

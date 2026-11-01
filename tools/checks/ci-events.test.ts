@@ -5,17 +5,32 @@ import { readWorkflow } from './workflows'
 const ci = readWorkflow('ci.yml')
 const repository = 'serpcompany/pitonne.jp'
 
-type Classified = { docs?: boolean; skip?: boolean; fast?: boolean; receipts?: boolean }
+type Classified = {
+  docs?: boolean
+  content?: boolean
+  skip?: boolean
+  fast?: boolean
+  receipts?: boolean
+}
 
-const steps = ({ docs = false, skip = false, fast = false, receipts = false }: Classified) => ({
+const lookedUp = (content: boolean, receipts: boolean): Record<string, string> => {
+  if (content) return {}
+  const state = receipts ? 'passed' : 'run'
+  return { e2e: state, lighthouse: state }
+}
+
+const steps = ({
+  docs = false,
+  content = false,
+  skip = false,
+  fast = false,
+  receipts = false
+}: Classified) => ({
   changes: {
-    classify: { docs_only: String(docs), skip: String(skip) },
+    classify: { docs_only: String(docs), content_only: String(content), skip: String(skip) },
     fast: { fast: String(fast) },
-    receipts: {
-      tree: 'a1b2c3',
-      e2e: receipts ? 'passed' : 'run',
-      lighthouse: receipts ? 'passed' : 'run'
-    }
+    tree: { tree: 'a1b2c3' },
+    receipts: lookedUp(content, receipts)
   }
 })
 
@@ -130,6 +145,17 @@ describe('what CI runs on a push', () => {
     ).toBe(false)
     expect(tested.stepRuns('lighthouse', 'Score eight pages with Lighthouse')).toBe(false)
     expect(tested.stepRuns('test', 'pnpm lint')).toBe(true)
+  })
+
+  it('looks up no receipt for a CMS save, so a slow API can’t hold back its deploy', () => {
+    const content = run(push('main', { content: true, fast: true }))
+    expect(content.stepRuns('changes', 'tree')).toBe(true)
+    expect(content.stepRuns('changes', 'receipts')).toBe(false)
+    expect(
+      content.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
+    ).toBe(true)
+    expect(run(push('main')).stepRuns('changes', 'receipts')).toBe(true)
+    expect(run(pullRequest({})).stepRuns('changes', 'receipts')).toBe(false)
   })
 
   it('deploys a CMS save on main at once, beside the checks, whatever they say', () => {

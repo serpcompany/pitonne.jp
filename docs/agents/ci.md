@@ -77,7 +77,8 @@ request's merge commit with its base:
   succeeded, in their latest attempts. A pull request's run tested a merge commit, never this
   one, so it doesn't count. An API error means waiting for the checks.
 - `e2e` and `lighthouse` (pushes): `passed` when the pushed tree has a receipt for that suite
-  ([below](#receipts)), otherwise `run`.
+  ([below](#receipts)), otherwise `run`. A content-only push looks up no receipt, so a slow or
+  failing API can't hold back `deploy-content`: its checks run in full beside the deploy.
 
 It is a job of its own, so a skipped deploy never joins the deploy concurrency group.
 

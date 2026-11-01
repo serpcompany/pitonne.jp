@@ -27,9 +27,9 @@ jobs:
       docs: ${{ github.event_name == 'pull_request' && steps.classify.outputs.docs_only || 'false' }}
       skip: ${{ steps.classify.outputs.skip }}
       fast: ${{ steps.fast.outputs.fast }}
-      tree: ${{ steps.receipts.outputs.tree }}
-      e2e: ${{ steps.receipts.outputs.e2e }}
-      lighthouse: ${{ steps.receipts.outputs.lighthouse }}
+      tree: ${{ steps.tree.outputs.tree }}
+      e2e: ${{ steps.receipts.outputs.e2e || 'run' }}
+      lighthouse: ${{ steps.receipts.outputs.lighthouse || 'run' }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -54,17 +54,19 @@ jobs:
             echo "This commit already passed $CHECKS in CI for a push to staging or main; deploying now."
           fi
           echo "fast=$fast" >> "$GITHUB_OUTPUT"
+      - id: tree
+        run: echo "tree=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_OUTPUT"
       - id: receipts
+        if: github.event_name == 'push' && steps.classify.outputs.content_only != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          TREE: ${{ steps.tree.outputs.tree }}
         run: |
-          tree=$(git rev-parse 'HEAD^{tree}')
-          echo "tree=$tree" >> "$GITHUB_OUTPUT"
           for suite in e2e lighthouse; do
             state=run
-            if [ "$GITHUB_EVENT_NAME" = push ] && node scripts/ci-passed.mjs receipt "$suite" "$tree"; then
+            if node scripts/ci-passed.mjs receipt "$suite" "$TREE"; then
               state=passed
-              echo "$suite passed on this tree ($tree) before, so its steps skip."
+              echo "$suite passed on this tree ($TREE) before, so its steps skip."
             fi
             echo "$suite=$state" >> "$GITHUB_OUTPUT"
           done
