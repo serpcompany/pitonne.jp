@@ -95,13 +95,12 @@ export default async function ContactPage({ params }: Props) {
 
                 {info.lineUrl && (
                   <div className="flex items-start gap-4">
-                    {/* Duplicate of the text link below, so it's skipped by keyboard and screen readers */}
                     <a
                       href={info.lineUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       tabIndex={-1}
-                      aria-hidden="true"
+                      aria-label={dict.contact.lineContact}
                       className="w-12 h-12 rounded-full bg-[#f5ebe0] flex items-center justify-center shrink-0 transition-opacity hover:opacity-80"
                     >
                       <LineIcon className="h-5 w-5" />

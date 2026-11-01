@@ -96,16 +96,23 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
     )
   }
 
+  let offset = 0
+  const parts = segments.map((segment, index) => {
+    const part = { segment, key: `${index % 2 === 1 ? 'video' : 'text'}-${offset}` }
+    offset += segment.length
+    return part
+  })
+
   return (
     <>
-      {segments.map((segment, index) => {
-        if (index % 2 === 1) {
-          return <BlogVideoEmbed key={`${segment}-${index}`} slug={segment} locale={locale} />
+      {parts.map(({ segment, key }) => {
+        if (key.startsWith('video-')) {
+          return <BlogVideoEmbed key={key} slug={segment} locale={locale} />
         }
 
         const markdown = segment.trim()
         return markdown ? (
-          <ReactMarkdown key={index} remarkPlugins={[remarkGfm]} components={components}>
+          <ReactMarkdown key={key} remarkPlugins={[remarkGfm]} components={components}>
             {markdown}
           </ReactMarkdown>
         ) : null

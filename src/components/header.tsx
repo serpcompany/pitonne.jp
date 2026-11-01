@@ -117,6 +117,7 @@ export function Header({
           {navigation.map(item => (
             <div
               key={item.name}
+              role="none"
               className="relative"
               onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.hasDropdown)}
               onMouseLeave={() => setActiveDropdown(null)}
@@ -239,6 +240,7 @@ export function Header({
         <div className="hidden xl:flex items-center gap-6">
           <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
           <div
+            role="none"
             className="relative"
             onMouseEnter={() => setActiveDropdown('phone')}
             onMouseLeave={() => setActiveDropdown(null)}
@@ -317,6 +319,7 @@ export function Header({
                 {item.hasDropdown ? (
                   <div>
                     <button
+                      type="button"
                       className="flex items-center justify-between w-full py-2 text-base font-medium text-foreground"
                       onClick={() =>
                         setMobileExpandedSection(

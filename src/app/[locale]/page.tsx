@@ -110,7 +110,11 @@ export default async function HomePage({ params }: Props) {
               </div>
               {/* Decorative leaf */}
               <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-16 h-32 opacity-30 hidden lg:block">
-                <svg viewBox="0 0 60 120" className="w-full h-full text-[#8bb3b0]">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 60 120"
+                  className="w-full h-full text-[#8bb3b0]"
+                >
                   <path
                     d="M30 10 Q50 40 40 70 Q30 100 30 110"
                     stroke="currentColor"
@@ -236,7 +240,7 @@ export default async function HomePage({ params }: Props) {
       <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
         {/* Decorative leaf */}
         <div className="absolute right-0 top-20 w-32 h-48 opacity-30 hidden lg:block">
-          <svg viewBox="0 0 120 180" className="w-full h-full text-[#d4c4a8]">
+          <svg aria-hidden="true" viewBox="0 0 120 180" className="w-full h-full text-[#d4c4a8]">
             <path
               d="M60 20 Q90 60 80 100 Q70 140 60 170"
               stroke="currentColor"

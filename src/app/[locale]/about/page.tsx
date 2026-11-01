@@ -98,7 +98,11 @@ export default async function AboutPage({ params }: Props) {
               </div>
               {/* Decorative leaf */}
               <div className="absolute -right-6 top-0 w-16 h-24 opacity-40 hidden lg:block">
-                <svg viewBox="0 0 60 100" className="w-full h-full text-[#d4c4a8]">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 60 100"
+                  className="w-full h-full text-[#d4c4a8]"
+                >
                   <path
                     d="M30 5 Q50 30 40 55 Q30 80 30 95"
                     stroke="currentColor"

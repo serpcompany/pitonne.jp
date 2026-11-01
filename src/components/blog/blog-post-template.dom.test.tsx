@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { BlogPostTemplate } from '@/components/blog/blog-post-template'
 import {
   getAllBlogPosts,
@@ -348,5 +348,30 @@ describe('blog post parity', () => {
       expect(`${post.title}\n${post.excerpt}\n${post.content}`).not.toMatch(japaneseScript)
       // Related services are optional (getRelatedServiceSlugsForPost falls back by category) and the CMS doesn't set tags
     }
+  })
+
+  it('renders every post in both locales without duplicate React keys', () => {
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    for (const locale of ['en', 'ja'] as const) {
+      for (const post of getAllBlogPosts(locale)) {
+        const { unmount } = render(
+          <BlogPostTemplate
+            post={{ ...post, date: post.publishedAt }}
+            relatedPosts={[]}
+            relatedServices={[]}
+            latestPosts={[]}
+            locale={locale}
+          />
+        )
+        unmount()
+      }
+    }
+
+    const duplicateKeyErrors = errors.mock.calls.filter(call =>
+      String(call[0]).includes('same key')
+    )
+    errors.mockRestore()
+    expect(duplicateKeyErrors).toEqual([])
   })
 })

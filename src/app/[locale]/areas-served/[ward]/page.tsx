@@ -99,6 +99,7 @@ export default async function WardPage({ params }: Props) {
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 flex-shrink-0 bg-[#f5ebe0] rounded-full flex items-center justify-center group-hover:bg-[#7A8F87] transition-colors">
                     <svg
+                      aria-hidden="true"
                       className="w-6 h-6 text-[#7A8F87] group-hover:text-white transition-colors"
                       fill="none"
                       stroke="currentColor"
