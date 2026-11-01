@@ -23,6 +23,7 @@ export default defineConfig({
             happyDOM: {
               settings: {
                 enableIframePageLoading: true,
+                handleDisabledFileLoadingAsSuccess: true,
                 navigation: { disableChildFrameNavigation: true }
               }
             }
