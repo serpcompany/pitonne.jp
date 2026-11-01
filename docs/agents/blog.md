@@ -9,11 +9,10 @@ in [ADR 0002](../adr/0002-payload-d1.md).
 
 - English posts are `content/blog/<slug>.md` and Japanese posts `content/blog/ja/<slug>.md`. A
   translation pairs with its original by an identical filename, which is the slug.
-- **A post may exist in one language only.** The other language then has no page, blog index or
-  category entry, hreflang alternate or sitemap URL for it. `getBlogPostLocales`,
+- **A post may exist in one language only;** what readers and search engines then get is in
+  [Blog](../product/blog.md#languages-and-drafts). `getBlogPostLocales`,
   `getBlogCategoryLocales` and `getUntranslatedBlogPaths` in `src/lib/data/blog-posts.ts` answer
-  which languages a post or category is published in, and every consumer asks them. On a page
-  with no translation, the header's language switcher goes to the other language's blog index.
+  which languages a post or category is published in, and every consumer asks them.
 - **`draft: true` posts are left out of every build:** Production, Staging and PR previews. Don't
   link to a draft. A push that changes only drafts deploys nothing ([`ci.md`](ci.md#ciyml)).
 

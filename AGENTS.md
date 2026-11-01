@@ -51,6 +51,7 @@ apply; where this repository differs, the last section says so, and it wins.
   is still `main`, so open a pull request with `gh pr create --base staging`.
 - One issue, one branch (`issue-<n>-<slug>`, in its own worktree), one pull request with a
   Conventional Commit title, starting `Closes #<n>`, with each evidence level reported apart.
+- A behavior change also changes its [`docs/product/`](docs/product/index.md) entry and check.
 - Claude reviews each push once `verify` and `test` pass (`Code review`); until it runs, a
   fresh agent reviews once CI is green. The owner merges (squash) and promotes; agents do
   neither. Before starting and when handing back, check the latest runs on both branches.
@@ -62,6 +63,7 @@ apply; where this repository differs, the last section says so, and it wins.
 
 | Doc | Read it for |
 | --- | --- |
+| [`docs/product/`](docs/product/index.md) | What the live site does: each behavior and its check |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | How the site is built and served, from content to the deployed environments |
 | [`CONTEXT.md`](CONTEXT.md) | Terms that are easy to confuse, such as canonical route, promotion and the content fast path |
 | [`content.md`](docs/agents/content.md) | Text and dictionaries, Japanese copy, services and legal pages, areas, videos and business data |
@@ -73,7 +75,7 @@ apply; where this repository differs, the last section says so, and it wins.
 | [`hosts.md`](docs/agents/hosts.md) | The hosts, their redirects and the Pages Function |
 | [`code.md`](docs/agents/code.md) | Where code lives, the layers, conventions, tests and SERP's checks |
 | [`exceptions.md`](docs/agents/exceptions.md) | Each lint rule turned off in a config file, and why |
-| [`verification.md`](docs/agents/verification.md) | Commands, the finish gate, git hooks, evidence, and the tests that hold the rules |
+| [`verification.md`](docs/agents/verification.md) | Commands, the finish gate, git hooks, the browser journeys, and the evidence each change needs |
 | [`ci.md`](docs/agents/ci.md) | Each GitHub Actions workflow: what starts it, what it runs, and why |
 | [`gitflow.md`](docs/gitflow.md) | Branches, promotion, CMS saves, deploys and the repository settings |
 | [`docs/adr/`](docs/adr/) | Decisions and their reasons: Keystatic for the blog, no Payload on D1, the static export, the layout |

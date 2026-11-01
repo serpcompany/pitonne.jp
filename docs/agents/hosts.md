@@ -75,6 +75,6 @@ allows 100 include and exclude rules together, which `src/lib/canonical-host.tes
 
 ## Checks
 
-`src/lib/canonical-host.test.ts` and `src/lib/staging-gate.test.ts` hold these rules. After each
-Production deploy, `scripts/smoke-canonical-host.mjs` checks the redirects, and that `_redirects`,
-`_headers` and 404s still work behind the Function ([`ci.md`](ci.md#deployyml)).
+What a visitor gets from each rule, and the test or smoke check that holds it, is in
+[Hosts and redirects](../product/hosts-and-redirects.md). How the smoke tests run after each
+deploy is in [`ci-deploys.md`](ci-deploys.md#smoke-tests).

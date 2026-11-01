@@ -75,9 +75,9 @@ The password keeps search engines and the public out.
   site receives no webhooks, so there are no others. Keep the list explicit, in
   `src/lib/canonical-host.ts`.
 
-`src/lib/staging-gate.test.ts` holds each rule above, and the Staging smoke test checks them on
-the deployed site ([`ci.md`](ci.md#deployyml)). A browser asks for the password once per
-session; Ahrefs Site Audit takes it in its crawl settings.
+The tests and smoke checks that hold these rules are named in the product docs'
+[Staging gate](../product/environments.md#the-staging-gate). A browser asks for the password once
+per session; Ahrefs Site Audit takes it in its crawl settings.
 
 ## PR previews
 

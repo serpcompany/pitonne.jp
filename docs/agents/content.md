@@ -19,7 +19,7 @@ rules are in [`blog.md`](blog.md).
 - Text with a variable part keeps a `{name}` placeholder and is filled with `interpolate()`
   ([`docs/i18n.md`](../i18n.md#ui-strings)); never join translated fragments.
 - Run `pnpm test` after changing a dictionary or a content file: the parity tests
-  ([`verification.md`](verification.md#tests-that-hold-the-sites-rules)) catch a missing key or
+  ([Languages](../product/languages.md#what-each-language-shows)) catch a missing key or
   translation before a push does.
 
 ## Japanese copy

@@ -68,6 +68,8 @@ their own.
 
 - Vitest runs two projects (`vitest.config.ts`): `*.dom.test.tsx` files in happy-dom, with
   `src/test/setup.ts`, and every other test in Node. Tests sit beside the module they test.
+- [`docs/product/`](../product/index.md) names the test, journey, audit or smoke check that holds
+  each behavior of the live site.
 - **Tests check rules, not content.** Editors add and change posts at any time, so a test never
   asserts a post count, that every post has an image or tags, or a post's text.
 - A test has 30 seconds (`testTimeout`), so a slow test fails rather than hangs.

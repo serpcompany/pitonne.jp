@@ -69,13 +69,10 @@ uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, 
 - **Behavior, not content:** editors change posts at any time, so a journey follows whatever
   post, category, service or area the page links first, and never counts posts or reads their
   text. Labels come from the dictionaries.
-- **What they cover:** the home page in each language and the language switch; the header's
-  links on desktop and the phone menu, page after page without a reload; a service from the
-  services index and back; a post from the blog index, and a category's posts; an area from
-  its ward; the contact page's phone link and message form; and, on the build as served, each
-  environment's indexing signals, canonical and `robots.txt`, the 404 page, and the slash,
-  `/en/` and `_redirects` redirects. The deploy's smoke test checks those last ones on the
-  deployed site; the journeys check them before the deploy, on the same build.
+- **What they cover:** the product docs name each journey under the behavior it holds
+  ([`docs/product/`](../product/index.md)). `e2e/environment.spec.ts` checks the indexing
+  signals, the 404 page and the redirects on the build before the deploy; the deploy's smoke test
+  checks them again on the deployed site.
 - **Not part of `pnpm check`:** they need a build and a browser, and on Windows the export
   isn't the one Linux builds (below). CI's `e2e` job runs them on every ready pull request and
   every push ([`ci.md`](ci.md#ciyml)).
@@ -168,17 +165,8 @@ production-like preview shows that ([`environments.md`](environments.md#pr-previ
 
 ## Tests that hold the site's rules
 
-| Test | Holds |
-| --- | --- |
-| `src/lib/i18n/dictionaries.test.ts` | `en.json` and `ja.json` have the same keys and value types, and no empty Japanese value |
-| `src/lib/i18n/content-parity.test.ts` | Services and legal pages exist in both locales; blog translations pair by filename and slug |
-| `src/lib/i18n/hardcoded-strings.test.ts` | No visible text in `src/app` or `src/components` outside the dictionaries |
-| `src/lib/i18n/client-imports.test.ts` | No client component reaches the dictionaries |
-| `src/lib/data/routes.test.ts` | Every canonical route has a page in each locale, and blog pages exist only for published posts, in their own locale |
-| `src/lib/data/blog-posts.test.ts` | The blog's frontmatter rules, drafts, categories and related services |
-| `src/lib/sitemaps.test.ts` | The sitemap index pattern |
-| `src/lib/canonical-host.test.ts`, `src/lib/staging-gate.test.ts` | The host redirects, the slash rules and the Staging gate |
-| `src/lib/site-origin.test.tsx` | Staging writes its own origin everywhere a URL is written |
-| `e2e/*.spec.ts` | The browser journeys above, on a built `out/` served as Pages serves it |
-| `tools/checks/e2e.test.ts` | The journeys' own rules: no retries, both widths, the console-error check, no fixed waits |
-| `tools/checks/deploy-workflows.test.ts` | The workflows' deploy rules |
+Each behavior of the live site names the test, journey, audit or smoke check that holds it in
+[`docs/product/`](../product/index.md). The checks of the code and the harness are named beside
+their rules: the
+dictionaries kept out of client components in [`docs/i18n.md`](../i18n.md#ui-strings), the
+journeys' own rules in [`code.md`](code.md#tests), and the workflows' in [`ci.md`](ci.md).
