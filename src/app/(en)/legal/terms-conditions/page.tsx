@@ -1,12 +1,8 @@
-import TermsConditionsPage, {
-  generateMetadata as generateLocaleMetadata
-} from '@/app/[locale]/legal/terms-conditions/page'
-import { englishLocaleParams } from '../../route-helpers'
+import * as localePage from '@/app/[locale]/legal/terms-conditions/page'
+import { englishStaticRoute } from '../../route-helpers'
 
-export function generateMetadata() {
-  return generateLocaleMetadata({ params: englishLocaleParams })
-}
+const route = englishStaticRoute(localePage)
 
-export default function Page() {
-  return <TermsConditionsPage params={englishLocaleParams} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

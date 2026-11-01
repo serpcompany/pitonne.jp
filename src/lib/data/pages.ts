@@ -18,7 +18,7 @@ export interface MarkdownPage {
   sourcePath: string
 }
 
-type LegalPageKey = 'privacyPolicy' | 'termsConditions' | 'medicalDisclaimer'
+export type LegalPageKey = 'privacyPolicy' | 'termsConditions' | 'medicalDisclaimer'
 
 const legalPagePaths: Record<LegalPageKey, string> = {
   privacyPolicy: 'legal/privacy-policy.md',

@@ -1,53 +1,34 @@
 import { MapPin } from 'lucide-react'
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactButton } from '@/components/shared/contact-button'
 import { PageHero } from '@/components/shared/page-hero'
 import { wards } from '@/lib/data/areas'
 import { localizedRoute } from '@/lib/data/routes'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-interface Props {
-  params: Promise<{ locale: string }>
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateMetadata = localizedMetadata('/areas-served/', ({ areas }) => ({
+  title: areas.metaTitle,
+  description: areas.metaDescription
+}))
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
-
-  return {
-    title: dict.areas.metaTitle,
-    description: dict.areas.metaDescription,
-    alternates: localizedHreflangAlternates('/areas-served/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.areas.metaTitle,
-      description: dict.areas.metaDescription,
-      path: '/areas-served/',
-      locale: locale as Locale
-    })
-  }
-}
-
-export default async function AreasServedPage({ params }: Props) {
-  const { locale } = await params
-  const typedLocale = locale as Locale
-  const dict = getDictionary(typedLocale)
+export default async function AreasServedPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   return (
     <>
       <PageHero
-        locale={typedLocale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.areasServed }
         ]}
         title={dict.areas.heroTitle}
@@ -62,24 +43,24 @@ export default async function AreasServedPage({ params }: Props) {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="text-2xl font-serif text-foreground">
-                      {typedLocale === 'ja' ? ward.nameJa : `${ward.name} ${dict.areas.ward}`}
+                      {locale === 'ja' ? ward.nameJa : `${ward.name} ${dict.areas.ward}`}
                     </h2>
-                    {typedLocale !== 'ja' && (
+                    {locale !== 'ja' && (
                       <p className="text-sm text-muted-foreground">{ward.nameJa}</p>
                     )}
                   </div>
                   <Link
-                    href={localizedRoute(`/areas-served/${ward.slug}/`, typedLocale)}
+                    href={localizedRoute(`/areas-served/${ward.slug}/`, locale)}
                     className="text-sm text-[#7A8F87] hover:underline"
                   >
-                    {dict.areas.viewAllIn} {typedLocale === 'ja' ? ward.nameJa : ward.name} &rarr;
+                    {dict.areas.viewAllIn} {locale === 'ja' ? ward.nameJa : ward.name} &rarr;
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {ward.areas.map(area => (
                     <Link
                       key={area.slug}
-                      href={localizedRoute(`/areas-served/${ward.slug}/${area.slug}/`, typedLocale)}
+                      href={localizedRoute(`/areas-served/${ward.slug}/${area.slug}/`, locale)}
                       className="group flex items-center gap-3 p-4 rounded-lg border border-border bg-background hover:bg-[#f5ebe0] hover:border-[#7A8F87] transition-all"
                     >
                       <MapPin className="h-5 w-5 text-[#7A8F87] shrink-0" />
@@ -135,7 +116,7 @@ export default async function AreasServedPage({ params }: Props) {
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             {dict.areas.notSureAreaDescription}
           </p>
-          <ContactButton locale={typedLocale}>{dict.common.contactUs}</ContactButton>
+          <ContactButton locale={locale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </>

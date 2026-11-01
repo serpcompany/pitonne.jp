@@ -1,10 +1,8 @@
-import FaqsPage, { generateMetadata as generateLocaleMetadata } from '@/app/[locale]/faqs/page'
-import { englishLocaleParams } from '../route-helpers'
+import * as localePage from '@/app/[locale]/faqs/page'
+import { englishStaticRoute } from '../route-helpers'
 
-export function generateMetadata() {
-  return generateLocaleMetadata({ params: englishLocaleParams })
-}
+const route = englishStaticRoute(localePage)
 
-export default function Page() {
-  return <FaqsPage params={englishLocaleParams} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

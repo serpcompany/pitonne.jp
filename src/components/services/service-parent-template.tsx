@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
 import { ServiceCardGrid } from '@/components/services/service-card-grid'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
@@ -26,11 +27,7 @@ export function ServiceParentTemplate({
 
       <PageHero
         locale={locale}
-        breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale) },
-          { label: dict.nav.services, href: localizedRoute('/services/', locale) },
-          { label: service.name }
-        ]}
+        breadcrumbs={serviceBreadcrumbs(service, locale)}
         title={service.name}
         description={service.fullDescription}
       >

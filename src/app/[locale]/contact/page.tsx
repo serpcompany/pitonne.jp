@@ -1,58 +1,36 @@
 import { Clock, MapPin, Phone } from 'lucide-react'
-import type { Metadata } from 'next'
 import { ContactFormDialog } from '@/components/contact/contact-form-dialog'
 import { BookingButton } from '@/components/shared/booking-button'
 import { LineIcon } from '@/components/shared/line-icon'
 import { PageHero } from '@/components/shared/page-hero'
 import { localizedRoute } from '@/lib/data/routes'
 import { getBusinessInfo } from '@/lib/data/site'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export const generateMetadata = localizedMetadata('/contact/', ({ contact }) => ({
+  title: contact.contactUs,
+  description: contact.metaDescription
+}))
 
-  return {
-    title: dict.contact.contactUs,
-    description: dict.contact.metaDescription,
-    alternates: localizedHreflangAlternates('/contact/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.contact.contactUs,
-      description: dict.contact.metaDescription,
-      path: '/contact/',
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function ContactPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
-  const info = getBusinessInfo(locale as Locale)
+export default async function ContactPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
+  const info = getBusinessInfo(locale)
 
   return (
     <>
       <PageHero
-        locale={locale as Locale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.contact }
         ]}
         title={dict.contact.contactUs}
@@ -67,7 +45,7 @@ export default async function ContactPage({ params }: Props) {
               <div className="rounded-lg border border-border bg-card p-8">
                 <p className="mb-6 text-muted-foreground">{dict.contact.inquiryFormDescription}</p>
                 <div className="flex flex-col gap-3 sm:flex-row">
-                  <BookingButton className="w-full sm:w-auto" locale={locale as Locale} />
+                  <BookingButton className="w-full sm:w-auto" locale={locale} />
                   {locale === 'en' ? <ContactFormDialog locale="en" /> : null}
                 </div>
               </div>

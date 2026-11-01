@@ -12,7 +12,7 @@ import {
 import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { absoluteUrl, localizedPageMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -37,18 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metaTitle = service.metaTitle ?? service.name
   const metaDescription = service.metaDescription ?? service.shortDescription
 
-  return {
+  return localizedPageMetadata({
     title: metaTitle,
     description: metaDescription,
-    alternates: localizedHreflangAlternates(service.canonicalPath, locale as Locale),
-    ...pageSocialMetadata({
-      title: metaTitle,
-      description: metaDescription,
-      path: service.canonicalPath,
-      locale: locale as Locale,
-      images: service.image ? [absoluteUrl(service.image)] : undefined
-    })
-  }
+    path: service.canonicalPath,
+    locale: locale as Locale,
+    images: service.image ? [absoluteUrl(service.image)] : undefined
+  })
 }
 
 export default async function ServiceDetailPage({ params }: Props) {

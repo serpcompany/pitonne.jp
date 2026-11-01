@@ -1,46 +1,24 @@
-import type { Metadata } from 'next'
 import { BookingButton } from '@/components/shared/booking-button'
 import { PageHero } from '@/components/shared/page-hero'
 import { localizedRoute } from '@/lib/data/routes'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export const generateMetadata = localizedMetadata('/about/', ({ about }) => ({
+  title: about.aboutPitonne,
+  description: about.metaDescription
+}))
 
-  return {
-    title: dict.about.aboutPitonne,
-    description: dict.about.metaDescription,
-    alternates: localizedHreflangAlternates('/about/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.about.aboutPitonne,
-      description: dict.about.metaDescription,
-      path: '/about/',
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function AboutPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function AboutPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   const team = [
     {
@@ -66,9 +44,9 @@ export default async function AboutPage({ params }: Props) {
   return (
     <>
       <PageHero
-        locale={locale as Locale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.about }
         ]}
         title={dict.about.aboutPitonne}
@@ -147,7 +125,7 @@ export default async function AboutPage({ params }: Props) {
                 <span className="italic">{dict.about.realLife}</span>
               </h2>
               <p className="text-muted-foreground mb-8">{dict.about.visitBasedCareContent}</p>
-              <BookingButton locale={locale as Locale} />
+              <BookingButton locale={locale} />
             </div>
           </div>
         </div>

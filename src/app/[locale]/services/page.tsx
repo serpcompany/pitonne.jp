@@ -1,45 +1,23 @@
-import type { Metadata } from 'next'
 import { ServicesIndexTemplate } from '@/components/services/services-index-template'
 import { getServiceCategorySections } from '@/lib/data/services'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-interface Props {
-  params: Promise<{ locale: string }>
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateMetadata = localizedMetadata('/services/', ({ services }) => ({
+  title: services.metaTitle,
+  description: services.metaDescription
+}))
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function ServicesPage({ params }: LocalePageProps) {
+  const { locale } = localeDictionary(await params)
 
-  return {
-    title: dict.services.metaTitle,
-    description: dict.services.metaDescription,
-    alternates: localizedHreflangAlternates('/services/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.services.metaTitle,
-      description: dict.services.metaDescription,
-      path: '/services/',
-      locale: locale as Locale
-    })
-  }
-}
-
-export default async function ServicesPage({ params }: Props) {
-  const { locale } = await params
-
-  return (
-    <ServicesIndexTemplate
-      sections={getServiceCategorySections(locale as Locale)}
-      locale={locale as Locale}
-    />
-  )
+  return <ServicesIndexTemplate sections={getServiceCategorySections(locale)} locale={locale} />
 }

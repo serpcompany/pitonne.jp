@@ -1,12 +1,11 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 import LocaleLayout from '@/app/[locale]/layout'
-import { BlogPostTemplate } from '@/components/blog/blog-post-template'
 import { ServiceDetailTemplate } from '@/components/services/service-detail-template'
-import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from '@/lib/data/blog-posts'
 import { getService, getServicesFromSlugs } from '@/lib/data/services'
 import { businessHours, isOpenBusinessHours } from '@/lib/data/site'
 import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { englishBlogPost } from '@/test/blog-post'
 import { defined } from '@/test/defined'
 
 vi.mock('next/font/google', () => ({
@@ -101,36 +100,8 @@ describe('structured data parity', () => {
   })
 
   it('renders BlogPosting JSON-LD on blog post pages', () => {
-    const post = defined(getBlogPostBySlug('iv-therapy-for-hangover'))
-
-    const markup = renderToStaticMarkup(
-      <BlogPostTemplate
-        post={{
-          title: post.title,
-          slug: post.slug,
-          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-          content: post.content,
-          excerpt: post.excerpt,
-          readingTime: post.readingTime,
-          category: post.category,
-          categorySlug: post.categorySlug,
-          author: post.author,
-          featureImage: post.featureImage,
-          relatedServiceSlugs: post.relatedServiceSlugs,
-          tags: post.tags
-        }}
-        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
-          candidate => candidate.slug !== post.slug
-        )}
-        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
-        locale="en"
-      />
-    )
+    const { post, template } = englishBlogPost('iv-therapy-for-hangover')
+    const markup = renderToStaticMarkup(template)
     const schemas = jsonLdFrom(markup)
 
     expect(schemas).toContainEqual(

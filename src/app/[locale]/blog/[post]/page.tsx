@@ -12,7 +12,7 @@ import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { formatPostDate } from '@/lib/post-date'
-import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { absoluteUrl, localizedPageMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -35,28 +35,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const metaTitle = post.metaTitle ?? post.title
     const metaDescription = post.metaDescription ?? post.excerpt
 
-    const social = pageSocialMetadata({
+    const metadata = localizedPageMetadata({
       title: metaTitle,
       description: metaDescription,
       path: `/blog/${post.slug}/`,
       locale: typedLocale,
+      availableLocales: getBlogPostLocales(post.slug),
       images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined
     })
 
     return {
-      title: metaTitle,
-      description: metaDescription,
-      alternates: localizedHreflangAlternates(
-        `/blog/${post.slug}/`,
-        typedLocale,
-        getBlogPostLocales(post.slug)
-      ),
-      openGraph: {
-        ...social.openGraph,
-        type: 'article',
-        publishedTime: post.publishedAt
-      },
-      twitter: social.twitter
+      ...metadata,
+      openGraph: { ...metadata.openGraph, type: 'article', publishedTime: post.publishedAt }
     }
   }
 

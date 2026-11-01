@@ -1,53 +1,34 @@
-import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { PostDateline } from '@/components/blog/post-dateline'
 import { ContactButton } from '@/components/shared/contact-button'
 import { PageHero } from '@/components/shared/page-hero'
 import { getAllBlogPosts, getAllCategories } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
 import { formatPostDate } from '@/lib/post-date'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-interface Props {
-  params: Promise<{ locale: string }>
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateMetadata = localizedMetadata('/blog/', ({ blog }) => ({
+  title: blog.metaTitle,
+  description: blog.metaDescription
+}))
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
-  const typedLocale = locale as Locale
-  const dict = getDictionary(typedLocale)
+export default async function BlogPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
-  return {
-    title: dict.blog.metaTitle,
-    description: dict.blog.metaDescription,
-    alternates: localizedHreflangAlternates('/blog/', typedLocale),
-    ...pageSocialMetadata({
-      title: dict.blog.metaTitle,
-      description: dict.blog.metaDescription,
-      path: '/blog/',
-      locale: typedLocale
-    })
-  }
-}
-
-export default async function BlogPage({ params }: Props) {
-  const { locale } = await params
-  const typedLocale = locale as Locale
-  const dict = getDictionary(typedLocale)
-
-  const posts = getAllBlogPosts(typedLocale).map(post => ({
+  const posts = getAllBlogPosts(locale).map(post => ({
     slug: post.slug,
     title: post.title,
-    date: formatPostDate(post.publishedAt, typedLocale),
+    date: formatPostDate(post.publishedAt, locale),
     excerpt: post.excerpt,
     readingTime: post.readingTime,
     featureImage: post.featureImage,
@@ -61,9 +42,9 @@ export default async function BlogPage({ params }: Props) {
   return (
     <>
       <PageHero
-        locale={typedLocale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.blog.blog }
         ]}
         title={dict.blog.blog}
@@ -75,15 +56,15 @@ export default async function BlogPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-sm font-medium text-foreground">{dict.blog.categories}</span>
             <Link
-              href={localizedRoute('/blog/', typedLocale)}
+              href={localizedRoute('/blog/', locale)}
               className="px-4 py-1.5 text-sm rounded-full bg-[#7A8F87] text-white"
             >
               {dict.blog.all}
             </Link>
-            {getAllCategories(typedLocale).map(cat => (
+            {getAllCategories(locale).map(cat => (
               <Link
                 key={cat.slug}
-                href={localizedRoute(`/blog/category/${cat.slug}/`, typedLocale)}
+                href={localizedRoute(`/blog/category/${cat.slug}/`, locale)}
                 className="px-4 py-1.5 text-sm rounded-full border border-border hover:border-[#7A8F87] hover:text-[#7A8F87] transition-colors"
               >
                 {cat.name}
@@ -97,7 +78,7 @@ export default async function BlogPage({ params }: Props) {
         <section className="py-12 bg-card">
           <div className="container mx-auto px-4">
             <Link
-              href={localizedRoute(`/blog/${featuredPost.slug}/`, typedLocale)}
+              href={localizedRoute(`/blog/${featuredPost.slug}/`, locale)}
               className="group block max-w-5xl mx-auto"
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -132,15 +113,11 @@ export default async function BlogPage({ params }: Props) {
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
                     <span className="text-[#7A8F87]">{featuredPost.category}</span>
                     <span>&middot;</span>
-                    <time>{featuredPost.date}</time>
-                    {featuredPost.readingTime && (
-                      <>
-                        <span>&middot;</span>
-                        <span>
-                          {featuredPost.readingTime} {dict.common.minRead}
-                        </span>
-                      </>
-                    )}
+                    <PostDateline
+                      date={featuredPost.date}
+                      readingTime={featuredPost.readingTime}
+                      locale={locale}
+                    />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-serif text-foreground mb-4 group-hover:text-[#7A8F87] transition-colors">
                     {featuredPost.title}
@@ -163,7 +140,7 @@ export default async function BlogPage({ params }: Props) {
             {otherPosts.map(post => (
               <Link
                 key={post.slug}
-                href={localizedRoute(`/blog/${post.slug}/`, typedLocale)}
+                href={localizedRoute(`/blog/${post.slug}/`, locale)}
                 className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#7A8F87] transition-all"
               >
                 {post.featureImage ? (
@@ -187,15 +164,7 @@ export default async function BlogPage({ params }: Props) {
                   <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
                     <span className="text-[#7A8F87]">{post.category}</span>
                     <span>&middot;</span>
-                    <time>{post.date}</time>
-                    {post.readingTime && (
-                      <>
-                        <span>&middot;</span>
-                        <span>
-                          {post.readingTime} {dict.common.minRead}
-                        </span>
-                      </>
-                    )}
+                    <PostDateline date={post.date} readingTime={post.readingTime} locale={locale} />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
                     {post.title}
@@ -214,7 +183,7 @@ export default async function BlogPage({ params }: Props) {
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             {dict.blog.stayInformedDescription}
           </p>
-          <ContactButton locale={typedLocale}>{dict.common.contactUs}</ContactButton>
+          <ContactButton locale={locale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </>

@@ -1,53 +1,11 @@
-import type { Metadata } from 'next'
-import { LegalMarkdownPage } from '@/components/legal/legal-markdown-page'
-import { getLegalPage } from '@/lib/data/pages'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { legalDocumentRoute } from '../legal-document-route'
+
+const route = legalDocumentRoute('termsConditions')
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = route.generateStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export const generateMetadata = route.generateMetadata
 
-  return {
-    title: dict.legal.termsMetaTitle,
-    description: dict.legal.termsMeta,
-    alternates: localizedHreflangAlternates('/legal/terms-conditions/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.legal.termsMetaTitle,
-      description: dict.legal.termsMeta,
-      path: '/legal/terms-conditions/',
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function TermsConditionsPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
-
-  const page = getLegalPage('termsConditions', locale as Locale)
-
-  return (
-    <LegalMarkdownPage
-      page={page}
-      canonicalTitle={dict.legal.termsOfUse}
-      locale={locale as Locale}
-    />
-  )
-}
+export default route.Page

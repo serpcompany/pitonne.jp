@@ -1,10 +1,10 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { ServiceSidebar } from '@/components/services/service-sidebar'
+import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
+import { RelatedSidebar } from '@/components/shared/related-sidebar'
 import type { BlogPost } from '@/lib/data/blog-posts'
-import { localizedRoute } from '@/lib/data/routes'
 import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
@@ -30,19 +30,7 @@ export function ServiceDetailTemplate({
 
       <PageHero
         locale={locale}
-        breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale) },
-          { label: dict.nav.services, href: localizedRoute('/services/', locale) },
-          ...(parentService
-            ? [
-                {
-                  label: parentService.name,
-                  href: localizedRoute(parentService.canonicalPath, locale)
-                }
-              ]
-            : []),
-          { label: service.name }
-        ]}
+        breadcrumbs={serviceBreadcrumbs(service, locale, parentService)}
         title={service.name}
         description={service.shortDescription}
       />
@@ -80,7 +68,10 @@ export function ServiceDetailTemplate({
               </section>
             </main>
 
-            <ServiceSidebar
+            <RelatedSidebar
+              bookingTitle={dict.services.bookThisService}
+              bookingDescription={dict.services.bookServiceDescription}
+              relatedPostsTitle={dict.services.relatedPosts}
               relatedServices={relatedServices}
               relatedPosts={relatedPosts}
               locale={locale}

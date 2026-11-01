@@ -1,12 +1,8 @@
-import DisclaimerPage, {
-  generateMetadata as generateLocaleMetadata
-} from '@/app/[locale]/legal/disclaimer/page'
-import { englishLocaleParams } from '../../route-helpers'
+import * as localePage from '@/app/[locale]/legal/disclaimer/page'
+import { englishStaticRoute } from '../../route-helpers'
 
-export function generateMetadata() {
-  return generateLocaleMetadata({ params: englishLocaleParams })
-}
+const route = englishStaticRoute(localePage)
 
-export default function Page() {
-  return <DisclaimerPage params={englishLocaleParams} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

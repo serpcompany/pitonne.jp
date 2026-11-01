@@ -1,8 +1,6 @@
-import WatchPage, {
-  generateMetadata as generateLocaleMetadata
-} from '@/app/[locale]/watch/[video]/page'
+import * as localePage from '@/app/[locale]/watch/[video]/page'
 import { pitonneVideos } from '@/lib/data/videos'
-import { type PageProps, withEnglishLocale } from '../../route-helpers'
+import { englishRoute } from '../../route-helpers'
 
 type Params = { video: string }
 
@@ -12,10 +10,8 @@ export function generateStaticParams(): Params[] {
 
 export const dynamicParams = false
 
-export function generateMetadata({ params }: PageProps<Params>) {
-  return generateLocaleMetadata({ params: withEnglishLocale(params) })
-}
+const route = englishRoute<Params>(localePage)
 
-export default function Page({ params }: PageProps<Params>) {
-  return <WatchPage params={withEnglishLocale(params)} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

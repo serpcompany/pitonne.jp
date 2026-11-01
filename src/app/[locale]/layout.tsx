@@ -8,7 +8,7 @@ import { JsonLd } from '@/components/shared/json-ld'
 import { getUntranslatedBlogPaths } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
 import { getServiceCategorySections } from '@/lib/data/services'
-import { type Locale, nonDefaultLocales } from '@/lib/i18n/config'
+import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import {
   absoluteUrl,
@@ -21,6 +21,7 @@ import {
   SITE_URL
 } from '@/lib/seo'
 import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { localeStaticParams } from './locale-page'
 
 export const dynamicParams = false
 
@@ -34,9 +35,7 @@ const playfair = Playfair_Display({
   variable: '--font-playfair'
 })
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
 export async function generateMetadata({
   params

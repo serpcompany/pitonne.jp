@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { pathToFileURL } from 'node:url'
+import { runMain } from './run-main.mjs'
 
 export const CANONICAL_ORIGIN = 'https://pitonne.jp'
 export const PAGES_ORIGIN = 'https://pitonne-jp.pages.dev'
@@ -168,6 +168,4 @@ async function main([deploymentUrl]) {
   if (!(await runChecks(smokeChecks({ deploymentUrl, marker })))) process.exit(1)
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await main(process.argv.slice(2))
-}
+await runMain(import.meta.url, main)

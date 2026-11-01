@@ -1,8 +1,6 @@
-import ServiceDetailPage, {
-  generateMetadata as generateLocaleMetadata
-} from '@/app/[locale]/services/[service]/page'
+import * as localePage from '@/app/[locale]/services/[service]/page'
 import { getAllServiceSlugs } from '@/lib/data/services'
-import { type PageProps, withEnglishLocale } from '../../route-helpers'
+import { englishRoute } from '../../route-helpers'
 
 type Params = { service: string }
 
@@ -12,10 +10,8 @@ export function generateStaticParams(): Params[] {
 
 export const dynamicParams = false
 
-export function generateMetadata({ params }: PageProps<Params>) {
-  return generateLocaleMetadata({ params: withEnglishLocale(params) })
-}
+const route = englishRoute<Params>(localePage)
 
-export default function Page({ params }: PageProps<Params>) {
-  return <ServiceDetailPage params={withEnglishLocale(params)} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

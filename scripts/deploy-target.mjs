@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
-import { pathToFileURL } from 'node:url'
+import { runMain } from './run-main.mjs'
 
 export const DEPLOY_BRANCHES = ['main', 'staging']
 
@@ -51,6 +51,4 @@ function main([branch, sha]) {
     fs.appendFileSync(process.env.GITHUB_OUTPUT, `sha=${decision.sha}\nskip=false\n`)
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main(process.argv.slice(2))
-}
+await runMain(import.meta.url, main)

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
-import { pathToFileURL } from 'node:url'
+import { runMain } from './run-main.mjs'
 
 const BLOG_POST = /^content\/blog\/(ja\/)?[^/]+\.md$/
 const CMS_CONTENT =
@@ -62,6 +62,4 @@ function main([before, after]) {
     fs.appendFileSync(process.env.GITHUB_OUTPUT, `skip=${skip}\ncontent_only=${contentOnly}\n`)
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main(process.argv.slice(2))
-}
+await runMain(import.meta.url, main)

@@ -11,7 +11,7 @@ import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { interpolate } from '@/lib/i18n/interpolate'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { localizedPageMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -34,17 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoTitle = interpolate(dict.areas.wardMetaTitle, names)
   const seoDescription = interpolate(dict.areas.wardMetaDescription, names)
 
-  return {
+  return localizedPageMetadata({
     title: seoTitle,
     description: seoDescription,
-    alternates: localizedHreflangAlternates(`/areas-served/${ward.slug}/`, typedLocale),
-    ...pageSocialMetadata({
-      title: seoTitle,
-      description: seoDescription,
-      path: `/areas-served/${ward.slug}/`,
-      locale: typedLocale
-    })
-  }
+    path: `/areas-served/${ward.slug}/`,
+    locale: typedLocale
+  })
 }
 
 export default async function WardPage({ params }: Props) {

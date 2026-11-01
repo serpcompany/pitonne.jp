@@ -2,9 +2,10 @@ import Link from 'next/link'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { BlogDiscoverySection } from '@/components/blog/blog-discovery-section'
-import { BlogSidebar } from '@/components/blog/blog-sidebar'
+import { PostDateline } from '@/components/blog/post-dateline'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
+import { RelatedSidebar } from '@/components/shared/related-sidebar'
 import { blogContentParts } from '@/lib/blog-content-parts'
 import { type BlogPost, localizeBlogContentHref } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
@@ -220,15 +221,7 @@ export function BlogPostTemplate({
         }
         meta={
           <div className="flex items-center gap-4">
-            <time>{post.date}</time>
-            {post.readingTime && (
-              <>
-                <span>&middot;</span>
-                <span>
-                  {post.readingTime} {dict.common.minRead}
-                </span>
-              </>
-            )}
+            <PostDateline date={post.date} readingTime={post.readingTime} locale={locale} />
           </div>
         }
         title={post.title}
@@ -279,7 +272,10 @@ export function BlogPostTemplate({
               <BlogContent post={post} locale={locale} />
             </article>
 
-            <BlogSidebar
+            <RelatedSidebar
+              bookingTitle={dict.blog.bookAConsultation}
+              bookingDescription={dict.blog.consultationDescription}
+              relatedPostsTitle={dict.blog.relatedPosts}
               relatedServices={relatedServices}
               relatedPosts={relatedPosts}
               locale={locale}

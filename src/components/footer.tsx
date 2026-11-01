@@ -114,6 +114,23 @@ function FooterHours({
   )
 }
 
+function FooterLinkList({ links }: { links: { name: string; href: string }[] }) {
+  return (
+    <ul className="space-y-2">
+      {links.map(link => (
+        <li key={link.name}>
+          <Link
+            href={link.href}
+            className="text-sm text-white/70 hover:text-white transition-colors"
+          >
+            {link.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 function wardName(wardSlug: string, locale: Locale): string {
   const ward = getWard(wardSlug)
   if (!ward) throw new Error(`Unknown ward ${wardSlug}`)
@@ -237,18 +254,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
               {dict.footer.quickLinks}
             </h3>
-            <ul className="space-y-2">
-              {quickLinks.map(link => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <FooterLinkList links={quickLinks} />
           </div>
 
           <div>
@@ -261,18 +267,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             >
               {dict.nav.viewAllServices}
             </Link>
-            <ul className="space-y-2">
-              {serviceLinks.map(link => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <FooterLinkList links={serviceLinks} />
           </div>
 
           <div>
@@ -285,18 +280,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             >
               {dict.nav.viewAllAreas}
             </Link>
-            <ul className="space-y-2">
-              {areasServed.map(area => (
-                <li key={area.name}>
-                  <Link
-                    href={area.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
-                  >
-                    {area.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <FooterLinkList links={areasServed} />
           </div>
         </div>
 

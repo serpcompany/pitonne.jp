@@ -44,6 +44,33 @@ function LanguageSwitcher({
   )
 }
 
+function MegaMenu({
+  widthClassName,
+  gridClassName,
+  viewAllHref,
+  viewAllLabel,
+  children
+}: {
+  widthClassName: string
+  gridClassName: string
+  viewAllHref: string
+  viewAllLabel: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 ${widthClassName}`}>
+      <div className="bg-white rounded-lg shadow-xl border border-border p-6">
+        <div className={`grid ${gridClassName}`}>{children}</div>
+        <div className="mt-6 pt-4 border-t border-border">
+          <Link href={viewAllHref} className="text-sm font-medium text-[#7A8F87] hover:underline">
+            {viewAllLabel} &rarr;
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function Header({
   locale,
   text,
@@ -148,84 +175,70 @@ export function Header({
               )}
 
               {item.hasDropdown === 'services' && activeDropdown === 'services' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[760px]">
-                  <div className="bg-white rounded-lg shadow-xl border border-border p-6">
-                    <div className="grid grid-cols-4 gap-6">
-                      {servicesMenu.categories.map(category => (
-                        <div key={category.name}>
-                          <Link
-                            href={category.href}
-                            className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
-                          >
-                            {category.name}
-                          </Link>
-                          <ul className="mt-3 space-y-2">
-                            {category.items.map(service => (
-                              <li key={service.name}>
-                                <Link
-                                  href={service.href}
-                                  className="text-sm text-muted-foreground hover:text-[#7A8F87] transition-colors"
-                                >
-                                  {service.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-border">
+                <MegaMenu
+                  widthClassName="w-[760px]"
+                  gridClassName="grid-cols-4 gap-6"
+                  viewAllHref={localizedRoute('/services/', locale)}
+                  viewAllLabel={text.nav.viewAllServices}
+                >
+                  {servicesMenu.categories.map(category => (
+                    <div key={category.name}>
                       <Link
-                        href={localizedRoute('/services/', locale)}
-                        className="text-sm font-medium text-[#7A8F87] hover:underline"
+                        href={category.href}
+                        className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
                       >
-                        {text.nav.viewAllServices} &rarr;
+                        {category.name}
                       </Link>
+                      <ul className="mt-3 space-y-2">
+                        {category.items.map(service => (
+                          <li key={service.name}>
+                            <Link
+                              href={service.href}
+                              className="text-sm text-muted-foreground hover:text-[#7A8F87] transition-colors"
+                            >
+                              {service.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </div>
-                </div>
+                  ))}
+                </MegaMenu>
               )}
 
               {item.hasDropdown === 'areas' && activeDropdown === 'areas' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[700px]">
-                  <div className="bg-white rounded-lg shadow-xl border border-border p-6">
-                    <div className="grid grid-cols-5 gap-4">
-                      {areasMenu.wards.map(ward => (
-                        <div key={ward.name}>
-                          <Link
-                            href={ward.href}
-                            className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
-                          >
-                            {ward.name}
-                            <span className="block text-xs text-muted-foreground font-normal">
-                              {ward.nameJa}
-                            </span>
-                          </Link>
-                          <ul className="mt-3 space-y-1.5">
-                            {ward.areas.map(area => (
-                              <li key={area.name}>
-                                <Link
-                                  href={area.href}
-                                  className="text-xs text-muted-foreground hover:text-[#7A8F87] transition-colors"
-                                >
-                                  {area.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-border">
+                <MegaMenu
+                  widthClassName="w-[700px]"
+                  gridClassName="grid-cols-5 gap-4"
+                  viewAllHref={localizedRoute('/areas-served/', locale)}
+                  viewAllLabel={text.nav.viewAllAreas}
+                >
+                  {areasMenu.wards.map(ward => (
+                    <div key={ward.name}>
                       <Link
-                        href={localizedRoute('/areas-served/', locale)}
-                        className="text-sm font-medium text-[#7A8F87] hover:underline"
+                        href={ward.href}
+                        className="text-sm font-semibold text-foreground hover:text-[#7A8F87] transition-colors"
                       >
-                        {text.nav.viewAllAreas} &rarr;
+                        {ward.name}
+                        <span className="block text-xs text-muted-foreground font-normal">
+                          {ward.nameJa}
+                        </span>
                       </Link>
+                      <ul className="mt-3 space-y-1.5">
+                        {ward.areas.map(area => (
+                          <li key={area.name}>
+                            <Link
+                              href={area.href}
+                              className="text-xs text-muted-foreground hover:text-[#7A8F87] transition-colors"
+                            >
+                              {area.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </div>
-                </div>
+                  ))}
+                </MegaMenu>
               )}
             </div>
           ))}

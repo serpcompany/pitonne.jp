@@ -3,14 +3,9 @@ import path from 'node:path'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { BlogPostTemplate } from '@/components/blog/blog-post-template'
-import {
-  getAllBlogPosts,
-  getBlogPostBySlug,
-  getBlogPostsByCategory,
-  localizeBlogContentHref
-} from '@/lib/data/blog-posts'
-import { getServicesFromSlugs } from '@/lib/data/services'
+import { getAllBlogPosts, getBlogPostBySlug, localizeBlogContentHref } from '@/lib/data/blog-posts'
 import { getVideoBySlug } from '@/lib/data/videos'
+import { englishBlogPost } from '@/test/blog-post'
 import { defined } from '@/test/defined'
 
 const migratedDraftSlugs = [
@@ -84,35 +79,8 @@ describe('blog post parity', () => {
   })
 
   it('renders markdown prose plus live discovery sections around the final takeaway', () => {
-    const post = defined(getBlogPostBySlug('iv-therapy-for-dehydration'))
-
-    const { container } = render(
-      <BlogPostTemplate
-        post={{
-          title: post.title,
-          slug: post.slug,
-          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-          content: post.content,
-          excerpt: post.excerpt,
-          readingTime: post.readingTime,
-          category: post.category,
-          categorySlug: post.categorySlug,
-          author: post.author,
-          featureImage: post.featureImage,
-          relatedServiceSlugs: post.relatedServiceSlugs,
-          tags: post.tags
-        }}
-        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
-          candidate => candidate.slug !== post.slug
-        )}
-        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
-      />
-    )
+    const { post, template } = englishBlogPost('iv-therapy-for-dehydration')
+    const { container } = render(template)
 
     expect(container.querySelector('.blog-prose')).toBeInTheDocument()
     const renderedText = container.textContent || ''
@@ -141,35 +109,8 @@ describe('blog post parity', () => {
   })
 
   it('renders blog video markers as YouTube embeds', () => {
-    const post = defined(getBlogPostBySlug('iv-therapy-for-hangover-in-tokyo'))
-
-    const { container } = render(
-      <BlogPostTemplate
-        post={{
-          title: post.title,
-          slug: post.slug,
-          date: new Date(post.publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }),
-          content: post.content,
-          excerpt: post.excerpt,
-          readingTime: post.readingTime,
-          category: post.category,
-          categorySlug: post.categorySlug,
-          author: post.author,
-          featureImage: post.featureImage,
-          relatedServiceSlugs: post.relatedServiceSlugs,
-          tags: post.tags
-        }}
-        relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
-          candidate => candidate.slug !== post.slug
-        )}
-        relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
-        latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
-      />
-    )
+    const { template } = englishBlogPost('iv-therapy-for-hangover-in-tokyo')
+    const { container } = render(template)
 
     expect(
       screen.getByTitle('IV Therapy for Hangover Hydration & Recovery Support')

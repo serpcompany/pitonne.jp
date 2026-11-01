@@ -1,48 +1,25 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactButton } from '@/components/shared/contact-button'
 import { PageHero } from '@/components/shared/page-hero'
 import { localizedRoute } from '@/lib/data/routes'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
+export const generateMetadata = localizedMetadata('/legal/', ({ legal }) => ({
+  title: legal.metaTitle,
+  description: legal.metaDescription
+}))
 
-  const dict = getDictionary(locale as Locale)
-
-  return {
-    title: dict.legal.metaTitle,
-    description: dict.legal.metaDescription,
-    alternates: localizedHreflangAlternates('/legal/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.legal.metaTitle,
-      description: dict.legal.metaDescription,
-      path: '/legal/',
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function LegalPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function LegalPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   const legalPages = [
     {
@@ -65,9 +42,9 @@ export default async function LegalPage({ params }: Props) {
   return (
     <div className="bg-[#faf9f7]">
       <PageHero
-        locale={locale as Locale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.legal }
         ]}
         title={dict.legal.legalInformation}
@@ -80,7 +57,7 @@ export default async function LegalPage({ params }: Props) {
             {legalPages.map(page => (
               <Link
                 key={page.href}
-                href={localizedRoute(page.href, locale as Locale)}
+                href={localizedRoute(page.href, locale)}
                 className="bg-white p-8 rounded-lg border border-[#e5e5e5] hover:shadow-md hover:border-[#7A8F87] transition-all group"
               >
                 <h2 className="font-serif text-xl text-[#1a1a1a] mb-3 group-hover:text-[#7A8F87] transition-colors">
@@ -100,7 +77,7 @@ export default async function LegalPage({ params }: Props) {
             {dict.legal.questionsAboutPolicies}
           </h2>
           <p className="text-[#666] mb-6">{dict.legal.questionsDescription}</p>
-          <ContactButton locale={locale as Locale}>{dict.common.contactUs}</ContactButton>
+          <ContactButton locale={locale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </div>

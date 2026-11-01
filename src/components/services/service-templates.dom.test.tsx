@@ -12,11 +12,26 @@ import {
   services
 } from '@/lib/data/services'
 import { businessInfo } from '@/lib/data/site'
+import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { defined } from '@/test/defined'
 
 function normalizeText(value: string | null | undefined) {
   return value?.replace(/\s+/g, ' ').trim() ?? ''
+}
+
+function expectIndexSections(locale: Locale, pricedItems: string[]) {
+  const dict = getDictionary(locale)
+  expect(screen.getByRole('img', { name: dict.services.heroImageAlt })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: dict.services.howItWorksTitle })).toBeInTheDocument()
+  expect(screen.getByText(dict.services.howItWorksDescription)).toBeInTheDocument()
+  const pricingSection = screen
+    .getByRole('heading', { name: dict.services.pricingTitle })
+    .closest('section')
+  expect(pricingSection).not.toBeNull()
+  for (const text of pricedItems) {
+    expect(within(pricingSection as HTMLElement).getByText(text)).toBeInTheDocument()
+  }
 }
 
 describe('service page parity', () => {
@@ -75,21 +90,13 @@ describe('service page parity', () => {
 
   it('matches live service index grouping and card order', () => {
     render(<ServicesIndexTemplate sections={getServiceCategorySections()} />)
-    const dict = getDictionary('en')
 
-    expect(screen.getByRole('img', { name: dict.services.heroImageAlt })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: dict.services.howItWorksTitle })).toBeInTheDocument()
-    expect(screen.getByText(dict.services.howItWorksDescription)).toBeInTheDocument()
-    const pricingSection = screen
-      .getByRole('heading', { name: dict.services.pricingTitle })
-      .closest('section')
-    expect(pricingSection).not.toBeNull()
-    expect(within(pricingSection as HTMLElement).getByText('Exosome IV Drip')).toBeInTheDocument()
-    expect(within(pricingSection as HTMLElement).getByText('¥165,000')).toBeInTheDocument()
-    expect(
-      within(pricingSection as HTMLElement).getByText('Initial Online Consultation')
-    ).toBeInTheDocument()
-    expect(within(pricingSection as HTMLElement).getByText('¥5,500')).toBeInTheDocument()
+    expectIndexSections('en', [
+      'Exosome IV Drip',
+      '¥165,000',
+      'Initial Online Consultation',
+      '¥5,500'
+    ])
 
     const ivSection = screen.getByTestId('service-section-iv-therapy')
     const ivCards = within(ivSection)
@@ -132,23 +139,9 @@ describe('service page parity', () => {
   })
 
   it('renders services index pricing and how-it-works sections in Japanese', () => {
-    const dict = getDictionary('ja')
-
     render(<ServicesIndexTemplate sections={getServiceCategorySections('ja')} locale="ja" />)
 
-    expect(screen.getByRole('img', { name: dict.services.heroImageAlt })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: dict.services.howItWorksTitle })).toBeInTheDocument()
-    expect(screen.getByText(dict.services.howItWorksDescription)).toBeInTheDocument()
-    const pricingSection = screen
-      .getByRole('heading', { name: dict.services.pricingTitle })
-      .closest('section')
-    expect(pricingSection).not.toBeNull()
-    expect(within(pricingSection as HTMLElement).getByText('エクソソーム点滴')).toBeInTheDocument()
-    expect(within(pricingSection as HTMLElement).getByText('¥165,000')).toBeInTheDocument()
-    expect(
-      within(pricingSection as HTMLElement).getByText('初回オンライン診察')
-    ).toBeInTheDocument()
-    expect(within(pricingSection as HTMLElement).getByText('¥5,500')).toBeInTheDocument()
+    expectIndexSections('ja', ['エクソソーム点滴', '¥165,000', '初回オンライン診察', '¥5,500'])
   })
 
   it('loads service page copy from the shared service content docs', () => {

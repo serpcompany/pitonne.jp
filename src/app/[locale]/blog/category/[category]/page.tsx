@@ -13,7 +13,7 @@ import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { formatPostDate } from '@/lib/post-date'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import { localizedPageMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -27,38 +27,32 @@ export async function generateStaticParams() {
   )
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, category: categorySlug } = await params
+function categoryFromParams({ locale, category: categorySlug }: Awaited<Props['params']>) {
   const typedLocale = locale as Locale
-  const dict = getDictionary(typedLocale)
-  const categories = getAllCategories(typedLocale)
-  const category = categories.find(c => c.slug === categorySlug)
-  if (!category) return { title: dict.common.notFoundCategory }
-  const categoryDescription = category.description
-
   return {
-    title: `${category.name} ${dict.blog.articles}`,
-    description: categoryDescription,
-    alternates: localizedHreflangAlternates(
-      `/blog/category/${category.slug}/`,
-      typedLocale,
-      getBlogCategoryLocales(category.slug)
-    ),
-    ...pageSocialMetadata({
-      title: `${category.name} ${dict.blog.articles}`,
-      description: categoryDescription,
-      path: `/blog/category/${category.slug}/`,
-      locale: typedLocale
-    })
+    typedLocale,
+    categorySlug,
+    dict: getDictionary(typedLocale),
+    category: getAllCategories(typedLocale).find(c => c.slug === categorySlug)
   }
 }
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { typedLocale, dict, category } = categoryFromParams(await params)
+  if (!category) return { title: dict.common.notFoundCategory }
+  const categoryDescription = category.description
+
+  return localizedPageMetadata({
+    title: `${category.name} ${dict.blog.articles}`,
+    description: categoryDescription,
+    path: `/blog/category/${category.slug}/`,
+    locale: typedLocale,
+    availableLocales: getBlogCategoryLocales(category.slug)
+  })
+}
+
 export default async function BlogCategoryPage({ params }: Props) {
-  const { locale, category: categorySlug } = await params
-  const typedLocale = locale as Locale
-  const dict = getDictionary(typedLocale)
-  const categories = getAllCategories(typedLocale)
-  const category = categories.find(c => c.slug === categorySlug)
+  const { typedLocale, categorySlug, dict, category } = categoryFromParams(await params)
 
   if (!category) {
     notFound()

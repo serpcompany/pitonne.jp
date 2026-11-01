@@ -1,47 +1,25 @@
-import type { Metadata } from 'next'
 import type { FAQPage, WithContext } from 'schema-dts'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
 import { localizedRoute } from '@/lib/data/routes'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export const generateMetadata = localizedMetadata('/faqs/', ({ faqs }) => ({
+  title: faqs.frequentlyAskedQuestions,
+  description: faqs.metaDescription
+}))
 
-  return {
-    title: dict.faqs.frequentlyAskedQuestions,
-    description: dict.faqs.metaDescription,
-    alternates: localizedHreflangAlternates('/faqs/', locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.faqs.frequentlyAskedQuestions,
-      description: dict.faqs.metaDescription,
-      path: '/faqs/',
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function FaqsPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function FaqsPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   const faqJsonLd: WithContext<FAQPage> = {
     '@context': 'https://schema.org',
@@ -60,9 +38,9 @@ export default async function FaqsPage({ params }: Props) {
     <>
       <JsonLd data={faqJsonLd} />
       <PageHero
-        locale={locale as Locale}
+        locale={locale}
         breadcrumbs={[
-          { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
+          { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.faqs }
         ]}
         title={dict.faqs.frequentlyAskedQuestions}

@@ -1,8 +1,6 @@
-import AreaPage, {
-  generateMetadata as generateLocaleMetadata
-} from '@/app/[locale]/areas-served/[ward]/[area]/page'
+import * as localePage from '@/app/[locale]/areas-served/[ward]/[area]/page'
 import { getAllAreas } from '@/lib/data/areas'
-import { type PageProps, withEnglishLocale } from '../../../route-helpers'
+import { englishRoute } from '../../../route-helpers'
 
 type Params = { ward: string; area: string }
 
@@ -15,10 +13,8 @@ export function generateStaticParams(): Params[] {
 
 export const dynamicParams = false
 
-export function generateMetadata({ params }: PageProps<Params>) {
-  return generateLocaleMetadata({ params: withEnglishLocale(params) })
-}
+const route = englishRoute<Params>(localePage)
 
-export default function Page({ params }: PageProps<Params>) {
-  return <AreaPage params={withEnglishLocale(params)} />
-}
+export const generateMetadata = route.generateMetadata
+
+export default route.Page

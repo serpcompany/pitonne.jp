@@ -6,23 +6,27 @@ import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
-export function BlogSidebar({
+export function RelatedSidebar({
+  bookingTitle,
+  bookingDescription,
+  relatedPostsTitle,
   relatedServices,
   relatedPosts,
-  locale = 'en' as Locale
+  locale
 }: {
+  bookingTitle: string
+  bookingDescription: string
+  relatedPostsTitle: string
   relatedServices: Service[]
   relatedPosts: BlogPost[]
-  locale?: Locale
+  locale: Locale
 }) {
   const dict = getDictionary(locale)
   return (
     <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="mb-4 text-lg font-semibold text-foreground">
-          {dict.blog.bookAConsultation}
-        </h2>
-        <p className="mb-5 text-sm text-muted-foreground">{dict.blog.consultationDescription}</p>
+        <h2 className="mb-4 text-lg font-semibold text-foreground">{bookingTitle}</h2>
+        <p className="mb-5 text-sm text-muted-foreground">{bookingDescription}</p>
         <BookingButton className="w-full" locale={locale} />
       </div>
 
@@ -48,7 +52,7 @@ export function BlogSidebar({
 
       {relatedPosts.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold text-foreground">{dict.blog.relatedPosts}</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">{relatedPostsTitle}</h2>
           <ul className="space-y-4">
             {relatedPosts.map(post => (
               <li key={post.slug}>

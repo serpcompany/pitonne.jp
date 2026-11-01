@@ -1,60 +1,37 @@
 import { PlayCircle } from 'lucide-react'
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import { JsonLd } from '@/components/shared/json-ld'
 import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { pitonneVideos } from '@/lib/data/videos'
-import type { Locale } from '@/lib/i18n/config'
-import { nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 import { videoListJsonLd } from '@/lib/structured-data'
+import {
+  type LocalePageProps,
+  localeDictionary,
+  localeStaticParams,
+  localizedMetadata
+} from '../locale-page'
 
 export const dynamicParams = false
 
-export async function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
+export const generateStaticParams = localeStaticParams
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ locale: string }>
-}): Promise<Metadata> {
-  const { locale } = await params
+export const generateMetadata = localizedMetadata(canonicalRoutes.videos, ({ videos }) => ({
+  title: videos.metaTitle,
+  description: videos.metaDescription
+}))
 
-  const dict = getDictionary(locale as Locale)
-
-  return {
-    title: dict.videos.metaTitle,
-    description: dict.videos.metaDescription,
-    alternates: localizedHreflangAlternates(canonicalRoutes.videos, locale as Locale),
-    ...pageSocialMetadata({
-      title: dict.videos.metaTitle,
-      description: dict.videos.metaDescription,
-      path: canonicalRoutes.videos,
-      locale: locale as Locale
-    })
-  }
-}
-
-interface Props {
-  params: Promise<{ locale: string }>
-}
-
-export default async function VideosPage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function VideosPage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   return (
     <section className="bg-background">
       <JsonLd data={videoListJsonLd(pitonneVideos)} />
       <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
         <Breadcrumbs
-          locale={locale as Locale}
+          locale={locale}
           items={[
-            { label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) },
+            { label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
             { label: dict.nav.videos }
           ]}
         />
@@ -77,10 +54,7 @@ export default async function VideosPage({ params }: Props) {
               key={video.slug}
               className="overflow-hidden rounded-lg border border-border bg-white shadow-sm"
             >
-              <Link
-                href={localizedRoute(video.watchPath, locale as Locale)}
-                className="group block"
-              >
+              <Link href={localizedRoute(video.watchPath, locale)} className="group block">
                 <div className="relative aspect-video bg-muted">
                   <img
                     src={video.thumbnailUrl}

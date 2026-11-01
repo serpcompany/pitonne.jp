@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-import { pathToFileURL } from 'node:url'
-
+import { runMain } from './run-main.mjs'
 import { SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 
 export const SITEMAP_LINE = 'Sitemap: https://pitonne.jp/sitemap-index.xml'
@@ -130,6 +129,4 @@ async function main([environment, ...urls]) {
   if (!(await runChecks(checks))) process.exit(1)
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await main(process.argv.slice(2))
-}
+await runMain(import.meta.url, main)

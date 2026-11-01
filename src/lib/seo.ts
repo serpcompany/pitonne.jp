@@ -76,7 +76,7 @@ export function fitsTitleLimit(title: string): boolean {
   return title.length + TITLE_SUFFIX.length <= TITLE_MAX
 }
 
-export function pageSocialMetadata({
+function pageSocialMetadata({
   title,
   description,
   path,
@@ -107,6 +107,29 @@ export function pageSocialMetadata({
       description,
       images: resolvedImages
     }
+  }
+}
+
+export function localizedPageMetadata({
+  title,
+  description,
+  path,
+  locale,
+  availableLocales,
+  images
+}: {
+  title: string
+  description: string
+  path: string
+  locale: Locale
+  availableLocales?: readonly Locale[]
+  images?: OpenGraphImages
+}) {
+  return {
+    title,
+    description,
+    alternates: localizedHreflangAlternates(path, locale, availableLocales),
+    ...pageSocialMetadata({ title, description, path, locale, images })
   }
 }
 

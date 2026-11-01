@@ -3,25 +3,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { BookingButton } from '@/components/shared/booking-button'
 import { HomepageHeadTags } from '@/components/shared/homepage-head-tags'
+import { LatestPosts } from '@/components/shared/latest-posts-section'
 import { getAllBlogPosts } from '@/lib/data/blog-posts'
 import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
-import { type Locale, nonDefaultLocales } from '@/lib/i18n/config'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { formatPostDate } from '@/lib/post-date'
+import { type LocalePageProps, localeDictionary, localeStaticParams } from './locale-page'
 
 export const dynamicParams = false
 
-interface Props {
-  params: Promise<{ locale: string }>
-}
+export const generateStaticParams = localeStaticParams
 
-export function generateStaticParams() {
-  return nonDefaultLocales.map(locale => ({ locale }))
-}
-
-export default async function HomePage({ params }: Props) {
-  const { locale } = await params
-  const dict = getDictionary(locale as Locale)
+export default async function HomePage({ params }: LocalePageProps) {
+  const { locale, dict } = localeDictionary(await params)
 
   const services = [
     {
@@ -50,11 +42,11 @@ export default async function HomePage({ params }: Props) {
     }
   ]
 
-  const latestPosts = getAllBlogPosts(locale as Locale).slice(0, 3)
+  const latestPosts = getAllBlogPosts(locale).slice(0, 3)
 
   return (
     <>
-      <HomepageHeadTags locale={locale as Locale} />
+      <HomepageHeadTags locale={locale} />
 
       <section className="relative flex min-h-[calc(100svh-73px)] items-center overflow-hidden bg-[#faf9f7]">
         <div className="absolute left-0 bottom-0 w-32 h-48 opacity-60">
@@ -88,7 +80,7 @@ export default async function HomePage({ params }: Props) {
             {dict.home.heroTitle}
           </h1>
           <p className="max-w-xl mx-auto text-muted-foreground mb-8">{dict.home.heroDescription}</p>
-          <BookingButton className="px-8" locale={locale as Locale} />
+          <BookingButton className="px-8" locale={locale} />
         </div>
       </section>
 
@@ -157,7 +149,7 @@ export default async function HomePage({ params }: Props) {
                 </li>
               </ul>
               <Link
-                href={localizedRoute('/about', locale as Locale)}
+                href={localizedRoute('/about', locale)}
                 className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
               >
                 {dict.about.aboutPitonne}
@@ -183,7 +175,7 @@ export default async function HomePage({ params }: Props) {
             {services.map(service => (
               <Link
                 key={service.title}
-                href={localizedRoute(service.href, locale as Locale)}
+                href={localizedRoute(service.href, locale)}
                 className="group bg-white rounded-lg p-6 border border-border hover:shadow-lg transition-all duration-300"
               >
                 <div className="relative h-32 rounded-md mb-4 overflow-hidden">
@@ -245,42 +237,13 @@ export default async function HomePage({ params }: Props) {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#7A8F87] mb-4">
-              {dict.blog.blog}
-            </p>
-            <h2 className="text-3xl md:text-4xl font-serif">{dict.home.latestPosts}</h2>
-          </div>
-
-          <div className="max-w-3xl mx-auto space-y-0">
-            {latestPosts.map(post => (
-              <Link
-                key={post.slug}
-                href={localizedRoute(`/blog/${post.slug}/`, locale as Locale)}
-                className="block group"
-              >
-                <div className="flex items-start gap-4 py-5 border-b border-border">
-                  <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
-                    {formatPostDate(post.publishedAt, locale as Locale)}
-                  </span>
-                  <h3 className="text-base md:text-lg font-medium group-hover:text-[#7A8F87] transition-colors">
-                    {post.title}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href={localizedRoute('/blog', locale as Locale)}
-              className="inline-block border border-[#1a1a1a] text-[#1a1a1a] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#1a1a1a] hover:text-white transition-colors"
-            >
-              {dict.home.viewAllPosts}
-            </Link>
-          </div>
-        </div>
+        <LatestPosts
+          posts={latestPosts}
+          title={dict.home.latestPosts}
+          viewAllLabel={dict.home.viewAllPosts}
+          dateMonth="long"
+          locale={locale}
+        />
       </section>
     </>
   )
