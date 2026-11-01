@@ -25,7 +25,7 @@
     "translate": "node scripts/translate-content.ts",
     "drafts:fetch": "node scripts/fetch-google-docs.mjs",
     "verify": "serp-verify",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
+    "check": "pnpm verify && pnpm lint && pnpm typecheck && pnpm test && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
   },
   "dependencies": {
     "@keystatic/core": "^0.6.9",

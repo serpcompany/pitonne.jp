@@ -27,9 +27,10 @@ this doc holds this repository's commands for them.
 - `pnpm dev` for the site at http://localhost:3000, and `pnpm cms` for Keystatic on local files
   at http://127.0.0.1:3000/keystatic.
 
-**The finish gate** is `pnpm check`: `pnpm lint`, `pnpm typecheck`, `pnpm test`,
-`pnpm audit:meta`, `DEPLOY_ENV=production pnpm build`, `pnpm audit:out` and `pnpm audit:seo`, in
-that order, stopping at the first failure. It took about two minutes on a Windows laptop on
+**The finish gate** is `pnpm check`: `pnpm verify`, then `pnpm lint`, `pnpm typecheck`,
+`pnpm test`, `pnpm audit:meta`, `DEPLOY_ENV=production pnpm build`, `pnpm audit:out` and
+`pnpm audit:seo`, in that order, stopping at the first failure. The shared checks come first
+because they take seconds. The whole gate took about two minutes on a Windows machine on
 2026-11-01. It writes the export to `out/`, so don't change files while it runs: the result
 would match no commit.
 
@@ -40,6 +41,10 @@ would match no commit.
   you changed, not every suite again.
 - **CI on the final commit is the record** of what CI runs. CI lists its steps itself rather than
   calling `pnpm check`, and runs Lighthouse too ([`ci.md`](ci.md#ciyml)).
+- **Docker installed but not running** fails the shared checks' linters step: `@serpcompany/verify`
+  0.1.1 reads Docker's "failed to connect to the docker API" as actionlint failing, instead of
+  falling back. Start Docker, or run with Docker's folder off `PATH` and an installed actionlint
+  1.7.12 on it.
 
 ## Git hooks
 

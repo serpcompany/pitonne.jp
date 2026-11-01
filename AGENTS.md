@@ -26,8 +26,9 @@ apply; where this repository differs, the last section says so, and it wins.
   shared checks on some paths.
 - **The site:** `pnpm dev` serves http://localhost:3000 (and `/ja/`); `pnpm cms` serves Keystatic
   on your local files at http://127.0.0.1:3000/keystatic.
-- **Finish gate:** `pnpm check`, once per state: lint, typecheck, tests, `audit:meta`, the
-  production build, `audit:out` and `audit:seo`, in that order, in about two minutes.
+- **Finish gate:** `pnpm check`, once per state: `pnpm verify` first, then lint, typecheck, tests,
+  `audit:meta`, the production build, `audit:out` and `audit:seo`, in that order, in about two
+  minutes.
 - **Git hooks:** before a commit, Biome and the comment, size and secrets checks on the staged
   files; before a push, the full `serp-verify`, and `pnpm lint`, `pnpm typecheck` and `pnpm test`.
 - **CI:** `ci.yml` lists those steps itself, plus Lighthouse, and doesn't run `pnpm verify` yet.

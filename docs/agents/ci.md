@@ -25,8 +25,8 @@ only; the jobs that call `deploy.yml` add `checks: read` and `deployments: write
 
 **`test`** runs, one step each: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm audit:meta`,
 `DEPLOY_ENV=production pnpm build`, `pnpm audit:out`, `pnpm audit:seo` and
-`pnpm test:lighthouse`. These are the steps of `pnpm check` plus Lighthouse, listed rather than
-calling `pnpm check`, so a step added to one is added to the other by hand.
+`pnpm test:lighthouse`. These are the steps of `pnpm check` after `pnpm verify`, plus Lighthouse,
+listed rather than calling `pnpm check`, so a step added to one is added to the other by hand.
 
 Lighthouse CI (`lighthouserc.cjs`) serves `out/` with `pnpm start` and audits eight pages once
 each, with the desktop preset. Accessibility and best practices must score 0.95 and SEO 0.9;
