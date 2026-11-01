@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { type Scenario, simulate } from './job-results'
-import { checkNames } from './pull-request.mjs'
-import { expression, readWorkflow } from './workflows'
+import { checkNames, closedOnMergeInto } from './pull-request.mjs'
+import { expression, readWorkflow, scripts } from './workflows'
 
 const rules = readWorkflow('pull-request.yml')
+const closing = readWorkflow('close-issues.yml')
 const repository = 'serpcompany/pitonne.jp'
 
 const opened = (login: string, more: Record<string, unknown> = {}): Scenario => ({
@@ -81,5 +82,34 @@ describe('the Pull request workflow', () => {
         checkNames.map(() => 'success')
       )
     }
+  })
+})
+
+describe('the Close issues workflow', () => {
+  const job = closing.jobs.close
+
+  it('runs when a pull request into staging closes, and closes issues only when it merged', () => {
+    expect(closing.on).toEqual({
+      pull_request_target: { types: ['closed'], branches: [closedOnMergeInto] }
+    })
+    const merged = (value: boolean) =>
+      simulate(closing, opened('octocat', { merged: value, base: { ref: closedOnMergeInto } }))
+        .results.close
+    expect(merged(true)).toBe('success')
+    expect(merged(false)).toBe('skipped')
+  })
+
+  it('runs the base branch’s own script with the job’s token, which may only write issues', () => {
+    expect(closing.permissions).toEqual({ contents: 'read' })
+    expect(job.permissions).toEqual({ contents: 'read', issues: 'write' })
+    const [checkout] = job.steps ?? []
+    expect(checkout.with?.ref).toBeUndefined()
+    expect(checkout.with).toMatchObject({ 'persist-credentials': false })
+    expect(String(checkout.with?.['sparse-checkout']).trim().split('\n')).toEqual([
+      'tools/checks/pull-request.mjs',
+      'tools/checks/close-issues.mjs'
+    ])
+    expect(scripts(job)).toBe('node tools/checks/close-issues.mjs')
+    expect(job.steps?.[1].env).toEqual({ GITHUB_TOKEN: expression('github.token') })
   })
 })

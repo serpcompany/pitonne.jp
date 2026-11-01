@@ -12,6 +12,7 @@ change a workflow's section in the same pull request as the workflow. The flow t
 | Promote to Production | `promote.yml` | By hand | [`ci-deploys.md`](ci-deploys.md#promoteyml) |
 | Sync staging | `sync-staging.yml` | Every push to `main`; by hand | [`ci-deploys.md`](ci-deploys.md#sync-stagingyml) |
 | Pull request | `pull-request.yml` | Every pull request, again when its title or body is edited | [`ci-pull-requests.md`](ci-pull-requests.md#pull-request) |
+| Close issues | `close-issues.yml` | A pull request into `staging` closing | [`ci-pull-requests.md`](ci-pull-requests.md#close-issues) |
 
 Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only
 read: each write is granted to the one job that needs it. No `run:` script holds a `${{ }}`
@@ -22,7 +23,7 @@ expression; values reach scripts through `env:`. These tests hold the workflows 
 | `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install, no expressions in scripts |
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
-| `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts` | The pull request checks |
+| `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `close-issues.test.ts` | The pull request checks and the issue closing |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
 
 ## Checks a merge waits for
@@ -159,7 +160,7 @@ and their retry times are in [`ci-deploys.md`](ci-deploys.md#deployyml).
 
 Each workflow runs every action at a commit, never a tag, which can be moved to new code: the
 deploy jobs hold the Cloudflare token, every install holds a token that reads the private
-package. Each commit is the one its tag named on 2026-11-01.
+package, and the issue closing holds one that writes issues. Each commit is the one its tag named on 2026-11-01.
 `checkout`, `setup-node` and `pnpm/action-setup` moved then from `v4` to the majors SERP's
 standards use; `wrangler-action` stays at the commit `v3` named, so the deploy runs the code it
 ran before. To move one, pin the new release's commit and change its row here in the same pull
@@ -168,7 +169,7 @@ this table beside the workflows that use it.
 
 | Action | Commit | Version | Used in |
 | --- | --- | --- | --- |
-| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
+| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `close-issues.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
 | `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `deploy.yml` |
 | `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `ci.yml`, `deploy.yml` |
 | `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |

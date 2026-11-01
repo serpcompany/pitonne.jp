@@ -1,6 +1,7 @@
-# Pull request checks
+# Pull request checks and issue closing
 
-The workflow that reads a pull request rather than build the site: `pull-request.yml`. The workflow list, and what a merge waits for, are in
+The workflows that read a pull request rather than build the site: `pull-request.yml` and
+`close-issues.yml`. The workflow list, and what a merge waits for, are in
 [`ci.md`](ci.md).
 
 ## Pull request
@@ -17,7 +18,7 @@ each as a job of its own, named for its check, so each can be required on its ow
   (`Closes #12`, `Fixes #12`, `Resolves #12`, one line per issue) itself and asks GitHub that each
   names an issue of this repository: GitHub links keywords only on pull requests into the default
   branch, which is `main` ([`gitflow.md`](../gitflow.md#why-main-stays-the-default-branch)), and
-  the Close issues workflow closes them at the merge. An issue already closed
+  the [Close issues](#close-issues) workflow closes them at the merge. An issue already closed
   passes with a warning, and so does one in another repository named beside one of this
   repository's, since it has to be closed by hand. Into `main`, it asks
   GitHub which issues it linked, three times, five seconds apart, since GitHub links them a
@@ -46,3 +47,19 @@ writes, so a title or body never reaches a shell. It runs again when the title o
 and only reads (`contents`, `pull-requests` and `issues`). The alignment rule
 `ci-pull-request-checks` stays failing, since it looks for serp's action
 ([`AGENTS.md`](../../AGENTS.md#where-this-differs-from-serps-standards)).
+
+## Close issues
+
+`.github/workflows/close-issues.yml` closes, when a pull request into `staging` merges, each issue
+of this repository its description names with a closing keyword, with a comment that names the
+pull request and its commit. GitHub does that only for pull requests into the default branch,
+`main`, so without it every issue a merged pull request finishes would stay open.
+
+- It starts on `pull_request_target`, so a fork's merged pull request closes its issues too: that
+  event runs `staging`'s own copy of the workflow and of `tools/checks/close-issues.mjs`, never
+  the pull request's, and the job checks out nothing else and runs nothing from it.
+- Its job runs only when the pull request merged, with the job's own token, which may write
+  issues and nothing else.
+- An issue already closed, a number that isn't an issue, and an issue in another repository are
+  left alone, with a note in the log. The keywords are read as `issue-link` reads them, in the
+  same script, so what the check accepted is what closes.

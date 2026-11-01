@@ -140,7 +140,10 @@ default stays `main`, because changing it would break two things:
 
 So `main` stays the default branch, and `staging` is the documented PR base
 (`gh pr create --base staging`). The cost: GitHub acts on `Closes #<n>` only when a PR merges into
-the default branch, so merging a PR into `staging` doesn't close its issue.
+the default branch, so merging a PR into `staging` doesn't close its issue. The `Close issues`
+workflow does it instead: when a PR into `staging` merges, it closes each issue of this repository
+its description names with `Closes`, `Fixes` or `Resolves`, with a comment naming the PR
+([`agents/ci-pull-requests.md`](agents/ci-pull-requests.md#close-issues)).
 
 ## Repository settings this flow needs
 

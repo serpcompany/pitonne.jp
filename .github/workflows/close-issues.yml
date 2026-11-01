@@ -1,0 +1,36 @@
+name: Close issues
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches:
+      - staging
+
+permissions:
+  contents: read
+
+concurrency:
+  group: close-issues-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  close:
+    name: Close the issues a merged pull request names
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          sparse-checkout: |
+            tools/checks/pull-request.mjs
+            tools/checks/close-issues.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Comment on each issue its description closes, then close it
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/checks/close-issues.mjs
