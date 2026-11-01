@@ -8,6 +8,7 @@ import { JsonLd } from '@/components/shared/json-ld'
 import { getUntranslatedBlogPaths } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
 import { getServiceCategorySections } from '@/lib/data/services'
+import { hasAnalytics, siteOrigin } from '@/lib/deploy-environment.mts'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import {
@@ -16,9 +17,7 @@ import {
   DEFAULT_OG_IMAGE,
   deploymentRobots,
   GTM_CONTAINER_ID,
-  isProductionDeployment,
-  SITE_NAME,
-  SITE_URL
+  SITE_NAME
 } from '@/lib/seo'
 import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
 import { localeStaticParams } from './locale-page'
@@ -46,7 +45,7 @@ export async function generateMetadata({
   const dict = getDictionary(locale as Locale)
 
   return {
-    metadataBase: new URL(SITE_URL),
+    metadataBase: new URL(siteOrigin()),
     title: {
       default: dict.common.siteTitle,
       template: `%s | ${SITE_NAME}`
@@ -97,14 +96,14 @@ export default async function LocaleLayout({
 }>) {
   const { locale } = await params
   const typedLocale = locale as Locale
-  const showProductionTags = isProductionDeployment()
+  const showAnalytics = hasAnalytics()
   const dict = getDictionary(typedLocale)
 
   return (
     <html lang={locale} className={`${inter.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased bg-background">
-        {showProductionTags && <GoogleTagManager gtmId={GTM_CONTAINER_ID} />}
-        {showProductionTags && (
+        {showAnalytics && <GoogleTagManager gtmId={GTM_CONTAINER_ID} />}
+        {showAnalytics && (
           <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}

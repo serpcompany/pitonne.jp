@@ -1,9 +1,8 @@
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
 import { RelatedSidebar } from '@/components/shared/related-sidebar'
+import { SiteMarkdown } from '@/components/shared/site-markdown'
 import type { BlogPost } from '@/lib/data/blog-posts'
 import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
@@ -50,7 +49,7 @@ export function ServiceDetailTemplate({
               )}
 
               <section className="blog-prose mb-16">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{service.content}</ReactMarkdown>
+                <SiteMarkdown content={service.content} />
               </section>
 
               <section>

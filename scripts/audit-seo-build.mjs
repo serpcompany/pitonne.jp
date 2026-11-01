@@ -1,9 +1,16 @@
 #!/usr/bin/env node
 import fs from 'node:fs'
 import path from 'node:path'
+import {
+  DEPLOY_ENVIRONMENTS,
+  deployEnvironment,
+  SITE_AUDITOR,
+  siteOrigin
+} from '../src/lib/deploy-environment.mts'
+import { blocksEverything } from './robots-txt.mjs'
 
 const OUT = path.resolve(process.argv[2] || 'out')
-const SITE_URL = 'https://pitonne.jp'
+const SITE_URL = siteOrigin(deployEnvironment(process.env))
 const limits = JSON.parse(
   fs.readFileSync(new URL('../src/lib/seo-limits.json', import.meta.url), 'utf8')
 )
@@ -36,7 +43,12 @@ const decode = value =>
   value.replace(/&(amp|quot|#x27|#39|lt|gt);/g, (_, entity) => HTML_ENTITIES[entity])
 
 const SITE = new URL(SITE_URL)
-const SITE_HOSTS = new Set([SITE.hostname, `www.${SITE.hostname}`])
+const SITE_HOSTS = new Set(
+  DEPLOY_ENVIRONMENTS.flatMap(environment => {
+    const { hostname } = new URL(siteOrigin(environment))
+    return [hostname, `www.${hostname}`]
+  })
+)
 
 function classifyLink(href, baseUrl) {
   let url
@@ -166,7 +178,7 @@ const readOut = file =>
   fs.existsSync(path.join(OUT, file)) ? fs.readFileSync(path.join(OUT, file), 'utf8') : null
 const locs = xml => [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) => decode(loc))
 
-const indexable = !/^Disallow:\s*\/\s*$/im.test(readOut('robots.txt') || '')
+const indexable = !blocksEverything(readOut('robots.txt') || '', SITE_AUDITOR)
 const robotsSitemaps = [...(readOut('robots.txt') || '').matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(
   ([, url]) => url
 )
@@ -269,5 +281,5 @@ if (findings.length > 0) {
 }
 
 console.log(
-  `SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} URLs in ${childSitemaps.length} sitemaps.`
+  `SEO audit passed for ${pages.length} pages and ${sitemapOwners.size} URLs in ${childSitemaps.length} sitemaps on ${SITE_URL}.`
 )

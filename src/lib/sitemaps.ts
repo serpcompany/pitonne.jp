@@ -8,8 +8,9 @@ import {
 import { canonicalRoutes } from '@/lib/data/routes'
 import { services } from '@/lib/data/services'
 import { pitonneVideos } from '@/lib/data/videos'
+import { siteOrigin } from '@/lib/deploy-environment.mts'
 import { defaultLocale, type Locale, locales } from '@/lib/i18n/config'
-import { normalizePath, SITE_URL } from '@/lib/seo'
+import { normalizePath } from '@/lib/seo'
 
 export const sitemapGroups = ['pages', 'services', 'areas', 'blog', 'categories', 'videos'] as const
 type SitemapGroup = (typeof sitemapGroups)[number]
@@ -45,10 +46,10 @@ interface SitemapPath {
 export function sitemapOrigin(): string {
   return process.env.NODE_ENV === 'development'
     ? `http://localhost:${process.env.PORT ?? 3000}`
-    : SITE_URL
+    : siteOrigin()
 }
 
-function sitemapUrl(path: string, locale: Locale, origin: string = SITE_URL): string {
+function sitemapUrl(path: string, locale: Locale, origin: string = siteOrigin()): string {
   const normalizedPath = normalizePath(path)
   if (locale !== defaultLocale) return `${origin}/${locale}${normalizedPath}`
   return normalizedPath === '/' ? origin : `${origin}${normalizedPath}`
@@ -109,7 +110,7 @@ function groupPaths(): Record<SitemapGroup, SitemapPath[]> {
 export function sitemapEntriesForPath(
   path: string,
   pathLocales: readonly Locale[],
-  origin: string = SITE_URL,
+  origin: string = siteOrigin(),
   video?: SitemapPath['video']
 ): SitemapEntry[] {
   const normalizedPath = normalizePath(path)
@@ -134,7 +135,7 @@ export function sitemapEntriesForPath(
 }
 
 export function sitemapEntriesByGroup(
-  origin: string = SITE_URL
+  origin: string = siteOrigin()
 ): Record<SitemapGroup, SitemapEntry[]> {
   const paths = groupPaths()
   const seen = new Set<string>()
@@ -161,7 +162,7 @@ export function sitemapEntriesByGroup(
   ) as Record<SitemapGroup, SitemapEntry[]>
 }
 
-export function sitemapEntries(group: SitemapGroup, origin: string = SITE_URL): SitemapEntry[] {
+export function sitemapEntries(group: SitemapGroup, origin: string = siteOrigin()): SitemapEntry[] {
   return sitemapEntriesByGroup(origin)[group]
 }
 
@@ -184,7 +185,7 @@ function durationToSeconds(duration: string): number {
 const XML_HEADER =
   '<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>'
 
-export function sitemapIndexXml(origin: string = SITE_URL): string {
+export function sitemapIndexXml(origin: string = siteOrigin()): string {
   const children = sitemapGroups.map(
     group =>
       `  <sitemap>\n    <loc>${escapeXml(`${origin}/${sitemapFile(group)}`)}</loc>\n  </sitemap>`

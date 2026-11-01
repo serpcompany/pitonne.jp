@@ -1,20 +1,14 @@
 import type { Metadata } from 'next'
+import { isIndexable, siteOrigin } from '@/lib/deploy-environment.mts'
 import type { Locale } from '@/lib/i18n/config'
 import { defaultLocale, locales } from '@/lib/i18n/config'
 import seoLimits from '@/lib/seo-limits.json'
 
-export const SITE_URL = 'https://pitonne.jp'
 export const SITE_NAME = 'Pitonne'
 export const DEFAULT_DESCRIPTION =
   'Pitonne is a concierge wellness service in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and in-home or hotel visit care.'
 export const DEFAULT_OG_IMAGE = '/images/content/sheet/home.jpg'
 export const GTM_CONTAINER_ID = 'GTM-TJ94H7LQ'
-
-export function isProductionDeployment(): boolean {
-  return (
-    process.env.DEPLOY_ENV === 'production' || process.env.NEXT_PUBLIC_DEPLOY_ENV === 'production'
-  )
-}
 
 export function normalizePath(path: string): string {
   if (!path || path === '/') {
@@ -27,7 +21,8 @@ export function normalizePath(path: string): string {
 
 export function canonicalUrl(path: string): string {
   const normalizedPath = normalizePath(path)
-  return normalizedPath === '/' ? SITE_URL : `${SITE_URL}${normalizedPath}`
+  const origin = siteOrigin()
+  return normalizedPath === '/' ? origin : `${origin}${normalizedPath}`
 }
 
 export function absoluteUrl(path: string): string {
@@ -35,13 +30,19 @@ export function absoluteUrl(path: string): string {
     return path
   }
 
-  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
+  return `${siteOrigin()}${path.startsWith('/') ? path : `/${path}`}`
+}
+
+export function onSiteOrigin(href: string): string {
+  const written = siteOrigin('production')
+  if (href !== written && !href.startsWith(`${written}/`)) return href
+  return `${siteOrigin()}${href.slice(written.length)}`
 }
 
 export function localizedCanonicalUrl(path: string, locale: Locale): string {
   const normalizedPath = normalizePath(path)
   if (locale === 'ja') {
-    return `${SITE_URL}/ja${normalizedPath}`
+    return `${siteOrigin()}/ja${normalizedPath}`
   }
   return canonicalUrl(normalizedPath)
 }
@@ -134,7 +135,7 @@ export function localizedPageMetadata({
 }
 
 export function deploymentRobots(): Metadata['robots'] {
-  return isProductionDeployment()
+  return isIndexable()
     ? {
         index: true,
         follow: true

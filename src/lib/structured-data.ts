@@ -12,19 +12,20 @@ import type { BlogPost } from '@/lib/data/blog-posts'
 import type { Service } from '@/lib/data/services'
 import { businessHours, getBusinessInfo, isOpenBusinessHours } from '@/lib/data/site'
 import type { PitonneVideo } from '@/lib/data/videos'
+import { siteOrigin } from '@/lib/deploy-environment.mts'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME } from '@/lib/seo'
 
-const businessId = `${SITE_URL}/#business`
-const websiteId = `${SITE_URL}/#website`
+const businessId = () => `${siteOrigin()}/#business`
+const websiteId = () => `${siteOrigin()}/#website`
 
 export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusiness> {
   const info = getBusinessInfo(locale)
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
-    '@id': businessId,
+    '@id': businessId(),
     name: info.name,
     url: localizedCanonicalUrl('/', locale),
     telephone: info.phone,
@@ -54,10 +55,10 @@ export function websiteJsonLd(locale: Locale = 'en'): WithContext<WebSite> {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': websiteId,
+    '@id': websiteId(),
     name: SITE_NAME,
     url: localizedCanonicalUrl('/', locale),
-    publisher: { '@id': businessId },
+    publisher: { '@id': businessId() },
     inLanguage: locale === 'ja' ? 'ja' : 'en'
   }
 }
@@ -71,7 +72,7 @@ export function serviceJsonLd(service: Service, locale: Locale = 'en'): WithCont
     description: service.shortDescription,
     url: localizedCanonicalUrl(service.canonicalPath, locale),
     image: service.image ? absoluteUrl(service.image) : undefined,
-    provider: { '@id': businessId },
+    provider: { '@id': businessId() },
     areaServed: {
       '@type': 'City',
       name: 'Tokyo'
@@ -85,7 +86,7 @@ export function blogPostingJsonLd(
   locale: Locale = 'en'
 ): WithContext<BlogPosting> {
   const enUrl = canonicalUrl(`/blog/${post.slug}/`)
-  const jaUrl = `${SITE_URL}/ja/blog/${post.slug}/`
+  const jaUrl = localizedCanonicalUrl(`/blog/${post.slug}/`, 'ja')
 
   return {
     '@context': 'https://schema.org',
@@ -105,7 +106,7 @@ export function blogPostingJsonLd(
       name: post.author.name,
       jobTitle: post.author.role
     },
-    publisher: { '@id': businessId },
+    publisher: { '@id': businessId() },
     mainEntityOfPage: localizedCanonicalUrl(`/blog/${post.slug}/`, locale)
   }
 }
@@ -125,7 +126,7 @@ export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject>
     embedUrl: absoluteUrl(video.embedUrl),
     url: watchUrl,
     mainEntityOfPage: watchUrl,
-    publisher: { '@id': businessId },
+    publisher: { '@id': businessId() },
     potentialAction: {
       '@type': 'WatchAction',
       target: {

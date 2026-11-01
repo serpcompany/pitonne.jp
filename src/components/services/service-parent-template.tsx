@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { serviceBreadcrumbs } from '@/components/services/service-breadcrumbs'
 import { ServiceCardGrid } from '@/components/services/service-card-grid'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
+import { SiteMarkdown } from '@/components/shared/site-markdown'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Service } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
@@ -46,7 +45,7 @@ export function ServiceParentTemplate({
         <div className="container mx-auto px-4">
           {service.content && (
             <section className="blog-prose mx-auto mb-16 max-w-4xl">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{service.content}</ReactMarkdown>
+              <SiteMarkdown content={service.content} />
             </section>
           )}
 

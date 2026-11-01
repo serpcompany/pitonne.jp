@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { PageHero } from '@/components/shared/page-hero'
+import { SiteMarkdown } from '@/components/shared/site-markdown'
 import type { MarkdownPage } from '@/lib/data/pages'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Locale } from '@/lib/i18n/config'
@@ -37,7 +36,7 @@ export function LegalMarkdownPage({
       <section className="py-16">
         <div className="container mx-auto max-w-3xl px-4">
           <div className="blog-prose">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{page.content}</ReactMarkdown>
+            <SiteMarkdown content={page.content} />
           </div>
         </div>
       </section>

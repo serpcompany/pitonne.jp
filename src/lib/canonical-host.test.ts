@@ -8,10 +8,11 @@ import {
   canonicalRedirectLocation,
   isNonCanonicalHost,
   SMOKE_TEST_HEADER,
+  STAGING_ORIGIN,
   slashedFileLocation,
   slashedFileRedirect
 } from '@/lib/canonical-host'
-import { SITE_URL } from '@/lib/seo'
+import { siteOrigin } from '@/lib/deploy-environment.mts'
 import { defined } from '@/test/defined'
 import { onRequest } from '../../functions/_middleware'
 
@@ -19,8 +20,9 @@ const location = (url: string, headers: Record<string, string> = {}) =>
   canonicalRedirectLocation(url, new Headers(headers))
 
 describe('canonical host', () => {
-  it('matches the site URL used for canonical tags', () => {
-    expect(CANONICAL_ORIGIN).toBe(SITE_URL)
+  it('matches the site origins used for canonical tags', () => {
+    expect(CANONICAL_ORIGIN).toBe(siteOrigin('production'))
+    expect(STAGING_ORIGIN).toBe(siteOrigin('staging'))
   })
 
   it.each([

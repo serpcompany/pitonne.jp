@@ -1,5 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { SITE_AUDITOR } from '../src/lib/deploy-environment.mts'
+import { blocksEverything } from './robots-txt.mjs'
 
 const OUT = path.join(process.cwd(), 'out')
 const SITEMAP_INDEX = 'sitemap-index.xml'
@@ -35,9 +37,8 @@ function htmlUnder(relative) {
     .map(file => path.join(relative, file))
 }
 const routesPath = path.join(OUT, '_routes.json')
-const excludedRoutes = fs.existsSync(routesPath)
-  ? (JSON.parse(fs.readFileSync(routesPath, 'utf8')).exclude ?? [])
-  : []
+const routes = fs.existsSync(routesPath) ? JSON.parse(fs.readFileSync(routesPath, 'utf8')) : {}
+const excludedRoutes = routes.exclude ?? []
 const htmlInExcludedRoutes = excludedRoutes.flatMap(rule =>
   htmlUnder(rule.replace(/^\//, '').replace(/\*$/, ''))
 )
@@ -48,15 +49,20 @@ const robots = read('robots.txt')
 const headers = read('_headers')
 const indexMismatch = []
 if (robots !== null && headers !== null) {
-  const disallowsAll = /^Disallow:\s*\/\s*$/m.test(robots)
+  const auditable = !blocksEverything(robots, SITE_AUDITOR)
   const sendsNoindex = /^\s*X-Robots-Tag:.*\bnoindex\b/im.test(headers)
-  if (disallowsAll && !sendsNoindex)
+  if (!auditable && !sendsNoindex)
     indexMismatch.push(
       'out/robots.txt disallows crawling but out/_headers sends no X-Robots-Tag: noindex'
     )
-  if (!disallowsAll && sendsNoindex)
+  if (auditable && sendsNoindex)
     indexMismatch.push(
       'out/_headers sends X-Robots-Tag: noindex but out/robots.txt allows crawling'
+    )
+  const gated = auditable && blocksEverything(robots)
+  if (gated && (String(routes.include) !== '/*' || excludedRoutes.length > 0))
+    indexMismatch.push(
+      `out/robots.txt admits only ${SITE_AUDITOR}, so the password gate must cover every path, but out/_routes.json keeps paths off the Function`
     )
 }
 
