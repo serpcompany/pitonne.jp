@@ -7,6 +7,7 @@
       "content/blog-categories/**": "Keystatic, the CMS at /keystatic (docs/cms.md), which saves each category from its editor"
     },
     "names": {
+      ".git-blame-ignore-revs": "hash-lines",
       "_headers": "hash-lines",
       "_redirects": "hash-lines"
     },
