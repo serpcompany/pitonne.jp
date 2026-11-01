@@ -96,3 +96,5 @@ the review prompt
 ([Review Prompt](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/agent-harness/review-prompt.md)),
 and cleaning up after merged work
 ([Housekeeping](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/housekeeping.md)).
+Where this repository differs from a standard, [`AGENTS.md`](../../AGENTS.md) lists it, and that
+list wins.
