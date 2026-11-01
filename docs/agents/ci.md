@@ -13,6 +13,7 @@ change a workflow's section in the same pull request as the workflow. The flow t
 | Sync staging | `sync-staging.yml` | Every push to `main`; by hand | [`ci-deploys.md`](ci-deploys.md#sync-stagingyml) |
 | Pull request | `pull-request.yml` | Every pull request, again when its title or body is edited | [`ci-pull-requests.md`](ci-pull-requests.md#pull-request) |
 | Close issues | `close-issues.yml` | A pull request into `staging` closing | [`ci-pull-requests.md`](ci-pull-requests.md#close-issues) |
+| Code review | `code-review.yml` | Every push to a pull request that isn't a draft | [`ci-pull-requests.md`](ci-pull-requests.md#code-review) |
 
 Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only
 read: each write is granted to the one job that needs it. No `run:` script holds a `${{ }}`
@@ -24,6 +25,7 @@ expression; values reach scripts through `env:`. These tests hold the workflows 
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
 | `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `close-issues.test.ts` | The pull request checks and the issue closing |
+| `tools/checks/code-review.test.ts` | Who gets a review, when, and with which model |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
 
 ## Checks a merge waits for
@@ -32,7 +34,9 @@ The `staging` and `main` rulesets require `test`. Once these workflows are on bo
 owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and may add `e2e` and
 `lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
 required workflow starts on every pull request, with no `paths` filter, so its check always
-reports: a docs-only change skips work inside the jobs, never the jobs.
+reports: a docs-only change skips work inside the jobs, never the jobs. `Code review` isn't a
+required check, as SERP's standard sets: its findings are review threads, and the merge waits for
+every thread to be resolved instead.
 
 ## Installing the private package
 
@@ -159,8 +163,8 @@ and their retry times are in [`ci-deploys.md`](ci-deploys.md#deployyml).
 ## Pinned actions
 
 Each workflow runs every action at a commit, never a tag, which can be moved to new code: the
-deploy jobs hold the Cloudflare token, every install holds a token that reads the private
-package, and the issue closing holds one that writes issues. Each commit is the one its tag named on 2026-11-01.
+deploy jobs hold the Cloudflare token, the review holds Claude's, and every install holds a token
+that reads the private package. Each commit is the one its tag named on 2026-11-01.
 `checkout`, `setup-node` and `pnpm/action-setup` moved then from `v4` to the majors SERP's
 standards use; `wrangler-action` stays at the commit `v3` named, so the deploy runs the code it
 ran before. To move one, pin the new release's commit and change its row here in the same pull
@@ -169,14 +173,19 @@ this table beside the workflows that use it.
 
 | Action | Commit | Version | Used in |
 | --- | --- | --- | --- |
-| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `close-issues.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
-| `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `deploy.yml` |
+| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `close-issues.yml`, `code-review.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
+| `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `code-review.yml`, `deploy.yml` |
 | `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `ci.yml`, `deploy.yml` |
 | `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |
-| `actions/upload-artifact` | `cf430e030ddbb5b0abf93d22962f4752f3646cd9` | v7.0.2 | `ci.yml` |
+| `actions/upload-artifact` | `cf430e030ddbb5b0abf93d22962f4752f3646cd9` | v7.0.2 | `ci.yml`, `code-review.yml` |
 | `actions/download-artifact` | `9000827ccba6bdab643e8b6fd33ac0654aef8333` | v8.0.2 | `ci.yml` |
 | `actions/create-github-app-token` | `64ab729a6294000f5aa4a4bc0b73d1f32bc45510` | v3.3.0 | `ci.yml` |
 | `cloudflare/wrangler-action` | `9acf94ace14e7dc412b076f2c5c20b8ce93c79cd` | v3.15.0 | `deploy.yml` |
+| `anthropics/claude-code-action` | `6b6870e649b5ff408753befeaee5fc7989d4e6a9` | v1.0.258 | `code-review.yml` |
+
+`claude-code-action` is the version zenbujapanese-monorepo's review runs. It runs only when its
+workflow is the default branch's, so a pull request that moves the pin can't try it: the first
+review after a promotion is its test.
 
 ## Owner steps
 
@@ -189,5 +198,9 @@ Nothing in the repository can do these; an owner does them once:
    add the app's ID as the Actions variable `SERP_AGENT_APP_ID` and a private key made for CI as
    the Actions secret `SERP_AGENT_PRIVATE_KEY` (or organization ones that cover this repository),
    and install the app on `serpcompany/serp`. Until then `verify` skips those links with a note.
-3. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
+3. **Claude's review:** install the Claude GitHub app (github.com/apps/claude) on
+   `serpcompany/pitonne.jp`, so `claude-code-action` can post as `claude[bot]`, and add the
+   Actions secret `CLAUDE_CODE_OAUTH_TOKEN`, made with `claude setup-token` on the account that
+   pays for the reviews. Until the secret is set, `Code review` notes that it skipped.
+4. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
    `staging` and `main` rulesets beside `test`, and optionally `e2e` and `lighthouse`.

@@ -1,7 +1,7 @@
-# Pull request checks and issue closing
+# Pull request checks, issue closing and code review
 
-The workflows that read a pull request rather than build the site: `pull-request.yml` and
-`close-issues.yml`. The workflow list, and what a merge waits for, are in
+The workflows that read a pull request rather than build the site: `pull-request.yml`,
+`close-issues.yml` and `code-review.yml`. The workflow list, and what a merge waits for, are in
 [`ci.md`](ci.md).
 
 ## Pull request
@@ -63,3 +63,50 @@ pull request and its commit. GitHub does that only for pull requests into the de
 - An issue already closed, a number that isn't an issue, and an issue in another repository are
   left alone, with a note in the log. The keywords are read as `issue-link` reads them, in the
   same script, so what the check accepted is what closes.
+
+## Code review
+
+`.github/workflows/code-review.yml` reviews each push to a pull request with Claude, as SERP's
+[code review](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification/code-review/README.md)
+standard sets, after serp's own `review.yml`, which this repository can't call.
+
+- **Whose:** every push to a pull request from this repository that isn't a draft, a person's or
+  the `serp-agent` app's. Drafts, forks (which get no secrets), `claude[bot]`, Dependabot and
+  Renovate are skipped. A new push cancels the review of the one before.
+- **The changes job** reads the pull request's files, checking nothing out. When the pull
+  request changes `code-review.yml` itself, it skips the review with a notice that a person
+  reviews it: `claude-code-action` runs only when its workflow is the default branch's copy.
+  That also means no review runs until this workflow is on `main`.
+- **Once the fast checks pass:** the review job waits, up to 20 minutes, for `verify` and `test`
+  on the pull request's head commit, so no tokens go to a change that fails lint, types or the
+  tests. When either fails it reviews nothing and says so; the next push that passes is reviewed.
+  It doesn't wait for `e2e` or `lighthouse`, so findings arrive while they run.
+- **The scripts** that gather the review's context, post its summary and judge it come from
+  `@serpcompany/verify`'s `dist/review/`, from the package the default branch's lockfile pins: the
+  job downloads that tarball with its own token and checks it against the lockfile's integrity
+  hash before running it. Nothing the pull request changes runs with the job's token. The
+  reviewer can write files, so after the review the job deletes the scripts and takes them again,
+  checked against the hash it read before, for the steps that post. What it can't take again,
+  the runner's Node and the actions those steps use, the reviewer could still reach.
+- **The context:** `AGENTS.md`, `ARCHITECTURE.md`, `CONTEXT.md` and `docs/agents/code.md` as they
+  are on the base branch; the change as one patch per file, since the last reviewed commit after
+  the first review; the issue it closes, read from its closing keywords on a pull request into
+  `staging`; and the findings already posted, so none is posted twice.
+- **The reviewer**, after [Models and Effort](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/agent-harness/models-and-effort.md):
+  a first review runs on Opus at high effort, or at xhigh when the change touches the workflows,
+  the Function, the host rules and Staging gate (`src/lib/canonical-host.ts`), `wrangler.toml` or
+  `public/_headers`, `_redirects` or `_routes.json`. A re-review of the commits since the last
+  review, and the only review of a small change (under 50 changed lines outside docs, content,
+  dictionaries and tests), run on Sonnet at medium effort.
+- **What it does:** it reads every patch, starts three reviewers in parallel (bugs, the
+  repository's rules, and the issue, tests and docs), keeps the real new findings, posts each as
+  an inline comment marked **blocking** or **suggestion**, and writes a summary that says how
+  many of the changed files it read. The workflow posts the summary, or updates the earlier one,
+  as `github-actions[bot]`, and keeps the transcript for a week.
+- **Time and failure:** the wait has 25 minutes and the review 20, inside the job's 60. The job
+  fails only when no review ran or its summary couldn't be posted; findings never turn it red.
+  Every review thread is resolved before the pull request merges.
+- **Permissions:** it reads contents, checks, issues and packages, writes pull request comments,
+  and mints the OIDC token `claude-code-action` exchanges for its own app's token, which posts
+  the inline findings as `claude[bot]`. It needs the `CLAUDE_CODE_OAUTH_TOKEN` secret, and notes
+  that it skipped without it.

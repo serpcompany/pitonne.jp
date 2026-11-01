@@ -51,7 +51,8 @@ apply; where this repository differs, the last section says so, and it wins.
   is still `main`, so open a pull request with `gh pr create --base staging`.
 - One issue, one branch (`issue-<n>-<slug>`, in its own worktree), one pull request with a
   Conventional Commit title, starting `Closes #<n>`, with each evidence level reported apart.
-- A fresh agent reviews once CI is green. The owner merges (squash) and promotes; agents do
+- Claude reviews each push once `verify` and `test` pass (`Code review`); until it runs, a
+  fresh agent reviews once CI is green. The owner merges (squash) and promotes; agents do
   neither. Before starting and when handing back, check the latest runs on both branches.
 - Agents run `gh` and push only as the organization's app
   ([Agent GitHub Identity](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/agent-harness/agent-github-identity.md)).
