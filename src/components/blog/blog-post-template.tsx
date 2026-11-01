@@ -12,6 +12,7 @@ import type { Service } from '@/lib/data/services'
 import { getVideoBySlug } from '@/lib/data/videos'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { formatPostDate } from '@/lib/post-date'
 import { blogPostingJsonLd } from '@/lib/structured-data'
 
 export interface BlogPostViewModel {
@@ -154,10 +155,7 @@ function LatestPostsSection({
               className="group block rounded-lg border border-border bg-background p-5 transition-all hover:border-[#7A8F87] hover:shadow-md"
             >
               <p className="mb-2 text-xs text-muted-foreground">
-                {new Date(post.publishedAt).toLocaleDateString(
-                  locale === 'ja' ? 'ja-JP' : 'en-US',
-                  { year: 'numeric', month: 'short', day: 'numeric' }
-                )}
+                {formatPostDate(post.publishedAt, locale, 'short')}
               </p>
               <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-[#7A8F87]">
                 {post.title}

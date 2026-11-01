@@ -3,6 +3,7 @@ import { getAllBlogPosts } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { formatPostDate } from '@/lib/post-date'
 
 export function LatestPostsSection({
   count = 3,
@@ -33,10 +34,7 @@ export function LatestPostsSection({
             >
               <div className="flex items-start gap-4 py-5 border-b border-border">
                 <span className="text-xs text-muted-foreground whitespace-nowrap mt-1 w-24 shrink-0">
-                  {new Date(post.publishedAt).toLocaleDateString(
-                    locale === 'ja' ? 'ja-JP' : 'en-US',
-                    { year: 'numeric', month: 'short', day: 'numeric' }
-                  )}
+                  {formatPostDate(post.publishedAt, locale, 'short')}
                 </span>
                 <h3 className="text-base md:text-lg font-medium group-hover:text-[#7A8F87] transition-colors">
                   {post.title}

@@ -8,6 +8,7 @@ import { localizedRoute } from '@/lib/data/routes'
 import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { formatPostDate } from '@/lib/post-date'
 import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
@@ -41,17 +42,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params
   const typedLocale = locale as Locale
-  const dateLocale = locale === 'ja' ? 'ja-JP' : 'en-US'
   const dict = getDictionary(typedLocale)
 
   const posts = getAllBlogPosts(typedLocale).map(post => ({
     slug: post.slug,
     title: post.title,
-    date: new Date(post.publishedAt).toLocaleDateString(dateLocale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }),
+    date: formatPostDate(post.publishedAt, typedLocale),
     excerpt: post.excerpt,
     readingTime: post.readingTime,
     featureImage: post.featureImage,

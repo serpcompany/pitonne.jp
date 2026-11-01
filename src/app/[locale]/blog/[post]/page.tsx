@@ -11,6 +11,7 @@ import { getServicesFromSlugs } from '@/lib/data/services'
 import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { formatPostDate } from '@/lib/post-date'
 import { absoluteUrl, localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
@@ -65,7 +66,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { locale, post: postSlug } = await params
   const typedLocale = locale as Locale
-  const dateLocale = locale === 'ja' ? 'ja-JP' : 'en-US'
 
   const staticPost = getBlogPostBySlug(postSlug, typedLocale)
   const post: BlogPostViewModel | null = staticPost
@@ -73,11 +73,7 @@ export default async function BlogPostPage({ params }: Props) {
         title: staticPost.title,
         slug: staticPost.slug,
         publishedAt: staticPost.publishedAt,
-        date: new Date(staticPost.publishedAt).toLocaleDateString(dateLocale, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }),
+        date: formatPostDate(staticPost.publishedAt, typedLocale),
         content: staticPost.content,
         excerpt: staticPost.excerpt,
         featureImage: staticPost.featureImage,
