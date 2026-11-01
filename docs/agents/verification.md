@@ -46,6 +46,44 @@ would match no commit.
   falling back. Start Docker, or run with Docker's folder off `PATH` and an installed actionlint
   1.7.12 on it.
 
+## Browser journeys
+
+`e2e/` holds Playwright journeys that drive a built `out/` in Chromium, served as Pages serves
+it: Playwright starts `pnpm preview` (`wrangler pages dev out`, with the wrangler the deploy
+uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, `_headers`,
+`_routes.json` and the Function, and it refuses to reuse a server already on that port.
+
+- **Run them:** `DEPLOY_ENV=production pnpm build`, then `DEPLOY_ENV=production pnpm test:e2e`.
+  They read `DEPLOY_ENV` as `pnpm audit:seo` does, to know which indexing signals the build must
+  send, so export the value the build used; `pnpm build` and `pnpm test:e2e` with neither test
+  a preview build. Once per machine, `pnpm exec playwright install chromium` downloads the
+  browser; point `PLAYWRIGHT_BROWSERS_PATH` at a disk with room if the default one is full.
+- **Two widths:** the `desktop` project (1440×900) and the `phone` project (Pixel 7). `retries`
+  is 0, and any console error or uncaught page error fails the journey (`e2e/fixtures.ts`).
+  Requests to other hosts (Google Tag Manager, the LeadConnector form, the map) get an empty
+  answer, so no journey depends on a third party.
+- **Behavior, not content:** editors change posts at any time, so a journey follows whatever
+  post, category, service or area the page links first, and never counts posts or reads their
+  text. Labels come from the dictionaries.
+- **What they cover:** the home page in each language and the language switch; the header's
+  links on desktop and the phone menu, page after page without a reload; a service from the
+  services index and back; a post from the blog index, and a category's posts; an area from
+  its ward; the contact page's phone link and message form; and, on the build as served, each
+  environment's indexing signals, canonical and `robots.txt`, the 404 page, and the slash,
+  `/en/` and `_redirects` redirects. The deploy's smoke test checks those last ones on the
+  deployed site; the journeys check them before the deploy, on the same build.
+- **Not part of `pnpm check`:** they need a build and a browser, and on Windows the export
+  isn't the one Linux builds (below). CI runs them on every pull request and push
+  ([`ci.md`](ci.md#ciyml)).
+- **On Windows,** `next build` writes each page's RSC payload files into nested folders
+  (`out/about/__next.!KGVuKQ/about/__PAGE__.txt`) where Linux, and so CI and every deploy, writes
+  one flat name per file (`out/about/__next.!KGVuKQ.about.__PAGE__.txt`), the name the client
+  requests. Served locally, those requests answer 404, so on a Windows build the journeys that
+  load or follow links fail: on 2026-11-01, 12 of the 23 that ran failed, 10 on console errors
+  (`Failed to load resource: the server responded with a status of 404` for
+  `/services/__next.!KGVuKQ.services.txt` and the like), one because a link never navigated,
+  and one on an aborted page load. Run them in WSL or another Linux shell, or let CI run them.
+
 ## Git hooks
 
 `pnpm install` installs lefthook's git hooks (`lefthook.yml`, which extends
@@ -92,14 +130,14 @@ build and tests, from the finish gate or CI. Beyond that:
 | The CMS (`keystatic.config.ts`, `src/lib/blog-rules.ts`, `patches/@keystatic__core@0.6.9.patch`, the post and category schemas) | A local run of the affected editor flow with `pnpm cms`; after the deploy, https://pitonne.jp/keystatic loads |
 | Deploy config (`.github/workflows/*`, `wrangler.toml`, `next.config.mjs`, `scripts/draft-only-change.mjs`, `scripts/deploy-target.mjs`, `scripts/environment-headers.mjs`, the smoke scripts, the environment helpers, robots or sitemaps) | The production-like preview, and the PR preview. For the Staging gate, a Staging build served locally (below). After the merge, the Staging deploy and its smoke test; after the promotion, the Production deploy and its smoke test ([`ci.md`](ci.md#deployyml)) |
 
-**The production-like preview:** `DEPLOY_ENV=production pnpm build`, then
-`pnpm dlx wrangler@4.103.0 pages dev out` from the repository root, which serves `out/` with
-`_redirects`, `_headers`, `_routes.json` and the Function as Pages does. `pnpm start` serves the
-files alone, without any of those.
+**The production-like preview:** `DEPLOY_ENV=production pnpm build`, then `pnpm preview`
+(`wrangler pages dev out`) from the repository root, which serves `out/` with `_redirects`,
+`_headers`, `_routes.json` and the Function as Pages does. `pnpm start` serves the files alone,
+without any of those.
 
 **The Staging gate locally:** `DEPLOY_ENV=staging pnpm build`, then serve it with
-`--binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword`. The Function
-sends every Staging host but `staging.pitonne.jp` to that host, so send its name:
+`pnpm preview --binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword`.
+The Function sends every Staging host but `staging.pitonne.jp` to that host, so send its name:
 `curl -I -H "Host: staging.pitonne.jp" http://127.0.0.1:8788/` answers 401, and with
 `-u any:stagingpassword` it answers 200 without `X-Robots-Tag`.
 
@@ -120,4 +158,6 @@ production-like preview shows that ([`environments.md`](environments.md#pr-previ
 | `src/lib/sitemaps.test.ts` | The sitemap index pattern |
 | `src/lib/canonical-host.test.ts`, `src/lib/staging-gate.test.ts` | The host redirects, the slash rules and the Staging gate |
 | `src/lib/site-origin.test.tsx` | Staging writes its own origin everywhere a URL is written |
+| `e2e/*.spec.ts` | The browser journeys above, on a built `out/` served as Pages serves it |
+| `tools/checks/e2e.test.ts` | The journeys' own rules: no retries, both widths, the console-error check, no fixed waits |
 | `tools/checks/deploy-workflows.test.ts` | The workflows' deploy rules |

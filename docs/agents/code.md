@@ -20,7 +20,8 @@ site's parts are in [`CONTEXT.md`](../../CONTEXT.md).
 | `src/test/` | Helpers the tests share |
 | `functions/_middleware.ts` | The Cloudflare Pages Function, which calls `src/lib/canonical-host.ts` |
 | `scripts/` | Build, audit, deploy and smoke-test scripts, each with its tests beside it |
-| `tools/checks/` | Tests that hold the workflows and the Lighthouse setup to their rules |
+| `tools/checks/` | Tests that hold the workflows, the browser journeys and the Lighthouse setup to their rules |
+| `e2e/`, `playwright.config.ts` | The Playwright browser journeys on the built site ([`verification.md`](verification.md#browser-journeys)) |
 | `content/`, `public/`, `keystatic.config.ts` | Content, static files and the CMS config, at the root ([ADR 0004](../adr/0004-repository-layout.md)) |
 
 `@/*` resolves to `src/` (`tsconfig.json`). Wrangler bundles `src/lib/canonical-host.ts` into the
@@ -64,6 +65,12 @@ Don't add `base-nova` components beside it; a move to `base-nova` is one change 
 - **Tests check rules, not content.** Editors add and change posts at any time, so a test never
   asserts a post count, that every post has an image or tags, or a post's text.
 - A test has 30 seconds (`testTimeout`), so a slow test fails rather than hangs.
+- **Browser journeys** are Playwright specs in `e2e/`. Each imports `test` and `expect` from
+  `e2e/fixtures.ts`, never from `@playwright/test`, so a console error or an uncaught page error
+  fails it. A journey waits for what it needs with web-first assertions
+  (`await expect(locator).toBeVisible()`), never `page.waitForTimeout` or a timer, and nothing
+  retries it. SERP's wait check reads only Swift UI tests so far, so
+  `tools/checks/e2e.test.ts` holds these rules.
 
 ## The checks
 

@@ -29,6 +29,8 @@ apply; where this repository differs, the last section says so, and it wins.
 - **Finish gate:** `pnpm check`, once per state: `pnpm verify` first, then lint, typecheck, tests,
   `audit:meta`, the production build, `audit:out` and `audit:seo`, in that order, in about two
   minutes.
+- **Browser journeys:** `pnpm test:e2e` after a build, with the build's `DEPLOY_ENV`; on Linux
+  only ([`verification.md`](docs/agents/verification.md#browser-journeys)).
 - **Git hooks:** before a commit, Biome and the comment, size and secrets checks on the staged
   files; before a push, the full `serp-verify`, and `pnpm lint`, `pnpm typecheck` and `pnpm test`.
 - **Agent hooks:** `.claude/settings.json` checks each file an agent edits and the turn's changes

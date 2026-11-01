@@ -21,12 +21,27 @@
       "catalog": "AGENTS.md"
     }
   },
+  "tests": {
+    "patterns": ["**/*.{test,spec}.{ts,tsx,mts,cts,js,jsx,mjs,cjs}", "scripts/smoke-*.mjs"]
+  },
+  "waits": {
+    "uiTestFolders": ["e2e/"],
+    "helpers": "Playwright's web-first assertions, such as await expect(locator).toBeVisible()"
+  },
   "dependencies": {
     "parts": [
       {
         "folder": ".",
-        "sources": ["src", "functions", "scripts", "tools", "keystatic.config.ts"],
-        "testCode": "(\\.test\\.[cm]?[jt]sx?$|^src/test/|^tools/checks/)",
+        "sources": [
+          "src",
+          "functions",
+          "scripts",
+          "tools",
+          "e2e",
+          "keystatic.config.ts",
+          "playwright.config.ts"
+        ],
+        "testCode": "(\\.test\\.[cm]?[jt]sx?$|^src/test/|^tools/checks/|^e2e/|^playwright\\.config\\.ts$)",
         "entries": [
           "^src/app/(|.*/)(page|layout|route|not-found|global-not-found|error|global-error|loading|template|default|sitemap|robots|manifest|icon|opengraph-image)(\\.keystatic)?\\.tsx?$",
           "^functions/_middleware\\.ts$",

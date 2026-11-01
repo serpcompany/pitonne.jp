@@ -35,10 +35,12 @@ Production.
 
 ```sh
 DEPLOY_ENV=production pnpm build
-pnpm dlx wrangler@4.103.0 pages dev out
+pnpm preview
 ```
 
-It serves http://127.0.0.1:8788 as Pages does. On 2026-11-01 it answered:
+`pnpm preview` is `wrangler pages dev out`, with the wrangler version the deploy uploads with. It
+serves http://127.0.0.1:8788 as Pages does (`--port <n>` picks another port). On 2026-11-01 it
+answered:
 
 ```sh
 curl -sI http://127.0.0.1:8788/about            # 308, Location: /about/
@@ -49,13 +51,14 @@ curl -sI http://127.0.0.1:8788/images/x.jpg/    # 404, the _routes.json exceptio
 ```
 
 `pnpm start` serves the files alone, with none of this. `pnpm audit:out` and
-`DEPLOY_ENV=production pnpm audit:seo` check the same build.
+`DEPLOY_ENV=production pnpm audit:seo` check the same build, and `DEPLOY_ENV=production
+pnpm test:e2e` runs the browser journeys on it (`docs/agents/verification.md`, Browser journeys).
 
 - **A build made on Windows** writes each page's RSC payload files into nested folders
   (`out/about/__next.!KGVuKQ/about/__PAGE__.txt`), where a Linux build, CI's, writes one flat name
   per file. Served locally, the client's requests for the flat names answer 404, so client-side
-  navigation and prefetching differ from the deployed site. The HTML is the same, so check pages
-  by loading them.
+  navigation and prefetching differ from the deployed site, and the browser journeys that
+  navigate fail. The HTML is the same, so check pages by loading them.
 - **A busy port:** wrangler takes 8788 unless given `--port <n>`. A new server can start on a port
   an old one still holds while the old one answers, so first confirm that the build answering is
   yours, for example from its `robots.txt`.
@@ -65,7 +68,7 @@ curl -sI http://127.0.0.1:8788/images/x.jpg/    # 404, the _routes.json exceptio
 
 ```sh
 DEPLOY_ENV=staging pnpm build
-pnpm dlx wrangler@4.103.0 pages dev out --binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword
+pnpm preview --binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword
 curl -sI http://127.0.0.1:8788/                                    # 308 to https://staging.pitonne.jp/
 curl -sI -H "Host: staging.pitonne.jp" http://127.0.0.1:8788/      # 401, Basic challenge, no-store, noindex
 curl -sI -H "Host: staging.pitonne.jp" -u any:stagingpassword http://127.0.0.1:8788/ja/   # 200, no X-Robots-Tag
@@ -78,14 +81,14 @@ gets the 401.
 
 ## 3. Screenshots
 
-Use the session's browser tool if it has one; otherwise Playwright's command line. Its browser is
-a large download, so point `PLAYWRIGHT_BROWSERS_PATH` at a disk with room if the default one is
-full.
+Use the session's browser tool if it has one; otherwise the installed Playwright's command line.
+Its browser is a large download, so point `PLAYWRIGHT_BROWSERS_PATH` at a disk with room if the
+default one is full.
 
 ```sh
-pnpm dlx playwright@1.64.1 install chromium
-pnpm dlx playwright@1.64.1 screenshot --viewport-size "1440, 900" http://localhost:3000/ en-desktop.png
-pnpm dlx playwright@1.64.1 screenshot --viewport-size "390, 844" --full-page http://localhost:3000/ja/ ja-phone.png
+pnpm exec playwright install chromium
+pnpm exec playwright screenshot --viewport-size "1440, 900" http://localhost:3000/ en-desktop.png
+pnpm exec playwright screenshot --viewport-size "390, 844" --full-page http://localhost:3000/ja/ ja-phone.png
 ```
 
 Take each changed page in both locales, at both widths, once the owner's changes are in. Keep the
