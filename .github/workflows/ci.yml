@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - staging
@@ -15,6 +16,67 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Classify changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      checks: read
+      actions: read
+    outputs:
+      docs: ${{ steps.classify.outputs.docs_only }}
+      skip: ${{ steps.classify.outputs.skip }}
+      fast: ${{ steps.fast.outputs.fast }}
+      tree: ${{ steps.receipts.outputs.tree }}
+      e2e: ${{ steps.receipts.outputs.e2e }}
+      lighthouse: ${{ steps.receipts.outputs.lighthouse }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
+      - id: classify
+        env:
+          DIFF_BASE: ${{ github.event_name == 'push' && github.event.before || 'HEAD^1' }}
+        run: node scripts/draft-only-change.mjs "$DIFF_BASE" "$GITHUB_SHA"
+      - id: fast
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
+          CHECKS: verify test e2e lighthouse
+        run: |
+          fast=false
+          if [ "$CONTENT_ONLY" = true ]; then
+            fast=true
+            echo "Only CMS content changed; deploying without waiting for the checks."
+          else
+            missing=""
+            for check in $CHECKS; do
+              passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=$check" \
+                --jq '[.check_runs[] | select(.conclusion == "success")] | length') || passed=0
+              [ "${passed:-0}" -gt 0 ] || missing="$missing $check"
+            done
+            if [ -z "$missing" ]; then fast=true; echo "This commit already passed $CHECKS; deploying now."; fi
+          fi
+          echo "fast=$fast" >> "$GITHUB_OUTPUT"
+      - id: receipts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+        run: |
+          tree=$(git rev-parse 'HEAD^{tree}')
+          echo "tree=$tree" >> "$GITHUB_OUTPUT"
+          for suite in e2e lighthouse; do
+            state=run
+            if [ "$GITHUB_EVENT_NAME" = push ]; then
+              found=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=passed-$suite-$tree" --jq \
+                "[.artifacts[] | select(.expired | not) | select(.workflow_run.head_repository_id == $REPOSITORY_ID)] | length") || found=0
+              if [ "${found:-0}" -gt 0 ]; then state=passed; echo "$suite passed on this tree ($tree) before, so its steps skip."; fi
+            fi
+            echo "$suite=$state" >> "$GITHUB_OUTPUT"
+          done
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -63,12 +125,21 @@ jobs:
         run: pnpm verify
 
   test:
+    needs: changes
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     permissions:
       contents: read
       packages: read
+    env:
+      BUILD: ${{ needs.changes.outputs.docs != 'true' && (github.event_name == 'pull_request' || needs.changes.outputs.e2e != 'passed' || needs.changes.outputs.lighthouse != 'passed') }}
     steps:
+      - name: Stop when the change couldn't be classified
+        if: needs.changes.result != 'success'
+        run: |
+          echo "::error::The Classify changes job didn't succeed, so nothing says what this run must check."
+          exit 1
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
@@ -92,60 +163,161 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm audit:meta
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+      - if: env.BUILD == 'true'
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: .next/cache
           key: next-production-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('src/**', 'content/**') }}
           restore-keys: next-production-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
-      - run: DEPLOY_ENV=production pnpm build
-      - run: pnpm audit:out
-      - run: pnpm audit:seo
-      - run: pnpm test:lighthouse
+      - name: Build the production export
+        if: env.BUILD == 'true'
+        run: DEPLOY_ENV=production pnpm build
+      - if: env.BUILD == 'true'
+        run: pnpm audit:out
+      - if: env.BUILD == 'true'
+        run: pnpm audit:seo
+      - name: Hand the export to the browser journeys and Lighthouse
+        if: env.BUILD == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: site-production
+          path: out
+          retention-days: 3
+          if-no-files-found: error
 
-  changes:
-    name: Classify changes
-    if: github.event_name == 'push'
+  e2e:
+    needs: [changes, test]
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     permissions:
       contents: read
-      checks: read
-    outputs:
-      skip: ${{ steps.classify.outputs.skip }}
-      fast: ${{ steps.fast.outputs.fast }}
+      packages: read
+    env:
+      RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.e2e != 'passed' }}
+      RECEIPT: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+      TREE: ${{ needs.changes.outputs.tree }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        if: env.RUN == 'true'
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        if: env.RUN == 'true'
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        if: env.RUN == 'true'
         with:
-          fetch-depth: 0
-      - id: classify
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@serpcompany"
+      - name: Install, with @serpcompany/verify from GitHub Packages, read with this job's token
+        id: install
+        if: env.RUN == 'true'
         env:
-          DIFF_BASE: ${{ github.event.before }}
-        run: node scripts/draft-only-change.mjs "$DIFF_BASE" "$GITHUB_SHA"
-      - id: fast
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: pnpm install --frozen-lockfile
+      - name: Say what installing the private package needs
+        if: failure() && steps.install.outcome == 'failure'
+        run: >-
+          echo "::error title=@serpcompany/verify is a private GitHub Package::This job grants
+          packages: read, so the package's settings must give serpcompany/pitonne.jp Read under
+          Manage Actions access (docs/agents/ci.md, Installing the private package)."
+      - name: Take the production export test built
+        if: env.RUN == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: site-production
+          path: out
+      - if: env.RUN == 'true'
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Install Chromium and what it needs
+        if: env.RUN == 'true'
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run the browser journeys on the export, served as Pages serves it
+        if: env.RUN == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
-          CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
-          CHECKS: verify test
-        run: |
-          fast=false
-          if [ "$CONTENT_ONLY" = true ]; then
-            fast=true
-            echo "Only CMS content changed; deploying without waiting for the checks."
-          else
-            missing=""
-            for check in $CHECKS; do
-              passed=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=$check" \
-                --jq '[.check_runs[] | select(.conclusion == "success")] | length') || passed=0
-              [ "${passed:-0}" -gt 0 ] || missing="$missing $check"
-            done
-            if [ -z "$missing" ]; then fast=true; echo "This commit already passed $CHECKS; deploying now."; fi
-          fi
-          echo "fast=$fast" >> "$GITHUB_OUTPUT"
+          DEPLOY_ENV: production
+        run: pnpm test:e2e
+      - name: Keep the report
+        if: failure() && env.RUN == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: playwright-report
+          path: tmp/e2e
+          retention-days: 7
+      - name: Record that this tree passed
+        if: env.RUN == 'true' && env.RECEIPT == 'true'
+        run: echo "$TREE" > receipt.txt
+      - if: env.RUN == 'true' && env.RECEIPT == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: passed-e2e-${{ env.TREE }}
+          path: receipt.txt
+          retention-days: 30
+          overwrite: true
+
+  lighthouse:
+    needs: [changes, test]
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    env:
+      RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.lighthouse != 'passed' }}
+      RECEIPT: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+      TREE: ${{ needs.changes.outputs.tree }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        if: env.RUN == 'true'
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        if: env.RUN == 'true'
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        if: env.RUN == 'true'
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@serpcompany"
+      - name: Install, with @serpcompany/verify from GitHub Packages, read with this job's token
+        id: install
+        if: env.RUN == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: pnpm install --frozen-lockfile
+      - name: Say what installing the private package needs
+        if: failure() && steps.install.outcome == 'failure'
+        run: >-
+          echo "::error title=@serpcompany/verify is a private GitHub Package::This job grants
+          packages: read, so the package's settings must give serpcompany/pitonne.jp Read under
+          Manage Actions access (docs/agents/ci.md, Installing the private package)."
+      - name: Take the production export test built
+        if: env.RUN == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: site-production
+          path: out
+      - name: Score eight pages with Lighthouse
+        if: env.RUN == 'true'
+        run: pnpm test:lighthouse
+      - name: Record that this tree passed
+        if: env.RUN == 'true' && env.RECEIPT == 'true'
+        run: echo "$TREE" > receipt.txt
+      - if: env.RUN == 'true' && env.RECEIPT == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: passed-lighthouse-${{ env.TREE }}
+          path: receipt.txt
+          retention-days: 30
+          overwrite: true
 
   deploy-content:
     name: Deploy content
     needs: changes
-    if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
+    if: github.event_name == 'push' && needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
     permissions:
       contents: read
       deployments: write
@@ -158,8 +330,8 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [changes, verify, test]
-    if: needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
+    needs: [changes, verify, test, e2e, lighthouse]
+    if: github.event_name == 'push' && needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
     permissions:
       contents: read
       deployments: write
@@ -172,7 +344,7 @@ jobs:
 
   alert:
     name: Alert on red main
-    needs: [verify, test, changes, deploy-content, deploy]
+    needs: [changes, verify, test, e2e, lighthouse, deploy-content, deploy]
     if: >-
       always() && github.event_name == 'push' && github.ref_name == 'main' &&
       contains(needs.*.result, 'failure')
@@ -187,16 +359,16 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       TITLE: "CI is failing on main"
-      VERIFY_RESULT: ${{ needs.verify.result }}
-      TEST_RESULT: ${{ needs.test.result }}
       CHANGES_RESULT: ${{ needs.changes.result }}
+      CHECK_RESULTS: verify=${{ needs.verify.result }} test=${{ needs.test.result }} e2e=${{ needs.e2e.result }} lighthouse=${{ needs.lighthouse.result }}
       DEPLOY_RESULTS: ${{ needs.deploy-content.result }} ${{ needs.deploy.result }}
     steps:
       - name: Open or update the red-main issue
         run: |
           failed=()
-          [ "$VERIFY_RESULT" = failure ] && failed+=("\`verify\`")
-          [ "$TEST_RESULT" = failure ] && failed+=("\`test\`")
+          for result in $CHECK_RESULTS; do
+            [ "${result#*=}" = failure ] && failed+=("\`${result%%=*}\`")
+          done
           [ "$CHANGES_RESULT" = failure ] && failed+=("the change classification (nothing was deployed)")
           [[ " $DEPLOY_RESULTS " == *" failure "* ]] && failed+=("the Production deploy")
           FAILED=$(printf '%s and ' "${failed[@]}"); FAILED=${FAILED% and }

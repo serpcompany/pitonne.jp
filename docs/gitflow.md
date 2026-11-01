@@ -48,7 +48,7 @@ An agent runs `gh` and pushes only as the organization's app
    receives exactly the commits tested on Staging. Agents never promote. Either:
    - run **Actions → Promote to Production → Run workflow** (`.github/workflows/promote.yml`). It
      refuses when `main` has commits `staging` lacks or when the `staging` commit hasn't passed
-     every check (`verify` and `test`); or
+     every check (`verify`, `test`, `e2e` and `lighthouse`); or
    - as an admin: `git fetch origin && git push origin origin/staging:main`. The admin bypass skips
      every `main` rule, including the required `test` check, so check first that `staging`'s
      latest CI run is green.

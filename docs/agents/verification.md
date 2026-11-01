@@ -73,8 +73,8 @@ uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, 
   `/en/` and `_redirects` redirects. The deploy's smoke test checks those last ones on the
   deployed site; the journeys check them before the deploy, on the same build.
 - **Not part of `pnpm check`:** they need a build and a browser, and on Windows the export
-  isn't the one Linux builds (below). CI runs them on every pull request and push
-  ([`ci.md`](ci.md#ciyml)).
+  isn't the one Linux builds (below). CI's `e2e` job runs them on every ready pull request and
+  every push ([`ci.md`](ci.md#ciyml)).
 - **On Windows,** `next build` writes each page's RSC payload files into nested folders
   (`out/about/__next.!KGVuKQ/about/__PAGE__.txt`) where Linux, and so CI and every deploy, writes
   one flat name per file (`out/about/__next.!KGVuKQ.about.__PAGE__.txt`), the name the client
@@ -93,9 +93,9 @@ and `main` ([`ci.md`](ci.md#ciyml)), so CI on the final commit is the record of 
 | --- | --- | --- |
 | SERP's shared checks | `pnpm verify`; the git hooks | `verify` |
 | Lint, types, unit tests, `audit:meta` | The inner loop; `pnpm check` | `test` |
-| The production build, `audit:out`, `audit:seo` | `pnpm check` | `test`; each deploy also builds its own environment |
-| Lighthouse | `pnpm test:lighthouse` after a build | `test` |
-| Browser journeys | `pnpm test:e2e` after a build | Not yet |
+| The production build, `audit:out`, `audit:seo` | `pnpm check` | `test`, except on a docs-only change or a tree that passed the slow suites; each deploy builds its own environment |
+| Browser journeys | `pnpm test:e2e` after a build | `e2e`, on `test`'s build; not on drafts |
+| Lighthouse | `pnpm test:lighthouse` after a build | `lighthouse`, on `test`'s build; not on drafts |
 | Each environment as deployed | `verify-site` | Each deploy's smoke test |
 
 CI lists `pnpm check`'s steps rather than calling it, so a step added to one is added to the

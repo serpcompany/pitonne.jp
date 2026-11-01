@@ -35,7 +35,7 @@ jobs:
       - name: Check staging can be promoted
         env:
           GH_TOKEN: ${{ github.token }}
-          CHECKS: verify test
+          CHECKS: verify test e2e lighthouse
         run: |
           git fetch --prune origin
           staging=$(git rev-parse origin/staging)

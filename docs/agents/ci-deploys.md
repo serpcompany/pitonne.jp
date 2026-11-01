@@ -40,7 +40,9 @@ deployment, and `packages: read` for the install ([`ci.md`](ci.md#installing-the
   `pnpm audit:out`, then checks the environment's own output: Production's `robots.txt` doesn't
   disallow crawling and its `_headers` send no `noindex`; Staging's `_headers` send no `noindex`
   and its `robots.txt` disallows `*`, names `AhrefsSiteAudit` and lists Staging's sitemap; a
-  preview's do both.
+  preview's do both. This build is the commit's build check on a push: CI's `test` builds
+  Production for the browser journeys and Lighthouse, and skips that build when the tree passed
+  them before ([`ci.md`](ci.md#one-build-per-commit-and-environment)).
 - **Upload:** `wrangler pages deploy out` to the `pitonne-jp` project with the branch and commit.
   wrangler-action finds wrangler 4.103.0, the version `package.json` pins, already installed, so
   it installs nothing. For Staging and Production it passes the job's token so GitHub records a
@@ -106,8 +108,8 @@ which deploys at once, since the commit already passed its checks. It runs one a
 
 - It refuses when `main` has commits `staging` lacks (Sync staging hasn't caught up, or failed on
   a conflict), and when the `staging` commit hasn't passed each of CI's checks (`CHECKS` in the
-  step: `verify` and `test`). When `main` is already at `staging`, it succeeds with nothing to
-  promote.
+  step: `verify`, `test`, `e2e` and `lighthouse`). When `main` is already at `staging`, it
+  succeeds with nothing to promote.
 - It pushes with `RELEASE_DEPLOY_KEY`, a deploy key that bypasses the `main` ruleset, so the
   ruleset checks nothing about this push, required checks included: the checks above are what
   protect `main`. A push with Actions' own token wouldn't start CI, so Production wouldn't deploy.

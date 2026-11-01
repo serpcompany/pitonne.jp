@@ -17,7 +17,7 @@ const lighthouseConfig = createRequire(import.meta.url)(
 ) as LighthouseConfig
 
 describe('Lighthouse CI setup', () => {
-  it('runs Lighthouse CI from a package script in the CI test job', () => {
+  it("runs Lighthouse CI from a package script in CI's lighthouse job, on the export test built", () => {
     const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')) as {
       scripts?: Record<string, string>
       devDependencies?: Record<string, string>
@@ -25,7 +25,16 @@ describe('Lighthouse CI setup', () => {
 
     expect(packageJson.scripts?.['test:lighthouse']).toContain('lhci autorun')
     expect(packageJson.devDependencies).toHaveProperty('@lhci/cli')
-    expect(job(readWorkflow('ci.yml'), 'test').steps?.map(step => step.run)).toContain(
+    const lighthouse = job(readWorkflow('ci.yml'), 'lighthouse')
+    expect(lighthouse.steps?.map(step => step.run)).toContain('pnpm test:lighthouse')
+    expect(lighthouse.needs).toEqual(['changes', 'test'])
+    expect(
+      lighthouse.steps?.find(step => step.uses?.startsWith('actions/download-artifact@'))?.with
+    ).toEqual({
+      name: 'site-production',
+      path: 'out'
+    })
+    expect(job(readWorkflow('ci.yml'), 'test').steps?.map(step => step.run)).not.toContain(
       'pnpm test:lighthouse'
     )
   })

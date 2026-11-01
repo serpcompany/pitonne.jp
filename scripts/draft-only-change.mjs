@@ -6,6 +6,7 @@ import { runMain } from './run-main.mjs'
 const BLOG_POST = /^content\/blog\/(ja\/)?[^/]+\.md$/
 const CMS_CONTENT =
   /^(?:content\/blog\/|content\/blog-categories\/|public\/images\/content\/blog\/)/
+const DOCS = /^(?:docs\/|[^/]+\.md$|\.claude\/skills\/)/
 
 export function isDraft(markdown) {
   const frontmatter = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/)
@@ -28,6 +29,10 @@ export function isContentOnlyChange(paths) {
   return paths.length > 0 && paths.every(path => CMS_CONTENT.test(path))
 }
 
+export function isDocsOnlyChange(paths) {
+  return paths.length > 0 && paths.every(path => DOCS.test(path))
+}
+
 function fileAt(sha, path) {
   try {
     return execFileSync('git', ['show', `${sha}:${path}`], {
@@ -42,6 +47,7 @@ function fileAt(sha, path) {
 function main([before, after]) {
   let skip = false
   let contentOnly = false
+  let docsOnly = false
   if (before && after && !/^0+$/.test(before)) {
     const paths = execFileSync('git', ['diff', '--name-only', before, after], { encoding: 'utf8' })
       .split('\n')
@@ -50,16 +56,22 @@ function main([before, after]) {
       paths.map(path => ({ path, before: fileAt(before, path), after: fileAt(after, path) }))
     )
     contentOnly = isContentOnlyChange(paths)
+    docsOnly = isDocsOnlyChange(paths)
   }
   console.log(
     skip
       ? 'Only draft blog posts changed; skipping deploy.'
       : contentOnly
         ? 'Only CMS content changed.'
-        : 'Code or configuration changed (or no previous commit to compare with).'
+        : docsOnly
+          ? 'Only docs changed, which the build never reads.'
+          : 'Code or configuration changed (or no previous commit to compare with).'
   )
   if (process.env.GITHUB_OUTPUT)
-    fs.appendFileSync(process.env.GITHUB_OUTPUT, `skip=${skip}\ncontent_only=${contentOnly}\n`)
+    fs.appendFileSync(
+      process.env.GITHUB_OUTPUT,
+      `skip=${skip}\ncontent_only=${contentOnly}\ndocs_only=${docsOnly}\n`
+    )
 }
 
 await runMain(import.meta.url, main)

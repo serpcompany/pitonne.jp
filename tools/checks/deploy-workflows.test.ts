@@ -20,7 +20,7 @@ const sync = readWorkflow('sync-staging.yml')
 const promote = readWorkflow('promote.yml')
 const pagesDeploy = job(deploy, 'deploy')
 const cloudflareTokenOnly = { CLOUDFLARE_API_TOKEN: expression('secrets.CLOUDFLARE_API_TOKEN') }
-const CHECKS = ['verify', 'test']
+const CHECKS = ['verify', 'test', 'e2e', 'lighthouse']
 
 function permissionGrants(workflow: Workflow, exceptJobs: string[] = []): Record<string, string>[] {
   const jobGrants = Object.entries(workflow.jobs)
