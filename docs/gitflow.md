@@ -46,8 +46,9 @@ An agent runs `gh` and pushes only as the organization's app
    commit) or declined (with the reason). Only blocking findings start another round. Record the
    outcome in the PR, for example "Review: 1 round, clean".
 5. The owner squash-merges into `staging`, one PR at a time, each up to date with `staging`. CI
-   tests the push and, once `test` passes, deploys Staging and smoke-tests it: without the
-   password it answers 401, and with it, pages are indexable and carry Staging canonicals.
+   tests the push and, once `verify`, `test`, `e2e` and `lighthouse` pass, deploys Staging and
+   smoke-tests it: without the password it answers 401, and with it, pages are indexable and
+   carry Staging canonicals.
 6. QA on https://staging.pitonne.jp, with the password `stagingpassword`.
 7. The owner **promotes** `staging` to `main` by fast-forward, never by squashing, so `main`
    receives exactly the commits tested on Staging. Agents never promote. Either:
@@ -110,17 +111,18 @@ upload and smoke tests live in `.github/workflows/deploy.yml`, which CI calls.
 | Any other change | After this run's checks pass (`Deploy` job) | Yes, for this run's deploy |
 
 Every row uploads the branch tip, so code already on the branch also goes live with the next
-content deploy, even before its own `test` finishes.
+content deploy, even before its own checks finish.
 
-- **Content is never blocked by `test`.** A CMS save goes live as soon as it builds, whatever
-  `test` says about it or any earlier commit. A failing `test` on `main` alerts instead: the run
+- **Content is never blocked by the checks.** A CMS save goes live as soon as it builds, whatever
+  the checks say about it or any earlier commit. A failing check on `main` alerts instead: the run
   is red, and the `alert` job opens (or comments on) an issue titled "CI is failing on main" that
   mentions the owner's account. Close it once `main` is fixed.
 - **Code is gated before `main`.** Code reaches `main` only through promotion or a hotfix PR, both
-  of which passed `test` first, and a code push's own deploy waits for `test` on `main`. If that
-  post-merge `test` fails, the code still goes live with the next CMS save, because every deploy
-  uploads the tip and content is never held back; the alert issue is the signal to fix or revert
-  it. A hotfix that breaks `pnpm build` itself stops all deploys until it is reverted.
+  of which passed the checks first, and a code push's own deploy waits for `verify`, `test`,
+  `e2e` and `lighthouse` on `main`. If those post-merge checks fail, the code still goes live
+  with the next CMS save, because every deploy uploads the tip and content is never held back;
+  the alert issue is the signal to fix or revert it. A hotfix that breaks `pnpm build` itself
+  stops all deploys until it is reverted.
 - **No stale deploys.** Deploys of one environment run one at a time and upload the branch tip
   as it is when they run, so an older commit never overwrites a newer one and rapid CMS saves all
   go live ([`agents/ci.md`](agents/ci.md#deployyml)). A failed Production deploy also opens the
@@ -128,7 +130,7 @@ content deploy, even before its own `test` finishes.
 - Production deploys only from `main` and Staging only from `staging`; `deploy.yml` refuses
   anything else, so no PR can reach the `main` or `staging` aliases.
 - **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging`
-  (Staging). It uploads that branch's current tip and skips the `test` gate.
+  (Staging). It uploads that branch's current tip and waits for no check.
 
 ## Why `main` stays the default branch
 
@@ -157,8 +159,8 @@ its description names with `Closes`, `Fixes` or `Resolves`, with a comment namin
   Cloud app (CMS saves), organization admins (the promotion command and conflict resolution), and
   deploy keys (`RELEASE_DEPLOY_KEY`, used by Sync staging and Promote to Production). A bypass
   skips **every** rule of the ruleset, not just the PR rule: required checks, up-to-date,
-  force-push and deletion protection. The workflows never force-push and check `test`
-  themselves; an admin pushing by hand has to do the same.
+  force-push and deletion protection. The workflows never force-push, and Promote to Production
+  checks `staging`'s checks itself; an admin pushing by hand has to do the same.
 - Secrets:
   - `CLOUDFLARE_API_TOKEN` (repository secret): Cloudflare account API token with Account >
     Cloudflare Pages > Edit permission. Deploy jobs and PR previews receive only this secret.

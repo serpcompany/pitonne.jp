@@ -109,13 +109,16 @@ route handler in `src/app/sitemap-<group>.xml/route.ts` that `src/lib/sitemaps.t
 
 ## From commit to environment
 
-1. A pull request into `staging` runs CI's `test` job (lint, types, tests, the production build
-   and its audits, Lighthouse), and a same-repository pull request then gets a preview at
-   `pr-<n>.pitonne-jp.pages.dev`.
+1. A pull request into `staging` runs CI's `verify` (SERP's shared checks) and `test` (lint,
+   types, tests, the production build and its audits), then `e2e` (the browser journeys) and
+   `lighthouse` on that build once it's ready for review. A same-repository pull request also
+   gets a preview at `pr-<n>.pitonne-jp.pages.dev`, and the `Pull request` and `Code review`
+   workflows check its title, issue link and code.
 2. A push to `staging` deploys Staging; a push to `main`, a promotion or a CMS save, deploys
-   Production. `deploy.yml` builds with the environment's `DEPLOY_ENV`, checks the output,
-   uploads `out/` with `wrangler pages deploy` and smoke-tests the result.
-3. Code waits for `test` before it deploys; CMS content and already-tested commits deploy at once
+   Production. `deploy.yml` builds the branch tip with the environment's `DEPLOY_ENV`, checks the
+   output, uploads `out/` with `wrangler pages deploy` and smoke-tests the result.
+3. Code waits for `verify`, `test`, `e2e` and `lighthouse` before it deploys; CMS content and
+   commits that already passed them deploy at once
    ([`gitflow.md`](docs/gitflow.md#what-ci-deploys), [`ci.md`](docs/agents/ci.md)).
 
 ## Layers

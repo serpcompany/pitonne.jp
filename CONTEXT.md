@@ -66,8 +66,9 @@ promotion, and Sync staging then merges it into `staging`.
 _Avoid_: publish (a save of a draft publishes nothing)
 
 **Content fast path**:
-CI deploying a push at once, without waiting for `test`, because the push changes only files the
-CMS edits or its commit already passed `test`: the `Deploy content` job.
+CI deploying a push at once, without waiting for its checks, because the push changes only files
+the CMS edits or its commit already passed `verify`, `test`, `e2e` and `lighthouse`: the
+`Deploy content` job.
 _Avoid_: hotfix (a pull request into `main` with code)
 
 **Smoke test**:
