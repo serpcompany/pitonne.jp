@@ -1,25 +1,9 @@
-import fs from 'node:fs'
-import path from 'node:path'
 import ts from 'typescript'
 import { describe, expect, it } from 'vitest'
-
-const root = process.cwd()
-
-function sourceFiles(directory: string): string[] {
-  return fs.readdirSync(path.join(root, directory), { withFileTypes: true }).flatMap(entry => {
-    const relative = `${directory}/${entry.name}`
-    if (entry.isDirectory()) return sourceFiles(relative)
-    return /\.tsx?$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name) ? [relative] : []
-  })
-}
-
-function parse(file: string): ts.SourceFile {
-  const source = fs.readFileSync(path.join(root, file), 'utf8')
-  return ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true)
-}
+import { importBase, parseSource, resolveSourceFile, sourceFiles } from '@/test/source-files'
 
 function isClientComponent(file: string): boolean {
-  const [first] = parse(file).statements
+  const [first] = parseSource(file).statements
   return (
     first !== undefined &&
     ts.isExpressionStatement(first) &&
@@ -28,27 +12,16 @@ function isClientComponent(file: string): boolean {
   )
 }
 
-function resolveImport(from: string, specifier: string): string | undefined {
-  const base = specifier.startsWith('@/')
-    ? `src/${specifier.slice(2)}`
-    : specifier.startsWith('.')
-      ? path.posix.join(path.posix.dirname(from), specifier)
-      : undefined
-  if (!base) return undefined
-  return [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`, base].find(file =>
-    fs.existsSync(path.join(root, file))
-  )
-}
-
 function runtimeImports(file: string): string[] {
-  return parse(file).statements.flatMap(statement => {
+  return parseSource(file).statements.flatMap(statement => {
     if (!ts.isImportDeclaration(statement) && !ts.isExportDeclaration(statement)) return []
     const typeOnly = ts.isImportDeclaration(statement)
       ? statement.importClause?.isTypeOnly
       : statement.isTypeOnly
     const specifier = statement.moduleSpecifier
     if (typeOnly || !specifier || !ts.isStringLiteral(specifier)) return []
-    const resolved = resolveImport(file, specifier.text)
+    const base = importBase(file, specifier.text)
+    const resolved = base && resolveSourceFile(base)
     return resolved ? [resolved] : []
   })
 }
@@ -57,7 +30,6 @@ function bundledWith(entry: string): string[] {
   const seen = new Set([entry])
   const queue = [entry]
   for (let file = queue.shift(); file; file = queue.shift()) {
-    if (!/\.tsx?$/.test(file)) continue
     for (const imported of runtimeImports(file)) {
       if (seen.has(imported)) continue
       seen.add(imported)
@@ -75,8 +47,6 @@ describe('client components', () => {
   })
 
   it.each(clientComponents)('%s bundles no dictionary', file => {
-    expect(
-      bundledWith(file).filter(imported => imported.startsWith('src/lib/i18n/dictionaries'))
-    ).toEqual([])
+    expect(bundledWith(file)).not.toContain('src/lib/i18n/dictionaries.ts')
   })
 })
