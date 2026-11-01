@@ -20,6 +20,7 @@ export function ServicesIndexTemplate({
   return (
     <div className="bg-background">
       <PageHero
+        locale={locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.services }

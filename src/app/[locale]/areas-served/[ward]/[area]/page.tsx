@@ -5,6 +5,7 @@ import { getAllAreas, getArea } from '@/lib/data/areas'
 import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { interpolate } from '@/lib/i18n/interpolate'
 import { fitsTitleLimit, localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
@@ -26,27 +27,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ward: wardSlug, area: areaSlug } = await params
   const typedLocale = locale as Locale
+  const dict = getDictionary(typedLocale)
   const result = getArea(wardSlug, areaSlug)
 
   if (!result) {
-    const dict = getDictionary(typedLocale)
     return { title: dict.common.notFoundArea }
   }
 
   const { ward, area } = result
-
-  const enTitleWithWard = `IV Therapy, Stem Cells & Blood Tests in ${area.name}, ${ward.name}`
-  const seoTitle =
-    typedLocale === 'ja'
-      ? `${area.nameJa}（${ward.nameJa}）の点滴療法・幹細胞・血液検査`
-      : // Drop the ward for long area names so the full <title> stays within the audit limit
-        fitsTitleLimit(enTitleWithWard)
-        ? enTitleWithWard
-        : `IV Therapy, Stem Cells & Blood Tests in ${area.name}`
-  const seoDescription =
-    typedLocale === 'ja'
-      ? `${area.nameJa}（${ward.nameJa}、東京）での点滴療法、幹細胞治療、処方薬、血液検査。Pitonneの出張・クリニックケア。看護師がご自宅・ホテル・オフィスへお伺いする訪問点滴と、クリニックでの施術に対応しています。医師によるオンライン診療のもとでご案内します。`
-      : `IV therapy, stem cell treatments, medications, and blood testing in ${area.name} (${area.nameJa}), ${ward.name} Ward, Tokyo. Mobile and in-clinic care from Pitonne.`
+  const names = { area: area.name, areaJa: area.nameJa, ward: ward.name, wardJa: ward.nameJa }
+  const titleWithWard = interpolate(dict.areas.areaMetaTitle, names)
+  const seoTitle = fitsTitleLimit(titleWithWard)
+    ? titleWithWard
+    : interpolate(dict.areas.areaMetaTitleShort, names)
+  const seoDescription = interpolate(dict.areas.areaMetaDescription, names)
 
   return {
     title: seoTitle,

@@ -65,6 +65,7 @@ export default async function BlogPage({ params }: Props) {
   return (
     <>
       <PageHero
+        locale={typedLocale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
           { label: dict.blog.blog }

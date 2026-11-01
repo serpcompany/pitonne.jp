@@ -65,6 +65,7 @@ export default async function LegalPage({ params }: Props) {
   return (
     <div className="bg-[#faf9f7]">
       <PageHero
+        locale={locale as Locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
           { label: dict.nav.legal }

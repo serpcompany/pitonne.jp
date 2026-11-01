@@ -26,10 +26,7 @@ export function ContactFormDialog({ locale }: { locale: Locale }) {
         </button>
       </DialogTrigger>
 
-      <DialogContent
-        className="max-h-[calc(100vh-2rem)] max-w-2xl overflow-auto p-2"
-        showCloseButton={false}
-      >
+      <DialogContent className="max-h-[calc(100vh-2rem)] max-w-2xl overflow-auto p-2">
         <DialogTitle className="sr-only">{dict.contact.formTitle}</DialogTitle>
         <DialogClose asChild>
           <button

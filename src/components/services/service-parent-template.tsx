@@ -25,6 +25,7 @@ export function ServiceParentTemplate({
       <JsonLd data={serviceJsonLd(service, locale)} />
 
       <PageHero
+        locale={locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.services, href: localizedRoute('/services/', locale) },

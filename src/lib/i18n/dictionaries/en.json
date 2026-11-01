@@ -28,7 +28,11 @@
     "notFoundPost": "Post Not Found | Pitonne",
     "notFoundCategory": "Category Not Found | Pitonne",
     "notFoundService": "Service Not Found | Pitonne",
-    "notFoundVideo": "Video Not Found | Pitonne"
+    "notFoundVideo": "Video Not Found | Pitonne",
+    "siteTitle": "Pitonne | Stem Cell & IV Therapy in Tokyo",
+    "ogImageAlt": "Pitonne Stem Cell & IV Therapy in Tokyo",
+    "logoAlt": "Pitonne Stem Cell & IV Therapy",
+    "breadcrumb": "Breadcrumb"
   },
   "home": {
     "heroEyebrow": "Concierge Wellness in Tokyo",
@@ -66,7 +70,8 @@
       "Physician collaboration",
       "Convenience at home or hotels",
       "Care plans tailored to each client"
-    ]
+    ],
+    "clinicImageAlt": "Tokyo Tower view near Pitonne in Nishi Azabu"
   },
   "footer": {
     "quickLinks": "Quick Links",
@@ -79,7 +84,9 @@
     "websiteBy": "Website & SEO by",
     "businessName": "Pitonne Stem Cell & IV Therapy",
     "mapTitle": "Pitonne Stem Cell & IV Therapy Location",
-    "locationShort": "Nishi Azabu, Minato-ku, Tokyo, Japan"
+    "locationShort": "Nishi Azabu, Minato-ku, Tokyo, Japan",
+    "shibuya": "Shibuya",
+    "shinagawa": "Shinagawa"
   },
   "about": {
     "aboutPitonne": "About Pitonne",
@@ -104,7 +111,8 @@
     "teamSaoriBio": "Saori is involved in health support within the field of regenerative medicine, drawing on her knowledge and experience as a registered nurse and public health nurse. She values supporting each individual's daily well-being through treatment assistance using stem cell conditioned media, as well as preventive care, body maintenance, weight management, and corporate wellness programs.",
     "teamAkiraName": "Akira Mikami",
     "teamAkiraRole": "Physician",
-    "teamAkiraBio": "Since my years as a resident physician, I have practiced medicine with the words \"Patient First\" held close to my heart. Providing the kind of medical care that I would want to receive myself has always been the foundation of why I chose to become a physician. I believe that as long as I remain true to this principle, it will guide me in making the right decisions for my patients."
+    "teamAkiraBio": "Since my years as a resident physician, I have practiced medicine with the words \"Patient First\" held close to my heart. Providing the kind of medical care that I would want to receive myself has always been the foundation of why I chose to become a physician. I believe that as long as I remain true to this principle, it will guide me in making the right decisions for my patients.",
+    "clinicImageAlt": "Pitonne clinic reception area"
   },
   "services": {
     "ourServices": "Our Services",
@@ -373,7 +381,38 @@
     "sendRequestDesc": "Share your location, timing, and the service you want to discuss.",
     "clinicalReviewDesc": "The team reviews your goals, health history, and clinical suitability.",
     "carePlanningDesc": "Pitonne confirms the appropriate next step for clinic or visit-based care.",
-    "contactPitonne": "Contact Pitonne"
+    "contactPitonne": "Contact Pitonne",
+    "wardMetaTitle": "IV Therapy, Stem Cells & Blood Tests in {ward} | Tokyo",
+    "wardMetaDescription": "IV therapy, stem cell treatments, medications, and blood testing in {ward} Ward ({wardJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.",
+    "wardHeroTitle": "IV Therapy, Stem Cells, Medications & Blood Testing in {ward}, Tokyo",
+    "wardMapDescription": "Use this map to orient around {ward} Ward and the neighborhoods Pitonne serves in central Tokyo.",
+    "wardMapTitle": "{ward}, Tokyo map",
+    "wardLocation": "{ward}, Tokyo",
+    "areaMetaTitle": "IV Therapy, Stem Cells & Blood Tests in {area}, {ward}",
+    "areaMetaTitleShort": "IV Therapy, Stem Cells & Blood Tests in {area}",
+    "areaMetaDescription": "IV therapy, stem cell treatments, medications, and blood testing in {area} ({areaJa}), {ward} Ward, Tokyo. Mobile and in-clinic care from Pitonne.",
+    "areaEyebrow": "{areaJa} · {ward}, Tokyo",
+    "areaHeroTitle": "IV Therapy, Stem Cells, Medications & Blood Testing in {area}, {ward}, Tokyo",
+    "localAccessDescription": "Pitonne coordinates wellness consultations and visit-based care around {area}, {ward}, Tokyo.",
+    "areaMapTitle": "{area}, {ward}, Tokyo map",
+    "faqs": [
+      {
+        "question": "Can I book a consultation if I am staying in {area}, {ward}, Tokyo?",
+        "answer": "Yes. Patients staying in {area}, {ward}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step."
+      },
+      {
+        "question": "What services are available for {area} patients?",
+        "answer": "Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability."
+      },
+      {
+        "question": "Do you offer hotel or home visits near {area}, {ward}, Tokyo?",
+        "answer": "In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible."
+      },
+      {
+        "question": "What should I include when I contact Pitonne?",
+        "answer": "Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints."
+      }
+    ]
   },
   "videos": {
     "watch": "Watch",

@@ -52,6 +52,7 @@ export default async function VideosPage({ params }: Props) {
       <JsonLd data={videoListJsonLd(pitonneVideos)} />
       <div className="container mx-auto px-4 py-12 lg:px-8 lg:py-16">
         <Breadcrumbs
+          locale={locale as Locale}
           items={[
             { label: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale as Locale) },
             { label: dict.nav.videos }

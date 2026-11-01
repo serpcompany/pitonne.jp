@@ -10,6 +10,7 @@ import { localizedRoute } from '@/lib/data/routes'
 import type { Locale } from '@/lib/i18n/config'
 import { nonDefaultLocales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { interpolate } from '@/lib/i18n/interpolate'
 import { localizedHreflangAlternates, pageSocialMetadata } from '@/lib/seo'
 
 export const dynamicParams = false
@@ -29,15 +30,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ward = getWard(wardSlug)
   if (!ward) return { title: dict.common.notFoundArea }
 
-  const wardLabel = typedLocale === 'ja' ? ward.nameJa : ward.name
-  const seoTitle =
-    typedLocale === 'ja'
-      ? `${wardLabel}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
-      : `IV Therapy, Stem Cells & Blood Tests in ${ward.name} | Tokyo`
-  const seoDescription =
-    typedLocale === 'ja'
-      ? `${wardLabel}での訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査。Pitonneがご希望の場所へ看護師を派遣します。医師によるオンライン診療のもと、ご自宅・ホテル・オフィスなど、ご希望の場所でお一人おひとりに合わせたケアをご提供します。`
-      : `IV therapy, stem cell treatments, medications, and blood testing in ${ward.name} Ward (${ward.nameJa}), Tokyo. Mobile and in-clinic wellness care from Pitonne.`
+  const names = { ward: ward.name, wardJa: ward.nameJa }
+  const seoTitle = interpolate(dict.areas.wardMetaTitle, names)
+  const seoDescription = interpolate(dict.areas.wardMetaDescription, names)
 
   return {
     title: seoTitle,
@@ -63,23 +58,21 @@ export default async function WardPage({ params }: Props) {
   }
 
   const wardLabel = typedLocale === 'ja' ? ward.nameJa : ward.name
+  const names = { ward: ward.name, wardJa: ward.nameJa }
   const mapQuery = encodeURIComponent(`${ward.name}, Tokyo, Japan`)
   const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
 
   return (
     <div className="bg-background">
       <PageHero
+        locale={typedLocale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
           { label: dict.nav.areasServed, href: localizedRoute('/areas-served/', typedLocale) },
           { label: wardLabel }
         ]}
         eyebrow={ward.nameJa}
-        title={
-          typedLocale === 'ja'
-            ? `${ward.nameJa}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査`
-            : `IV Therapy, Stem Cells, Medications & Blood Testing in ${ward.name}, Tokyo`
-        }
+        title={interpolate(dict.areas.wardHeroTitle, names)}
         description={typedLocale === 'ja' ? ward.descriptionJa : ward.description}
       />
 
@@ -139,9 +132,7 @@ export default async function WardPage({ params }: Props) {
               {dict.areas.mapOf} {typedLocale === 'ja' ? ward.nameJa : ward.name}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              {typedLocale === 'ja'
-                ? `${ward.nameJa}周辺とPitonneが東京都心部でサービスを提供するエリアの地図です。`
-                : `Use this map to orient around ${ward.name} Ward and the neighborhoods Pitonne serves in central Tokyo.`}
+              {interpolate(dict.areas.wardMapDescription, names)}
             </p>
           </div>
           <div className="overflow-hidden rounded-lg border border-border bg-background">
@@ -153,7 +144,7 @@ export default async function WardPage({ params }: Props) {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title={`${ward.name}, Tokyo map`}
+              title={interpolate(dict.areas.wardMapTitle, names)}
               className="block w-full"
             />
           </div>
@@ -161,7 +152,10 @@ export default async function WardPage({ params }: Props) {
       </section>
 
       <CareAvailableSection locale={typedLocale} />
-      <HowToGetStartedSection locationLabel={`${wardLabel}, Tokyo`} locale={typedLocale} />
+      <HowToGetStartedSection
+        locationLabel={interpolate(dict.areas.wardLocation, names)}
+        locale={typedLocale}
+      />
       <LatestPostsSection locale={typedLocale} />
 
       {/* Back Link */}

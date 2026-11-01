@@ -60,6 +60,7 @@ export default async function FaqsPage({ params }: Props) {
     <>
       <JsonLd data={faqJsonLd} />
       <PageHero
+        locale={locale as Locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
           { label: dict.nav.faqs }

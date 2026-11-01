@@ -19,9 +19,11 @@ import { normalizePath } from '@/lib/seo'
 
 function LanguageSwitcher({
   locale,
+  labels,
   untranslatedPaths
 }: {
   locale: Locale
+  labels: Dictionary['languageSwitcher']
   untranslatedPaths: string[]
 }) {
   const pathname = usePathname() ?? '/'
@@ -38,7 +40,7 @@ function LanguageSwitcher({
       href={targetPath}
       className="text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
     >
-      {locale === 'en' ? '\u65E5\u672C\u8A9E' : 'English'}
+      {labels[targetLocale]}
     </Link>
   )
 }
@@ -107,7 +109,7 @@ export function Header({
         <Link href={localizedRoute('/', locale)} className="flex items-center">
           <img
             src="/images/pitt-wordlogo-blk-32.svg"
-            alt="Pitonne Stem Cell & IV Therapy"
+            alt={dict.common.logoAlt}
             className="h-8 w-auto"
           />
         </Link>
@@ -238,7 +240,11 @@ export function Header({
 
         {/* Language Switcher & Phone & CTA */}
         <div className="hidden xl:flex items-center gap-6">
-          <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
+          <LanguageSwitcher
+            locale={locale}
+            labels={dict.languageSwitcher}
+            untranslatedPaths={untranslatedPaths}
+          />
           <div
             role="none"
             className="relative"
@@ -311,7 +317,11 @@ export function Header({
           <div className="container mx-auto px-4 py-4 space-y-1">
             {/* Language Switcher - Mobile */}
             <div className="pb-3 mb-1 border-b border-border">
-              <LanguageSwitcher locale={locale} untranslatedPaths={untranslatedPaths} />
+              <LanguageSwitcher
+                locale={locale}
+                labels={dict.languageSwitcher}
+                untranslatedPaths={untranslatedPaths}
+              />
             </div>
 
             {navigation.map(item => (

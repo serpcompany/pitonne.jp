@@ -207,6 +207,7 @@ export function BlogPostTemplate({
       )}
 
       <PageHero
+        locale={locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.blog.blog, href: localizedRoute('/blog/', locale) },

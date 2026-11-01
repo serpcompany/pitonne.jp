@@ -7,6 +7,7 @@ describe('shared page hero', () => {
   it('renders the reusable left-aligned hero contract', () => {
     render(
       <PageHero
+        locale="en"
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Services', href: '/services/' },

@@ -5,7 +5,6 @@ import seoLimits from '@/lib/seo-limits.json'
 
 export const SITE_URL = 'https://pitonne.jp'
 export const SITE_NAME = 'Pitonne'
-export const DEFAULT_TITLE = 'Pitonne | Stem Cell & IV Therapy in Tokyo'
 export const DEFAULT_DESCRIPTION =
   'Pitonne is a concierge wellness service in Nishi Azabu, Tokyo, offering premium IV therapy, stem cell related wellness support, and in-home or hotel visit care.'
 export const DEFAULT_OG_IMAGE = '/images/content/sheet/home.jpg'

@@ -6,6 +6,7 @@ import { PageHero } from '@/components/shared/page-hero'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { interpolate } from '@/lib/i18n/interpolate'
 
 interface AreaPageProps {
   areaName: string
@@ -21,50 +22,6 @@ interface AreaPageProps {
   landmarksJa: string[]
   otherAreas: { name: string; slug: string }[]
   locale?: Locale
-}
-
-const faqs = (areaName: string, wardName: string, locale: Locale = 'en') => {
-  if (locale === 'ja') {
-    return [
-      {
-        question: `${areaName}、${wardName}、東京に滞在中にご相談の予約はできますか？`,
-        answer: `はい。${areaName}、${wardName}、東京にご滞在中の方は、ご相談オプション、訪問型ケア、最適な次のステップについてPitonneにお問い合わせいただけます。`
-      },
-      {
-        question: `${areaName}の患者様にはどのようなサービスがありますか？`,
-        answer: `Pitonneでは、点滴療法、幹細胞関連のケアプランニング、オンライン薬の相談、コンシェルジュ・ウェルネスサポートについてご相談いただけます。ご利用の可否は、お客様の目標、タイミング、臨床的適性によります。`
-      },
-      {
-        question: `${areaName}、${wardName}、東京近辺でホテルや自宅への訪問はできますか？`,
-        answer: `東京都心部での自宅やホテルへの訪問調整が可能な場合があります。場所、ご希望の時間、ケアのご要望をお知らせいただき、対応可能かチームが確認いたします。`
-      },
-      {
-        question: `Pitonneに連絡する際に何を伝えればよいですか？`,
-        answer: `現在のエリア、クリニック訪問または訪問型サポートのどちらをご希望か、興味のあるサービス、時間的な制約をお知らせください。`
-      }
-    ]
-  }
-  return [
-    {
-      question: `Can I book a consultation if I am staying in ${areaName}, ${wardName}, Tokyo?`,
-      answer: `Yes. Patients staying in ${areaName}, ${wardName}, Tokyo can contact Pitonne to ask about consultation options, visit-based care, and the most appropriate next step.`
-    },
-    {
-      question: `What services are available for ${areaName} patients?`,
-      answer:
-        'Pitonne can discuss IV therapy, stem cell related care planning, online medication consultation, and concierge wellness support. Availability depends on your goals, timing, and clinical suitability.'
-    },
-    {
-      question: `Do you offer hotel or home visits near ${areaName}, ${wardName}, Tokyo?`,
-      answer:
-        'In-home and hotel visit coordination may be available in central Tokyo. Share your location, preferred time, and care request so the team can confirm what is possible.'
-    },
-    {
-      question: 'What should I include when I contact Pitonne?',
-      answer:
-        'Please include your current area, whether you prefer a clinic visit or visit-based support, the service you are interested in, and any timing constraints.'
-    }
-  ]
 }
 
 export function AreaDetailPage({
@@ -83,7 +40,11 @@ export function AreaDetailPage({
   locale = 'en' as Locale
 }: AreaPageProps) {
   const dict = getDictionary(locale)
-  const areaFaqs = faqs(areaName, wardName, locale)
+  const names = { area: areaName, areaJa: areaNameJa, ward: wardName, wardJa: wardNameJa }
+  const areaFaqs = dict.areas.faqs.map(faq => ({
+    question: interpolate(faq.question, names),
+    answer: interpolate(faq.answer, names)
+  }))
   const mapQuery = encodeURIComponent(`${areaName}, ${wardName}, Tokyo, Japan`)
   const mapEmbedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`
 
@@ -94,6 +55,7 @@ export function AreaDetailPage({
   return (
     <div className="bg-background">
       <PageHero
+        locale={locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.nav.areasServed, href: localizedRoute('/areas-served/', locale) },
@@ -103,12 +65,8 @@ export function AreaDetailPage({
           },
           { label: locale === 'ja' ? areaNameJa : areaName }
         ]}
-        eyebrow={`${areaNameJa} · ${wardName}, Tokyo`}
-        title={
-          locale === 'ja'
-            ? `${areaNameJa}（${wardNameJa}、東京）の点滴療法・幹細胞・処方薬・血液検査`
-            : `IV Therapy, Stem Cells, Medications & Blood Testing in ${areaName}, ${wardName}, Tokyo`
-        }
+        eyebrow={interpolate(dict.areas.areaEyebrow, names)}
+        title={interpolate(dict.areas.areaHeroTitle, names)}
         description={localizedDescription}
       />
 
@@ -121,9 +79,7 @@ export function AreaDetailPage({
             <div>
               <h2 className="mb-4 font-serif text-3xl text-foreground">{dict.areas.localAccess}</h2>
               <p className="mb-6 text-muted-foreground">
-                {locale === 'ja'
-                  ? `Pitonneは${areaNameJa}（${wardNameJa}、東京）周辺でウェルネスに関するご相談や訪問型ケアを調整しています。`
-                  : `Pitonne coordinates wellness consultations and visit-based care around ${areaName}, ${wardName}, Tokyo.`}
+                {interpolate(dict.areas.localAccessDescription, names)}
               </p>
               {(localizedHighlights.length > 0 || localizedLandmarks.length > 0) && (
                 <div className="grid gap-6 md:grid-cols-2">
@@ -161,7 +117,7 @@ export function AreaDetailPage({
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title={`${areaName}, ${wardName}, Tokyo map`}
+                title={interpolate(dict.areas.areaMapTitle, names)}
                 className="block w-full"
               />
             </div>

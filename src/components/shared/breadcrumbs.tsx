@@ -1,13 +1,18 @@
 import Link from 'next/link'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export interface BreadcrumbItem {
   label: string
   href?: string
 }
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({ items, locale }: { items: BreadcrumbItem[]; locale: Locale }) {
   return (
-    <nav className="mb-8 text-sm text-muted-foreground" aria-label="Breadcrumb">
+    <nav
+      className="mb-8 text-sm text-muted-foreground"
+      aria-label={getDictionary(locale).common.breadcrumb}
+    >
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {items.map((item, index) => (
           <li key={`${item.label}-${index}`} className="flex items-center gap-2">

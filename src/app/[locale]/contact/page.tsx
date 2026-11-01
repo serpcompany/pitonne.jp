@@ -50,6 +50,7 @@ export default async function ContactPage({ params }: Props) {
   return (
     <>
       <PageHero
+        locale={locale as Locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
           { label: dict.nav.contact }

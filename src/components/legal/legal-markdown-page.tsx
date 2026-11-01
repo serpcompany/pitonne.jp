@@ -23,6 +23,7 @@ export function LegalMarkdownPage({
   return (
     <div className="bg-[#faf9f7]">
       <PageHero
+        locale={locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale) },
           { label: dict.legal.legal, href: localizedRoute('/legal/', locale) },

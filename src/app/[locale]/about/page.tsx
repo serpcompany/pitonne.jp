@@ -66,6 +66,7 @@ export default async function AboutPage({ params }: Props) {
   return (
     <>
       <PageHero
+        locale={locale as Locale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', locale as Locale) },
           { label: dict.nav.about }
@@ -92,7 +93,7 @@ export default async function AboutPage({ params }: Props) {
               <div className="aspect-[4/3] rounded-lg overflow-hidden">
                 <img
                   src="/images/content/sheet/about-clinic.jpg"
-                  alt="Pitonne clinic reception area"
+                  alt={dict.about.clinicImageAlt}
                   className="w-full h-full object-cover"
                 />
               </div>

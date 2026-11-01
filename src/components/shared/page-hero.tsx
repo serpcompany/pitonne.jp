@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react'
 import { type BreadcrumbItem, Breadcrumbs } from '@/components/shared/breadcrumbs'
+import type { Locale } from '@/lib/i18n/config'
 
 type PageHeroSize = 'standard' | 'compact'
 
 interface PageHeroProps {
+  locale: Locale
   breadcrumbs?: BreadcrumbItem[]
   eyebrow?: ReactNode
   title: ReactNode
@@ -21,6 +23,7 @@ const sectionPadding: Record<PageHeroSize, string> = {
 }
 
 export function PageHero({
+  locale,
   breadcrumbs,
   eyebrow,
   title,
@@ -35,7 +38,9 @@ export function PageHero({
     <section className={`bg-[#faf9f7] ${sectionPadding[size]} ${className}`}>
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
-          {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+          {breadcrumbs && breadcrumbs.length > 0 && (
+            <Breadcrumbs items={breadcrumbs} locale={locale} />
+          )}
           {eyebrow && (
             <div className="mb-4 text-sm uppercase tracking-widest text-[#7A8F87]">{eyebrow}</div>
           )}

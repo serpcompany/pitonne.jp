@@ -71,6 +71,7 @@ export default async function BlogCategoryPage({ params }: Props) {
   return (
     <div className="bg-background">
       <PageHero
+        locale={typedLocale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
           { label: dict.blog.blog, href: localizedRoute('/blog/', typedLocale) },

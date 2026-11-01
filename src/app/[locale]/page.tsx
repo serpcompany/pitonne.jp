@@ -102,7 +102,7 @@ export default async function HomePage({ params }: Props) {
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
                 <Image
                   src="/images/content/sheet/home.jpg"
-                  alt="Tokyo Tower view near Pitonne in Nishi Azabu"
+                  alt={dict.home.clinicImageAlt}
                   className="w-full h-full object-cover"
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"

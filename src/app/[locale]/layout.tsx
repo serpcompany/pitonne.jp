@@ -13,7 +13,6 @@ import {
   absoluteUrl,
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
-  DEFAULT_TITLE,
   deploymentRobots,
   GTM_CONTAINER_ID,
   isProductionDeployment,
@@ -49,14 +48,14 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      default: dict.common.siteTitle,
       template: `%s | ${SITE_NAME}`
     },
     description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
     // No alternates or openGraph.url here: with trailingSlash on, the metadata API would write the homepage as
     // https://pitonne.jp/. Every other page sets its own; the homepage renders its tags itself (HomepageHeadTags).
     openGraph: {
-      title: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      title: dict.common.siteTitle,
       description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
       siteName: SITE_NAME,
       images: [
@@ -64,10 +63,7 @@ export async function generateMetadata({
           url: absoluteUrl(DEFAULT_OG_IMAGE),
           width: 1200,
           height: 630,
-          alt:
-            locale === 'ja'
-              ? 'Pitonne 東京の幹細胞・点滴療法'
-              : 'Pitonne Stem Cell & IV Therapy in Tokyo'
+          alt: dict.common.ogImageAlt
         }
       ],
       locale: locale === 'ja' ? 'ja_JP' : 'en_US',
@@ -75,7 +71,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: locale === 'ja' ? 'Pitonne | 東京の幹細胞・点滴療法' : DEFAULT_TITLE,
+      title: dict.common.siteTitle,
       description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
       images: [absoluteUrl(DEFAULT_OG_IMAGE)]
     },

@@ -10,6 +10,7 @@ import {
   Youtube
 } from 'lucide-react'
 import Link from 'next/link'
+import { getArea, getWard } from '@/lib/data/areas'
 import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { getServiceCategorySections } from '@/lib/data/services'
 import { getBusinessInfo } from '@/lib/data/site'
@@ -116,6 +117,18 @@ function FooterHours({
   )
 }
 
+function wardName(wardSlug: string, locale: Locale): string {
+  const ward = getWard(wardSlug)
+  if (!ward) throw new Error(`Unknown ward ${wardSlug}`)
+  return locale === 'ja' ? ward.nameJa : ward.name
+}
+
+function areaName(wardSlug: string, areaSlug: string, locale: Locale): string {
+  const found = getArea(wardSlug, areaSlug)
+  if (!found) throw new Error(`Unknown area ${wardSlug}/${areaSlug}`)
+  return locale === 'ja' ? found.area.nameJa : found.area.name
+}
+
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const businessInfo = getBusinessInfo(locale)
   const serviceLinks = getServiceCategorySections(locale).map(section => ({
@@ -135,35 +148,35 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
   const areasServed = [
     {
-      name: locale === 'ja' ? '六本木' : 'Roppongi',
+      name: areaName('minato', 'roppongi', locale),
       href: localizedRoute('/areas-served/minato/roppongi/', locale)
     },
     {
-      name: locale === 'ja' ? '麻布十番' : 'Azabu Juban',
+      name: areaName('minato', 'azabu-juban', locale),
       href: localizedRoute('/areas-served/minato/azabu-juban/', locale)
     },
     {
-      name: locale === 'ja' ? '港区 / 広尾' : 'Minato / Hiroo',
+      name: `${wardName('minato', locale)} / ${areaName('minato', 'hiroo', locale)}`,
       href: localizedRoute('/areas-served/minato/hiroo/', locale)
     },
     {
-      name: locale === 'ja' ? '赤坂' : 'Akasaka',
+      name: areaName('minato', 'akasaka', locale),
       href: localizedRoute('/areas-served/minato/akasaka/', locale)
     },
     {
-      name: locale === 'ja' ? '渋谷' : 'Shibuya',
+      name: dict.footer.shibuya,
       href: localizedRoute('/areas-served/shibuya/', locale)
     },
     {
-      name: locale === 'ja' ? '恵比寿' : 'Ebisu',
+      name: areaName('shibuya', 'ebisu', locale),
       href: localizedRoute('/areas-served/shibuya/ebisu/', locale)
     },
     {
-      name: locale === 'ja' ? '銀座' : 'Ginza',
+      name: areaName('chuo', 'ginza', locale),
       href: localizedRoute('/areas-served/chuo/ginza/', locale)
     },
     {
-      name: locale === 'ja' ? '品川' : 'Shinagawa',
+      name: dict.footer.shinagawa,
       href: localizedRoute('/areas-served/shinagawa/', locale)
     }
   ]

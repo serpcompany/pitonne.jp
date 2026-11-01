@@ -28,7 +28,11 @@
     "notFoundPost": "記事が見つかりません | Pitonne",
     "notFoundCategory": "カテゴリーが見つかりません | Pitonne",
     "notFoundService": "サービスが見つかりません | Pitonne",
-    "notFoundVideo": "動画が見つかりません | Pitonne"
+    "notFoundVideo": "動画が見つかりません | Pitonne",
+    "siteTitle": "Pitonne | 東京の幹細胞・点滴療法",
+    "ogImageAlt": "Pitonne 東京の幹細胞・点滴療法",
+    "logoAlt": "Pitonne Stem Cell & IV Therapy",
+    "breadcrumb": "Breadcrumb"
   },
   "home": {
     "heroEyebrow": "東京のコンシェルジュヘルスケア",
@@ -66,7 +70,8 @@
       "医師との連携体制",
       "ご自宅やホテルで受けられる利便性",
       "お客様一人ひとりに合わせたケアプラン"
-    ]
+    ],
+    "clinicImageAlt": "Tokyo Tower view near Pitonne in Nishi Azabu"
   },
   "footer": {
     "quickLinks": "クイックリンク",
@@ -79,7 +84,9 @@
     "websiteBy": "ウェブサイト・SEO：",
     "businessName": "Pitonne 幹細胞・点滴療法",
     "mapTitle": "Pitonne 幹細胞・点滴療法 所在地",
-    "locationShort": "東京都港区西麻布"
+    "locationShort": "東京都港区西麻布",
+    "shibuya": "渋谷",
+    "shinagawa": "品川"
   },
   "about": {
     "aboutPitonne": "Pitonneについて",
@@ -104,7 +111,8 @@
     "teamSaoriBio": "再生医療分野における健康サポートに携わり、看護師・保健師としての知識と経験を活かしながら、お客様一人ひとりに合わせたケアを行っています。\n\n幹細胞培養上清液を用いた自由診療のサポートをはじめ、訪問点滴、健康管理、体重管理、企業向けウェルネスプログラムなどを通して、日々の健康づくりをお手伝いしています。\n\n安心してご相談いただける存在であることを大切にし、お客様のライフスタイルに寄り添ったサポートを心がけています。",
     "teamAkiraName": "三上 哲",
     "teamAkiraRole": "医師",
-    "teamAkiraBio": "研修医時代から、「患者さん第一」という想いを大切に診療を続けてきました。\n\n自分自身や大切な家族が受けたいと思える医療を提供することを常に心がけ、一人ひとりの健康状態やご希望に寄り添った診療を大切にしています。\n\n安心して相談できる医療を通じて、お客様がより健やかな毎日を送れるようサポートいたします。"
+    "teamAkiraBio": "研修医時代から、「患者さん第一」という想いを大切に診療を続けてきました。\n\n自分自身や大切な家族が受けたいと思える医療を提供することを常に心がけ、一人ひとりの健康状態やご希望に寄り添った診療を大切にしています。\n\n安心して相談できる医療を通じて、お客様がより健やかな毎日を送れるようサポートいたします。",
+    "clinicImageAlt": "Pitonne clinic reception area"
   },
   "services": {
     "ourServices": "サービス",
@@ -373,7 +381,38 @@
     "sendRequestDesc": "ご希望の場所、タイミング、ご相談したいサービスをお知らせください。",
     "clinicalReviewDesc": "チームがお客様の目標、健康履歴、臨床的適性を確認します。",
     "carePlanningDesc": "Pitonneがクリニックまたは訪問型ケアの適切な次のステップをご案内します。",
-    "contactPitonne": "Pitonneに問い合わせる"
+    "contactPitonne": "Pitonneに問い合わせる",
+    "wardMetaTitle": "{wardJa}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査",
+    "wardMetaDescription": "{wardJa}での訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査。Pitonneがご希望の場所へ看護師を派遣します。医師によるオンライン診療のもと、ご自宅・ホテル・オフィスなど、ご希望の場所でお一人おひとりに合わせたケアをご提供します。",
+    "wardHeroTitle": "{wardJa}の訪問点滴・再生医療関連サポート・オンライン処方・自費血液検査",
+    "wardMapDescription": "{wardJa}周辺とPitonneが東京都心部でサービスを提供するエリアの地図です。",
+    "wardMapTitle": "{ward}, Tokyo map",
+    "wardLocation": "{wardJa}, Tokyo",
+    "areaMetaTitle": "{areaJa}（{wardJa}）の点滴療法・幹細胞・血液検査",
+    "areaMetaTitleShort": "{areaJa}（{wardJa}）の点滴療法・幹細胞・血液検査",
+    "areaMetaDescription": "{areaJa}（{wardJa}、東京）での点滴療法、幹細胞治療、処方薬、血液検査。Pitonneの出張・クリニックケア。看護師がご自宅・ホテル・オフィスへお伺いする訪問点滴と、クリニックでの施術に対応しています。医師によるオンライン診療のもとでご案内します。",
+    "areaEyebrow": "{areaJa} · {ward}, Tokyo",
+    "areaHeroTitle": "{areaJa}（{wardJa}、東京）の点滴療法・幹細胞・処方薬・血液検査",
+    "localAccessDescription": "Pitonneは{areaJa}（{wardJa}、東京）周辺でウェルネスに関するご相談や訪問型ケアを調整しています。",
+    "areaMapTitle": "{area}, {ward}, Tokyo map",
+    "faqs": [
+      {
+        "question": "{area}、{ward}、東京に滞在中にご相談の予約はできますか？",
+        "answer": "はい。{area}、{ward}、東京にご滞在中の方は、ご相談オプション、訪問型ケア、最適な次のステップについてPitonneにお問い合わせいただけます。"
+      },
+      {
+        "question": "{area}の患者様にはどのようなサービスがありますか？",
+        "answer": "Pitonneでは、点滴療法、幹細胞関連のケアプランニング、オンライン薬の相談、コンシェルジュ・ウェルネスサポートについてご相談いただけます。ご利用の可否は、お客様の目標、タイミング、臨床的適性によります。"
+      },
+      {
+        "question": "{area}、{ward}、東京近辺でホテルや自宅への訪問はできますか？",
+        "answer": "東京都心部での自宅やホテルへの訪問調整が可能な場合があります。場所、ご希望の時間、ケアのご要望をお知らせいただき、対応可能かチームが確認いたします。"
+      },
+      {
+        "question": "Pitonneに連絡する際に何を伝えればよいですか？",
+        "answer": "現在のエリア、クリニック訪問または訪問型サポートのどちらをご希望か、興味のあるサービス、時間的な制約をお知らせください。"
+      }
+    ]
   },
   "videos": {
     "watch": "Pitonne Videos",

@@ -45,6 +45,7 @@ export default async function AreasServedPage({ params }: Props) {
   return (
     <>
       <PageHero
+        locale={typedLocale}
         breadcrumbs={[
           { label: dict.nav.home, href: localizedRoute('/', typedLocale) },
           { label: dict.nav.areasServed }
