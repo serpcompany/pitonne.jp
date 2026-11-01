@@ -11,6 +11,7 @@ import {
   stepIndex,
   textValues,
   type Workflow,
+  workflowFiles,
   workflowScripts
 } from './workflows'
 
@@ -70,6 +71,17 @@ describe('CI and deploy workflows', () => {
     expect(changes.permissions).toEqual({ contents: 'read', checks: 'read', actions: 'read' })
     for (const workflow of [ci, promote])
       expect(allText(workflow)).not.toMatch(/check-runs|actions\/artifacts/)
+  })
+
+  it('runs pnpm verify against the commit’s parent, with no app key, which would reach any pull request that edits a workflow', () => {
+    const verify = job(ci, 'verify')
+    expect(verify.steps?.[0].with?.['fetch-depth']).toBe(2)
+    const shared = step(verify, 'Every shared check, at the version the lockfile pins')
+    expect(shared.run).toBe('pnpm verify')
+    expect(shared.env).toEqual({ SERP_VERIFY_BASE: 'HEAD^1' })
+    expect(verify.env).toBeUndefined()
+    for (const file of workflowFiles())
+      expect(allText(readWorkflow(file)), file).not.toMatch(/SERP_AGENT_|create-github-app-token/)
   })
 
   it('alerts the owner when a check or a Production deploy fails on main instead of blocking publishing', () => {

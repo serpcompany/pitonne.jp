@@ -76,8 +76,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-    env:
-      HAS_APP_KEY: ${{ secrets.SERP_AGENT_PRIVATE_KEY != '' }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -100,20 +98,8 @@ jobs:
           echo "::error title=@serpcompany/verify is a private GitHub Package::This job grants
           packages: read, so the package's settings must give serpcompany/pitonne.jp Read under
           Manage Actions access (docs/agents/ci.md, Installing the private package)."
-      - name: A short-lived token that reads the organization's private repositories
-        id: app-token
-        if: env.HAS_APP_KEY == 'true' && vars.SERP_AGENT_APP_ID != ''
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
-        with:
-          app-id: ${{ vars.SERP_AGENT_APP_ID }}
-          private-key: ${{ secrets.SERP_AGENT_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-          permission-contents: read
-          permission-issues: read
-          permission-pull-requests: read
       - name: Every shared check, at the version the lockfile pins
         env:
-          SERP_VERIFY_GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           SERP_VERIFY_BASE: HEAD^1
         run: pnpm verify
 
