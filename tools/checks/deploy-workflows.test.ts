@@ -136,10 +136,24 @@ describe('CI and deploy workflows', () => {
     expect(allText(deploy)).not.toMatch(/--branch[= ]main/)
   })
 
-  it('checks that each environment is indexable only in production, before and after deploying', () => {
-    const verify = step(pagesDeploy, 'Verify static output').run
-    expect(verify).toContain('grep -Fxq "Disallow: /" out/robots.txt')
-    expect(verify).toContain('grep -Fq "X-Robots-Tag: noindex" out/_headers')
+  it("checks each environment's indexing signals before deploying and smoke-tests them after", () => {
+    const verify = step(pagesDeploy, 'Verify static output').run ?? ''
+    const branch = (pattern: string) =>
+      verify.match(new RegExp(`^\\s*${pattern}\\)\\n([\\s\\S]*?)\\n\\s*;;`, 'm'))?.[1] ?? ''
+    expect(verify).toMatch(/^pnpm audit:out\ncase "\$DEPLOY_ENV" in\n/)
+    const production = branch('production')
+    expect(production).toContain('if grep -Fxq "Disallow: /" out/robots.txt; then')
+    expect(production).toContain('if grep -Fq "X-Robots-Tag: noindex" out/_headers; then')
+    const staging = branch('staging')
+    expect(staging).toContain('if grep -Fq "X-Robots-Tag: noindex" out/_headers; then')
+    expect(staging).toMatch(/^\s*grep -Fxq "Disallow: \/" out\/robots\.txt$/m)
+    expect(staging).toContain('grep -Fxq "User-Agent: AhrefsSiteAudit" out/robots.txt')
+    expect(staging).toContain(
+      'grep -Fxq "Sitemap: https://staging.pitonne.jp/sitemap-index.xml" out/robots.txt'
+    )
+    const preview = branch('\\*')
+    expect(preview).toMatch(/^\s*grep -Fxq "Disallow: \/" out\/robots\.txt$/m)
+    expect(preview).toMatch(/^\s*grep -Fq "X-Robots-Tag: noindex" out\/_headers$/m)
     const smoke = step(pagesDeploy, 'Smoke-test environment behaviour').run
     expect(smoke).toContain(
       'node scripts/smoke-environment.mjs production https://pitonne-jp.pages.dev https://pitonne.jp'

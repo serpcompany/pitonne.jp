@@ -114,13 +114,22 @@ jobs:
         if: steps.target.outputs.skip != 'true'
         run: |
           pnpm audit:out
-          if [ "$DEPLOY_ENV" = production ]; then
-            if grep -Fxq "Disallow: /" out/robots.txt; then echo "::error::Production robots.txt disallows crawling."; exit 1; fi
-            if grep -Fq "X-Robots-Tag: noindex" out/_headers; then echo "::error::Production _headers sends noindex."; exit 1; fi
-          else
-            grep -Fxq "Disallow: /" out/robots.txt
-            grep -Fq "X-Robots-Tag: noindex" out/_headers
-          fi
+          case "$DEPLOY_ENV" in
+            production)
+              if grep -Fxq "Disallow: /" out/robots.txt; then echo "::error::Production robots.txt disallows crawling."; exit 1; fi
+              if grep -Fq "X-Robots-Tag: noindex" out/_headers; then echo "::error::Production _headers sends noindex."; exit 1; fi
+              ;;
+            staging)
+              if grep -Fq "X-Robots-Tag: noindex" out/_headers; then echo "::error::Staging _headers sends noindex; its password gate keeps it out of search."; exit 1; fi
+              grep -Fxq "Disallow: /" out/robots.txt
+              grep -Fxq "User-Agent: AhrefsSiteAudit" out/robots.txt
+              grep -Fxq "Sitemap: https://staging.pitonne.jp/sitemap-index.xml" out/robots.txt
+              ;;
+            *)
+              grep -Fxq "Disallow: /" out/robots.txt
+              grep -Fq "X-Robots-Tag: noindex" out/_headers
+              ;;
+          esac
 
       - name: Deploy to Cloudflare Pages
         if: steps.target.outputs.skip != 'true'

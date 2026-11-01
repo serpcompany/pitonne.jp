@@ -1,9 +1,17 @@
 #!/usr/bin/env node
+import { DEPLOY_ENVIRONMENTS, siteOrigin } from '../src/lib/deploy-environment.mts'
+import { blocksEverything } from './robots-txt.mjs'
 import { runMain } from './run-main.mjs'
 import { MISSING_PAGE_PATH, SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 
-export const SITEMAP_LINE = 'Sitemap: https://pitonne.jp/sitemap-index.xml'
-const ENVIRONMENTS = new Set(['production', 'staging', 'preview'])
+const sitemapLine = origin => `Sitemap: ${origin}/sitemap-index.xml`
+export const SITEMAP_LINE = sitemapLine(siteOrigin('production'))
+export const STAGING_ORIGIN = siteOrigin('staging')
+const STAGING_PASSWORD = 'stagingpassword'
+export const PASSWORD_HEADERS = {
+  authorization: `Basic ${Buffer.from(`smoke:${STAGING_PASSWORD}`).toString('base64')}`
+}
+const ENVIRONMENTS = new Set(DEPLOY_ENVIRONMENTS)
 
 const ATTEMPTS = 2
 const SETTLE_MS = 120_000
@@ -14,26 +22,106 @@ const robotsMetaTags = html =>
   [...html.matchAll(/<meta[^>]+name="robots"[^>]*content="([^"]*)"/gi)].map(match => match[1])
 const metaRobots = html => robotsMetaTags(html)[0] ?? null
 const hasNoindex = value => /\bnoindex\b/i.test(value ?? '')
-const disallowsAll = robots => /^Disallow:\s*\/\s*$/m.test(robots)
+const canonicalOf = html => html.match(/<link[^>]+rel="canonical"[^>]*href="([^"]*)"/i)?.[1] ?? null
+const shown = value => (value === null ? 'missing' : `"${value}"`)
+
+function noindexProblem({ headers, body }) {
+  const header = headers.get('x-robots-tag')
+  const meta = metaRobots(body)
+  if (hasNoindex(header)) return `sends X-Robots-Tag: ${header}`
+  if (hasNoindex(meta)) return `has meta robots "${meta}"`
+  return null
+}
+
+function stagingCanonicalProblem(path, body) {
+  const expected = path === '/' ? STAGING_ORIGIN : `${STAGING_ORIGIN}${path}`
+  const canonical = canonicalOf(body)
+  return canonical === expected ? null : `canonical is ${shown(canonical)}, expected ${expected}`
+}
+
+const withoutSmokeHeader = (url, verify, headers = {}) => ({
+  url,
+  headers,
+  redirect: 'manual',
+  verify
+})
+
+function stagingGateChecks(origin) {
+  const locked = path =>
+    withoutSmokeHeader(`${origin}${path}`, ({ status, headers }) => {
+      if (status !== 401) return `status ${status} without the password, expected 401`
+      const challenge = headers.get('www-authenticate')
+      if (!/^Basic\b/i.test(challenge ?? ''))
+        return `WWW-Authenticate is ${shown(challenge)}, expected Basic`
+      const cacheControl = headers.get('cache-control')
+      if (!/\bno-store\b/.test(cacheControl ?? ''))
+        return `Cache-Control is ${shown(cacheControl)}, expected no-store`
+      const robots = headers.get('x-robots-tag')
+      return hasNoindex(robots) ? null : `X-Robots-Tag is ${shown(robots)}, expected noindex`
+    })
+  const unlocked = path =>
+    withoutSmokeHeader(
+      `${origin}${path}`,
+      response => {
+        if (response.status !== 200)
+          return `status ${response.status} with the password, expected 200`
+        const problem = noindexProblem(response)
+        return problem
+          ? `${problem} with the password`
+          : stagingCanonicalProblem(path, response.body)
+      },
+      PASSWORD_HEADERS
+    )
+  const robots = withoutSmokeHeader(`${origin}/robots.txt`, ({ status, body }) => {
+    if (status !== 200) return `status ${status} without the password, expected 200`
+    if (!blocksEverything(body)) return "doesn't disallow all crawlers (`Disallow: /` for `*`)"
+    const line = sitemapLine(STAGING_ORIGIN)
+    return body.includes(line) ? null : `doesn't list \`${line}\``
+  })
+  return [
+    locked('/'),
+    locked('/ja/'),
+    locked('/favicon.ico'),
+    unlocked('/'),
+    unlocked('/ja/'),
+    robots
+  ]
+}
+
+const stagingHostRedirect = origin =>
+  withoutSmokeHeader(`${origin}/contact`, ({ status, headers }) => {
+    const location = headers.get('location')
+    const expected = `${STAGING_ORIGIN}/contact/`
+    return status === 308 && location === expected
+      ? null
+      : `status ${status} to ${shown(location)}, expected 308 to ${expected}`
+  })
+
+const withoutPasswordPrompt = check => ({
+  ...check,
+  verify: response =>
+    response.headers.has('www-authenticate')
+      ? `sends WWW-Authenticate: ${response.headers.get('www-authenticate')} on production`
+      : check.verify(response)
+})
 
 export function environmentChecks(environment, origin) {
   const production = environment === 'production'
+  const staging = environment === 'staging'
   const page = path => ({
     url: `${origin}${path}`,
-    verify({ status, headers, body }) {
+    verify(response) {
+      const { status, headers, body } = response
       if (status !== 200) return `status ${status}, expected 200`
-      const header = headers.get('x-robots-tag')
-      const meta = metaRobots(body)
       if (production) {
-        if (hasNoindex(header)) return `sends X-Robots-Tag: ${header} on production`
-        if (hasNoindex(meta)) return `has meta robots "${meta}" on production`
-      } else {
-        if (!hasNoindex(header))
-          return `X-Robots-Tag is ${header === null ? 'missing' : `"${header}"`}, expected noindex`
-        if (!hasNoindex(meta))
-          return `meta robots is ${meta === null ? 'missing' : `"${meta}"`}, expected noindex`
+        const problem = noindexProblem(response)
+        return problem && `${problem} on production`
       }
-      return null
+      const header = headers.get('x-robots-tag')
+      if (!hasNoindex(header)) return `X-Robots-Tag is ${shown(header)}, expected noindex`
+      if (staging) return stagingCanonicalProblem(path, body)
+      const meta = metaRobots(body)
+      return hasNoindex(meta) ? null : `meta robots is ${shown(meta)}, expected noindex`
     }
   })
 
@@ -42,10 +130,10 @@ export function environmentChecks(environment, origin) {
     verify({ status, body }) {
       if (status !== 200) return `status ${status}, expected 200`
       if (production) {
-        if (disallowsAll(body)) return 'disallows all crawling on production'
+        if (blocksEverything(body)) return 'disallows all crawling on production'
         if (!/^Allow:\s*\/\s*$/m.test(body)) return 'has no `Allow: /`'
         if (!body.includes(SITEMAP_LINE)) return `doesn't list \`${SITEMAP_LINE}\``
-      } else if (!disallowsAll(body)) {
+      } else if (!blocksEverything(body)) {
         return "doesn't disallow all crawling (`Disallow: /`)"
       }
       return null
@@ -66,6 +154,11 @@ export function environmentChecks(environment, origin) {
   }
 
   const checks = [page('/'), page('/ja/'), robots, missingPage]
+  if (staging) {
+    checks.push(
+      ...(origin === STAGING_ORIGIN ? stagingGateChecks(origin) : [stagingHostRedirect(origin)])
+    )
+  }
   if (production) {
     checks.push({
       url: `${origin}/sitemap-index.xml`,
@@ -74,6 +167,7 @@ export function environmentChecks(environment, origin) {
           ? null
           : `status ${status}, expected 200 with a <sitemapindex>`
     })
+    return checks.map(withoutPasswordPrompt)
   }
   return checks
 }
@@ -82,9 +176,9 @@ export function isZoneHost(url) {
   return !new URL(url).hostname.endsWith('.pages.dev')
 }
 
-async function probe(url, { redirect } = {}) {
+async function probe(url, { redirect, headers = SMOKE_HEADERS } = {}) {
   const response = await fetch(url, {
-    headers: SMOKE_HEADERS,
+    headers,
     redirect,
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
   })
@@ -98,7 +192,10 @@ export async function run(
   let message = null
   for (let attempt = 1; ; attempt++) {
     try {
-      const response = await probeFn(check.url, { redirect: check.redirect })
+      const response = await probeFn(check.url, {
+        redirect: check.redirect,
+        headers: check.headers
+      })
       if (isZoneHost(check.url) && response.headers.has('cf-mitigated')) {
         return {
           ok: true,
