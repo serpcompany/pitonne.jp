@@ -19,8 +19,8 @@ Node 24 and pnpm 10.14.0 (`packageManager` in `package.json`), then `pnpm instal
 - `pnpm vitest related --run <files>`: the tests that import the files you changed.
 - `pnpm vitest run <test-file>`: one test file.
 - `pnpm typecheck` and `pnpm exec biome check <files>` (or `pnpm lint`; `pnpm format` writes formatting).
-- The audit for what you touched; none needs a build: `pnpm audit:strings` (hardcoded English) and
-  `pnpm audit:meta` (title/description lengths). Route coverage (`src/lib/data/routes.test.ts`) and business data
+- `pnpm audit:meta` (title/description lengths) for what you touched; it needs no build. Hardcoded strings
+  (`src/lib/i18n/hardcoded-strings.test.ts`), route coverage (`src/lib/data/routes.test.ts`) and business data
   (`src/lib/data/site.test.ts`) are tests; `pnpm test` runs them.
 - `pnpm dev` for the site; `pnpm cms` for Keystatic on local files at http://127.0.0.1:3000/keystatic.
 

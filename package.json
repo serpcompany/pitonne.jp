@@ -18,7 +18,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:lighthouse": "lhci autorun",
-    "audit:strings": "node scripts/audit-hardcoded-strings.mjs",
     "audit:meta": "node scripts/audit-meta-lengths.mjs",
     "audit:seo": "node scripts/audit-seo-build.mjs",
     "audit:out": "node scripts/audit-out.mjs",

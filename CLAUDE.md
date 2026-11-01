@@ -37,7 +37,8 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
   data, never hardcoded English.
 - Business data (address, hours, phone) must come from `getBusinessInfo(locale)`, not `businessInfo` directly.
 - Run `pnpm test` before committing to catch dictionary key sync and content parity issues.
-- Run `pnpm audit:strings` to check for hardcoded English in components.
+- `src/lib/i18n/hardcoded-strings.test.ts` (run by `pnpm test`) fails on user-visible text in `src/app` and
+  `src/components` that doesn't come from the dictionary: JSX text, text attributes and props, and metadata.
 
 ## Architecture Quick Reference
 
