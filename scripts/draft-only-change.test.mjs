@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   isContentOnlyChange,
@@ -93,5 +95,14 @@ describe('docs-only change detection', () => {
     expect(isDocsOnlyChange(['content/blog/post.md'])).toBe(false)
     expect(isDocsOnlyChange(['.claude/settings.json'])).toBe(false)
     expect(isDocsOnlyChange(['verify.json'])).toBe(false)
+  })
+
+  it('holds Tailwind to src and content, so a docs-only change leaves the CSS alone', () => {
+    const css = fs.readFileSync(path.join(process.cwd(), 'src', 'app', 'globals.css'), 'utf8')
+    expect(css).toMatch(/^@import "tailwindcss" source\(none\);$/m)
+    const sources = [...css.matchAll(/^@source "([^"]+)";$/gm)].map(([, source]) =>
+      path.posix.join('src/app', source).replace(/\/$/, '')
+    )
+    expect(sources).toEqual(['src', 'content'])
   })
 })

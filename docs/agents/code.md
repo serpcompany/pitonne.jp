@@ -58,10 +58,10 @@ The site keeps shadcn's `new-york` style on Radix (`components.json`), where SER
 standard sets `base-nova` on Base UI. It was kept on 2026-10-31 because moving would change the UI.
 Don't add `base-nova` components beside it; a move to `base-nova` is one change of its own.
 
-Tailwind 4 reads every file git doesn't ignore, since `src/app/globals.css` names no `@source`:
-docs, workflows and tests too. A word there that names a utility the site doesn't use yet adds
-that rule to the site's CSS, so keep such words out of those files until `globals.css` limits
-what Tailwind reads; comparing a production build's CSS before and after shows one.
+Tailwind builds the site's CSS from `src/` and `content/` only (`source(none)` and the two
+`@source` lines in `src/app/globals.css`), so a doc, workflow, test or script can name a utility
+without adding it to the site, and CI can skip the build for a docs-only change. Class names
+anywhere else, such as a new top-level folder of components, need an `@source` line of their own.
 
 ## Tests
 
