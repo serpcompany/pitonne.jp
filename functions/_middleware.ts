@@ -1,15 +1,10 @@
-import {
-  type AssetServer,
-  canonicalHostRedirect,
-  slashedFileRedirect
-} from '../src/lib/canonical-host'
+import { type AssetServer, type FunctionEnv, handleRequest } from '../src/lib/canonical-host'
 
 interface MiddlewareContext {
   request: Request
   next: AssetServer
+  env?: FunctionEnv
 }
 
-export const onRequest = async ({ request, next }: MiddlewareContext): Promise<Response> =>
-  (await canonicalHostRedirect(request, next)) ??
-  (await slashedFileRedirect(request, next)) ??
-  next()
+export const onRequest = ({ request, next, env }: MiddlewareContext): Promise<Response> =>
+  handleRequest(request, next, env)
