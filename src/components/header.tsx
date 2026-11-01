@@ -4,6 +4,7 @@ import { ChevronDown, Menu, Phone, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import type { HeaderText } from '@/components/header-text'
 import { ContactButton } from '@/components/shared/contact-button'
 import { LineIcon } from '@/components/shared/line-icon'
 import {
@@ -14,7 +15,6 @@ import {
 } from '@/lib/data/routes'
 import { getBusinessInfo } from '@/lib/data/site'
 import type { Locale } from '@/lib/i18n/config'
-import type { Dictionary } from '@/lib/i18n/dictionaries'
 import { normalizePath } from '@/lib/seo'
 
 function LanguageSwitcher({
@@ -23,7 +23,7 @@ function LanguageSwitcher({
   untranslatedPaths
 }: {
   locale: Locale
-  labels: Dictionary['languageSwitcher']
+  labels: HeaderText['languageSwitcher']
   untranslatedPaths: string[]
 }) {
   const pathname = usePathname() ?? '/'
@@ -46,12 +46,12 @@ function LanguageSwitcher({
 
 export function Header({
   locale,
-  dict,
+  text,
   serviceNavigation,
   untranslatedPaths = []
 }: {
   locale: Locale
-  dict: Dictionary
+  text: HeaderText
   serviceNavigation: ServiceNavCategory[]
   untranslatedPaths?: string[]
 }) {
@@ -71,8 +71,8 @@ export function Header({
 
   const aboutMenu = {
     items: [
-      { name: dict.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },
-      { name: dict.nav.faqs, href: localizedRoute(canonicalRoutes.faqs, locale) }
+      { name: text.nav.about, href: localizedRoute(canonicalRoutes.about, locale) },
+      { name: text.nav.faqs, href: localizedRoute(canonicalRoutes.faqs, locale) }
     ]
   }
 
@@ -80,24 +80,24 @@ export function Header({
   const phoneLinks = [{ number: phone, href: `tel:${phone}` }]
 
   const navigation = [
-    { name: dict.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
+    { name: text.nav.home, href: localizedRoute(canonicalRoutes.home, locale) },
     {
-      name: dict.nav.about,
+      name: text.nav.about,
       href: localizedRoute(canonicalRoutes.about, locale),
       hasDropdown: 'about'
     },
     {
-      name: dict.nav.services,
+      name: text.nav.services,
       href: localizedRoute(canonicalRoutes.services, locale),
       hasDropdown: 'services'
     },
     {
-      name: dict.nav.areasServed,
+      name: text.nav.areasServed,
       href: localizedRoute(canonicalRoutes.areasServed, locale),
       hasDropdown: 'areas'
     },
-    { name: dict.nav.blog, href: localizedRoute(canonicalRoutes.blog, locale) },
-    { name: dict.nav.videos, href: localizedRoute(canonicalRoutes.videos, locale) }
+    { name: text.nav.blog, href: localizedRoute(canonicalRoutes.blog, locale) },
+    { name: text.nav.videos, href: localizedRoute(canonicalRoutes.videos, locale) }
   ]
 
   return (
@@ -106,7 +106,7 @@ export function Header({
         <Link href={localizedRoute('/', locale)} className="flex items-center">
           <img
             src="/images/pitt-wordlogo-blk-32.svg"
-            alt={dict.common.logoAlt}
+            alt={text.common.logoAlt}
             className="h-8 w-auto"
           />
         </Link>
@@ -179,7 +179,7 @@ export function Header({
                         href={localizedRoute('/services/', locale)}
                         className="text-sm font-medium text-[#7A8F87] hover:underline"
                       >
-                        {dict.nav.viewAllServices} &rarr;
+                        {text.nav.viewAllServices} &rarr;
                       </Link>
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export function Header({
                         href={localizedRoute('/areas-served/', locale)}
                         className="text-sm font-medium text-[#7A8F87] hover:underline"
                       >
-                        {dict.nav.viewAllAreas} &rarr;
+                        {text.nav.viewAllAreas} &rarr;
                       </Link>
                     </div>
                   </div>
@@ -234,7 +234,7 @@ export function Header({
         <div className="hidden xl:flex items-center gap-6">
           <LanguageSwitcher
             locale={locale}
-            labels={dict.languageSwitcher}
+            labels={text.languageSwitcher}
             untranslatedPaths={untranslatedPaths}
           />
           <div
@@ -248,7 +248,7 @@ export function Header({
               className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#7A8F87] transition-colors"
             >
               <Phone className="h-4 w-4" />
-              {dict.nav.phone}
+              {text.nav.phone}
               <ChevronDown className="h-4 w-4" />
             </button>
 
@@ -276,15 +276,15 @@ export function Header({
               href={lineUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={dict.contact.lineContact}
-              title={dict.contact.lineContact}
+              aria-label={text.contact.lineContact}
+              title={text.contact.lineContact}
               className="-m-1.5 shrink-0 rounded-md p-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#06C755] focus-visible:ring-offset-2"
             >
               <LineIcon className="h-7 w-7" />
             </a>
           )}
           <ContactButton className="px-5 py-2.5" locale={locale}>
-            {dict.common.contactUs}
+            {text.common.contactUs}
           </ContactButton>
         </div>
 
@@ -293,7 +293,7 @@ export function Header({
           className="xl:hidden -m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <span className="sr-only">{dict.common.toggleMenu}</span>
+          <span className="sr-only">{text.common.toggleMenu}</span>
           {mobileMenuOpen ? (
             <X className="h-6 w-6" aria-hidden="true" />
           ) : (
@@ -308,7 +308,7 @@ export function Header({
             <div className="pb-3 mb-1 border-b border-border">
               <LanguageSwitcher
                 locale={locale}
-                labels={dict.languageSwitcher}
+                labels={text.languageSwitcher}
                 untranslatedPaths={untranslatedPaths}
               />
             </div>
@@ -444,7 +444,7 @@ export function Header({
                     onClick={closeMobileMenu}
                   >
                     <LineIcon className="h-4 w-4" />
-                    <span>{dict.contact.lineContact}</span>
+                    <span>{text.contact.lineContact}</span>
                   </a>
                 )}
               </div>
@@ -453,7 +453,7 @@ export function Header({
                 locale={locale}
                 onClick={closeMobileMenu}
               >
-                {dict.common.contactUs}
+                {text.common.contactUs}
               </ContactButton>
             </div>
           </div>

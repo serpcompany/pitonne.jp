@@ -17,7 +17,7 @@ export function BlogDiscoverySection({
       <section className="my-12 rounded-lg bg-[#faf9f7] p-6">
         <h2 className="mb-4 font-serif text-2xl text-foreground">{dict.blog.contactPitonne}</h2>
         <p className="mb-5 text-muted-foreground">{dict.blog.contactDescription}</p>
-        <ContactButton locale={locale} />
+        <ContactButton locale={locale}>{dict.common.contactUs}</ContactButton>
       </section>
     </>
   )

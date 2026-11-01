@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
+import { getHeaderText } from '@/components/header-text'
 import { JsonLd } from '@/components/shared/json-ld'
 import { getUntranslatedBlogPaths } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
@@ -117,7 +118,7 @@ export default async function LocaleLayout({
         <JsonLd data={websiteJsonLd(typedLocale)} />
         <Header
           locale={typedLocale}
-          dict={dict}
+          text={getHeaderText(typedLocale)}
           serviceNavigation={getServiceCategorySections(typedLocale).map(section => ({
             name: section.title,
             href: section.href,

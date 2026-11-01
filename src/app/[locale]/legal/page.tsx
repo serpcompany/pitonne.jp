@@ -100,7 +100,7 @@ export default async function LegalPage({ params }: Props) {
             {dict.legal.questionsAboutPolicies}
           </h2>
           <p className="text-[#666] mb-6">{dict.legal.questionsDescription}</p>
-          <ContactButton locale={locale as Locale} />
+          <ContactButton locale={locale as Locale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </div>

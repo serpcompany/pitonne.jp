@@ -168,7 +168,7 @@ export default async function BlogCategoryPage({ params }: Props) {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl font-serif text-foreground mb-4">{dict.blog.haveQuestions}</h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">{categoryCtaDescription}</p>
-          <ContactButton locale={typedLocale} />
+          <ContactButton locale={typedLocale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </div>

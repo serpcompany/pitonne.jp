@@ -214,7 +214,7 @@ export default async function BlogPage({ params }: Props) {
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             {dict.blog.stayInformedDescription}
           </p>
-          <ContactButton locale={typedLocale} />
+          <ContactButton locale={typedLocale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </>

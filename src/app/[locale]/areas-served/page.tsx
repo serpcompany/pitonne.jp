@@ -135,7 +135,7 @@ export default async function AreasServedPage({ params }: Props) {
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
             {dict.areas.notSureAreaDescription}
           </p>
-          <ContactButton locale={typedLocale} />
+          <ContactButton locale={typedLocale}>{dict.common.contactUs}</ContactButton>
         </div>
       </section>
     </>

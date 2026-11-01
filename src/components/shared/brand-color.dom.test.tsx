@@ -19,7 +19,7 @@ describe('brand color', () => {
 
     render(
       <>
-        <ContactButton locale={locale} />
+        <ContactButton locale={locale}>{dict.common.contactUs}</ContactButton>
         <BookingButton locale={locale} />
       </>
     )

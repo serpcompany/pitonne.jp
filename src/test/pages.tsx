@@ -16,6 +16,7 @@ import ServicePage from '@/app/[locale]/services/[service]/page'
 import ServicesPage from '@/app/[locale]/services/page'
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
+import { getHeaderText } from '@/components/header-text'
 import { getAllAreas, wards } from '@/lib/data/areas'
 import { getAllBlogPosts, getAllCategories } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
@@ -42,7 +43,7 @@ export function siteHeader(locale: Locale): ReactElement {
   }))
 
   return (
-    <Header locale={locale} dict={getDictionary(locale)} serviceNavigation={serviceNavigation} />
+    <Header locale={locale} text={getHeaderText(locale)} serviceNavigation={serviceNavigation} />
   )
 }
 
