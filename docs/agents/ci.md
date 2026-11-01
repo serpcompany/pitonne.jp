@@ -82,15 +82,19 @@ never reaches a deploy or a preview.
   branch.
 - **Choose the commit to deploy** (Staging and Production): deploys queue out of commit order,
   since a CMS save deploys at once while a code commit waits for its `test`. So, inside the
-  concurrency group, `scripts/deploy-target.mjs <branch> <sha>` picks the branch tip as it is
-  now, and every deploy publishes everything committed so far: a queued older deploy never puts
-  back an older site, and rapid CMS saves all go live. `main` and `staging` only move forward, so
-  the tip is the newest state. There is deliberately no "already live" skip: GitHub's deployment
-  records name the branch, not the uploaded commit, and redeploying the same tree is harmless, so
-  the script always writes `skip=false`.
-  - The step may fail without failing the job. When the script fails, its fallback records the
-    fetched tip as `sha` but writes no `skip`, and the checkout step runs only when `skip` is
-    `false`, so the triggering commit deploys.
+  concurrency group, `scripts/deploy-target.mjs <branch> <sha>` fetches the branch and picks its
+  tip as it is now, and every deploy publishes everything committed so far: a queued older deploy
+  never puts back an older site, and rapid CMS saves all go live. `main` and `staging` only move
+  forward, so the tip is the newest state. There is deliberately no "already live" skip:
+  GitHub's deployment records name the branch, not the uploaded commit, and redeploying the same
+  tree is harmless. When the tip isn't the commit the run started for, the next step checks the
+  tip out before anything is installed or built.
+  - If the fetch fails, it deploys the tip the job's checkout fetched a moment earlier, with a
+    warning: deploys of one environment run one at a time, so no deploy before this one saw a
+    newer tip.
+  - If it can read no tip at all, the step fails and nothing deploys, rather than deploy the
+    commit the run started for, which could be older than what is live
+    (`scripts/deploy-target.test.mjs` runs each case against a scratch clone).
 - **Build and verify:** `pnpm build`, then `pnpm audit:out`, then the environment's own output:
   Production's `robots.txt` doesn't disallow crawling and its `_headers` send no `noindex`;
   Staging's `_headers` send no `noindex` and its `robots.txt` disallows `*`, names

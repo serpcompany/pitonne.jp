@@ -68,14 +68,10 @@ jobs:
       - name: Choose the commit to deploy
         id: target
         if: env.DEPLOY_ENV != 'preview'
-        continue-on-error: true
-        run: |
-          git fetch --quiet origin "$PAGES_BRANCH" || echo "::warning::Couldn't fetch origin/$PAGES_BRANCH."
-          node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA" ||
-            echo "sha=$(git rev-parse "origin/$PAGES_BRANCH")" >> "$GITHUB_OUTPUT"
+        run: node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"
 
       - name: Check out the chosen commit
-        if: steps.target.outputs.skip == 'false' && steps.target.outputs.sha != env.DEPLOY_SHA
+        if: env.DEPLOY_ENV != 'preview' && steps.target.outputs.sha != env.DEPLOY_SHA
         env:
           TARGET_SHA: ${{ steps.target.outputs.sha }}
         run: |
@@ -83,21 +79,17 @@ jobs:
           echo "DEPLOY_SHA=$TARGET_SHA" >> "$GITHUB_ENV"
 
       - uses: pnpm/action-setup@v4
-        if: steps.target.outputs.skip != 'true'
         with:
           version: 10.14.0
 
       - uses: actions/setup-node@v4
-        if: steps.target.outputs.skip != 'true'
         with:
           node-version: 24
           cache: pnpm
 
-      - if: steps.target.outputs.skip != 'true'
-        run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
       - name: Check Cloudflare deploy token
-        if: steps.target.outputs.skip != 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
@@ -107,11 +99,9 @@ jobs:
           fi
 
       - name: Build static export
-        if: steps.target.outputs.skip != 'true'
         run: pnpm build
 
       - name: Verify static output
-        if: steps.target.outputs.skip != 'true'
         run: |
           pnpm audit:out
           case "$DEPLOY_ENV" in
@@ -132,7 +122,6 @@ jobs:
           esac
 
       - name: Deploy to Cloudflare Pages
-        if: steps.target.outputs.skip != 'true'
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
@@ -144,13 +133,12 @@ jobs:
           gitHubToken: ${{ env.DEPLOY_ENV != 'preview' && github.token || '' }}
 
       - name: Smoke-test canonical host redirects
-        if: steps.target.outputs.skip != 'true' && env.DEPLOY_ENV == 'production'
+        if: env.DEPLOY_ENV == 'production'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: node scripts/smoke-canonical-host.mjs "$DEPLOYMENT_URL"
 
       - name: Smoke-test environment behaviour
-        if: steps.target.outputs.skip != 'true'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
           ALIAS_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}

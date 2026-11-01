@@ -5,30 +5,28 @@ import { runMain } from './run-main.mjs'
 
 export const DEPLOY_BRANCHES = ['main', 'staging']
 
-export function chooseDeploy({ sha, tip, relation }) {
-  if (tip && tip !== sha && relation(sha, tip) === 'ancestor') {
-    return {
-      skip: false,
-      sha: tip,
-      reason: `deploying the branch tip ${tip} (this run was started for ${sha})`
-    }
-  }
-  return { skip: false, sha, reason: `deploying ${sha}` }
+export function chooseDeploy({ sha, tip }) {
+  if (!tip) throw new Error('There is no branch tip to deploy.')
+  if (tip === sha) return { sha, reason: `deploying ${sha}, the branch tip` }
+  return { sha: tip, reason: `deploying the branch tip ${tip} (this run was started for ${sha})` }
 }
 
-function relation(a, b) {
-  if (a === b) return 'equal'
-  const isAncestor = (x, y) => {
-    try {
-      execFileSync('git', ['merge-base', '--is-ancestor', x, y], { stdio: 'ignore' })
-      return true
-    } catch {
-      return false
-    }
+const git = args =>
+  execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
+
+export function readTip(branch, run = git) {
+  try {
+    run(['fetch', '--quiet', 'origin', `+refs/heads/${branch}:refs/remotes/origin/${branch}`])
+  } catch {
+    console.log(
+      `::warning::Couldn't fetch origin/${branch}; deploying the tip the checkout fetched, which is no older than any deploy before this one.`
+    )
   }
-  if (isAncestor(a, b)) return 'ancestor'
-  if (isAncestor(b, a)) return 'descendant'
-  return 'unrelated'
+  try {
+    return run(['rev-parse', '--verify', '--quiet', `refs/remotes/origin/${branch}^{commit}`])
+  } catch {
+    return null
+  }
 }
 
 function main([branch, sha]) {
@@ -36,19 +34,17 @@ function main([branch, sha]) {
     console.error('Usage: node scripts/deploy-target.mjs <main|staging> <sha>')
     process.exit(2)
   }
-  let tip = null
-  try {
-    tip = execFileSync('git', ['rev-parse', `origin/${branch}`], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore']
-    }).trim()
-  } catch {
-    console.log(`::warning::Couldn't read origin/${branch}; deploying ${sha}.`)
+  const tip = readTip(branch)
+  if (!tip) {
+    console.log(
+      `::error::Couldn't read the tip of origin/${branch}, so nothing deploys: only the branch tip may replace a deploy. Run the deploy again.`
+    )
+    process.exit(1)
   }
-  const decision = chooseDeploy({ sha, tip, relation })
+  const decision = chooseDeploy({ sha, tip })
   console.log(decision.reason)
   if (process.env.GITHUB_OUTPUT)
-    fs.appendFileSync(process.env.GITHUB_OUTPUT, `sha=${decision.sha}\nskip=false\n`)
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `sha=${decision.sha}\n`)
 }
 
 await runMain(import.meta.url, main)

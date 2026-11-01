@@ -10,6 +10,7 @@ export type WorkflowStep = {
   run?: string
   env?: Record<string, string>
   with?: Record<string, string | number | boolean>
+  'continue-on-error'?: boolean | string
 }
 
 type WorkflowConcurrency = {
@@ -60,11 +61,6 @@ export function step(owner: WorkflowJob, idOrName: string): WorkflowStep {
   )
   if (!found) throw new Error(`No step with id or name ${idOrName}`)
   return found
-}
-
-export function stepsAfter(owner: WorkflowJob, idOrName: string): WorkflowStep[] {
-  const steps = owner.steps ?? []
-  return steps.slice(steps.indexOf(step(owner, idOrName)) + 1)
 }
 
 export function stepIndex(owner: WorkflowJob, idOrName: string): number {

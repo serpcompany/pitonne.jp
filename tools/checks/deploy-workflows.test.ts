@@ -9,7 +9,6 @@ import {
   scripts,
   step,
   stepIndex,
-  stepsAfter,
   textValues,
   type Workflow,
   workflowScripts
@@ -110,11 +109,20 @@ describe('CI and deploy workflows', () => {
 
   it('never uploads an older commit over a newer live one', () => {
     const target = step(pagesDeploy, 'target')
-    expect(target.run).toContain('node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"')
+    expect(target.run).toBe('node scripts/deploy-target.mjs "$PAGES_BRANCH" "$DEPLOY_SHA"')
     expect(target.if).toBe("env.DEPLOY_ENV != 'preview'")
-    const guarded = stepsAfter(pagesDeploy, 'target')
-    expect(guarded.length).toBeGreaterThan(0)
-    for (const later of guarded) expect(later.if).toMatch(/steps\.target\.outputs\.skip/)
+    expect(target['continue-on-error']).toBeUndefined()
+    const checkout = step(pagesDeploy, 'Check out the chosen commit')
+    expect(checkout.if).toBe(
+      "env.DEPLOY_ENV != 'preview' && steps.target.outputs.sha != env.DEPLOY_SHA"
+    )
+    expect(stepIndex(pagesDeploy, 'Check out the chosen commit')).toBe(
+      stepIndex(pagesDeploy, 'target') + 1
+    )
+    expect(stepIndex(pagesDeploy, 'Build static export')).toBeGreaterThan(
+      stepIndex(pagesDeploy, 'Check out the chosen commit')
+    )
+    expect(allText(deploy)).not.toContain('outputs.skip')
   })
 
   it('serializes deploys per target and environment without cancelling a running one', () => {
