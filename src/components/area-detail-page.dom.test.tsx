@@ -1,8 +1,14 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import AreaPage from '@/app/[locale]/areas-served/[ward]/[area]/page'
 import { AreaDetailPage } from '@/components/area-detail-page'
-import { getArea } from '@/lib/data/areas'
+import { getAllAreas, getArea } from '@/lib/data/areas'
+import { locales } from '@/lib/i18n/config'
 import { defined } from '@/test/defined'
+
+const areaPages = locales.flatMap(locale =>
+  getAllAreas().map(({ ward, area }) => [`${ward.slug}/${area.slug}`, locale, ward, area] as const)
+)
 
 function renderHirooAreaDetail() {
   const area = defined(getArea('minato', 'hiroo'))
@@ -103,5 +109,20 @@ describe('area detail parity', () => {
     expect(screen.queryByText('Regenerative wellness planning')).not.toBeInTheDocument()
     expect(screen.queryByText('Discreet consultation')).not.toBeInTheDocument()
     expect(screen.queryByText('Prescription guidance')).not.toBeInTheDocument()
+  })
+
+  it.each(areaPages)('embeds a Google map of %s (%s)', async (_path, locale, ward, area) => {
+    const { container } = render(
+      await AreaPage({ params: Promise.resolve({ locale, ward: ward.slug, area: area.slug }) })
+    )
+    const maps = Array.from(
+      container.querySelectorAll('iframe'),
+      frame => new URL(frame.src)
+    ).filter(url => url.hostname === 'www.google.com' && url.pathname === '/maps')
+
+    expect(maps).toHaveLength(1)
+    expect(maps[0].searchParams.get('output')).toBe('embed')
+    expect(maps[0].searchParams.get('q')).toContain(area.name)
+    expect(maps[0].searchParams.get('q')).toContain(ward.name)
   })
 })

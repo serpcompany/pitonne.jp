@@ -29,6 +29,8 @@ import {
 import { sitePageCases } from '@/test/pages'
 
 const root = process.cwd()
+const demoTemplateAsset = /placeholder|logoipsum|glowence/i
+const demoTemplateBrand = /logoipsum|glowence/i
 type ManifestEntry = {
   sheetName: string
   route?: string
@@ -226,5 +228,19 @@ describe('rendered site images', () => {
       expect(url).toMatch(localImagePath)
       expect(publicAssetExists(url), url).toBe(true)
     }
+  })
+
+  it.each(
+    sitePageCases
+  )('shows no demo template assets on the %s page (%s)', async (_name, _locale, page) => {
+    const { container } = render(await page())
+    const linked = Array.from(container.querySelectorAll('a[href]'), link =>
+      String(link.getAttribute('href'))
+    )
+
+    expect(
+      [...renderedImageUrls(container), ...linked].filter(url => demoTemplateAsset.test(url))
+    ).toEqual([])
+    expect(container.textContent).not.toMatch(demoTemplateBrand)
   })
 })

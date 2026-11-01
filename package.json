@@ -18,8 +18,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:lighthouse": "lhci autorun",
-    "audit:routes": "node scripts/audit-routes.mjs",
-    "audit:content": "node scripts/audit-content.mjs",
     "audit:strings": "node scripts/audit-hardcoded-strings.mjs",
     "audit:meta": "node scripts/audit-meta-lengths.mjs",
     "audit:seo": "node scripts/audit-seo-build.mjs",
@@ -27,7 +25,7 @@
     "audit:sheet-images": "node scripts/audit-sheet-images.mjs",
     "translate": "node scripts/translate-content.ts",
     "drafts:fetch": "node scripts/fetch-google-docs.mjs",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:routes && pnpm audit:content && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm audit:meta && DEPLOY_ENV=production pnpm build && pnpm audit:out && pnpm audit:seo"
   },
   "dependencies": {
     "@keystatic/core": "^0.6.9",

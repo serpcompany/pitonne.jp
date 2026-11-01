@@ -86,6 +86,8 @@ Workflow (stage, inner-loop commands, the `pnpm check` finish gate, preview/depl
 Key parity tests:
 - `src/lib/i18n/dictionaries.test.ts` — en.json and ja.json must have identical keys
 - `src/lib/i18n/content-parity.test.ts` — services and legal must exist in both locales; blog translations pair by filename/slug
+- `src/lib/data/routes.test.ts` — every canonical route has a built page in each locale, and blog pages exist only for
+  published posts in their own locale
 
 ## Conventions
 
