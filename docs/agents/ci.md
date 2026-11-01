@@ -1,7 +1,7 @@
 # GitHub Actions
 
 The workflows are in `.github/workflows/`. Workflow files hold no comments, so what starts each
-one, what it runs and why it's built that way are here and in [`ci-deploys.md`](ci-deploys.md);
+one, what it runs and why it's built that way are here and in the two docs this one links;
 change a workflow's section in the same pull request as the workflow. The flow they implement
 (which push deploys what, and when) is in [`docs/gitflow.md`](../gitflow.md#what-ci-deploys).
 
@@ -11,6 +11,7 @@ change a workflow's section in the same pull request as the workflow. The flow t
 | Deploy | `deploy.yml` | Called by CI; by hand from `main` or `staging` | [`ci-deploys.md`](ci-deploys.md#deployyml) |
 | Promote to Production | `promote.yml` | By hand | [`ci-deploys.md`](ci-deploys.md#promoteyml) |
 | Sync staging | `sync-staging.yml` | Every push to `main`; by hand | [`ci-deploys.md`](ci-deploys.md#sync-stagingyml) |
+| Pull request | `pull-request.yml` | Every pull request, again when its title or body is edited | [`ci-pull-requests.md`](ci-pull-requests.md#pull-request) |
 
 Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only
 read: each write is granted to the one job that needs it. No `run:` script holds a `${{ }}`
@@ -21,14 +22,16 @@ expression; values reach scripts through `env:`. These tests hold the workflows 
 | `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install, no expressions in scripts |
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
+| `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts` | The pull request checks |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
 
 ## Checks a merge waits for
 
-The `staging` and `main` rulesets require `test`. Once `verify` is on both branches, the owner
-adds it to both, and may add `e2e` and `lighthouse`, which run on every ready pull request (owner
-steps, [below](#owner-steps)). CI starts on every pull request, with no `paths` filter, so its
-checks always report: a docs-only change skips work inside the jobs, never the jobs.
+The `staging` and `main` rulesets require `test`. Once these workflows are on both branches, the
+owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and may add `e2e` and
+`lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
+required workflow starts on every pull request, with no `paths` filter, so its check always
+reports: a docs-only change skips work inside the jobs, never the jobs.
 
 ## Installing the private package
 
@@ -155,7 +158,7 @@ and their retry times are in [`ci-deploys.md`](ci-deploys.md#deployyml).
 ## Pinned actions
 
 Each workflow runs every action at a commit, never a tag, which can be moved to new code: the
-deploy jobs hold the Cloudflare token, and every install holds a token that reads the private
+deploy jobs hold the Cloudflare token, every install holds a token that reads the private
 package. Each commit is the one its tag named on 2026-11-01.
 `checkout`, `setup-node` and `pnpm/action-setup` moved then from `v4` to the majors SERP's
 standards use; `wrangler-action` stays at the commit `v3` named, so the deploy runs the code it
@@ -165,7 +168,7 @@ this table beside the workflows that use it.
 
 | Action | Commit | Version | Used in |
 | --- | --- | --- | --- |
-| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `deploy.yml`, `promote.yml`, `sync-staging.yml` |
+| `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
 | `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `deploy.yml` |
 | `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `ci.yml`, `deploy.yml` |
 | `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |
@@ -185,5 +188,5 @@ Nothing in the repository can do these; an owner does them once:
    add the app's ID as the Actions variable `SERP_AGENT_APP_ID` and a private key made for CI as
    the Actions secret `SERP_AGENT_PRIVATE_KEY` (or organization ones that cover this repository),
    and install the app on `serpcompany/serp`. Until then `verify` skips those links with a note.
-3. **Required checks:** add `verify` to the `staging` and `main` rulesets beside `test`, and
-   optionally `e2e` and `lighthouse`.
+3. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
+   `staging` and `main` rulesets beside `test`, and optionally `e2e` and `lighthouse`.

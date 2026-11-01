@@ -92,6 +92,8 @@ receives no webhooks ([`environments.md`](docs/agents/environments.md#the-stagin
   [`cms.md`](docs/cms.md#for-developers)).
 - **GitHub's default branch stays `main`** while pull requests target `staging`
   ([`gitflow.md`](docs/gitflow.md#why-main-stays-the-default-branch)).
+- **Vendored pull request checks:** serp's action is private, and `issue-link` must accept `staging`
+  ([`ci-pull-requests.md`](docs/agents/ci-pull-requests.md#pull-request)).
 - **No translation review fields:** Japanese that an AI wrote is flagged in the pull request for
   native review instead ([`content.md`](docs/agents/content.md#japanese-copy)).
 - **shadcn's `new-york` style on Radix,** not `base-nova` on Base UI

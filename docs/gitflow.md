@@ -28,7 +28,9 @@ An agent runs `gh` and pushes only as the organization's app
    GitHub's default branch is still `main`, so pick the base explicitly. The body starts with
    `Closes #<n>`, says what changed and what was left out, and reports evidence levels separately
    ([`agents/verification.md`](agents/verification.md#evidence)). Hotfixes are the only PRs into
-   `main`.
+   `main`. The `Pull request` workflow checks the title, the issue link, a test with every fix,
+   and that the text names no local path
+   ([`agents/ci-pull-requests.md`](agents/ci-pull-requests.md#pull-request)).
    - The `staging` ruleset requires a PR, the `test` check, an up-to-date branch, and squash
      merging. CI also runs `verify` on every PR; the owner adds it, and the pull request checks,
      to the required checks once they're on both branches
