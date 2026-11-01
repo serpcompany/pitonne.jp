@@ -4,7 +4,8 @@ import {
   closeNamedIssues,
   closingComment,
   commitsOf,
-  mergedAs
+  mergedAs,
+  pullNamedBy
 } from './close-issues.mjs'
 import { runAgainstGitHub } from './github-stub'
 
@@ -108,12 +109,23 @@ describe('closing the issues a merged pull request names', () => {
 
 describe('finding the pull requests a push to staging merged', () => {
   it('takes every commit the push brought, or its head commit', () => {
-    expect(commitsOf({ commits: [{ id: 'a' }, { id: 'b' }], head_commit: { id: 'b' } })).toEqual([
-      'a',
-      'b'
+    expect(
+      commitsOf({ commits: [{ id: 'a', message: 'x' }, { id: 'b' }], head_commit: { id: 'b' } })
+    ).toEqual([
+      { id: 'a', message: 'x' },
+      { id: 'b', message: '' }
     ])
-    expect(commitsOf({ commits: [], head_commit: { id: 'c' } })).toEqual(['c'])
+    expect(commitsOf({ commits: [], head_commit: { id: 'c', message: 'y' } })).toEqual([
+      { id: 'c', message: 'y' }
+    ])
     expect(commitsOf({})).toEqual([])
+  })
+
+  it('reads the pull request a squash merge names at the end of its subject', () => {
+    expect(pullNamedBy('feat: the form opens (#42)')).toBe(42)
+    expect(pullNamedBy('fix: closes #12 (#12) (#42)\n\nbody (#7)')).toBe(42)
+    expect(pullNamedBy('chore: merge main into staging')).toBeNull()
+    expect(pullNamedBy('Update blog post (#3) now')).toBeNull()
   })
 
   it('counts a pull request only when it merged into staging as that very commit', () => {
@@ -176,8 +188,90 @@ describe('finding the pull requests a push to staging merged', () => {
       failures: 1
     })
     expect(lines[0]).toBe(
-      `::error::Couldn't list the pull requests of ${other}: pulls ${other} returned 502`
+      `::error::Couldn't find the pull request ${other} merged: pulls ${other} returned 502`
     )
+  })
+})
+
+describe('waiting for GitHub to link a squash merge to its commit', () => {
+  const pushOf = (message: string) => ({
+    ref: 'refs/heads/staging',
+    commits: [{ id: squash, message }]
+  })
+
+  function slowApi(answers: unknown[][]) {
+    let calls = 0
+    const { api, done } = fakeApi({ 7: 'open' })
+    return {
+      done,
+      calls: () => calls,
+      api: {
+        ...api,
+        pullsOfCommit: async () => answers[Math.min(calls++, answers.length - 1)]
+      }
+    }
+  }
+
+  it('asks again while GitHub doesn’t link the pull request the subject names, then closes its issues', async () => {
+    const { api, done, calls } = slowApi([[], [], [listed(42, 'Closes #7', squash)]])
+    const waits: number[] = []
+    const { lines, log } = logged()
+    const result = await closeIssuesOfPush({
+      event: pushOf('feat: the form opens (#42)'),
+      repository,
+      api,
+      log,
+      wait: async (milliseconds: number) => {
+        waits.push(milliseconds)
+      }
+    })
+    expect(result).toEqual({ closed: [7], failures: 0 })
+    expect(calls()).toBe(3)
+    expect(waits).toEqual([10_000, 10_000])
+    expect(lines[0]).toBe("GitHub doesn't link #42's merge to abc1234 yet; asking again in 10 s.")
+    expect(done.at(-1)).toBe('close #7')
+  })
+
+  it('fails, naming the pull request, when GitHub never links it', async () => {
+    const { api, calls } = slowApi([[]])
+    const { lines, log } = logged()
+    const result = await closeIssuesOfPush({
+      event: pushOf('feat: the form opens (#42)'),
+      repository,
+      api,
+      log,
+      wait: async () => {}
+    })
+    expect(result).toEqual({ closed: [], failures: 1 })
+    expect(calls()).toBe(4)
+    expect(lines.at(-1)).toContain(
+      `::error::Couldn't find the pull request ${squash} merged: its subject names #42`
+    )
+    expect(lines.at(-1)).toContain('Close the issues #42 names by hand')
+  })
+
+  it.each([
+    ['names no pull request, such as a sync from main', 'chore: merge main into staging', []],
+    [
+      'names one merged elsewhere, such as a hotfix into main',
+      'fix: the phone link (#43)',
+      [listed(43, 'Closes #8', squash, 'main')]
+    ]
+  ])('asks once for a commit that %s, and closes nothing', async (_, message, answer) => {
+    const { api, calls, done } = slowApi([answer])
+    const { log } = logged()
+    const result = await closeIssuesOfPush({
+      event: pushOf(message),
+      repository,
+      api,
+      log,
+      wait: async () => {
+        throw new Error('It waited.')
+      }
+    })
+    expect(result).toEqual({ closed: [], failures: 0 })
+    expect(calls()).toBe(1)
+    expect(done).toEqual([])
   })
 })
 

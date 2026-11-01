@@ -61,6 +61,10 @@ pull request and its commit. GitHub does that only for pull requests into the de
   GitHub which pull requests the commit belongs to, and keeps one only when it merged into
   `staging` as that very commit, as a squash merge does. A sync from `main`, a CMS save or a
   hotfix that comes back from `main` closes nothing.
+- GitHub can take a moment to link a merge to its commit. When a commit's subject ends with
+  `(#N)`, as a squash merge's does, and GitHub links no merge of #N into `staging` to it, it asks
+  again, four times in all, ten seconds apart, then fails naming #N, so a missed close is a red
+  run rather than a quiet one.
 - It doesn't start on `pull_request_target`: since 2025-12-08 that event always runs the default
   branch's copy of a workflow, so it would run `main`'s, which has no such job until a promotion.
 - Its job reads the pull requests and writes issues, with the job's own token.
