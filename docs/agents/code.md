@@ -107,15 +107,6 @@ categories Keystatic saves), which the checks leave as written. A rule is never 
 the code it flags; one turned off in a tool's config is listed in
 [`exceptions.md`](exceptions.md), with its reason.
 
-## Formatting commits in blame
-
-[`.git-blame-ignore-revs`](../../.git-blame-ignore-revs) lists the commits that only reformatted
-or moved code, one full hash per line, so blame shows who wrote each line rather than who
-reformatted it. Today it holds `5bff871` ("style: format with Biome"). GitHub's blame view reads
-the file by itself; locally, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once per
-clone. Add a commit only when its diff is nothing but formatting or moves; a commit that also
-deletes comments or changes code doesn't qualify.
-
 ## SERP's standards
 
 What every SERP repository shares isn't restated here: handing work to subagents
