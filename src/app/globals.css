@@ -3,6 +3,8 @@
 
 @source "../";
 @source "../../content";
+@source not "../**/*.test.{ts,tsx}";
+@source not "../test";
 
 @custom-variant dark (&:is(.dark *));
 

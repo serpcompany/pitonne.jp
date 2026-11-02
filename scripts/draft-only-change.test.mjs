@@ -104,5 +104,9 @@ describe('docs-only change detection', () => {
       path.posix.join('src/app', source).replace(/\/$/, '')
     )
     expect(sources).toEqual(['src', 'content'])
+    const excluded = [...css.matchAll(/^@source not "([^"]+)";$/gm)].map(([, source]) =>
+      path.posix.join('src/app', source)
+    )
+    expect(excluded).toEqual(['src/**/*.test.{ts,tsx}', 'src/test'])
   })
 })

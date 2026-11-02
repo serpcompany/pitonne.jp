@@ -60,11 +60,11 @@ Don't add `base-nova` components beside it; a move to `base-nova` is one change 
 components also write colors as hex values, such as the brand green `#7A8F87`, where the standard
 asks for theme tokens; moving them into tokens is a change of its own too.
 
-Tailwind builds the site's CSS from `src/` and `content/` only (`source(none)` and the two
-`@source` lines in `src/app/globals.css`), so a doc, workflow, test or script can name a utility
-without adding it to the site, and CI can skip the build for a docs-only pull request. Class
-names anywhere else, such as a new top-level folder of components, need an `@source` line of
-their own.
+Tailwind builds the site's CSS from `src/` and `content/` only, leaving out test files and
+`src/test/` (`source(none)` and the `@source` lines in `src/app/globals.css`), so a doc,
+workflow, test or script can name a utility without adding it to the site, and CI can skip the
+build for a docs-only pull request. Class names anywhere else, such as a new top-level folder of
+components, need an `@source` line of their own.
 
 ## Tests
 
