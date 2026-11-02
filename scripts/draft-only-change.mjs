@@ -6,7 +6,8 @@ import { runMain } from './run-main.mjs'
 const BLOG_POST = /^content\/blog\/(ja\/)?[^/]+\.md$/
 const CMS_CONTENT =
   /^(?:content\/blog\/|content\/blog-categories\/|public\/images\/content\/blog\/)/
-const DOCS = /^(?:docs\/|[^/]+\.md$|\.claude\/skills\/)/
+const DOCS = /^(?:docs\/.+|\.claude\/skills\/.+|[^/]+)\.md$/
+const READ_BY_TESTS = new Set(['docs/agents/ci.md'])
 
 export function isDraft(markdown) {
   const frontmatter = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/)
@@ -30,7 +31,7 @@ export function isContentOnlyChange(paths) {
 }
 
 export function isDocsOnlyChange(paths) {
-  return paths.length > 0 && paths.every(path => DOCS.test(path))
+  return paths.length > 0 && paths.every(path => DOCS.test(path) && !READ_BY_TESTS.has(path))
 }
 
 function fileAt(sha, path) {
@@ -64,7 +65,7 @@ function main([before, after]) {
       : contentOnly
         ? 'Only CMS content changed.'
         : docsOnly
-          ? 'Only docs changed, which the build never reads.'
+          ? 'Only docs changed, which no build, test or script reads.'
           : 'Code or configuration changed (or no previous commit to compare with).'
   )
   if (process.env.GITHUB_OUTPUT)

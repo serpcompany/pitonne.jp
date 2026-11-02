@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -76,10 +77,10 @@ describe('CMS content-only change detection', () => {
 })
 
 describe('docs-only change detection', () => {
-  it('treats the docs folder, root Markdown files and skills as docs, which no build reads', () => {
+  it('treats Markdown under docs/, at the root and in skills as docs', () => {
     expect(
       isDocsOnlyChange([
-        'docs/agents/ci.md',
+        'docs/agents/ci-deploys.md',
         'docs/adr/0001-blog-cms.md',
         'AGENTS.md',
         'README.md',
@@ -88,13 +89,48 @@ describe('docs-only change detection', () => {
     ).toBe(true)
   })
 
-  it('treats content, code, config and anything else as more than docs', () => {
+  it('treats content, code, config, data beside the docs and anything else as more than docs', () => {
     expect(isDocsOnlyChange([])).toBe(false)
-    expect(isDocsOnlyChange(['docs/agents/ci.md', 'src/lib/seo.ts'])).toBe(false)
+    expect(isDocsOnlyChange(['docs/agents/ci-deploys.md', 'src/lib/seo.ts'])).toBe(false)
     expect(isDocsOnlyChange(['content/services/iv-therapy.md'])).toBe(false)
     expect(isDocsOnlyChange(['content/blog/post.md'])).toBe(false)
     expect(isDocsOnlyChange(['.claude/settings.json'])).toBe(false)
     expect(isDocsOnlyChange(['verify.json'])).toBe(false)
+    expect(isDocsOnlyChange(['docs/image-audit/sheet-image-manifest.json'])).toBe(false)
+    expect(isDocsOnlyChange(['.claude/skills/verify-site/serve.mjs'])).toBe(false)
+  })
+
+  it('treats ci.md as more than docs, since workflow-rules.test.ts reads its table of pinned actions', () => {
+    expect(isDocsOnlyChange(['docs/agents/ci.md'])).toBe(false)
+    expect(fs.readFileSync('tools/checks/workflow-rules.test.ts', 'utf8')).toContain(
+      "fs.readFileSync('docs/agents/ci.md', 'utf8')"
+    )
+  })
+
+  it('counts as docs no file that code, a test, a script or a root config names', () => {
+    const tracked = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' })
+      .split('\0')
+      .filter(Boolean)
+    const docs = tracked.filter(file => isDocsOnlyChange([file]))
+    const readers = tracked.filter(
+      file =>
+        (/^(?:src|scripts|tools|e2e|functions)\//.test(file) || !file.includes('/')) &&
+        !docs.includes(file) &&
+        file !== 'scripts/draft-only-change.test.mjs'
+    )
+    expect(docs).toContain('AGENTS.md')
+    expect(readers).toContain('src/lib/data/sheet-images.dom.test.tsx')
+    const named = readers.flatMap(reader => {
+      const text = fs.readFileSync(reader, 'utf8')
+      return docs.filter(doc => text.includes(doc)).map(doc => `${reader} names ${doc}`)
+    })
+    const onlyInText = {
+      'tools/checks/pull-request.mjs names docs/agents/ci-pull-requests.md':
+        "issue-link's note, which links the doc",
+      'verify.json names AGENTS.md': 'the docs check, which runs on a docs-only change',
+      'verify.json names docs/cms.md': "a generated file's description, which links the doc"
+    }
+    expect(named).toEqual(Object.keys(onlyInText))
   })
 
   it('holds Tailwind to src and content, so a docs-only change leaves the CSS alone', () => {

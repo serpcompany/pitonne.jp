@@ -72,8 +72,12 @@ to `staging` and `main` gets a run of its own, so none is cancelled. It starts o
 `scripts/draft-only-change.mjs <before> <after>` compares the pushed commits, or a pull
 request's merge commit with its base:
 
-- `docs` (pull requests): every changed file is a doc (`docs/`, a root `*.md`, or a skill under
-  `.claude/skills/`), which the build never reads. A push is never docs-only: its checks also
+- `docs` (pull requests): every changed file is a doc, a Markdown file under `docs/` or
+  `.claude/skills/` or at the root, which no build, test or script reads. Two files there aren't
+  docs: `docs/agents/ci.md`, whose table of pinned actions `tools/checks/workflow-rules.test.ts`
+  reads, and `docs/image-audit/sheet-image-manifest.json`, which a test reads and Biome lints.
+  `scripts/draft-only-change.test.mjs` fails when code, a test, a script or a root config names a
+  doc. A push is never docs-only: its checks also
   stand for the commits under it, which promotion and the fast path trust, so a docs commit on
   top of one that failed `e2e` must fail `e2e` too. A push builds and runs both suites unless
   its tree has receipts.
