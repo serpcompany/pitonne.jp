@@ -45,7 +45,8 @@ included, whose file name, which the CMS stores, isn't its slug.
   IV Therapy to an IV therapy post that names no service, and nothing to any other", "offers every
   service as a CMS related-service option, and resolves each option and each post’s related
   services to a service in both languages" and "resolves a related service the CMS stores by file
-  name to the service’s slug". The box's own list: no automated check yet.
+  name to the service’s slug"; `src/components/blog/related-pitonne-services.dom.test.tsx`, "the
+  related services box in a post’s body (%s) > lists %s".
 
 **Reading time and date.** The reading time is computed from the body, at 200 words a minute in
 English and 500 characters a minute in Japanese, unless the post's `readingTime` sets it. The date
