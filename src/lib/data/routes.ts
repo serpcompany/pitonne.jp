@@ -35,13 +35,18 @@ export function localizedRoute(path: string, locale: Locale = 'en'): string {
   return normalized
 }
 
+function nameIn(place: { name: string; nameJa: string }, locale: Locale): string {
+  return locale === 'ja' ? place.nameJa : place.name
+}
+
 export function getAreaNavigation(locale: Locale = 'en') {
+  const otherLocale: Locale = locale === 'ja' ? 'en' : 'ja'
   return wardNames.map(ward => ({
-    name: ward.name,
-    nameJa: ward.nameJa,
+    name: nameIn(ward, locale),
+    otherName: nameIn(ward, otherLocale),
     href: localizedRoute(`/areas-served/${ward.slug}/`, locale),
     areas: ward.areas.map(area => ({
-      name: area.name,
+      name: nameIn(area, locale),
       href: localizedRoute(`/areas-served/${ward.slug}/${area.slug}/`, locale)
     }))
   }))

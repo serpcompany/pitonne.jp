@@ -225,7 +225,7 @@ export function Header({
                       >
                         {ward.name}
                         <span className="block text-xs text-muted-foreground font-normal">
-                          {ward.nameJa}
+                          {ward.otherName}
                         </span>
                       </Link>
                       <ul className="mt-3 space-y-1.5">
@@ -409,7 +409,7 @@ export function Header({
                             >
                               {ward.name}{' '}
                               <span className="text-muted-foreground font-normal">
-                                {ward.nameJa}
+                                {ward.otherName}
                               </span>
                             </Link>
                             <div className="pl-3 space-y-1">

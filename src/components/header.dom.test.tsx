@@ -127,6 +127,46 @@ describe.each(locales)('header navigation (%s)', locale => {
     }
   })
 
+  it.each([
+    [
+      'desktop menu',
+      () => fireEvent.mouseEnter(screen.getByRole('link', { name: dict.nav.areasServed }))
+    ],
+    [
+      'mobile menu',
+      () => {
+        fireEvent.click(screen.getByRole('button', { name: dict.common.toggleMenu }))
+        fireEvent.click(screen.getByRole('button', { name: dict.nav.areasServed }))
+      }
+    ]
+  ])('names each ward and area in the Areas Served %s in this language', async (_, open) => {
+    const [shown, other] =
+      locale === 'ja' ? (['nameJa', 'name'] as const) : (['name', 'nameJa'] as const)
+    const { container } = await renderHeader(locale)
+    open()
+
+    const links = Array.from(container.querySelectorAll('a')).map(link => [
+      link.getAttribute('href'),
+      link.firstChild?.textContent,
+      link.querySelector('span')?.textContent ?? null
+    ])
+    for (const ward of wards) {
+      expect(links).toContainEqual([
+        routeHref(localizedRoute(`/areas-served/${ward.slug}/`, locale)),
+        ward[shown],
+        ward[other]
+      ])
+      for (const area of ward.areas) {
+        expect(links).toContainEqual([
+          routeHref(localizedRoute(`/areas-served/${ward.slug}/${area.slug}/`, locale)),
+          area[shown],
+          null
+        ])
+        expect(container).not.toHaveTextContent(area[other])
+      }
+    }
+  })
+
   it('offers only the Japan number in the phone menu and the mobile menu', async () => {
     const { container } = await renderHeader(locale)
 

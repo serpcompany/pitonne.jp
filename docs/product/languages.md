@@ -67,15 +67,18 @@ language, in the footer and on the contact page.
   hours as the structured data (%s)".
 
 **Names shown in both languages.** The areas index and the ward pages name each area in English
-with its Japanese name below, on both languages' pages. The header's Areas Served menu shows each
-ward's English name with its Japanese name under it, and each area by its English name, in both
-languages. A video with no Japanese title shows its English title on the Japanese pages.
+with its Japanese name below, on both languages' pages. The header's Areas Served menu names each
+ward in the page's language with its name in the other language under it, and each area in the
+page's language: Minato over 港区, then Roppongi, on English pages, and 港区 over Minato, then
+六本木, on Japanese pages. A video with no Japanese title shows its English title on the Japanese
+pages.
 
 - Check: `src/app/[locale]/areas-served/page.dom.test.tsx`, "areas served (%s) > names each area
   of each ward in English and in Japanese on the areas index" and "shows %s with a Google map of
-  the ward and each area named in both languages"; `src/app/[locale]/videos/page.test.tsx`,
-  "Pitonne video pages > titles a Japanese watch page with the video’s Japanese title, or its
-  English one without". The header's Areas Served menu: no automated check yet.
+  the ward and each area named in both languages"; `src/components/header.dom.test.tsx`, "header
+  navigation (%s) > names each ward and area in the Areas Served %s in this language";
+  `src/app/[locale]/videos/page.test.tsx`, "Pitonne video pages > titles a Japanese watch page
+  with the video’s Japanese title, or its English one without".
 
 ## The language switcher
 
