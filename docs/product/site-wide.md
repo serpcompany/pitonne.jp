@@ -21,8 +21,9 @@ the logo and a menu button.
   navigation (%s) > links Videos from the primary navigation and the mobile menu", "opens the
   contact page in this language from Contact Us", "links the logo to the home page in this
   language" and "shows the section links, then the language switcher, the Phone dropdown, LINE
-  where offered and Contact Us". The header staying pinned and the switch at 1280 pixels: no
-  automated check yet.
+  where offered and Contact Us"; `e2e/navigation.spec.ts`, "the header stays pinned to the top of
+  the window as the page scrolls" and "the header shows its section links from 1280 pixels wide,
+  and the logo and a menu button below", at both widths and, on desktop, at 1280 and 1279 pixels.
 
 **Header menus.** About, Services and Areas Served are links to their pages, and each opens a menu
 while the pointer is over it: About lists About and FAQs; Services, each service category, linking
