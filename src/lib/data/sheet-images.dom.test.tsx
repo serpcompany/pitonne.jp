@@ -240,7 +240,7 @@ describe('Google Drive images', () => {
 
   it.each(
     everyPageCases
-  )('are on no %s page (%s), inline backgrounds included', async (_name, _locale, page) => {
+  )('are on no %s page (%s), style attributes included', async (_name, _locale, page) => {
     const { container } = render(await page())
 
     expect(renderedImageUrls(container).filter(url => googleDriveImage.test(url))).toEqual([])

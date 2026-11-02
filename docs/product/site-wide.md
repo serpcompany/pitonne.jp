@@ -83,7 +83,7 @@ No image is over 5 MB.
   image files on the %s page (%s)" and "shows no demo template assets on the %s page (%s)", and
   "sheet image integration > keeps every image the site renders from data as a local file rather
   than a Google Drive link", and "Google Drive images > are named in no file of the site’s code
-  or content" and "are on no %s page (%s), inline backgrounds included";
+  or content" and "are on no %s page (%s), style attributes included";
   `scripts/audit-seo-build.mjs`, "image is … MB (max … MB)".
 
 **No errors in the browser.** No page logs a console error or throws an uncaught error while a
