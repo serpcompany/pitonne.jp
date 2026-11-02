@@ -2,8 +2,9 @@
 
 pitonne.jp follows the SERP [git workflow](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/git-workflow.md)
 and [environment configuration](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/environment-configuration.md)
-standards, with two documented exceptions: CMS saves go straight to Production, and GitHub's
-default branch stays `main` ([below](#why-main-stays-the-default-branch)).
+standards, except where [`agents/deviations.md`](agents/deviations.md#branches-deploys-and-ci)
+says otherwise: among them, CMS saves go straight to Production, and GitHub's default branch stays
+`main` ([below](#why-main-stays-the-default-branch)).
 
 | Branch | Environment | URL | Indexable |
 | --- | --- | --- | --- |
@@ -35,8 +36,8 @@ An agent runs `gh` and pushes only as the organization's app
      merging. CI also runs `verify` on every PR; the owner adds it, and the pull request checks,
      to the required checks once they're on both branches
      ([`agents/ci.md`](agents/ci.md#checks-a-merge-waits-for)).
-   - Same-repository PRs get a Cloudflare Pages preview at `pr-<n>.pitonne-jp.pages.dev` once the
-     `test` job passes. New commits replace it, and the Cloudflare Pages app keeps one PR comment
+   - Same-repository PRs into `staging` or `main` get a Cloudflare Pages preview at
+     `pr-<n>.pitonne-jp.pages.dev` once the `test` job passes. New commits replace it, and the Cloudflare Pages app keeps one PR comment
      with the URL. Previews build with `DEPLOY_ENV=preview`: robots.txt disallows everything and
      pages send `noindex`. Forked PRs get no secrets and no preview.
 4. The `Code review` workflow has Claude review each push once `verify` and `test` pass, and
@@ -82,9 +83,10 @@ deploy or Sync staging failed, fixing it comes first.
 ## Content: CMS saves go straight to `main`
 
 Keystatic Cloud commits CMS saves directly to `main` (its GitHub app bypasses the `main` ruleset),
-so client content is live within minutes without waiting for a promotion. This is the documented
-exception to "code flows staging → main": it applies only to the files the CMS edits
-(`content/blog/`, `content/blog-categories/`, `public/images/content/blog/`).
+so client content is live within minutes without waiting for a promotion or any check. With
+hotfixes, these are the only changes that reach `main` without passing through `staging`, and they
+touch only the files the CMS edits (`content/blog/`, `content/blog-categories/`,
+`public/images/content/blog/`).
 
 **Sync staging** (`.github/workflows/sync-staging.yml`) runs after every push to `main` and merges
 `main` into `staging`: a fast-forward when `staging` has nothing new, a merge commit
@@ -129,19 +131,17 @@ content deploy, even before its own checks finish.
   "CI is failing on main" issue.
 - Production deploys only from `main` and Staging only from `staging`; `deploy.yml` refuses
   anything else, so no PR can reach the `main` or `staging` aliases.
-- **Manual redeploy:** Actions → Deploy → Run workflow, from `main` (Production) or `staging`
-  (Staging). It uploads that branch's current tip and waits for no check.
+- **Manual redeploy, the owner's to run:** Actions → Deploy → Run workflow, from `main`
+  (Production) or `staging` (Staging). It uploads that branch's current tip and waits for no
+  check, so it ships whatever is there, checked or not. Agents never run it.
 
 ## Why `main` stays the default branch
 
 The standard makes `staging` the base branch for PRs and also GitHub's default branch. Here the
-default stays `main`, because changing it would break two things:
-
-- The `main` ruleset targets `~DEFAULT_BRANCH`. Changing the default would move Production's
-  protection onto `staging` and leave `main` unprotected, unless the ruleset first targets
-  `refs/heads/main` explicitly.
-- Keystatic Cloud opens on the repository's default branch, and editors save to the branch shown
-  in the CMS. With `staging` as the default, saves would land on `staging` and stop going live.
+default stays `main`, because Keystatic Cloud opens on the repository's default branch, and editors
+save to the branch shown in the CMS. With `staging` as the default, saves would land on `staging`
+and stop going live. (The `main` ruleset targets `refs/heads/main` by name, so changing the
+default would leave its protection where it is.)
 
 So `main` stays the default branch, and `staging` is the documented PR base
 (`gh pr create --base staging`). The cost: GitHub acts on `Closes #<n>` only when a PR merges into

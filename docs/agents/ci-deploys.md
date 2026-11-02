@@ -7,8 +7,9 @@ in [`ci.md`](ci.md#ciyml) and [`docs/gitflow.md`](../gitflow.md#what-ci-deploys)
 ## deploy.yml
 
 A reusable workflow that builds the export, uploads it to Cloudflare Pages and smoke-tests the
-environment. Run by hand (Actions → Deploy → Run workflow), it uploads the current tip of the
-branch it runs from, `main` to Production or `staging` to Staging, and skips CI's checks. The
+environment. Run by hand (Actions → Deploy → Run workflow), which is the owner's to do and never an
+agent's, it uploads the current tip of the branch it runs from, `main` to Production or `staging`
+to Staging, and skips CI's checks, so it ships whatever is there. The
 job has 40 minutes: the smoke tests' worst case and ten more ([Retries](#smoke-tests)). It receives one secret, `CLOUDFLARE_API_TOKEN`; the release deploy key never
 reaches a deploy or a preview. It grants `deployments: write`, so wrangler can record a GitHub
 deployment, and `packages: read` for the install ([`ci.md`](ci.md#installing-the-private-package)).

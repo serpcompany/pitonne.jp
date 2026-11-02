@@ -72,7 +72,8 @@ change; if the tests fail afterwards, an issue alerts the owner, and later saves
 Staging then receives the same content.
 
 - Source: [`docs/gitflow.md`](../gitflow.md#content-cms-saves-go-straight-to-main), one of the
-  differences [`AGENTS.md`](../../AGENTS.md) lists.
+  differences from SERP's standards in
+  [`deviations.md`](../agents/deviations.md#branches-deploys-and-ci).
 - Check: `tools/checks/deploy-workflows.test.ts`, "CI and deploy workflows > deploys CMS content as
   soon as it builds, whatever any test result says" and "alerts the owner when a check or a
   Production deploy fails on main instead of blocking publishing", and "staging sync and promotion

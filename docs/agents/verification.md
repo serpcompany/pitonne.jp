@@ -1,7 +1,8 @@
 # Verifying a change
 
 What to run while editing, before a push and at the finish gate, and the evidence each kind of
-change needs. The rules are SERP's
+change needs. Commands here and in the skills are POSIX shell: on Windows, run them in Git Bash.
+In PowerShell, set a variable first instead, as in `$env:DEPLOY_ENV = 'production'; pnpm build`. The rules are SERP's
 [Verification Cadence](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification-cadence.md);
 this doc holds this repository's commands for them.
 

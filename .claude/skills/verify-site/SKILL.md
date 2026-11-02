@@ -31,7 +31,8 @@ deleting those files undoes a test save. Never try changes with `pnpm cms:cloud`
 Production.
 
 **The production-like preview.** Build, then serve `out/` from the repository root, which is where
-`functions/` is:
+`functions/` is. The commands are POSIX shell (Git Bash on Windows;
+[`verification.md`](../../../docs/agents/verification.md) gives the PowerShell form):
 
 ```sh
 DEPLOY_ENV=production pnpm build

@@ -39,15 +39,17 @@ body, where a post in the IV therapy category that names none lists IV Therapy. 
 service to list shows neither.
 
 - Check: `src/lib/data/blog-posts.test.ts`, "blog content model > offers every service as a CMS
-  related-service option and only links existing services". The IV Therapy default: no automated
-  check yet.
+  related-service option and only links existing services", which checks the services a post may
+  name, not what the page shows. The sidebar's list, the box's and the IV Therapy default: no
+  automated check yet.
 
 **Reading time and date.** The reading time is computed from the body, at 200 words a minute in
-English and 500 characters a minute in Japanese. The date is the day the post was published,
-whatever the time zone of the machine that built the site.
+English and 500 characters a minute in Japanese, unless the post's `readingTime` sets it. The date
+is the day the post was published, whatever the time zone of the machine that built the site.
 
 - Check: `src/lib/data/blog-posts.test.ts`, "blog content model > computes reading time from the
-  body, by words in English and characters in Japanese" and "rejects a publishedAt timestamp
+  body, by words in English and characters in Japanese", "keeps readingTime frontmatter as an
+  optional override" and "rejects a publishedAt timestamp
   instead of shifting it to another day"; `src/lib/post-date.test.ts`, "formatPostDate > shows the
   published day on a build machine west of UTC".
 

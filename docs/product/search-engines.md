@@ -125,7 +125,8 @@ password, and everything it serves without it carries `noindex`
   [Environment Configuration](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/environment-configuration.md)
   standard.
 - Check: `e2e/environment.spec.ts`, "answers each page with the ${environment} indexing signals
-  and canonical"; `scripts/environment-headers.test.mjs`, "environment headers > sends
+  and canonical", for Production in CI, which runs the journeys on the production build, and for
+  Staging or a preview only when run by hand on that build; `scripts/environment-headers.test.mjs`, "environment headers > sends
   X-Robots-Tag: noindex on every path of a preview" and "leaves the committed headers unchanged on
   %s, which is indexable"; `scripts/audit-out.mjs`, "out/_headers sends X-Robots-Tag: noindex but
   out/robots.txt allows crawling" and "out/robots.txt disallows crawling but out/_headers sends no

@@ -34,7 +34,8 @@ apply; where this repository differs, the last section says so, and it wins.
 - **Git hooks:** before a commit, Biome and the comment, size and secrets checks on the staged
   files; before a push, the full `serp-verify`, and `pnpm lint`, `pnpm typecheck` and `pnpm test`.
 - **Agent hooks:** `.claude/settings.json` checks each file an agent edits and the turn's changes
-  before it ends, and asks before deploys, pushes to `main` or `staging`, and GitHub writes
+  before it ends, and asks before deploys, pushes to `main` or `staging`, workflow runs, merges,
+  secret, variable and repository changes, and `gh api` writes
   ([`verification.md`](docs/agents/verification.md#agent-hooks)).
 - **CI:** `verify` and `test` run `pnpm check`'s steps and `e2e` and `lighthouse` the slow suites on
   each pull request and push; CI on the final commit is the record ([`ci.md`](docs/agents/ci.md)).
@@ -52,9 +53,9 @@ apply; where this repository differs, the last section says so, and it wins.
 - One issue, one branch (`issue-<n>-<slug>`, in its own worktree), one pull request with a
   Conventional Commit title, starting `Closes #<n>`, with each evidence level reported apart.
 - A behavior change also changes its [`docs/product/`](docs/product/index.md) entry and check.
-- Claude reviews each push once `verify` and `test` pass (`Code review`); until it runs, a
-  fresh agent reviews once CI is green. The owner merges (squash) and promotes; agents do
-  neither. Before starting and when handing back, check the latest runs on both branches.
+- Claude reviews each push (`Code review`) once `verify` and `test` pass, or a fresh agent once CI
+  is green until it runs. The owner merges (squash) and promotes, never an agent. On starting and
+  handing back, check both branches' runs: a failed CI run, deploy or Sync staging comes first.
 - Agents run `gh` and push only as the organization's app
   ([Agent GitHub Identity](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/agent-harness/agent-github-identity.md)).
 - The whole flow, what CI deploys, and the repository settings: [`gitflow.md`](docs/gitflow.md).
@@ -85,24 +86,7 @@ receives no webhooks ([`environments.md`](docs/agents/environments.md#the-stagin
 
 ## Where this differs from SERP's standards
 
-- **A static export on Cloudflare Pages,** not Workers through OpenNext
-  ([ADR 0003](docs/adr/0003-static-export-on-cloudflare-pages.md)).
-- **Code in `src/` at the root,** with `content/`, `public/` and `keystatic.config.ts` beside it,
-  not in `apps/web/` ([ADR 0004](docs/adr/0004-repository-layout.md)).
-- **CMS saves go straight to Production:** Keystatic commits to `main`, which deploys without a
-  promotion and without waiting for `test`
-  ([`gitflow.md`](docs/gitflow.md#content-cms-saves-go-straight-to-main),
-  [`cms.md`](docs/cms.md#for-developers)).
-- **GitHub's default branch stays `main`** while pull requests target `staging`
-  ([`gitflow.md`](docs/gitflow.md#why-main-stays-the-default-branch)).
-- **Vendored pull request checks:** serp's action is private, and `issue-link` must accept `staging`
-  ([`ci-pull-requests.md`](docs/agents/ci-pull-requests.md#pull-request)).
-- **No translation review fields:** Japanese that an AI wrote is flagged in the pull request for
-  native review instead ([`content.md`](docs/agents/content.md#japanese-copy)).
-- **shadcn's `new-york` style on Radix,** not `base-nova` on Base UI
-  ([`code.md`](docs/agents/code.md#ui-kit)).
-- **No Sentry:** error reporting waits for the owner's decision
-  ([`environments.md`](docs/agents/environments.md#what-each-environment-builds)).
-- **Trailing slashes:** on Production and previews, the slashed form of a path
-  `public/_routes.json` excludes answers 404, and `/keystatic/*` is left as requested
-  ([`hosts.md`](docs/agents/hosts.md#exceptions-to-the-trailing-slash-standard)).
+Each place this repository does something other than a SERP standard asks is listed, one line and
+a link each, in [`deviations.md`](docs/agents/deviations.md), and there it wins over the standard
+it names. The ones a change meets most: a static export on Cloudflare Pages, CMS saves that go live
+with no check, `main` as GitHub's default branch, and code in `src/` at the root.

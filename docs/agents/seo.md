@@ -43,7 +43,7 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
 - JSON-LD is built in `src/lib/structured-data.ts` and typed with `schema-dts`
   (`WithContext<...>`), so `pnpm typecheck` rejects a property schema.org doesn't define for the
   type. `JsonLd` (`src/components/shared/json-ld.tsx`) writes it into a `script` element with
-  `<` escaped as `<`.
+  `<` escaped as `\u003c`.
 - The `MedicalBusiness` lists English and Japanese as `knowsLanguage`. It never carries
   `inLanguage` or `availableLanguage`, which aren't valid there and which Ahrefs reports as errors
   (`src/lib/structured-data.test.tsx`). `WebSite` and `BlogPosting` carry `inLanguage`.

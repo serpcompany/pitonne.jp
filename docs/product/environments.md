@@ -13,7 +13,7 @@ in [`docs/gitflow.md`](../gitflow.md). How a check is named is in
 
 **Production, Staging and previews.** Production is https://pitonne.jp, built from `main`.
 Staging is https://staging.pitonne.jp, built from `staging` as Production is, on its own origin,
-behind a password. A pull request from this repository gets a preview at
+behind a password. A pull request from this repository into `staging` or `main` gets a preview at
 `pr-<n>.pitonne-jp.pages.dev` once CI's `test` job passes; one from a fork gets none.
 
 - Source: SERP's
@@ -78,9 +78,10 @@ smoke-test requests.
 - Check: `src/lib/staging-gate.test.ts`, "staging password gate > serves %s without the password,
   with noindex" and "keeps noindex on an exempt request even when it carries the password";
   `src/lib/site-origin.test.tsx`, "robots.txt > blocks every crawler on staging except the site
-  auditor, which gets production rules"; `e2e/environment.spec.ts`, "serves the ${environment}
-  robots.txt", on a Staging build; `scripts/smoke-environment.mjs`, "without the password,
-  expected 200", "doesn't disallow all crawlers" and "doesn't list" for `/robots.txt`.
+  auditor, which gets production rules"; `scripts/smoke-environment.mjs`, "without the password,
+  expected 200", "doesn't disallow all crawlers" and "doesn't list" for `/robots.txt`. The
+  journey `e2e/environment.spec.ts`, "serves the ${environment} robots.txt", checks it too, but
+  only when run by hand on a Staging build: CI runs the journeys on the production build.
 
 **Staging's other hosts.** `staging.pitonne-jp.pages.dev` and Staging's deployment URLs answer
 one 308 to the same path on https://staging.pitonne.jp before asking for the password. Any other

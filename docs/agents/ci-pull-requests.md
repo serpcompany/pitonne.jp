@@ -51,7 +51,7 @@ repository's own install does. The script reads the pull request from the event 
 writes, so a title or body never reaches a shell. It runs again when the title or body is edited,
 and only reads (`contents`, `pull-requests` and `issues`). The alignment rule
 `ci-pull-request-checks` stays failing, since it looks for serp's action
-([`AGENTS.md`](../../AGENTS.md#where-this-differs-from-serps-standards)).
+([`deviations.md`](deviations.md#branches-deploys-and-ci)).
 
 ## Close issues
 
@@ -116,7 +116,8 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
   as `github-actions[bot]`, and keeps the transcript for a week.
 - **Time and failure:** the wait has 25 minutes and the review 20, inside the job's 60. The job
   fails only when no review ran or its summary couldn't be posted; findings never turn it red.
-  Every review thread is resolved before the pull request merges.
+  Every review thread is meant to be resolved before the pull request merges; the rulesets don't
+  enforce it until the owner turns on conversation resolution ([`ci.md`](ci.md#owner-steps)).
 - **Permissions:** it reads contents, checks, issues and packages and writes pull request
   comments. `claude-code-action` gets the job's own token (`github_token`), so it exchanges no
   OIDC token for the Claude app's, checks no workflow file, and posts the findings, like the

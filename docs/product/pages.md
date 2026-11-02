@@ -65,7 +65,8 @@ its photo and text, then its treatments as cards, and links to all services.
   parent service's own image in its hero".
 
 **Service pages.** Each service, at `/services/<slug>/`, has breadcrumbs back through its category
-to Services and a plain heading with no photo. Below come its text and FAQs, beside a sidebar with
+to Services and a plain heading with no photo behind it. Below come its photo, where it has one,
+its text and FAQs, beside a sidebar with
 a booking box, its related services, and up to three posts: those that name the service as
 related, or the three newest when none does. The old `/services/medications/` redirects to
 `/services/medication/` ([Moved URLs](hosts-and-redirects.md#moved-urls)).
@@ -87,14 +88,16 @@ with its Japanese name below. Then come the three kinds of visit, at home, at a 
 office, and a contact button for an area that isn't listed.
 
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
-  index".
+  index", which follows the first ward's link. The areas' names, the kinds of visit and the
+  contact button: no automated check yet.
 
 **Ward pages.** `/areas-served/<ward>/`: the ward's description, its areas as cards, a Google map
 of the ward, every service category and service as links, the steps to get started with a contact
 button, the latest posts, and a link back to all areas.
 
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
-  index". The ward's map: no automated check yet.
+  index", which follows the ward's first area link. The description, the map, the services, the
+  steps, the latest posts and the link back: no automated check yet.
 
 **Area pages.** `/areas-served/<ward>/<area>/` has breadcrumbs through its ward, then every
 service category and service as links; how to get started, with a contact button; the area's

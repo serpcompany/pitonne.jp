@@ -19,7 +19,7 @@ site's parts are in [`CONTEXT.md`](../../CONTEXT.md).
 | `src/lib/i18n/` | The locale list, the dictionaries and their loader |
 | `src/test/` | Helpers the tests share |
 | `functions/_middleware.ts` | The Cloudflare Pages Function, which calls `src/lib/canonical-host.ts` |
-| `scripts/` | Build, audit, deploy and smoke-test scripts, each with its tests beside it |
+| `scripts/` | Build, audit, deploy and smoke-test scripts. The deploy, smoke-test and headers scripts have tests beside them; the audits, the content tools and the local server don't |
 | `tools/checks/` | Tests that hold the workflows, the browser journeys and the Lighthouse setup to their rules |
 | `e2e/`, `playwright.config.ts` | The Playwright browser journeys on the built site ([`verification.md`](verification.md#browser-journeys)) |
 | `content/`, `public/`, `keystatic.config.ts` | Content, static files and the CMS config, at the root ([ADR 0004](../adr/0004-repository-layout.md)) |
@@ -56,7 +56,9 @@ and the scripts).
 The site keeps shadcn's `new-york` style on Radix (`components.json`), where SERP's
 [shadcn first](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/shadcn-first.md#rules)
 standard sets `base-nova` on Base UI. It was kept on 2026-10-31 because moving would change the UI.
-Don't add `base-nova` components beside it; a move to `base-nova` is one change of its own.
+Don't add `base-nova` components beside it; a move to `base-nova` is one change of its own. The
+components also write colors as hex values, such as the brand green `#7A8F87`, where the standard
+asks for theme tokens; moving them into tokens is a change of its own too.
 
 Tailwind builds the site's CSS from `src/` and `content/` only (`source(none)` and the two
 `@source` lines in `src/app/globals.css`), so a doc, workflow, test or script can name a utility

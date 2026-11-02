@@ -36,8 +36,10 @@ owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and m
 `lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
 required workflow starts on every pull request, with no `paths` filter, so its check always
 reports: a docs-only pull request skips work inside the jobs, never the jobs. `Code review` isn't a
-required check, as SERP's standard sets: its findings are review threads, and the merge waits for
-every thread to be resolved instead.
+required check, as SERP's standard sets: its findings are review threads, which are meant to be
+resolved before the merge. Neither ruleset enforces that yet (`required_review_thread_resolution`
+is off in both, checked on 2026-11-01), so until the owner turns it on ([below](#owner-steps)),
+whoever merges checks the threads.
 
 ## Installing the private package
 
@@ -216,3 +218,5 @@ stop deploying.
    skipped.
 3. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
    `staging` and `main` rulesets beside `test`, and optionally `e2e` and `lighthouse`.
+4. **Resolved review threads:** turn on "Require conversation resolution before merging" in the
+   `main` and `staging` rulesets, so a pull request can't merge with a review finding left open.

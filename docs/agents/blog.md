@@ -87,7 +87,7 @@ under 1 MB.
   `robots.txt` disallows `/keystatic/`.
 - **Saving.** The deployed CMS, and `pnpm cms:cloud`, sign in through Keystatic Cloud (project
   `serp/pitonne-website`) and commit straight to `main`, which deploys Production without a
-  promotion. This is the one exception to the staging → main flow; Sync staging then merges `main`
+  promotion or any check, as [`deviations.md`](deviations.md#branches-deploys-and-ci) lists; Sync staging then merges `main`
   into `staging` ([`docs/gitflow.md`](../gitflow.md#content-cms-saves-go-straight-to-main)).
   Editors keep work back with the Draft checkbox, never with branches.
 - **Locally,** `pnpm cms` edits the files in your checkout, and `pnpm cms:cloud` uses Keystatic

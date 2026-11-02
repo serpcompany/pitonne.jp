@@ -81,7 +81,7 @@ language.
 - Check: `e2e/language.spec.ts`, "the language switch leads to the same page in the other language
   and back", at both widths.
 
-**Where it goes.** The link opens the same page in the other language, as a new page load. On a
+**Where it goes.** The link opens the same page in the other language. On a
 post or category that isn't published in the other language it opens that language's blog
 index, and on the 404 page the Japanese home page.
 

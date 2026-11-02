@@ -55,8 +55,8 @@ host.
 **Two exceptions.** On Production and previews, a static file kept off the Pages Function, under
 `/images/`, `/_next/` or `/screenshots/`, or an icon or `/sitemap.xsl`, answers 404 with a
 trailing slash (`/images/x.jpg/`); on Staging it gets the 308 once the password is given. URLs
-under `/keystatic/` are left as they are requested. [`AGENTS.md`](../../AGENTS.md) lists both
-among this site's differences from SERP's standards, and
+under `/keystatic/` are left as they are requested. Both are among this site's
+[differences from SERP's standards](../agents/deviations.md#urls-and-languages), and
 [`docs/agents/hosts.md`](../agents/hosts.md#exceptions-to-the-trailing-slash-standard) says why.
 
 - Check: `src/lib/canonical-host.test.ts`, "_routes.json > excludes only static files, never a page

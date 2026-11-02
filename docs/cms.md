@@ -57,8 +57,9 @@ posts are moved to another category.
 - **Local editing**: `pnpm cms` edits files in your checkout; `pnpm cms:cloud` uses Keystatic Cloud and commits to
   GitHub. Open http://127.0.0.1:3000/keystatic (Keystatic switches `localhost` to `127.0.0.1`).
 - **Publishing flow**: the Keystatic Cloud GitHub app is on the `main` ruleset's bypass list, so CMS saves commit
-  straight to `main` and deploy to Production without waiting for a promotion. This is the one documented exception to
-  the staging → main flow in [gitflow.md](gitflow.md): code goes through Staging, content goes live immediately.
+  straight to `main` and deploy to Production without waiting for a promotion or any check, one of the differences
+  from SERP's standards in [`agents/deviations.md`](agents/deviations.md#branches-deploys-and-ci): code goes through
+  Staging, content goes live immediately ([gitflow.md](gitflow.md#content-cms-saves-go-straight-to-main)).
   - A save that changes only CMS files (`content/blog/`, `content/blog-categories/`, `public/images/content/blog/`)
     deploys as soon as the site builds, never waiting for CI's tests; a build that fails isn't deployed. If CI's tests
     then fail on `main`, an issue titled "CI is failing on main" alerts the owner, but later saves keep publishing.
