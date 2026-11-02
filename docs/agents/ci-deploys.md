@@ -38,12 +38,15 @@ deployment, and `packages: read` for the install ([`ci.md`](ci.md#installing-the
     commit the run started for, which could be older than what is live
     (`scripts/deploy-target.test.mjs` runs each case against a scratch clone).
 - **Build and verify:** it restores `.next/cache` for its environment, runs `pnpm build`, then
-  `pnpm audit:out`, then checks the environment's own output: Production's `robots.txt` doesn't
-  disallow crawling and its `_headers` send no `noindex`; Staging's `_headers` send no `noindex`
-  and its `robots.txt` disallows `*`, names `AhrefsSiteAudit` and lists Staging's sitemap; a
-  preview's do both. This build is the commit's build check on a push: CI's `test` builds
-  Production for the browser journeys and Lighthouse, and skips that build when the tree passed
-  them before ([`ci.md`](ci.md#one-build-per-commit-and-environment)).
+  `pnpm audit:out`, the one check of the export ([`seo.md`](seo.md#the-audits)). With the
+  `DEPLOY_ENV` the job resolved, it also checks the environment's own output: Production's
+  `robots.txt` doesn't disallow crawling and its `_headers` send no `noindex`; Staging's `_headers`
+  send no `noindex` and its `robots.txt` disallows `*`, names `AhrefsSiteAudit` and lists Staging's
+  sitemap; a preview's do both (`scripts/audit-out.test.mjs` audits each environment's build as
+  each other one). CI's `test` runs the same command on its production build, with no
+  `DEPLOY_ENV`, so without these. This build is the commit's build check on a push: CI's `test`
+  builds Production for the browser journeys and Lighthouse, and skips that build when the tree
+  passed them before ([`ci.md`](ci.md#one-build-per-commit-and-environment)).
 - **Upload:** `wrangler pages deploy out` to the `pitonne-jp` project with the branch and commit.
   wrangler-action finds wrangler 4.103.0, the version `package.json` pins, already installed, so
   it installs nothing. For Staging and Production it passes the job's token so GitHub records a

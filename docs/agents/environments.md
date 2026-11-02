@@ -37,11 +37,11 @@ environment answers on, and their redirects, are in [`hosts.md`](hosts.md).
   environment's lines into `out/_headers` and its `out/_routes.json`. Cloudflare adds
   `X-Robots-Tag: noindex` on `*.pitonne-jp.pages.dev` hosts by itself, but not on a custom domain,
   so a preview build sends it explicitly.
-- `pnpm audit:out` fails when `robots.txt` and `_headers` disagree about indexing, and before
-  each deploy `deploy.yml` checks the environment's `robots.txt` and `_headers` again
-  ([`ci.md`](ci.md#deployyml)). Both treat any `X-Robots-Tag: noindex` in `_headers` as
-  site-wide, so a `noindex` rule for one path in `public/_headers` needs those checks narrowed
-  first.
+- `pnpm audit:out` fails when `robots.txt` and `_headers` disagree about indexing, and, with
+  `DEPLOY_ENV` set, as each deploy sets it, when they aren't that environment's own
+  ([`ci-deploys.md`](ci-deploys.md#deployyml)). Both checks treat any `X-Robots-Tag: noindex` in
+  `_headers` as site-wide, so a `noindex` rule for one path in `public/_headers` needs them
+  narrowed first.
 - **No error reporting.** Sentry, the web stack's default for errors, isn't installed; adding it
   is an open decision for the owner.
 

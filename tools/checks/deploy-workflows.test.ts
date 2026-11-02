@@ -170,23 +170,16 @@ describe('CI and deploy workflows', () => {
   })
 
   it("checks each environment's indexing signals before deploying and smoke-tests them after", () => {
-    const verify = step(pagesDeploy, 'Verify static output').run ?? ''
-    const branch = (pattern: string) =>
-      verify.match(new RegExp(`^\\s*${pattern}\\)\\n([\\s\\S]*?)\\n\\s*;;`, 'm'))?.[1] ?? ''
-    expect(verify).toMatch(/^pnpm audit:out\ncase "\$DEPLOY_ENV" in\n/)
-    const production = branch('production')
-    expect(production).toContain('if grep -Fxq "Disallow: /" out/robots.txt; then')
-    expect(production).toContain('if grep -Fq "X-Robots-Tag: noindex" out/_headers; then')
-    const staging = branch('staging')
-    expect(staging).toContain('if grep -Fq "X-Robots-Tag: noindex" out/_headers; then')
-    expect(staging).toMatch(/^\s*grep -Fxq "Disallow: \/" out\/robots\.txt$/m)
-    expect(staging).toContain('grep -Fxq "User-Agent: AhrefsSiteAudit" out/robots.txt')
-    expect(staging).toContain(
-      'grep -Fxq "Sitemap: https://staging.pitonne.jp/sitemap-index.xml" out/robots.txt'
+    const verify = step(pagesDeploy, 'Verify static output')
+    expect(verify.run).toBe('pnpm audit:out')
+    expect(verify.env).toBeUndefined()
+    expect(step(pagesDeploy, 'Resolve environment').run).toContain('echo "DEPLOY_ENV=$TARGET"')
+    expect(stepIndex(pagesDeploy, 'Verify static output')).toBe(
+      stepIndex(pagesDeploy, 'Build static export') + 1
     )
-    const preview = branch('\\*')
-    expect(preview).toMatch(/^\s*grep -Fxq "Disallow: \/" out\/robots\.txt$/m)
-    expect(preview).toMatch(/^\s*grep -Fq "X-Robots-Tag: noindex" out\/_headers$/m)
+    expect(job(ci, 'test').steps?.map(each => each.run)).toContain('pnpm audit:out')
+    for (const file of workflowFiles())
+      expect(allText(readWorkflow(file)), file).not.toMatch(/out\/(robots\.txt|_headers)/)
     const smoke = step(pagesDeploy, 'Smoke-test environment behaviour').run
     expect(smoke).toContain(
       'node scripts/smoke-environment.mjs production https://pitonne-jp.pages.dev https://pitonne.jp'

@@ -1,9 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { SITE_AUDITOR } from '../src/lib/deploy-environment.mts'
+import { deployEnvironment, SITE_AUDITOR, siteOrigin } from '../src/lib/deploy-environment.mts'
 import { blocksEverything } from './robots-txt.mjs'
 
 const OUT = path.join(process.cwd(), 'out')
+const declaredEnvironment = process.env.DEPLOY_ENV || process.env.NEXT_PUBLIC_DEPLOY_ENV
+const environment = declaredEnvironment ? deployEnvironment(process.env) : null
 const SITEMAP_INDEX = 'sitemap-index.xml'
 const NOT_FOUND_PAGE = '404.html'
 const required = [
@@ -84,6 +86,48 @@ function notFoundPageProblems(file, lang, home) {
     .map(([, problem]) => `out/${file} ${problem}`)
 }
 
+const robotsLine = text => ({
+  file: 'robots.txt',
+  text,
+  isIn: content => content.split('\n').includes(text)
+})
+const headersText = text => ({ file: '_headers', text, isIn: content => content.includes(text) })
+const disallowAll = robotsLine('Disallow: /')
+const noindex = headersText('X-Robots-Tag: noindex')
+const environmentSignals = {
+  production: { needs: [], forbids: [disallowAll, noindex] },
+  staging: {
+    needs: [
+      disallowAll,
+      robotsLine(`User-Agent: ${SITE_AUDITOR}`),
+      robotsLine(`Sitemap: ${siteOrigin('staging')}/${SITEMAP_INDEX}`)
+    ],
+    forbids: [noindex]
+  },
+  preview: { needs: [disallowAll, noindex], forbids: [] }
+}
+
+function environmentProblems() {
+  if (environment === null) return []
+  const { needs, forbids } = environmentSignals[environment]
+  const holds = signal => {
+    const content = read(signal.file)
+    return content === null ? null : signal.isIn(content)
+  }
+  return [
+    ...needs
+      .filter(signal => holds(signal) === false)
+      .map(
+        signal => `out/${signal.file} lacks "${signal.text}", which a ${environment} build needs`
+      ),
+    ...forbids
+      .filter(signal => holds(signal) === true)
+      .map(
+        signal => `out/${signal.file} has "${signal.text}", which a ${environment} build must not`
+      )
+  ]
+}
+
 const failures = [
   ...[...required, ...childSitemaps]
     .filter(file => !fs.existsSync(path.join(OUT, file)))
@@ -95,6 +139,7 @@ const failures = [
     file => `out/${file} is a page under a path _routes.json keeps off the Function`
   ),
   ...indexMismatch,
+  ...environmentProblems(),
   ...notFoundPageProblems(NOT_FOUND_PAGE, 'en', '/'),
   ...(fs.existsSync(indexPath) && childSitemaps.length === 0
     ? [`out/${SITEMAP_INDEX} lists no sitemaps`]
@@ -108,4 +153,5 @@ if (failures.length > 0) {
   process.exit(1)
 }
 
-console.log(`Export audit passed (${childSitemaps.length} child sitemaps).`)
+const signalsChecked = environment ? `, ${environment} indexing signals` : ''
+console.log(`Export audit passed (${childSitemaps.length} child sitemaps${signalsChecked}).`)

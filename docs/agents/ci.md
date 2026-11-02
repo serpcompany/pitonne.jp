@@ -153,7 +153,7 @@ Manager), so "once" means once per commit and environment:
 - The production build the checks need (`audit:seo`, the journeys, Lighthouse, which can't score
   a Staging or preview build whose `robots.txt` blocks crawlers) is made once, by `test`, and
   handed on. On a push whose tree passed those suites before, it isn't made at all, and the
-  deploy's build, with its `audit:out` and output checks, is that commit's build check.
+  deploy's build, with its `audit:out` for that environment, is that commit's build check.
 - Each deploy builds its own environment once, from the branch tip, which can be newer than the
   commit the run tested, so it never takes `test`'s artifact.
 - A push to `main` that wasn't tested before, a CMS save or a hotfix, builds production twice:

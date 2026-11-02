@@ -133,8 +133,9 @@ password, and everything it serves without it carries `noindex`
   X-Robots-Tag: noindex on every path of a preview" and "leaves the committed headers unchanged on
   %s, which is indexable"; `scripts/audit-out.mjs`, "out/_headers sends X-Robots-Tag: noindex but
   out/robots.txt allows crawling" and "out/robots.txt disallows crawling but out/_headers sends no
-  X-Robots-Tag: noindex"; `scripts/smoke-environment.mjs`, "on production" (a `noindex` on
-  Production), "X-Robots-Tag is …, expected noindex", "meta robots is …, expected noindex" and
-  "doesn't disallow all crawling"; `tools/checks/deploy-workflows.test.ts`, "CI and deploy
+  X-Robots-Tag: noindex"; `scripts/audit-out.test.mjs`, "pnpm audit:out > fails a %s build
+  deployed as %s, on each signal that differs"; `scripts/smoke-environment.mjs`, "on production"
+  (a `noindex` on Production), "X-Robots-Tag is …, expected noindex", "meta robots is …, expected
+  noindex" and "doesn't disallow all crawling"; `tools/checks/deploy-workflows.test.ts`, "CI and deploy
   workflows > checks each environment's indexing signals before deploying and smoke-tests them
   after".
