@@ -35,6 +35,29 @@ CI can check a deployment through its own pages.dev host. Search engines never s
   `Request` follows redirects by default, and the asset server then answers with the target's
   content instead of the redirect, as seen on Pages and in `wrangler pages dev`.
 
+## The 404 page's own URLs
+
+Next's export writes the 404 page three times: `out/404.html`, which Pages serves with status 404
+for any URL without a file, and `out/404/index.html` and `out/_not-found/index.html`. Pages would
+serve those two like any page, with 200, and `404.html` itself at `/404` (with `/404.html`
+redirecting there). So on the hosts served as is, the Function answers `/404`, `/404/`,
+`/404.html`, `/404/index.html`, `/_not-found`, `/_not-found/`, `/_not-found.html` and
+`/_not-found/index.html` (`NOT_FOUND_PAGE_PATH`, matched on the decoded path, as Pages decodes it)
+with 404, after the host redirect, and on Staging after the password, as SERP's
+[404 Pages](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/404-pages.md)
+standard asks.
+
+- **The answer is Pages' own for a missing page.** The Function asks the asset server for
+  `/404.html/`, with the request's method and headers. Nothing can exist under `404.html` while
+  it is a file, so Pages answers 404 with the 404 page, `Cache-Control: no-store` and the
+  `_headers` rules for `/*`, exactly as for any other missing URL.
+- **The build keeps the two copies.** Deleting them after the build wouldn't be enough: `/404`
+  and `/404.html` reach `404.html`, which Pages needs, and the asset server `wrangler` bundles
+  first looks in an asset preservation cache, which can answer a deleted file's URL with its old
+  content and status for up to a week. `pnpm audit:seo` skips the three files.
+- **Not the RSC files.** The payload files under `/_not-found/` (`index.txt`, `__next.*.txt`)
+  aren't pages, and nothing links to them; they answer as before.
+
 ## Trailing slashes
 
 `canonicalPath` puts a path into the form SERP's

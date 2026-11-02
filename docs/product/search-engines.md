@@ -139,3 +139,17 @@ password, and everything it serves without it carries `noindex`
   noindex" and "doesn't disallow all crawling"; `tools/checks/deploy-workflows.test.ts`, "CI and deploy
   workflows > checks each environment's indexing signals before deploying and smoke-tests them
   after".
+
+**No soft 404s.** A URL with no page never answers 200. That includes the URLs the build writes
+the 404 page at, `/404/` and `/_not-found/`, and `/404`, where Pages would serve `404.html`
+itself: each answers 404 with the 404 page
+([Hosts and redirects](hosts-and-redirects.md#behind-the-function)).
+
+- Source: SERP's
+  [404 Pages](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/404-pages.md)
+  standard.
+- Check: `e2e/environment.spec.ts`, "answers a missing page with the 404 page, which no
+  environment indexes" and "answers the 404 page's own URLs with 404, as a missing page";
+  `src/lib/not-found-urls.test.ts`, "the 404 page's own URLs > answers %s as Pages answers a
+  missing page"; `scripts/smoke-environment.mjs`, "status …, expected 404" for
+  `/no-such-page-smoke-test/`, `/404/` and `/_not-found/`.

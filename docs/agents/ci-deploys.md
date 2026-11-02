@@ -64,16 +64,17 @@ of redirected; the redirect and password checks leave it off.
   type and a 404 still come from the static files. Then
   `scripts/smoke-environment.mjs production` on `pitonne-jp.pages.dev` and
   https://pitonne.jp: `/` and `/ja/` answer 200 without `noindex`, `robots.txt` allows crawling
-  and lists the sitemap index, a missing page answers 404 with one `noindex` tag and a link home,
-  the sitemap index loads, and no response asks for a password. Not on the deployment URL:
-  Cloudflare sends `noindex` on every `<hash>.pitonne-jp.pages.dev`, Production's too.
+  and lists the sitemap index, a missing page, `/404/` and `/_not-found/` answer 404 with one
+  `noindex` tag and a link home, the sitemap index loads, and no response asks for a password.
+  Not on the deployment URL: Cloudflare sends `noindex` on every `<hash>.pitonne-jp.pages.dev`,
+  Production's too.
 - **Staging:** `smoke-environment.mjs staging` on the `staging` alias, the deployment URL and
   https://staging.pitonne.jp. On each, `/` and `/ja/` answer 200 with `noindex` and a Staging
-  canonical, `robots.txt` disallows crawling, and a missing page answers 404. On
-  staging.pitonne.jp, without the header: `/`, `/ja/` and `/favicon.ico` answer 401 with a Basic
-  challenge, `no-store` and `noindex`; with the password, `/` and `/ja/` answer 200 with no
-  `noindex` and a Staging canonical; `/robots.txt` answers 200, disallows `*` and lists Staging's
-  sitemap. On the other two, `/contact` without the header answers 308 to
+  canonical, `robots.txt` disallows crawling, and a missing page, `/404/` and `/_not-found/`
+  answer 404. On staging.pitonne.jp, without the header: `/`, `/ja/` and `/favicon.ico` answer
+  401 with a Basic challenge, `no-store` and `noindex`; with the password, `/` and `/ja/` answer
+  200 with no `noindex` and a Staging canonical; `/robots.txt` answers 200, disallows `*` and lists
+  Staging's sitemap. On the other two, `/contact` without the header answers 308 to
   https://staging.pitonne.jp/contact/. On the deployment URL, that 308 proves the branch variable
   reached the Function ([`environments.md`](environments.md#the-staging-gate)): without it, the
   URL answers as Production's do.

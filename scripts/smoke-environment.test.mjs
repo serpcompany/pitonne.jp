@@ -3,6 +3,7 @@ import { MISSING_PAGE_PATH, SMOKE_HEADERS } from './smoke-canonical-host.mjs'
 import {
   environmentChecks,
   isZoneHost,
+  NOT_FOUND_PAGE_PATHS,
   PASSWORD_HEADERS,
   run,
   runChecks,
@@ -27,30 +28,32 @@ const byPath = environment =>
   )
 
 describe('environment smoke test', () => {
-  it('checks pages in both locales, robots.txt and a missing page everywhere, and the sitemap index on production', () => {
-    const everywhere = ['/', '/ja/', '/robots.txt', MISSING_PAGE_PATH]
+  it("checks pages in both locales, robots.txt, a missing page and the 404 page's own URLs everywhere, and the sitemap index on production", () => {
+    const everywhere = ['/', '/ja/', '/robots.txt', MISSING_PAGE_PATH, '/404/', '/_not-found/']
     expect(Object.keys(byPath('staging'))).toEqual([...everywhere, '/contact'])
     expect(Object.keys(byPath('preview'))).toEqual(everywhere)
     expect(Object.keys(byPath('production'))).toEqual([...everywhere, '/sitemap-index.xml'])
   })
 
-  it('requires a missing page to answer 404 with one noindex robots tag and a link home', () => {
+  it("requires a missing page and the 404 page's own URLs to answer 404 with one noindex robots tag and a link home", () => {
     const notFound = (robots, home = '/') =>
       `<html><head>${robots.map(content => `<meta name="robots" content="${content}"/>`).join('')}</head><body><a class="logo" href="${home}">Home</a></body></html>`
     for (const environment of ['production', 'staging', 'preview']) {
-      const missing = byPath(environment)[MISSING_PAGE_PATH]
-      expect(missing.redirect).toBe('manual')
-      expect(missing.verify(response(404, notFound(['noindex'])))).toBeNull()
-      expect(missing.verify(response(200, notFound(['noindex'])))).toMatch(/status 200/)
-      expect(missing.verify(response(308, ''))).toMatch(/status 308/)
-      expect(missing.verify(response(404, notFound([])))).toMatch(/0 meta robots/)
-      expect(missing.verify(response(404, notFound(['noindex', 'noindex, follow'])))).toMatch(
-        /2 meta robots/
-      )
-      expect(missing.verify(response(404, notFound(['index, follow'])))).toMatch(/with noindex/)
-      expect(missing.verify(response(404, notFound(['noindex'], '/about/')))).toMatch(
-        /no link to the home page/
-      )
+      for (const path of [MISSING_PAGE_PATH, ...NOT_FOUND_PAGE_PATHS]) {
+        const missing = byPath(environment)[path]
+        expect(missing.redirect).toBe('manual')
+        expect(missing.verify(response(404, notFound(['noindex'])))).toBeNull()
+        expect(missing.verify(response(200, notFound(['noindex'])))).toMatch(/status 200/)
+        expect(missing.verify(response(308, ''))).toMatch(/status 308/)
+        expect(missing.verify(response(404, notFound([])))).toMatch(/0 meta robots/)
+        expect(missing.verify(response(404, notFound(['noindex', 'noindex, follow'])))).toMatch(
+          /2 meta robots/
+        )
+        expect(missing.verify(response(404, notFound(['index, follow'])))).toMatch(/with noindex/)
+        expect(missing.verify(response(404, notFound(['noindex'], '/about/')))).toMatch(
+          /no link to the home page/
+        )
+      }
     }
   })
 
@@ -148,7 +151,9 @@ describe('environment smoke test', () => {
       environmentChecks('staging', origin)
     )
     expect(await runChecks(checks, { delayMs: 0, probeFn, now, settleMs: 100 })).toBe(false)
-    expect(checks.map(check => calls.get(check.url))).toEqual([10, 2, 2, 2, 2, 10, 2, 2, 2, 2])
+    expect(checks.map(check => calls.get(check.url))).toEqual([
+      10, 2, 2, 2, 2, 2, 2, 10, 2, 2, 2, 2, 2, 2
+    ])
 
     calls.clear()
     clock = 0
@@ -191,7 +196,9 @@ describe('environment smoke test', () => {
       response(200, html('index, follow')),
       response(200, html('index, follow')),
       response(200, PRODUCTION_ROBOTS),
-      response(404, html('noindex').replace('<body>', '<body><a href="/">Home</a>')),
+      ...[MISSING_PAGE_PATH, ...NOT_FOUND_PAGE_PATHS].map(() =>
+        response(404, html('noindex').replace('<body>', '<body><a href="/">Home</a>'))
+      ),
       response(200, '<sitemapindex></sitemapindex>')
     ]
     checks.forEach((check, index) => {
@@ -224,6 +231,8 @@ describe('staging password gate smoke test', () => {
       'smoke /ja/',
       'smoke /robots.txt',
       `smoke ${MISSING_PAGE_PATH}`,
+      'smoke /404/',
+      'smoke /_not-found/',
       'none /',
       'none /ja/',
       'none /favicon.ico',

@@ -51,6 +51,24 @@ test.describe(`the ${environment} build as Pages serves it`, () => {
     await expect(page).toHaveURL('/')
   })
 
+  test("answers the 404 page's own URLs with 404, as a missing page", async ({ request }) => {
+    for (const path of [
+      '/404',
+      '/404/',
+      '/404.html',
+      '/404/index.html',
+      '/_not-found',
+      '/_not-found/',
+      '/_not-found/index.html'
+    ]) {
+      const response = await request.get(path, { maxRedirects: 0 })
+      expect(response.status(), path).toBe(404)
+      const robots = (await response.text()).match(/<meta[^>]*name="robots"[^>]*>/g) ?? []
+      expect(robots, `${path} robots meta tags`).toHaveLength(1)
+      expect(robots[0], `${path} robots meta tag`).toMatch(noindex)
+    }
+  })
+
   for (const [from, status, to] of [
     ['/about', 308, '/about/'],
     ['/ja/contact', 308, '/ja/contact/'],

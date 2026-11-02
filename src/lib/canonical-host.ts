@@ -155,6 +155,26 @@ export async function slashedFileRedirect(
   return redirect308(location === request.url ? file : location)
 }
 
+const NOT_FOUND_PAGE_PATH = /^\/(?:404|_not-found)(?:\.html|\/(?:index\.html)?)?$/
+const ALWAYS_MISSING_PATH = '/404.html/'
+
+function decodedPath(pathname: string): string {
+  try {
+    return decodeURIComponent(pathname)
+  } catch {
+    return pathname
+  }
+}
+
+async function notFoundPageResponse(request: Request, next: AssetServer): Promise<Response | null> {
+  const url = new URL(request.url)
+  if (!NOT_FOUND_PAGE_PATH.test(decodedPath(url.pathname))) return null
+  const missing = new URL(ALWAYS_MISSING_PATH, url)
+  return next(
+    new Request(missing, { method: request.method, headers: request.headers, redirect: 'manual' })
+  )
+}
+
 export interface FunctionEnv {
   CF_PAGES_BRANCH?: string
   STAGING_PASSWORD?: string
@@ -225,7 +245,10 @@ async function serveStaging(
   const forwarded = withoutAuthorization(request)
   const hostRedirect = await canonicalHostRedirect(forwarded, next, STAGING_HOSTS)
   if (hostRedirect) return hostRedirect
-  const serve = async () => (await slashedFileRedirect(forwarded, next)) ?? next(forwarded)
+  const serve = async () =>
+    (await notFoundPageResponse(forwarded, next)) ??
+    (await slashedFileRedirect(forwarded, next)) ??
+    next(forwarded)
   const exempt =
     request.headers.has(SMOKE_TEST_HEADER) || GATE_EXEMPT_PATHS.has(new URL(request.url).pathname)
   if (exempt) return keptPrivate(await serve(), true)
@@ -250,6 +273,7 @@ export async function handleRequest(
   if (servesStaging(request, env)) return serveStaging(request, next, env.STAGING_PASSWORD)
   return (
     (await canonicalHostRedirect(request, next)) ??
+    (await notFoundPageResponse(request, next)) ??
     (await slashedFileRedirect(request, next)) ??
     next()
   )

@@ -452,7 +452,11 @@ describe('_routes.json', () => {
       '/keystatic/',
       '/robots.txt',
       '/sitemap.xml',
-      '/en/'
+      '/en/',
+      '/404',
+      '/404/',
+      '/404.html',
+      '/_not-found/'
     ]) {
       const excluded = (routes.exclude as string[]).some(
         rule => kept === rule || (rule.endsWith('*') && kept.startsWith(rule.slice(0, -1)))

@@ -12,6 +12,7 @@ import {
 const sitemapLine = origin => `Sitemap: ${origin}/sitemap-index.xml`
 export const SITEMAP_LINE = sitemapLine(siteOrigin('production'))
 export const STAGING_ORIGIN = siteOrigin('staging')
+export const NOT_FOUND_PAGE_PATHS = ['/404/', '/_not-found/']
 const STAGING_PASSWORD = 'stagingpassword'
 export const PASSWORD_HEADERS = {
   authorization: `Basic ${Buffer.from(`smoke:${STAGING_PASSWORD}`).toString('base64')}`
@@ -143,8 +144,8 @@ export function environmentChecks(environment, origin) {
     }
   }
 
-  const missingPage = {
-    url: `${origin}${MISSING_PAGE_PATH}`,
+  const missingPage = path => ({
+    url: `${origin}${path}`,
     redirect: 'manual',
     verify({ status, body }) {
       if (status !== 404) return `status ${status}, expected 404`
@@ -154,9 +155,14 @@ export function environmentChecks(environment, origin) {
       if (!/<a\s[^>]*href="\/"/.test(body)) return 'has no link to the home page'
       return null
     }
-  }
+  })
 
-  const checks = [page('/'), page('/ja/'), robots, missingPage]
+  const checks = [
+    page('/'),
+    page('/ja/'),
+    robots,
+    ...[MISSING_PAGE_PATH, ...NOT_FOUND_PAGE_PATHS].map(missingPage)
+  ]
   if (staging) {
     checks.push(
       ...(origin === STAGING_ORIGIN ? stagingGateChecks(origin) : [stagingHostRedirect(origin)])

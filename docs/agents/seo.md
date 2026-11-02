@@ -15,6 +15,10 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
 - `next.config.mjs` sets `trailingSlash: true`, so the export writes each page as
   `<path>/index.html`. The Pages Function redirects the other forms
   ([`hosts.md`](hosts.md)).
+- **A URL with no page answers 404, never 200.** Pages serves `out/404.html` for it. Next also
+  writes that page as `out/404/index.html` and `out/_not-found/index.html`, and the Function
+  answers their URLs, and `/404`, with 404 too
+  ([`hosts.md`](hosts.md#the-404-pages-own-urls)).
 - URLs are written on the build's own origin, `siteOrigin()`
   ([`environments.md`](environments.md)): Staging's canonicals, hreflang, `og:url`, JSON-LD ids
   and sitemaps name https://staging.pitonne.jp.

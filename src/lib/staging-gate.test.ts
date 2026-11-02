@@ -173,6 +173,28 @@ describe('staging password gate', () => {
     expect(response.headers.get('cache-control')).toBe('private, no-store')
   })
 
+  it("answers the 404 page's own URLs with 404 only after the password check", async () => {
+    const url = `${STAGING_ORIGIN}/_not-found/`
+    expectChallenge((await serve(url)).response)
+    for (const [headers, noindex] of [
+      [{ authorization: basic(`x:${PASSWORD}`) }, false],
+      [{ [SMOKE_TEST_HEADER]: '1' }, true]
+    ] as const) {
+      const asked: Request[] = []
+      const next: AssetServer = async request => {
+        if (request) asked.push(request)
+        const missing = request && new URL(request.url).pathname === '/404.html/'
+        return new Response('page', { status: missing ? 404 : 200 })
+      }
+      const { response } = await serve(url, headers, staging, { asked, next })
+      expect(response.status).toBe(404)
+      expect(response.headers.get('cache-control')).toBe('private, no-store')
+      expect(response.headers.has('x-robots-tag')).toBe(noindex)
+      expect(asked.map(request => request.url)).toEqual([`${STAGING_ORIGIN}/404.html/`])
+      expect(asked[0].headers.has('authorization')).toBe(false)
+    }
+  })
+
   it('keeps every answer it serves out of shared caches, whatever the file itself allows', async () => {
     const cacheable = {
       'Content-Type': 'application/xml',

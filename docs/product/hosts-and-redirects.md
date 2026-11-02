@@ -105,3 +105,20 @@ they would without it: a sitemap as XML, a missing page with 404, a page with 20
   `https://pitonne-jp.pages.dev/sitemap.xml (with x-pitonne-smoke-test): 200 [application/xml]`,
   `https://pitonne-jp.pages.dev/ja/ (with x-pitonne-smoke-test): 200 [text/html]` and
   `https://pitonne-jp.pages.dev/no-such-page-smoke-test/ (with x-pitonne-smoke-test): 404`.
+
+**The 404 page's own URLs.** The build also writes the 404 page as `/404/` and `/_not-found/`,
+and Pages would serve `404.html` itself at `/404`. Those URLs, `/404`, `/404/`, `/404.html`,
+`/404/index.html`, `/_not-found`, `/_not-found/` and `/_not-found/index.html`, answer 404 with the
+404 page, as any missing page does, on every host served as is. On a non-canonical host the host
+redirect comes first, and on Staging the password.
+
+- Source: SERP's
+  [404 Pages](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/404-pages.md)
+  standard.
+- Check: `src/lib/not-found-urls.test.ts`, "the 404 page's own URLs > answers %s as Pages answers
+  a missing page", "leaves %s to the asset server" and "answers 404 on hosts served as is, after
+  the host redirect on the others"; `src/lib/staging-gate.test.ts`, "staging password gate >
+  answers the 404 page's own URLs with 404 only after the password check";
+  `e2e/environment.spec.ts`, "answers the 404 page's own URLs with 404, as a missing page";
+  `scripts/smoke-environment.mjs`, "status …, expected 404" and "expected one with noindex" for
+  `/404/` and `/_not-found/`.
