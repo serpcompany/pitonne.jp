@@ -3,6 +3,7 @@ import path from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   DEPLOY_ENVIRONMENTS,
+  declaresDeployEnvironment,
   deployEnvironment,
   hasAnalytics,
   hasPasswordGate,
@@ -33,6 +34,13 @@ describe('deploy environment', () => {
     { DEPLOY_ENV: 'production', NEXT_PUBLIC_DEPLOY_ENV: 'nope' }
   ])('falls back to preview for a missing, unknown or conflicting value: %j', env => {
     expect(deployEnvironment(env)).toBe('preview')
+  })
+
+  it('says whether a build or audit declared any environment at all', () => {
+    expect(declaresDeployEnvironment({})).toBe(false)
+    expect(declaresDeployEnvironment({ DEPLOY_ENV: '' })).toBe(false)
+    expect(declaresDeployEnvironment({ DEPLOY_ENV: 'prod' })).toBe(true)
+    expect(declaresDeployEnvironment({ NEXT_PUBLIC_DEPLOY_ENV: 'staging' })).toBe(true)
   })
 
   it('reads process.env when it is used, not when the module loads', () => {

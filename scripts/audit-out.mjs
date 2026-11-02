@@ -1,11 +1,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { deployEnvironment, SITE_AUDITOR, siteOrigin } from '../src/lib/deploy-environment.mts'
+import {
+  declaresDeployEnvironment,
+  deployEnvironment,
+  SITE_AUDITOR,
+  siteOrigin
+} from '../src/lib/deploy-environment.mts'
 import { blocksEverything } from './robots-txt.mjs'
 
 const OUT = path.join(process.cwd(), 'out')
-const declaredEnvironment = process.env.DEPLOY_ENV || process.env.NEXT_PUBLIC_DEPLOY_ENV
-const environment = declaredEnvironment ? deployEnvironment(process.env) : null
+const environment = declaresDeployEnvironment() ? deployEnvironment() : null
 const SITEMAP_INDEX = 'sitemap-index.xml'
 const NOT_FOUND_PAGE = '404.html'
 const required = [

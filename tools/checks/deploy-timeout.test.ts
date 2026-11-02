@@ -66,7 +66,7 @@ describe('the deploy job’s time limit', () => {
     vi.spyOn(console, 'log').mockImplementation(() => undefined)
     const worst = await smokeWorstCases()
     const limit = (job(readWorkflow('deploy.yml'), 'deploy')['timeout-minutes'] ?? 0) * MINUTE
-    expect(worst.production).toBe(21.5 * MINUTE)
+    expect(worst.production).toBe(23 * MINUTE + 10_000)
     for (const [environment, smoke] of Object.entries(worst)) {
       expect(smoke + REST_OF_THE_JOB, environment).toBeLessThanOrEqual(limit)
     }

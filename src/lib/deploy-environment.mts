@@ -14,6 +14,9 @@ type DeployEnv = Record<string, string | undefined>
 const isDeployEnvironment = (value: string | undefined): value is DeployEnvironment =>
   DEPLOY_ENVIRONMENTS.some(environment => environment === value)
 
+export const declaresDeployEnvironment = (env: DeployEnv = process.env) =>
+  Boolean(env.DEPLOY_ENV || env.NEXT_PUBLIC_DEPLOY_ENV)
+
 export function deployEnvironment(env: DeployEnv = process.env): DeployEnvironment {
   const declared = new Set([env.DEPLOY_ENV, env.NEXT_PUBLIC_DEPLOY_ENV].filter(Boolean))
   const [value] = declared

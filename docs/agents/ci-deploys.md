@@ -98,10 +98,10 @@ hangs costs 15 seconds.
   URL's checks until 120 seconds after the first of them started.
 - If every request hung until its timeout, an origin's first check would take 130 seconds (9
   tries), the host checks' first 175 (12 tries), and each later one 25 (2 tries). Production's
-  smoke tests would then take 21.5 minutes: 13 minutes 50 seconds for the host checks (12 on the
-  pages.dev and branded hosts, 11 on the deployment URL) and 3 minutes 50 seconds for each of the
-  environment checks' two origins (5 checks each). Staging's would take 13 minutes 35 seconds,
-  and a preview's under 7.
+  smoke tests would then take 23 minutes 10 seconds: 13 minutes 50 seconds for the host checks
+  (12 on the pages.dev and branded hosts, 11 on the deployment URL) and 4 minutes 40 seconds for
+  each of the environment checks' two origins (7 checks each). Staging's would take 16 minutes 5
+  seconds, and a preview's 8 minutes 30 seconds.
 - The job's 40 minutes leave ten for checkout, install, build and upload after Production's worst
   case; those took about a minute and a half on 2026-10-27. `tools/checks/deploy-timeout.test.ts`
   runs both scripts with every request timing out and fails if the limit stops leaving that.
