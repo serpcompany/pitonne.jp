@@ -97,7 +97,8 @@ office, and a contact button for an area that isn't listed.
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
   index", which follows the first ward's link; `src/app/[locale]/areas-served/page.dom.test.tsx`,
   "areas served (%s) > names each area of each ward in English and in Japanese on the areas
-  index". The kinds of visit and the contact button: no automated check yet.
+  index" and "offers visits at home, at a hotel and at an office, then a contact button for an
+  area it doesn’t list".
 
 **Ward pages.** `/areas-served/<ward>/`: the ward's description, its areas as cards, a Google map
 of the ward, every service category and service as links, the steps to get started with a contact
@@ -106,8 +107,8 @@ button, the latest posts, and a link back to all areas.
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
   index", which follows the ward's first area link;
   `src/app/[locale]/areas-served/page.dom.test.tsx`, "areas served (%s) > shows %s with a Google
-  map of the ward and each area named in both languages". The description, the services, the
-  steps, the latest posts and the link back: no automated check yet.
+  map of the ward and each area named in both languages" and "shows %s’s description, every
+  service, the steps to get started, the latest posts and a link back to all areas".
 
 **Area pages.** `/areas-served/<ward>/<area>/` has breadcrumbs through its ward, then every
 service category and service as links; how to get started, with a contact button; the area's
