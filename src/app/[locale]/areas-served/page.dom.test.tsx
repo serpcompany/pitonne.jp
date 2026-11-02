@@ -28,17 +28,17 @@ function expectEachAreaNamedInBothLanguages(ward: Ward, locale: Locale) {
 }
 
 function sectionHeaded(name: string) {
-  return within(defined(screen.getByRole('heading', { name }).closest('section')))
+  return defined(screen.getByRole('heading', { name }).closest('section'))
 }
 
-function linksIn(section: ReturnType<typeof within>) {
-  return section
+function linksIn(section: HTMLElement) {
+  return within(section)
     .getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')] as const)
 }
 
-function subheadingsIn(section: ReturnType<typeof within>) {
-  return section
+function subheadingsIn(section: HTMLElement) {
+  return within(section)
     .getAllByRole('heading', { level: 3 })
     .map(heading => [heading.textContent, heading.nextElementSibling?.textContent] as const)
 }
