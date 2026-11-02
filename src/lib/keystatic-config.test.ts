@@ -1,3 +1,6 @@
+import { createRequire } from 'node:module'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   EXCERPT_MAX_LENGTH,
@@ -9,9 +12,32 @@ import config from '../../keystatic.config'
 
 type Field = { validate: (value: string) => unknown }
 type Collection = { label: string; path: string; schema: Record<string, Field> }
+type EditorState = {
+  schema: { nodes: { heading: { spec: { parseDOM: { attrs: { level: number } }[] } } } }
+}
+type BodyField = {
+  parse: (
+    value: undefined,
+    files: {
+      content: Uint8Array
+      other: Map<string, unknown>
+      external: Map<string, unknown>
+      slug: string
+    }
+  ) => EditorState
+  serialize: (state: EditorState, options: { slug: string }) => { content: Uint8Array }
+}
 
 const collections = config.collections as unknown as Record<string, Collection>
 const text = (length: number) => 'x'.repeat(length)
+const packages = createRequire(import.meta.url)
+const keystaticPackage = packages.resolve('@keystatic/core/package.json')
+const keystaticBrowserBuild = pathToFileURL(
+  path.join(
+    path.dirname(keystaticPackage),
+    packages('@keystatic/core/package.json').exports['.'].default
+  )
+).href
 
 function accepts(field: Field, lengths: number[]) {
   return lengths.map(length => {
@@ -26,6 +52,7 @@ function accepts(field: Field, lengths: number[]) {
 
 afterEach(() => {
   vi.unstubAllEnvs()
+  vi.doUnmock('@keystatic/core')
 })
 
 describe('the CMS', () => {
@@ -79,4 +106,24 @@ describe('the CMS', () => {
       ])
     }
   })
+
+  it('offers headings of levels 2 to 4 only in a post’s body, and turns a heading of another level, pasted or loaded, into the nearest of those', async () => {
+    vi.doMock('@keystatic/core', () => import(keystaticBrowserBuild))
+    vi.resetModules()
+    const editor = (await import('../../keystatic.config')).default
+      .collections as unknown as Record<string, { schema: { content: BodyField } }>
+    const slug = 'a-post'
+    const content = new TextEncoder().encode('# One\n\n### Three\n\n###### Six\n')
+
+    for (const blog of [editor.blog, editor.blogJa]) {
+      const body = blog.schema.content
+      const state = body.parse(undefined, { content, other: new Map(), external: new Map(), slug })
+      const saved = new TextDecoder().decode(body.serialize(state, { slug }).content)
+
+      expect(state.schema.nodes.heading.spec.parseDOM.map(rule => rule.attrs.level)).toEqual([
+        2, 3, 4
+      ])
+      expect(saved.match(/^#+ .*/gm)).toEqual(['## One', '### Three', '#### Six'])
+    }
+  }, 120_000)
 })

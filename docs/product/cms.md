@@ -32,9 +32,10 @@ build, and the live site stays as it was.
 - Check: `src/lib/data/blog-posts.test.ts`, "blog content model > rejects %s", "rejects a slug
   that does not match the filename" and "rejects a publishedAt timestamp instead of shifting it to
   another day"; `src/lib/keystatic-config.test.ts`, "the CMS > refuses an excerpt, meta
-  description or category description outside the build’s limits". The heading levels, which
-  Keystatic keeps inside its editor, and the clamp on pasted headings, a patch to Keystatic: no
-  automated check yet.
+  description or category description outside the build’s limits" and "offers headings of levels
+  2 to 4 only in a post’s body, and turns a heading of another level, pasted or loaded, into the
+  nearest of those", which loads Keystatic's browser build, the one the editor runs and the patch
+  changes.
 
 **Translations.** An English post and a Japanese post with the same slug are each other's
 translation: the language switcher and hreflang then link them. A post without one is published in
