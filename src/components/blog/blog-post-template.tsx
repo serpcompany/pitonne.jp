@@ -7,7 +7,7 @@ import { JsonLd } from '@/components/shared/json-ld'
 import { PageHero } from '@/components/shared/page-hero'
 import { RelatedSidebar } from '@/components/shared/related-sidebar'
 import { blogContentParts } from '@/lib/blog-content-parts'
-import { type BlogPost, localizeBlogContentHref } from '@/lib/data/blog-posts'
+import { type BlogPost, getBlogPostLocales, localizeBlogContentHref } from '@/lib/data/blog-posts'
 import { localizedRoute } from '@/lib/data/routes'
 import type { Service } from '@/lib/data/services'
 import { getVideoBySlug } from '@/lib/data/videos'
@@ -199,7 +199,8 @@ export function BlogPostTemplate({
                 role: post.author.role ?? ''
               }
             },
-            locale
+            locale,
+            getBlogPostLocales(post.slug)
           )}
         />
       )}

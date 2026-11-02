@@ -124,8 +124,13 @@ origin, `https://pitonne.jp`.
   a post as an article with its date".
 
 **Translations in structured data.** The business lists English and Japanese among the languages
-it speaks. The site and each post name their language, and a post names its translation.
+it speaks. The site and each post name their language. A post published in both languages names
+its translation, and a post published in one names none, so it never points at a page that
+doesn't exist.
 
 - Check: `src/lib/structured-data.test.tsx`, "structured data parity > renders organization and
-  website JSON-LD in the root layout", for the business's two languages, and "names the language
-  of the site and of each post". A post naming its translation: no automated check yet.
+  website JSON-LD in the root layout", for the business's two languages, "names the language of
+  the site and of each post" and "names a post’s translation only when the post is published in
+  the other language"; with a post in each language alone added to a copy of the content, "a post
+  published in one language, added to a copy of the content > names no translation in its page’s
+  BlogPosting".

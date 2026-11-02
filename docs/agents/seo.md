@@ -53,7 +53,9 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
   `inLanguage` or `availableLanguage`, which aren't valid there and which Ahrefs reports as errors
   (`src/lib/structured-data.test.tsx`). `WebSite` and `BlogPosting` carry `inLanguage`.
 - A post and its translation point at each other: the Japanese `BlogPosting` names the English one
-  as `translationOfWork`, and the English one names the Japanese as `workTranslation`.
+  as `translationOfWork`, and the English one names the Japanese as `workTranslation`. Each is
+  named only when it is published: the template passes `getBlogPostLocales(slug)`, so a post in
+  one language names no translation, as its hreflang and sitemap entry list none.
 - The video breadcrumbs follow the page's locale, as the visible breadcrumbs on `/watch/` and
   `/ja/watch/` do.
 

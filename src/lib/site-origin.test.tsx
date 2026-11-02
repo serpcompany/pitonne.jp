@@ -11,6 +11,7 @@ import { blogPosts } from '@/lib/data/blog-posts'
 import { services } from '@/lib/data/services'
 import { pitonneVideos } from '@/lib/data/videos'
 import { type DeployEnvironment, SITE_AUDITOR, siteOrigin } from '@/lib/deploy-environment.mts'
+import { locales } from '@/lib/i18n/config'
 import { localizedPageMetadata } from '@/lib/seo'
 import {
   blogPostingJsonLd,
@@ -114,13 +115,13 @@ describe.each(environments)('URLs a %s build writes', environment => {
       businessJsonLd('ja'),
       websiteJsonLd('en'),
       serviceJsonLd(services[0], 'ja'),
-      blogPostingJsonLd(post, 'en'),
-      blogPostingJsonLd(post, 'ja'),
+      blogPostingJsonLd(post, 'en', locales),
+      blogPostingJsonLd(post, 'ja', locales),
       videoBreadcrumbJsonLd(video, 'ja'),
       { ...videoObjectJsonLd(video), description: '', name: '' }
     ]
     expect(businessJsonLd()).toMatchObject({ '@id': `${origin}/#business` })
-    expect(blogPostingJsonLd(post, 'en')).toMatchObject({
+    expect(blogPostingJsonLd(post, 'en', locales)).toMatchObject({
       workTranslation: { '@id': `${origin}/ja/blog/${post.slug}/#blog-posting` }
     })
     expectOnly(origin, siteUrls(schemas))

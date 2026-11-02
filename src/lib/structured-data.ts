@@ -83,10 +83,15 @@ export function serviceJsonLd(service: Service, locale: Locale = 'en'): WithCont
 
 export function blogPostingJsonLd(
   post: Pick<BlogPost, 'slug' | 'title' | 'excerpt' | 'publishedAt' | 'author' | 'featureImage'>,
-  locale: Locale = 'en'
+  locale: Locale,
+  publishedLocales: readonly Locale[]
 ): WithContext<BlogPosting> {
-  const enUrl = canonicalUrl(`/blog/${post.slug}/`)
-  const jaUrl = localizedCanonicalUrl(`/blog/${post.slug}/`, 'ja')
+  const otherLocale: Locale = locale === 'ja' ? 'en' : 'ja'
+  const hasTranslation = publishedLocales.includes(otherLocale)
+  const translation = {
+    '@type': 'BlogPosting',
+    '@id': `${localizedCanonicalUrl(`/blog/${post.slug}/`, otherLocale)}#blog-posting`
+  } as const
 
   return {
     '@context': 'https://schema.org',
@@ -98,9 +103,8 @@ export function blogPostingJsonLd(
     dateModified: post.publishedAt,
     image: post.featureImage ? absoluteUrl(post.featureImage) : undefined,
     inLanguage: locale === 'ja' ? 'ja' : 'en',
-    ...(locale === 'ja'
-      ? { translationOfWork: { '@type': 'BlogPosting', '@id': `${enUrl}#blog-posting` } }
-      : { workTranslation: { '@type': 'BlogPosting', '@id': `${jaUrl}#blog-posting` } }),
+    ...(hasTranslation && locale === 'ja' ? { translationOfWork: translation } : {}),
+    ...(hasTranslation && locale === 'en' ? { workTranslation: translation } : {}),
     author: {
       '@type': 'Person',
       name: post.author.name,

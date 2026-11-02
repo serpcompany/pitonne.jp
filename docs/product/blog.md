@@ -101,9 +101,10 @@ language once a published post in that language uses it.
 ## Languages and drafts
 
 **Posts in one language.** A post may be published in English only or Japanese only. Its other
-language then has no page for it, no entry in the index or a category, no hreflang alternate and no
-sitemap URL. The language switcher on such a post, or on a category with posts in one language
-only, opens the other language's blog index. A translation pairs with its original by slug.
+language then has no page for it, no entry in the index or a category, no hreflang alternate, no
+sitemap URL and no translation named in its structured data. The language switcher on such a post,
+or on a category with posts in one language only, opens the other language's blog index. A
+translation pairs with its original by slug.
 
 - Source: [ADR 0001](../adr/0001-blog-cms.md).
 - Check: `src/lib/data/blog-posts.test.ts`, "single-locale blog posts > emits hreflang only for the
@@ -118,7 +119,9 @@ only, opens the other language's blog index. A translation pairs with its origin
   `src/lib/sitemaps.test.ts`, "sitemap URLs > with a draft and a post in one language added to a
   copy of the content > lists a post in one language at its one URL, with no alternate in the
   other"; `src/components/header.dom.test.tsx`, "the language switcher with posts in one language
-  added to a copy of the content > on a %s page at %s, links the other language at %s".
+  added to a copy of the content > on a %s page at %s, links the other language at %s";
+  `src/lib/structured-data.test.tsx`, "a post published in one language, added to a copy of the
+  content > names no translation in its page’s BlogPosting".
 
 **Drafts.** A post saved as a draft is in no build, in any environment: no page, no index or
 category entry, no sitemap URL.

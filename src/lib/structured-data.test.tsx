@@ -14,6 +14,12 @@ import {
   websiteJsonLd
 } from '@/lib/structured-data'
 import { englishBlogPost } from '@/test/blog-post'
+import {
+  fixture,
+  removeContentFixture,
+  withContent,
+  writeContentFixture
+} from '@/test/content-fixture'
 import { defined } from '@/test/defined'
 import { jsonLdFrom } from '@/test/json-ld'
 
@@ -134,7 +140,35 @@ describe('structured data parity', () => {
   it('names the language of the site and of each post', () => {
     for (const locale of ['en', 'ja'] as const) {
       expect(websiteJsonLd(locale).inLanguage).toBe(locale)
-      expect(blogPostingJsonLd(getAllBlogPosts(locale)[0], locale).inLanguage).toBe(locale)
+      const post = getAllBlogPosts(locale)[0]
+      expect(blogPostingJsonLd(post, locale, getBlogPostLocales(post.slug)).inLanguage).toBe(locale)
+    }
+  })
+
+  it('names a post’s translation only when the post is published in the other language', () => {
+    const post = getAllBlogPosts('en')[0]
+    const both = ['en', 'ja'] as const
+    expect(blogPostingJsonLd(post, 'en', both)).toMatchObject({
+      workTranslation: {
+        '@type': 'BlogPosting',
+        '@id': `${SITE_URL}/ja/blog/${post.slug}/#blog-posting`
+      }
+    })
+    expect(blogPostingJsonLd(post, 'ja', both)).toMatchObject({
+      translationOfWork: {
+        '@type': 'BlogPosting',
+        '@id': `${SITE_URL}/blog/${post.slug}/#blog-posting`
+      }
+    })
+    expect(blogPostingJsonLd(post, 'en', both)).not.toHaveProperty('translationOfWork')
+    expect(blogPostingJsonLd(post, 'ja', both)).not.toHaveProperty('workTranslation')
+
+    for (const schema of [
+      blogPostingJsonLd(post, 'en', ['en']),
+      blogPostingJsonLd(post, 'ja', ['ja'])
+    ]) {
+      expect(schema).not.toHaveProperty('workTranslation')
+      expect(schema).not.toHaveProperty('translationOfWork')
     }
   })
 
@@ -181,7 +215,7 @@ describe('structured data parity', () => {
   it('describes every English post as it always has, naming its Japanese translation', () => {
     for (const post of getAllBlogPosts('en')) {
       const url = `${SITE_URL}/blog/${post.slug}/`
-      expectSameJson(blogPostingJsonLd(post, 'en'), {
+      expectSameJson(blogPostingJsonLd(post, 'en', getBlogPostLocales(post.slug)), {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         '@id': `${url}#blog-posting`,
@@ -237,4 +271,49 @@ describe('structured data parity', () => {
       })
     )
   })
+})
+
+describe('a post published in one language, added to a copy of the content', () => {
+  it('names no translation in its page’s BlogPosting', async () => {
+    const contentRoot = writeContentFixture()
+    try {
+      const pages = [
+        {
+          locale: 'en',
+          post: fixture.englishOnly,
+          url: `${SITE_URL}/blog/${fixture.englishOnly}/`
+        },
+        {
+          locale: 'ja',
+          post: fixture.japaneseOnly,
+          url: `${SITE_URL}/ja/blog/${fixture.japaneseOnly}/`
+        }
+      ]
+      const schemas = await withContent(contentRoot, async () => {
+        const { default: BlogPostPage } = await import('@/app/[locale]/blog/[post]/page')
+        return Promise.all(
+          pages.map(async ({ locale, post }) =>
+            jsonLdFrom(
+              renderToStaticMarkup(
+                await BlogPostPage({ params: Promise.resolve({ locale, post }) })
+              )
+            )
+          )
+        )
+      })
+
+      pages.forEach(({ locale, url }, index) => {
+        const posting = defined(schemas[index].find(schema => schema['@type'] === 'BlogPosting'))
+        expect(posting).toMatchObject({
+          '@id': `${url}#blog-posting`,
+          inLanguage: locale,
+          mainEntityOfPage: url
+        })
+        expect(posting).not.toHaveProperty('workTranslation')
+        expect(posting).not.toHaveProperty('translationOfWork')
+      })
+    } finally {
+      removeContentFixture(contentRoot)
+    }
+  }, 600_000)
 })
