@@ -47,11 +47,14 @@ describe('CI and deploy workflows', () => {
     expect(allText(gated)).not.toContain('always()')
   })
 
-  it('deploys, previews and alerts on nothing for a docs-only change, each by a condition of its own', () => {
-    for (const id of ['deploy', 'deploy-content', 'preview', 'alert']) {
+  it('deploys and previews nothing for a docs-only change, each by a condition of its own', () => {
+    for (const id of ['deploy', 'deploy-content', 'preview']) {
       expect(needs(job(ci, id)), id).toContain('changes')
       expect(job(ci, id).if, id).toContain("needs.changes.outputs.docs != 'true'")
     }
+    expect(job(ci, 'alert').if, 'a red main alerts whatever the push changed').not.toContain(
+      'needs.changes.outputs.docs'
+    )
     for (const id of ['test', 'e2e', 'lighthouse'])
       expect(job(ci, id).if, id).toContain("needs.changes.outputs.docs != 'true'")
     expect(job(ci, 'test').if).toBe(

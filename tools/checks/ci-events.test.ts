@@ -162,8 +162,12 @@ describe('what CI runs on a push', () => {
       expect(run(docs).stepRuns('changes', step), step).toBe(false)
   })
 
-  it('alerts on no docs-only push to main, but on one whose classification failed', () => {
-    expect(ran(push('main', { docs: true }, ['verify']))).toEqual(['changes', 'verify:failure'])
+  it('alerts on a docs-only push to main whose docs check failed, and on a failed classification', () => {
+    expect(ran(push('main', { docs: true }, ['verify']))).toEqual([
+      'changes',
+      'verify:failure',
+      'alert'
+    ])
     expect(run(push('main', { docs: true }, ['changes'])).results).toMatchObject({
       verify: 'success',
       test: 'failure',

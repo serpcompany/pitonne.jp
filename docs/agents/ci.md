@@ -186,14 +186,12 @@ docs-only or skipped and isn't `fast`: a code push's deploy needs `verify`, `tes
 call `deploy.yml` for Production on `main` and Staging on `staging`, and both upload the branch
 tip ([`ci-deploys.md`](ci-deploys.md#deployyml)).
 
-**`alert`** ("Alert on red main") runs when, on a push to `main` that isn't docs-only, any check,
-the classification or a Production deploy failed. A docs-only push changes nothing live, so a
-failing `verify` on one opens no issue and the red run is the signal; a failed classification
-leaves `docs` empty, so it still alerts. A failing check never holds back a CMS save, and CMS
-commits come from a bot, so nobody gets the failure email: the job opens one issue titled "CI is
-failing on main" that mentions the owner's account, or comments on the open one, until someone
-fixes `main` and closes it. It runs one at a time (`alert-red-main`, never cancelled), so two red
-runs can't open two issues. It needs `issues: write`.
+**`alert`** ("Alert on red main") runs when, on a push to `main`, any check, the classification or
+a Production deploy failed, a docs-only push's `verify` included. A failing check never holds back
+a CMS save, and CMS commits come from a bot, so nobody gets the failure email: the job opens one
+issue titled "CI is failing on main" that mentions the owner's account, or comments on the open
+one, until someone fixes `main` and closes it. It runs one at a time (`alert-red-main`, never
+cancelled), so two red runs can't open two issues. It needs `issues: write`.
 
 **`preview`** ("Deploy PR preview") needs `changes` and `test`, and runs only for
 same-repository pull requests into `staging` or `main` that aren't docs-only: a forked pull
