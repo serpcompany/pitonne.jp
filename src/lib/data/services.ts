@@ -175,6 +175,14 @@ export function getService(slug: string, locale: Locale = 'en'): Service | undef
   return getServicesForLocale(locale).find(service => service.slug === slug)
 }
 
+const serviceSlugsByFileName = new Map(
+  services.map(service => [path.basename(service.sourcePath, '.md'), service.slug])
+)
+
+export function serviceSlugForCmsValue(value: string): string {
+  return serviceSlugsByFileName.get(value) ?? value
+}
+
 export function getServicesFromSlugs(slugs: string[], locale: Locale = 'en'): Service[] {
   return slugs
     .map(slug => getService(slug, locale))

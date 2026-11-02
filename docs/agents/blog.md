@@ -45,8 +45,10 @@ browser.
 - **`featureImageAlt`** is optional: an image without it is described by the post's title.
 - **`categorySlug`** names a file in `content/blog-categories/`. Every post is checked when it
   loads, drafts included, and the error names the post and the slug.
-- **`relatedServiceSlugs`** name services in `content/services/`
-  (`src/lib/data/blog-posts.test.ts`).
+- **`relatedServiceSlugs`** name services in `content/services/` by file name, which is what the
+  CMS stores. The loader turns each into the service's slug (`serviceSlugForCmsValue` in
+  `src/lib/data/services.ts`), since one file name isn't its slug: `androgenetic-alopecia.md` is
+  AGA Medication, `androgenetic-alopecia-medicine` (`src/lib/data/blog-posts.test.ts`).
 
 ## The body
 

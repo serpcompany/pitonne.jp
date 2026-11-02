@@ -53,10 +53,12 @@ until those posts move to another.
   %s", "rejects a category file that is not valid JSON or not named by a kebab-case slug" and
   "localizes the category name from categorySlug and rejects unknown categories".
 
-**Related services.** Editors pick a post's related services from a list of every service.
+**Related services.** Editors pick a post's related services from a list of every service, and
+each one they pick shows on the post in both languages.
 
 - Check: `src/lib/data/blog-posts.test.ts`, "blog content model > offers every service as a CMS
-  related-service option and only links existing services".
+  related-service option, and resolves each option and each post’s related services to a service
+  in both languages".
 
 **Feature images.** An uploaded feature image is stored in its post's own folder, apart for each
 language, so changing one language's image never replaces the other's. Images are served as

@@ -6,7 +6,6 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { BLOG_RELATED_SERVICE_OPTIONS } from '@/lib/blog-rules'
 import { blogCategories, loadBlogCategoriesFromDirectory } from '@/lib/data/blog-categories'
 import {
-  blogPosts,
   estimateReadingTime,
   getAllBlogPosts,
   getAllCategories,
@@ -16,6 +15,8 @@ import {
   localizeBlogContentHref,
   withoutLeadingTitleHeading
 } from '@/lib/data/blog-posts'
+import { getService, serviceSlugForCmsValue } from '@/lib/data/services'
+import { locales } from '@/lib/i18n/config'
 import { localizedHreflangAlternates } from '@/lib/seo'
 import { sitemapEntriesForPath } from '@/lib/sitemaps'
 import {
@@ -273,19 +274,48 @@ describe('blog content model', () => {
     expect(() => loadBlogPostsFromDirectory(draft, 'en', 'content/blog')).toThrow('categorySlug')
   })
 
-  it('offers every service as a CMS related-service option and only links existing services', () => {
-    const serviceSlugs = fs
+  it('offers every service as a CMS related-service option, and resolves each option and each post’s related services to a service in both languages', () => {
+    const serviceFileNames = fs
       .readdirSync(path.join(process.cwd(), 'content/services'))
       .filter(file => file.endsWith('.md'))
       .map(file => file.replace(/\.md$/, ''))
       .sort()
-    expect(BLOG_RELATED_SERVICE_OPTIONS.map(option => option.value).sort()).toEqual(serviceSlugs)
+    expect(BLOG_RELATED_SERVICE_OPTIONS.map(option => option.value).sort()).toEqual(
+      serviceFileNames
+    )
 
-    for (const post of [...blogPosts, ...getAllBlogPosts('ja')]) {
-      for (const slug of post.relatedServiceSlugs) {
-        expect(serviceSlugs, `${post.sourcePath} relatedServiceSlugs`).toContain(slug)
+    for (const option of BLOG_RELATED_SERVICE_OPTIONS) {
+      expect(getService(serviceSlugForCmsValue(option.value))?.name).toBe(option.label)
+    }
+    for (const locale of locales) {
+      for (const option of BLOG_RELATED_SERVICE_OPTIONS) {
+        expect(
+          getService(serviceSlugForCmsValue(option.value), locale),
+          `${option.label} (${locale})`
+        ).toBeDefined()
+      }
+      for (const post of getAllBlogPosts(locale)) {
+        for (const slug of post.relatedServiceSlugs) {
+          expect(
+            getService(slug, locale),
+            `${post.sourcePath} relatedServiceSlugs: ${slug}`
+          ).toBeDefined()
+        }
       }
     }
+  })
+
+  it('resolves a related service the CMS stores by file name to the service’s slug', () => {
+    const dir = writePosts({
+      'example-post.md': {
+        ...validFrontmatter,
+        relatedServiceSlugs: '\n  - androgenetic-alopecia\n  - iv-therapy'
+      }
+    })
+    expect(loadBlogPostsFromDirectory(dir, 'en', 'content/blog')[0].relatedServiceSlugs).toEqual([
+      'androgenetic-alopecia-medicine',
+      'iv-therapy'
+    ])
   })
 
   it('lists a service’s posts, or the three newest when no post names it', () => {

@@ -37,13 +37,15 @@ posts.
 
 **Related services.** The sidebar lists the services the post names, and so does the box in the
 body, where a post in the IV therapy category that names none lists IV Therapy. A post with no
-service to list shows neither.
+service to list shows neither. Every service an editor can pick is listed, AGA Medication
+included, whose file name, which the CMS stores, isn't its slug.
 
 - Check: `src/app/[locale]/blog/[post]/page.dom.test.tsx`, "blog post sidebar > lists the
   services the post names (%s)"; `src/lib/data/blog-posts.test.ts`, "blog content model > relates
-  IV Therapy to an IV therapy post that names no service, and nothing to any other" and "offers
-  every service as a CMS related-service option and only links existing services". The box's own
-  list: no automated check yet.
+  IV Therapy to an IV therapy post that names no service, and nothing to any other", "offers every
+  service as a CMS related-service option, and resolves each option and each post’s related
+  services to a service in both languages" and "resolves a related service the CMS stores by file
+  name to the service’s slug". The box's own list: no automated check yet.
 
 **Reading time and date.** The reading time is computed from the body, at 200 words a minute in
 English and 500 characters a minute in Japanese, unless the post's `readingTime` sets it. The date

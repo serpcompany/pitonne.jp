@@ -45,8 +45,9 @@ rules are in [`blog.md`](blog.md).
   which must be `/services/<slug>/` (`src/lib/data/routes.test.ts`). `metaTitle` and
   `metaDescription` are optional SEO overrides.
 - A new service is also added to `BLOG_RELATED_SERVICE_OPTIONS` in `src/lib/blog-rules.ts`, the
-  list the CMS offers as a post's related services; `src/lib/data/blog-posts.test.ts` fails when
-  the list and `content/services/` differ.
+  list the CMS offers as a post's related services, with its file name as the value and its title
+  as the label; `src/lib/data/blog-posts.test.ts` fails when the list and `content/services/`
+  differ, or when an option doesn't resolve to its service in both languages.
 - An absolute `https://pitonne.jp/...` link in this markdown renders on the build's own origin
   (`onSiteOrigin()` in `src/lib/seo.ts`, through `SiteMarkdown`), so on Staging it stays on
   Staging.

@@ -17,6 +17,7 @@ import {
   blogCategories,
   getBlogCategory
 } from '@/lib/data/blog-categories'
+import { serviceSlugForCmsValue } from '@/lib/data/services'
 import { type Locale, locales } from '@/lib/i18n/config'
 
 function blogContentDirectory(locale: Locale): string {
@@ -214,7 +215,7 @@ export function loadBlogPostsFromDirectory(
             ? frontmatter.featureImageAlt || frontmatter.title
             : undefined,
           featured: frontmatter.featured ?? false,
-          relatedServiceSlugs: frontmatter.relatedServiceSlugs ?? [],
+          relatedServiceSlugs: (frontmatter.relatedServiceSlugs ?? []).map(serviceSlugForCmsValue),
           tags: frontmatter.tags ?? [],
           content,
           sourcePath: `${contentSubdir}/${fileName}`
