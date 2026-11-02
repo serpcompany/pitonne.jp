@@ -67,8 +67,8 @@ _Avoid_: publish (a save of a draft publishes nothing)
 
 **Content fast path**:
 CI deploying a push at once, without waiting for its checks, because the push changes only files
-the CMS edits or its commit already passed `verify`, `test`, `e2e` and `lighthouse`: the
-`Deploy content` job.
+the CMS edits or its commit already passed `verify`, `test`, `e2e` and `lighthouse` (a commit that
+changes only docs, through the tested commit under it): the `Deploy content` job.
 _Avoid_: hotfix (a pull request into `main` with code)
 
 **Smoke test**:

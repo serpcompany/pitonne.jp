@@ -1,7 +1,10 @@
 #!/usr/bin/env node
+import { execFileSync } from 'node:child_process'
+import { isDocsOnlyChange } from './draft-only-change.mjs'
 import { runMain } from './run-main.mjs'
 
 export const ciWorkflow = '.github/workflows/ci.yml'
+export const walkLimit = 50
 
 const retryAfter = [5, 15]
 const pauseFor = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -41,20 +44,31 @@ export const isCiPush = (run, { branches = protectedBranches, sha = null } = {})
 const passedJobs = (jobs, checks) =>
   checks.filter(check => jobs.some(job => job.name === check && job.conclusion === 'success'))
 
-export async function checksPassed(read, { repository, sha, checks, branches, log }) {
+async function passingRun(read, { repository, sha, checks, branches }) {
+  const listed = await read(
+    `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
+  )
+  for (const run of listed.workflow_runs ?? []) {
+    if (!isCiPush(run, { branches, sha })) continue
+    const { jobs = [] } = await read(
+      `/repos/${repository}/actions/runs/${run.id}/jobs?filter=latest&per_page=100`
+    )
+    if (passedJobs(jobs, checks).length === checks.length) return run
+  }
+  return null
+}
+
+export async function checksPassed(
+  read,
+  { repository, sha, checks, branches, log, chain = [sha] }
+) {
   if (!checks.length || !branches.length) return false
   try {
-    const listed = await read(
-      `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
-    )
-    for (const run of listed.workflow_runs ?? []) {
-      if (!isCiPush(run, { branches, sha })) continue
-      const { jobs = [] } = await read(
-        `/repos/${repository}/actions/runs/${run.id}/jobs?filter=latest&per_page=100`
-      )
-      if (passedJobs(jobs, checks).length === checks.length) {
+    for (const commit of chain) {
+      const run = await passingRun(read, { repository, sha: commit, checks, branches })
+      if (run) {
         log(
-          `${checks.join(', ')} passed on ${sha} in CI's push run ${run.id} on ${run.head_branch}.`
+          `${checks.join(', ')} passed on ${commit} in CI's push run ${run.id} on ${run.head_branch}.`
         )
         return true
       }
@@ -64,9 +78,52 @@ export async function checksPassed(read, { repository, sha, checks, branches, lo
     return false
   }
   log(
-    `${checks.join(', ')} didn't all pass on ${sha} in one run of ${ciWorkflow} for a push to ${branches.join(' or ')}.`
+    `${checks.join(', ')} didn't all pass on ${chain.join(' or ')} in one run of ${ciWorkflow} for a push to ${branches.join(' or ')}.`
   )
   return false
+}
+
+export const gitIn = cwd => args =>
+  execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
+
+const changedPaths = (git, from, to) =>
+  git(['diff', '--name-only', from, to]).split('\n').filter(Boolean)
+
+export function docsOnlyChain(git, sha, limit = walkLimit) {
+  const chain = []
+  for (let commit = sha; ; ) {
+    const [found, parent] = git(['rev-list', '--parents', '-n', '1', commit]).trim().split(' ')
+    chain.push(found)
+    if (!parent || !isDocsOnlyChange(changedPaths(git, parent, found))) break
+    if (chain.length > limit) return null
+    commit = parent
+  }
+  const since = changedPaths(git, chain.at(-1), chain[0])
+  if (since.length && !isDocsOnlyChange(since))
+    throw new Error(`${chain.at(-1)}..${chain[0]} changes more than docs`)
+  return chain
+}
+
+export async function checksPassedUnderDocs(read, git, { limit = walkLimit, ...options }) {
+  const { sha, log } = options
+  let chain
+  try {
+    chain = docsOnlyChain(git, sha, limit)
+  } catch (error) {
+    log(`::warning::Couldn't read the commits under ${sha}: ${error.message}`)
+    return false
+  }
+  if (!chain) {
+    log(
+      `${sha} is more than ${limit} docs-only commits above any other, so it counts as not passed.`
+    )
+    return false
+  }
+  if (chain.length > 1)
+    log(
+      `${sha} changes only docs since ${chain.at(-1)}, so a pass on either, or on a commit between them, counts.`
+    )
+  return checksPassed(read, { ...options, chain })
 }
 
 export async function receiptPassed(read, { repository, repositoryId, suite, tree, log }) {
@@ -109,7 +166,7 @@ async function main([what, ...given]) {
     .split(/[\s,]+/)
     .filter(Boolean)
   if (what === 'checks' && sha && branches && checks.length) {
-    passed = await checksPassed(read, {
+    passed = await checksPassedUnderDocs(read, gitIn(process.cwd()), {
       repository,
       sha,
       checks,

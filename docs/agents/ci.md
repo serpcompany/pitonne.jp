@@ -27,7 +27,7 @@ workflows and the action to this doc:
 | `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install through the setup action, no expressions in scripts |
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
-| `scripts/ci-passed.test.mjs` | Which CI runs and receipts count as passed |
+| `scripts/ci-passed.test.mjs`, `scripts/ci-passed-docs-only.test.mjs` | Which CI runs and receipts count as passed, and how a docs-only commit counts through the commit under it |
 | `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `close-issues.test.ts` | The pull request checks and the issue closing |
 | `tools/checks/code-review.test.ts` | Who gets a review, when, and with which model |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
@@ -87,7 +87,9 @@ request's merge commit with its base:
   only the files Keystatic edits (`content/blog/`, `content/blog-categories/` and the feature
   images under `public/images/content/blog/`), or this exact commit already passed every check
   (`verify`, `test`, `e2e` and `lighthouse`) in CI for a push to `staging` or `main`, such as a
-  promotion of a commit tested on `staging`. `scripts/ci-passed.mjs` decides it from CI's own
+  promotion of a commit tested on `staging`. A commit that changes only docs counts only through
+  a tested commit under it, as promotion reads it
+  ([`ci-deploys.md`](ci-deploys.md#promoteyml)). `scripts/ci-passed.mjs` decides it from CI's own
   jobs, never from check runs, which any workflow with `checks: write` can make: it lists
   `ci.yml`'s push runs of this commit on those branches and needs one whose four jobs all
   succeeded, in their latest attempts. A pull request's run tested a merge commit, never this

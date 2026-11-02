@@ -1,44 +1,31 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import {
+  allPassed,
+  checks,
+  ciPushRun,
+  fakeGitHub,
+  job,
+  jobsPath,
+  removeScratchHistories,
+  repository,
+  runsPathOf,
+  scratchHistory
+} from '../tools/checks/ci-passed-fixtures'
 import { runAgainstGitHub } from '../tools/checks/github-stub'
 import { checksPassed, ciWorkflow, gitHubReader, isCiPush, receiptPassed } from './ci-passed.mjs'
 
-const repository = 'serpcompany/pitonne.jp'
 const repositoryId = 1228099867
 const sha = '651a854324ed4cc4f9800ac5d7d79ef483213601'
 const tree = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
-const checks = ['verify', 'test', 'e2e', 'lighthouse']
 
-const ciRun = (id, more = {}) => ({
-  id,
-  path: ciWorkflow,
-  event: 'push',
-  head_branch: 'staging',
-  head_sha: sha,
-  ...more
-})
+const ciRun = (id, more = {}) => ciPushRun(id, { head_sha: sha, ...more })
 
-const job = (name, conclusion = 'success') => ({ name, conclusion })
-const allPassed = () => checks.map(name => job(name))
-
-const runsPath = `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
-const jobsPath = id => `/repos/${repository}/actions/runs/${id}/jobs?filter=latest&per_page=100`
+const runsPath = runsPathOf(sha)
 const runPath = id => `/repos/${repository}/actions/runs/${id}`
 const artifactsPath = suite =>
   `/repos/${repository}/actions/artifacts?name=passed-${suite}-${tree}&per_page=100`
 
-function fakeGitHub(answers) {
-  const asked = []
-  return {
-    asked,
-    read: async path => {
-      asked.push(path)
-      const answer = answers[path]
-      if (answer instanceof Error) throw answer
-      if (answer === undefined) throw new Error(`GET ${path} returned 404`)
-      return answer
-    }
-  }
-}
+afterEach(removeScratchHistories)
 
 async function passedWith(runs, jobsOf, { branches = ['staging'], names = checks } = {}) {
   const answers = { [runsPath]: { workflow_runs: runs } }
@@ -255,25 +242,30 @@ describe('the command line', () => {
     ({ path }) =>
       answers[path] ? { status: 200, body: answers[path] } : undefined
 
-  it('exits 0 when every check passed in a CI push run, and 1 when GitHub refuses', async () => {
+  it('exits 0 when every check passed in a CI push run under docs-only commits, and 1 when GitHub refuses', async () => {
+    const { folder, commit } = scratchHistory()
+    const code = commit('src/a.ts')
+    const docs = commit('docs/a.md')
     const answers = {
-      [runsPath]: { workflow_runs: [ciRun(5)] },
+      [runsPathOf(docs)]: { workflow_runs: [] },
+      [runsPathOf(code)]: { workflow_runs: [ciPushRun(5, { head_sha: code })] },
       [jobsPath(5)]: { jobs: [job('verify'), job('test')] }
     }
     const passed = await runAgainstGitHub(
       'scripts/ci-passed.mjs',
-      ['checks', sha, 'staging,main', 'verify test'],
-      { event: {}, env: environment, route: answering(answers) }
+      ['checks', docs, 'staging,main', 'verify test'],
+      { event: {}, env: environment, route: answering(answers), cwd: folder }
     )
     expect(passed.status).toBe(0)
     expect(passed.requests.map(({ method, path }) => `${method} ${path}`)).toEqual([
-      `GET ${runsPath}`,
+      `GET ${runsPathOf(docs)}`,
+      `GET ${runsPathOf(code)}`,
       `GET ${jobsPath(5)}`
     ])
     const refused = await runAgainstGitHub(
       'scripts/ci-passed.mjs',
-      ['checks', sha, 'staging', 'verify'],
-      { event: {}, env: environment, route: () => ({ status: 403, body: {} }) }
+      ['checks', code, 'staging', 'verify'],
+      { event: {}, env: environment, route: () => ({ status: 403, body: {} }), cwd: folder }
     )
     expect(refused.status).toBe(1)
     expect(refused.output).toContain("::warning::Couldn't tell whether verify passed")

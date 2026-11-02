@@ -124,6 +124,19 @@ which deploys at once, since the commit already passed its checks. It runs one a
   `staging`, as `scripts/ci-passed.mjs` reads CI's jobs ([`ci.md`](ci.md#ciyml)); when GitHub
   can't be asked, it refuses too. When `main` is already at `staging`, it succeeds with nothing
   to promote.
+- **A docs-only commit counts only through a tested commit under it.** A push that changes only
+  docs runs no `test`, `e2e` or `lighthouse` ([`ci.md`](ci.md#ciyml)), so its own run never
+  counts. `scripts/ci-passed.mjs checks` walks back along first parents while each commit changes
+  only docs against its first parent (`isDocsOnlyChange` in `scripts/draft-only-change.mjs`), and
+  stops at the first commit that changes more: a merge that brings in only docs is walked through,
+  one that brings in more is where it stops. The commit counts as passed when that one, or a
+  commit between them, passed every check in one of CI's push runs, and `git diff --name-only`
+  from that commit to this one lists only docs. A commit between them passes
+  only when it was pushed with code under it, so its own run checked everything. More than 50
+  docs-only commits, or any git or GitHub error, counts as not passed. CI's fast path asks the same
+  question, so a docs commit on top of one that failed `e2e` neither promotes nor deploys at once.
+  Both read full history: this job and CI's `changes` on a push check out with `fetch-depth: 0`.
+  `scripts/ci-passed-docs-only.test.mjs` plays each case on a scratch repository.
 - It pushes with `RELEASE_DEPLOY_KEY`, a deploy key that bypasses the `main` ruleset, so the
   ruleset checks nothing about this push, required checks included: the checks above are what
   protect `main`. A push with Actions' own token wouldn't start CI, so Production wouldn't deploy.

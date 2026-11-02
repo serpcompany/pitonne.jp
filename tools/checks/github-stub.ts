@@ -14,7 +14,12 @@ export type ScriptRun = { status: number | null; output: string; requests: Sent[
 export async function runAgainstGitHub(
   script: string,
   args: string[],
-  { event, route, env = {} }: { event: unknown; route: Route; env?: Record<string, string> }
+  {
+    event,
+    route,
+    env = {},
+    cwd = process.cwd()
+  }: { event: unknown; route: Route; env?: Record<string, string>; cwd?: string }
 ): Promise<ScriptRun> {
   const folder = fs.mkdtempSync(path.join(os.tmpdir(), 'github-stub-'))
   const eventFile = path.join(folder, 'event.json')
@@ -37,7 +42,7 @@ export async function runAgainstGitHub(
   try {
     const { port } = server.address() as AddressInfo
     const child = spawn(process.execPath, [path.resolve(script), ...args], {
-      cwd: process.cwd(),
+      cwd,
       env: {
         ...process.env,
         GITHUB_API_URL: `http://127.0.0.1:${port}`,
