@@ -71,14 +71,17 @@ its photo and text, then its treatments as cards, and links to all services.
 to Services and a plain heading with no photo behind it. Below come its photo, where it has one,
 its text and FAQs, beside a sidebar with
 a booking box, its related services, and up to three posts: those that name the service as
-related, or the three newest when none does. The old `/services/medications/` redirects to
-`/services/medication/` ([Moved URLs](hosts-and-redirects.md#moved-urls)).
+related, or the three newest when none does. Everything between the header and the footer is the
+page's one main landmark, so a screen reader finds a single main region holding the heading. The
+old `/services/medications/` redirects to `/services/medication/`
+([Moved URLs](hosts-and-redirects.md#moved-urls)).
 
 - Check: `src/components/services/service-templates.dom.test.tsx`, "service page parity > renders
   leaf services with breadcrumbs, sidebar, and the live booking URL" and "keeps leaf service
   sidebars focused on specific related services";
   `src/app/[locale]/services/[service]/page.dom.test.tsx`, "service page hero > is a plain hero
-  with breadcrumbs back to Services on %s (%s)";
+  with breadcrumbs back to Services on %s (%s)" and "service page landmarks > has one main
+  landmark, holding the heading, on %s (%s)";
   `src/lib/data/routes.test.ts`, "routes > serves every service at its canonical path (%s)";
   `e2e/pages.spec.ts`, "a service page opens from the services index and leads back to it";
   `src/lib/data/blog-posts.test.ts`, "blog content model > lists a service’s posts, or the three

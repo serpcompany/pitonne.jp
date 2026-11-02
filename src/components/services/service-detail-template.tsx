@@ -30,7 +30,7 @@ export function ServiceDetailTemplate({
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <main className="min-w-0">
+            <div className="min-w-0">
               {service.image && (
                 <div className="mb-12 overflow-hidden rounded-lg border border-border">
                   <img
@@ -58,7 +58,7 @@ export function ServiceDetailTemplate({
                   ))}
                 </div>
               </section>
-            </main>
+            </div>
 
             <RelatedSidebar
               bookingTitle={dict.services.bookThisService}

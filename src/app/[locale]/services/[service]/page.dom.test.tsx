@@ -1,5 +1,7 @@
 import { render, within } from '@testing-library/react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
+import LocaleLayout from '@/app/[locale]/layout'
 import ServicePage from '@/app/[locale]/services/[service]/page'
 import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { getAllServiceSlugs, getService, type Service } from '@/lib/data/services'
@@ -49,5 +51,26 @@ describe('service page hero', () => {
     expect(hero.querySelectorAll('.absolute.inset-0')).toHaveLength(0)
     for (const image of media) expect(image.closest('.absolute')).toBeNull()
     if (service.kind === 'leaf') expect(media).toHaveLength(0)
+  })
+})
+
+describe('service page landmarks', () => {
+  it.each(
+    servicePages
+  )('has one main landmark, holding the heading, on %s (%s)', async (slug, locale) => {
+    const markup = renderToStaticMarkup(
+      await LocaleLayout({
+        children: await ServicePage({ params: Promise.resolve({ locale, service: slug }) }),
+        params: Promise.resolve({ locale })
+      })
+    )
+    const landmarks = new DOMParser()
+      .parseFromString(markup, 'text/html')
+      .querySelectorAll('main, [role="main"]')
+
+    expect(landmarks).toHaveLength(1)
+    expect(landmarks[0]?.querySelector('h1')?.textContent).toBe(
+      defined(getService(slug, locale)).name
+    )
   })
 })
