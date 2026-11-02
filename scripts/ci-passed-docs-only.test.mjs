@@ -79,8 +79,8 @@ describe('a commit that changes only docs counts as passed only through a tested
     const { commit, git } = scratchHistory()
     const code = commit('src/a.ts')
     const first = commit('docs/a.md')
-    const second = commit('README.md', 'docs/agents/b.md')
-    const third = commit('.claude/skills/verify-site/SKILL.md')
+    const second = commit('NOTES.md', 'docs/agents/b.md')
+    const third = commit('.claude/skills/some-skill/SKILL.md')
     expect(docsOnlyChain(git, third)).toEqual([third, second, first, code])
     const results = { [third]: 'docs', [second]: 'none', [first]: 'docs', [code]: 'passed' }
     expect((await passedFrom(git, third, results)).passed).toBe(true)
