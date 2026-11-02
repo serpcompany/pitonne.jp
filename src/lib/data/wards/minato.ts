@@ -1,18 +1,12 @@
-import type { Ward } from './ward'
+import type { WardCopy } from './ward'
 
-export const minato: Ward = {
-  slug: 'minato',
-  name: 'Minato',
-  nameJa: '港区',
+export const minato: WardCopy<'minato'> = {
   description:
     "Minato is one of Tokyo's most prestigious wards, home to embassies, international businesses, and upscale residential areas. Our Nishi Azabu clinic is centrally located in Minato, providing convenient access to premium IV therapy and stem cell treatments.",
   descriptionJa:
     '港区は、大使館や外資系企業、高級住宅街が集まる、東京を代表する国際色豊かなエリアです。 Pitonneは西麻布を拠点としており、港区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。',
-  areas: [
-    {
-      slug: 'roppongi',
-      name: 'Roppongi',
-      nameJa: '六本木',
+  areas: {
+    roppongi: {
       description:
         "Roppongi is Tokyo's premier entertainment and nightlife district, known for its vibrant clubs, international dining, and the iconic Roppongi Hills complex. Business professionals and travelers often seek our hangover IV drips and energy recovery treatments after late nights in this dynamic neighborhood.",
       descriptionJa:
@@ -32,10 +26,7 @@ export const minato: Ward = {
       landmarks: ['Roppongi Hills', 'Tokyo Midtown', 'National Art Center'],
       landmarksJa: ['六本木ヒルズ', '東京ミッドタウン', '国立新美術館']
     },
-    {
-      slug: 'azabu-juban',
-      name: 'Azabu Juban',
-      nameJa: '麻布十番',
+    'azabu-juban': {
       description:
         'Azabu Juban is a charming neighborhood blending traditional Tokyo atmosphere with modern sophistication. Home to long-established shops and trendy cafes, this area attracts discerning residents who appreciate our discreet, personalized wellness services.',
       descriptionJa:
@@ -55,10 +46,7 @@ export const minato: Ward = {
       landmarks: ['Azabu Juban Shopping Street', 'Zenpukuji Temple', 'Ichinohashi Park'],
       landmarksJa: ['麻布十番商店街', '善福寺', '一の橋公園']
     },
-    {
-      slug: 'hiroo',
-      name: 'Hiroo',
-      nameJa: '広尾',
+    hiroo: {
       description:
         "Hiroo is an upscale residential area popular with international families and embassy staff. The neighborhood's peaceful atmosphere and proximity to international schools makes it ideal for our wellness consultation services.",
       descriptionJa:
@@ -78,10 +66,7 @@ export const minato: Ward = {
       landmarks: ['Arisugawa-no-miya Memorial Park', 'National Azabu Supermarket', 'Hiroo Station'],
       landmarksJa: ['有栖川宮記念公園', 'ナショナル麻布スーパーマーケット', '広尾駅']
     },
-    {
-      slug: 'akasaka',
-      name: 'Akasaka',
-      nameJa: '赤坂',
+    akasaka: {
       description:
         'Akasaka is a major business and entertainment district, home to TBS headquarters, luxury hotels, and numerous corporate offices. Business executives frequently request our IV vitamin therapy and fatigue recovery treatments for maintaining peak performance.',
       descriptionJa:
@@ -101,10 +86,7 @@ export const minato: Ward = {
       landmarks: ['Akasaka Sacas', 'The Capitol Hotel Tokyu', 'Hie Shrine'],
       landmarksJa: ['赤坂サカス', 'ザ・キャピトルホテル東急', '日枝神社']
     },
-    {
-      slug: 'toranomon',
-      name: 'Toranomon',
-      nameJa: '虎ノ門',
+    toranomon: {
       description:
         "Toranomon is Tokyo's newest business hub, featuring modern skyscrapers and the innovative Toranomon Hills development. The area's corporate professionals value our efficient, discreet IV therapy services delivered directly to their offices or hotels.",
       descriptionJa:
@@ -124,10 +106,7 @@ export const minato: Ward = {
       landmarks: ['Toranomon Hills', 'Andaz Tokyo', 'Atago Shrine'],
       landmarksJa: ['虎ノ門ヒルズ', 'アンダーズ東京', '愛宕神社']
     },
-    {
-      slug: 'shimbashi',
-      name: 'Shimbashi',
-      nameJa: '新橋',
+    shimbashi: {
       description:
         "Shimbashi is known as the quintessential Japanese salaryman district, with countless izakayas and bars serving after-work crowds. Our hangover IV drip service is particularly popular among Shimbashi's hardworking professionals.",
       descriptionJa:
@@ -147,5 +126,5 @@ export const minato: Ward = {
       landmarks: ['Shimbashi Station SL Plaza', 'Shiodome City Center', 'Hamarikyu Gardens'],
       landmarksJa: ['新橋駅SL広場', '汐留シティセンター', '浜離宮恩賜庭園']
     }
-  ]
+  }
 }

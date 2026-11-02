@@ -1,11 +1,18 @@
+import { type WardSlug, wardNames } from './area-names'
 import { chiyoda } from './wards/chiyoda'
 import { chuo } from './wards/chuo'
 import { minato } from './wards/minato'
 import { shibuya } from './wards/shibuya'
 import { shinagawa } from './wards/shinagawa'
-import type { Area, Ward } from './wards/ward'
+import type { Area, AreaCopy, Ward, WardCopy } from './wards/ward'
 
-export const wards: Ward[] = [minato, shibuya, chuo, chiyoda, shinagawa]
+const wardCopy: { [W in WardSlug]: WardCopy<W> } = { minato, shibuya, chuo, chiyoda, shinagawa }
+
+export const wards: Ward[] = wardNames.map(({ areas, ...ward }) => {
+  const { areas: areaCopy, ...copy } = wardCopy[ward.slug]
+  const copyBySlug: Record<string, AreaCopy> = areaCopy
+  return { ...ward, ...copy, areas: areas.map(area => ({ ...area, ...copyBySlug[area.slug] })) }
+})
 
 export function getWard(slug: string): Ward | undefined {
   return wards.find(w => w.slug === slug)

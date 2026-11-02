@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/i18n/config'
 import { normalizePath } from '@/lib/seo'
-import { wards } from './areas'
+import { wardNames } from './area-names'
 
 export const canonicalRoutes = {
   home: '/',
@@ -27,16 +27,6 @@ export type ServiceNavCategory = {
   items: { name: string; href: string }[]
 }
 
-const areaNavigation = wards.map(ward => ({
-  name: ward.name,
-  nameJa: ward.nameJa,
-  href: `/areas-served/${ward.slug}/`,
-  areas: ward.areas.map(area => ({
-    name: area.name,
-    href: `/areas-served/${ward.slug}/${area.slug}/`
-  }))
-}))
-
 export function localizedRoute(path: string, locale: Locale = 'en'): string {
   const normalized = normalizePath(path)
   if (locale === 'ja') {
@@ -46,12 +36,13 @@ export function localizedRoute(path: string, locale: Locale = 'en'): string {
 }
 
 export function getAreaNavigation(locale: Locale = 'en') {
-  return areaNavigation.map(ward => ({
-    ...ward,
-    href: localizedRoute(ward.href, locale),
+  return wardNames.map(ward => ({
+    name: ward.name,
+    nameJa: ward.nameJa,
+    href: localizedRoute(`/areas-served/${ward.slug}/`, locale),
     areas: ward.areas.map(area => ({
-      ...area,
-      href: localizedRoute(area.href, locale)
+      name: area.name,
+      href: localizedRoute(`/areas-served/${ward.slug}/${area.slug}/`, locale)
     }))
   }))
 }

@@ -1,18 +1,12 @@
-import type { Ward } from './ward'
+import type { WardCopy } from './ward'
 
-export const shinagawa: Ward = {
-  slug: 'shinagawa',
-  name: 'Shinagawa',
-  nameJa: '品川区',
+export const shinagawa: WardCopy<'shinagawa'> = {
   description:
     'Shinagawa ward is a major business and transportation hub, home to many corporate headquarters and the Shinkansen station connecting Tokyo to western Japan. Our IV therapy services support the busy professionals passing through this vital area.',
   descriptionJa:
     '品川区は、多くの企業が集まるビジネス街であり、新幹線が発着する品川駅を有する東京の主要な交通拠点です。 Pitonneでは、品川区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。',
-  areas: [
-    {
-      slug: 'gotanda',
-      name: 'Gotanda',
-      nameJa: '五反田',
+  areas: {
+    gotanda: {
       description:
         'Gotanda is a commercial district with a growing startup scene and active nightlife. Young professionals and entrepreneurs here value our energy and recovery treatments.',
       descriptionJa:
@@ -32,10 +26,7 @@ export const shinagawa: Ward = {
       landmarks: ['TOC Building', 'Gotanda Station', 'Meguro River nearby'],
       landmarksJa: ['TOCビル', '五反田駅', '目黒川（近隣）']
     },
-    {
-      slug: 'takanawa',
-      name: 'Takanawa',
-      nameJa: '高輪',
+    takanawa: {
       description:
         "Takanawa is an upscale area featuring grand hotels and quiet residential streets. The neighborhood's luxury hotels frequently request our concierge IV therapy services for their guests.",
       descriptionJa:
@@ -55,10 +46,7 @@ export const shinagawa: Ward = {
       landmarks: ['Takanawa Gateway Station', 'Grand Prince Hotels', 'Sengakuji Temple'],
       landmarksJa: ['高輪ゲートウェイ駅', 'グランドプリンスホテル', '泉岳寺']
     },
-    {
-      slug: 'osaki',
-      name: 'Osaki',
-      nameJa: '大崎',
+    osaki: {
       description:
         'Osaki has transformed into a modern business district with the Gate City complex. Corporate professionals in this area use our IV therapy services for wellness and performance support.',
       descriptionJa:
@@ -78,5 +66,5 @@ export const shinagawa: Ward = {
       landmarks: ['Gate City Osaki', 'ThinkPark Tower', 'O Art Museum'],
       landmarksJa: ['ゲートシティ大崎', 'シンクパークタワー', 'O美術館']
     }
-  ]
+  }
 }

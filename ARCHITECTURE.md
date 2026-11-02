@@ -59,7 +59,8 @@ flowchart LR
   `blog-posts.ts` and `blog-categories.ts` for the blog, `services.ts` for services and
   `pages.ts` for the legal pages. Each checks its files against a zod schema, so a bad file fails
   the build rather than a page.
-- **Data in code:** the areas, one file per ward in `src/lib/data/wards/`; the videos in
+- **Data in code:** the areas, their names in `src/lib/data/area-names.ts` and each ward's text
+  in its own file in `src/lib/data/wards/`; the videos in
   `src/lib/data/videos.ts`; the business details in `src/lib/data/site.ts`. Each keeps its
   English and Japanese values side by side.
 - **Interface text** is in `src/lib/i18n/dictionaries/en.json` and `ja.json`, loaded with

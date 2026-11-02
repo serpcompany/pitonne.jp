@@ -169,4 +169,5 @@ Each behavior of the live site names the test, journey, audit or smoke check tha
 [`docs/product/`](../product/index.md). The checks of the code and the harness are named beside
 their rules: the
 dictionaries kept out of client components in [`docs/i18n.md`](../i18n.md#ui-strings), the
+areas' text kept out of them in [`content.md`](content.md#areas-videos-and-business-data), the
 journeys' own rules in [`code.md`](code.md#tests), and the workflows' in [`ci.md`](ci.md).

@@ -1,18 +1,12 @@
-import type { Ward } from './ward'
+import type { WardCopy } from './ward'
 
-export const shibuya: Ward = {
-  slug: 'shibuya',
-  name: 'Shibuya',
-  nameJa: '渋谷区',
+export const shibuya: WardCopy<'shibuya'> = {
   description:
     "Shibuya ward is the heart of Tokyo's youth culture, fashion, and technology scenes. From the famous Shibuya Crossing to the trendy streets of Harajuku, this dynamic ward attracts visitors and residents who appreciate our modern approach to wellness.",
   descriptionJa:
     '渋谷区は、流行や文化の発信地として知られ、オフィスや商業施設、住宅街が調和する東京を代表するエリアです。 Pitonneでは、渋谷区にお住まいの方やご滞在中の方へ、訪問点滴、再生医療関連の健康サポート、オンライン処方、自費血液検査をご提供しています。 ご自宅やホテル、オフィスへ看護師が訪問し、医師と連携しながら、お客様一人ひとりに合わせたケアをご案内しています。',
-  areas: [
-    {
-      slug: 'ebisu',
-      name: 'Ebisu',
-      nameJa: '恵比寿',
+  areas: {
+    ebisu: {
       description:
         'Ebisu is a sophisticated neighborhood known for its excellent restaurants, craft beer scene, and relaxed atmosphere. Young professionals living here often choose our skin brightening and vitamin IV treatments.',
       descriptionJa:
@@ -36,10 +30,7 @@ export const shibuya: Ward = {
       ],
       landmarksJa: ['恵比寿ガーデンプレイス', '東京都写真美術館', '恵比寿横丁']
     },
-    {
-      slug: 'hiroo',
-      name: 'Hiroo',
-      nameJa: '広尾',
+    hiroo: {
       description:
         'The Shibuya side of Hiroo maintains the same upscale, international character as its Minato counterpart. Residents here enjoy convenient access to our full range of IV therapy and wellness services.',
       descriptionJa:
@@ -59,10 +50,7 @@ export const shibuya: Ward = {
       landmarks: ['Hiroo Garden Hills', 'Sacred Heart International School', 'Hiroo Plaza'],
       landmarksJa: ['広尾ガーデンヒルズ', '聖心インターナショナルスクール', '広尾プラザ']
     },
-    {
-      slug: 'daikanyama',
-      name: 'Daikanyama',
-      nameJa: '代官山',
+    daikanyama: {
       description:
         "Daikanyama is Tokyo's most fashionable neighborhood, filled with designer boutiques, architecturally stunning buildings, and sophisticated cafes. The area's style-conscious residents appreciate our aesthetic-focused treatments.",
       descriptionJa:
@@ -82,10 +70,7 @@ export const shibuya: Ward = {
       landmarks: ['Daikanyama T-Site', 'Hillside Terrace', 'LOG ROAD DAIKANYAMA'],
       landmarksJa: ['代官山 蔦屋書店', 'ヒルサイドテラス', 'ログロード代官山']
     },
-    {
-      slug: 'yoyogi',
-      name: 'Yoyogi',
-      nameJa: '代々木',
+    yoyogi: {
       description:
         'Yoyogi offers a perfect blend of nature and urban convenience, anchored by the vast Yoyogi Park. Athletes and fitness enthusiasts in the area frequently request our energy recovery and immune boost treatments.',
       descriptionJa:
@@ -105,10 +90,7 @@ export const shibuya: Ward = {
       landmarks: ['Yoyogi Park', 'Meiji Shrine', 'NHK Broadcasting Center'],
       landmarksJa: ['代々木公園', '明治神宮', 'NHK放送センター']
     },
-    {
-      slug: 'omotesando',
-      name: 'Omotesando',
-      nameJa: '表参道',
+    omotesando: {
       description:
         "Omotesando is Tokyo's Champs-Élysées, lined with flagship stores from the world's top fashion brands. The area's discerning clientele appreciates our premium wellness services and aesthetic treatments.",
       descriptionJa:
@@ -128,10 +110,7 @@ export const shibuya: Ward = {
       landmarks: ['Omotesando Hills', 'Nezu Museum', 'Cat Street'],
       landmarksJa: ['表参道ヒルズ', '根津美術館', 'キャットストリート']
     },
-    {
-      slug: 'sendagaya',
-      name: 'Sendagaya',
-      nameJa: '千駄ヶ谷',
+    sendagaya: {
       description:
         'Sendagaya is home to the Japan National Stadium and numerous sports facilities. Athletes and sports professionals in this area frequently use our recovery IV treatments and performance support services.',
       descriptionJa:
@@ -151,10 +130,7 @@ export const shibuya: Ward = {
       landmarks: ['Japan National Stadium', 'Tokyo Metropolitan Gymnasium', 'Shogi Hall'],
       landmarksJa: ['国立競技場', '東京体育館', '将棋会館']
     },
-    {
-      slug: 'harajuku',
-      name: 'Harajuku',
-      nameJa: '原宿',
+    harajuku: {
       description:
         'Harajuku is the global center of Japanese street fashion and youth culture. The creative energy of this neighborhood attracts young professionals who value our modern approach to health and wellness.',
       descriptionJa:
@@ -174,10 +150,7 @@ export const shibuya: Ward = {
       landmarks: ['Takeshita Street', 'Laforet Harajuku', 'Meiji Jingu'],
       landmarksJa: ['竹下通り', 'ラフォーレ原宿', '明治神宮']
     },
-    {
-      slug: 'yoyogi-uehara',
-      name: 'Yoyogi Uehara',
-      nameJa: '代々木上原',
+    'yoyogi-uehara': {
       description:
         'Yoyogi Uehara is a quiet, upscale residential neighborhood known for its excellent restaurants and peaceful atmosphere. Residents here appreciate our discreet home visit services.',
       descriptionJa:
@@ -197,5 +170,5 @@ export const shibuya: Ward = {
       landmarks: ['Tokyo Camii Mosque', 'Komaba Park', 'Uehara Station'],
       landmarksJa: ['東京ジャーミイ', '駒場公園', '代々木上原駅']
     }
-  ]
+  }
 }

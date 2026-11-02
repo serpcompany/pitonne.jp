@@ -27,13 +27,15 @@ while the pointer is over it: About lists About and FAQs; Services, each service
 its page, with its services, and a link to all services; Areas Served, each ward, linking its page,
 with its areas, and a link to all areas. The Phone dropdown opens the same way and lists the
 clinic's number. These menus open on hover only, not by click or keyboard, and their links are in
-the page only while open.
+the page only while open. The header's JavaScript carries the areas' names and links, not their
+descriptions, highlights or landmarks.
 
 - Check: `src/components/header.dom.test.tsx`, "header navigation (%s) > keeps FAQs out of the
   primary navigation and reveals it only in the desktop About dropdown", "lists each service
   category with its services, and each ward with its areas, in its desktop menus" and "offers
-  only the Japan number in the phone menu and the mobile menu". That the menus open on hover only:
-  no automated check yet.
+  only the Japan number in the phone menu and the mobile menu";
+  `src/lib/i18n/client-imports.test.ts`, "client components > %s bundles no area descriptions,
+  only area names". That the menus open on hover only: no automated check yet.
 
 **Phone menu.** Below 1280 pixels the menu button, named for screen readers, opens a menu under
 the header: the language switcher first, then the sections, where About, Services and Areas Served

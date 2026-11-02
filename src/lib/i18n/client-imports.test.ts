@@ -13,6 +13,9 @@ type Sources = Record<string, string>
 const isDictionary = (file: string) =>
   file === 'src/lib/i18n/dictionaries.ts' || file.startsWith('src/lib/i18n/dictionaries/')
 
+const isAreaCopy = (file: string) =>
+  file === 'src/lib/data/areas.ts' || file.startsWith('src/lib/data/wards/')
+
 function reader(fixtures: Sources = {}) {
   return {
     parse: (file: string) => parseSource(file, fixtures[file]),
@@ -69,15 +72,21 @@ describe('client components', () => {
     expect(bundledWith(file).filter(isDictionary)).toEqual([])
   })
 
+  it.each(clientComponents)('%s bundles no area descriptions, only area names', file => {
+    expect(bundledWith(file).filter(isAreaCopy)).toEqual([])
+  })
+
   it.each([
     [
       'a dictionary file it imports directly',
+      isDictionary,
       {
         'src/components/fixture.tsx': `'use client'\nimport en from '@/lib/i18n/dictionaries/en.json'\nexport const text = en`
       }
     ],
     [
       'a dictionary file a .mts module imports',
+      isDictionary,
       {
         'src/components/fixture.tsx': `'use client'\nimport { text } from './fixture-text.mts'\nexport const shown = text`,
         'src/components/fixture-text.mts': `import ja from '@/lib/i18n/dictionaries/ja.json'\nexport const text = ja`
@@ -85,14 +94,23 @@ describe('client components', () => {
     ],
     [
       'the dictionaries through a .mjs module',
+      isDictionary,
       {
         'src/components/fixture.tsx': `'use client'\nimport { text } from './fixture-text.mjs'\nexport const shown = text`,
         'src/components/fixture-text.mjs': `export { getDictionary as text } from '@/lib/i18n/dictionaries'`
       }
+    ],
+    [
+      'the area descriptions through the routes',
+      isAreaCopy,
+      {
+        'src/components/fixture.tsx': `'use client'\nimport { getAreaNavigation } from '@/lib/data/routes'\nexport const shown = getAreaNavigation`,
+        'src/lib/data/routes.ts': `import { wards } from './areas'\nexport const getAreaNavigation = () => wards`
+      }
     ]
-  ])('are caught bundling %s', (_, fixtures: Sources) => {
+  ])('are caught bundling %s', (_, isServerOnly: (file: string) => boolean, fixtures: Sources) => {
     const read = reader(fixtures)
     expect(isClientComponent('src/components/fixture.tsx', read)).toBe(true)
-    expect(bundledWith('src/components/fixture.tsx', read).filter(isDictionary)).not.toEqual([])
+    expect(bundledWith('src/components/fixture.tsx', read).filter(isServerOnly)).not.toEqual([])
   })
 })

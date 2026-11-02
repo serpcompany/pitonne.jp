@@ -58,11 +58,16 @@ rules are in [`blog.md`](blog.md).
 
 ## Areas, videos and business data
 
-- **Areas** are one TypeScript file per ward in `src/lib/data/wards/`, listed in
-  `src/lib/data/areas.ts`, with the `Ward` and `Area` types in `src/lib/data/wards/ward.ts`.
-  English and Japanese sit side by side in each record (`name`/`nameJa`,
-  `description`/`descriptionJa`, `highlights`/`highlightsJa`, `landmarks`/`landmarksJa`), so a
-  new area or ward gets both values inline.
+- **Areas** are in two parts. `src/lib/data/area-names.ts` lists the wards and their areas in
+  order, each with its slug, `name` and `nameJa`. Each ward's text is one TypeScript file in
+  `src/lib/data/wards/`, with its areas keyed by slug, and `src/lib/data/areas.ts` joins the two
+  into `wards`; the types in `src/lib/data/wards/ward.ts` fail the typecheck when an area has
+  names but no text, or text but no names. English and Japanese sit side by side in each record
+  (`name`/`nameJa`, `description`/`descriptionJa`, `highlights`/`highlightsJa`,
+  `landmarks`/`landmarksJa`), so a new area or ward gets both values inline.
+- **The header's menu** reads only `area-names.ts`, so the browser downloads the names and not
+  every area's text. `src/lib/i18n/client-imports.test.ts` fails if a client component reaches
+  `areas.ts` or a ward's file.
 - **Videos** are in `src/lib/data/videos.ts`. `titleJa`, `descriptionJa` and `metaDescriptionJa`
   are optional, and the Japanese pages fall back to the English text without them. `metaTitle`
   and `metaDescription` override the watch page's English title and description, since YouTube
