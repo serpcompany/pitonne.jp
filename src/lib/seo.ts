@@ -19,7 +19,7 @@ export function normalizePath(path: string): string {
   return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`
 }
 
-export function canonicalUrl(path: string): string {
+function canonicalUrl(path: string): string {
   const normalizedPath = normalizePath(path)
   const origin = siteOrigin()
   return normalizedPath === '/' ? origin : `${origin}${normalizedPath}`
