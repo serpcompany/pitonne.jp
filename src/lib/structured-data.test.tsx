@@ -6,6 +6,7 @@ import { getAllBlogPosts, getBlogPostLocales } from '@/lib/data/blog-posts'
 import { getService, getServicesFromSlugs } from '@/lib/data/services'
 import { businessHours, getBusinessInfo, isOpenBusinessHours } from '@/lib/data/site'
 import { type PitonneVideo, pitonneVideos } from '@/lib/data/videos'
+import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import {
   blogPostingJsonLd,
@@ -53,6 +54,56 @@ function englishVideo(video: PitonneVideo) {
   }
 }
 
+const openingHours = businessHours.filter(isOpenBusinessHours).map(({ day, opens, closes }) => ({
+  '@type': 'OpeningHoursSpecification',
+  dayOfWeek: day,
+  opens,
+  closes
+}))
+
+const homeUrl = (locale: Locale) => (locale === 'ja' ? `${SITE_URL}/ja/` : SITE_URL)
+
+function expectedBusiness(
+  locale: Locale,
+  names: { japanese: string; locality: string; region: string }
+) {
+  const info = getBusinessInfo(locale)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalBusiness',
+    '@id': `${SITE_URL}/#business`,
+    name: 'Pitonne',
+    url: homeUrl(locale),
+    telephone: '03-6821-8285',
+    description: info.description,
+    knowsLanguage: [
+      { '@type': 'Language', name: 'English', alternateName: 'en' },
+      { '@type': 'Language', name: names.japanese, alternateName: 'ja' }
+    ],
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
+      addressLocality: names.locality,
+      addressRegion: names.region,
+      postalCode: '106-0031',
+      addressCountry: 'JP'
+    },
+    openingHoursSpecification: openingHours
+  }
+}
+
+function expectedWebsite(locale: Locale) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    name: 'Pitonne',
+    url: homeUrl(locale),
+    publisher: { '@id': `${SITE_URL}/#business` },
+    inLanguage: locale
+  }
+}
+
 vi.mock('next/font/google', () => ({
   Inter: () => ({ variable: 'font-inter' }),
   Playfair_Display: () => ({ variable: 'font-playfair' })
@@ -88,14 +139,7 @@ describe('structured data parity', () => {
     const businessSchema = defined(
       schemas.find(schema => schema['@id'] === 'https://pitonne.jp/#business')
     )
-    expect(businessSchema.openingHoursSpecification).toEqual(
-      businessHours.filter(isOpenBusinessHours).map(item => ({
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: item.day,
-        opens: item.opens,
-        closes: item.closes
-      }))
-    )
+    expect(businessSchema.openingHoursSpecification).toEqual(openingHours)
     expect(businessSchema.openingHoursSpecification).not.toContainEqual(
       expect.objectContaining({
         dayOfWeek: 'Sunday'
@@ -174,50 +218,17 @@ describe('structured data parity', () => {
   })
 
   it('describes the business and the site in Japanese on Japanese pages, as the same entities', async () => {
-    const info = getBusinessInfo('ja')
     const locality = '港区'
     const region = '東京都'
-    expect(info.addressLine1).toContain(`${region}${locality}`)
-    expect(businessJsonLd('ja')).toEqual({
-      '@context': 'https://schema.org',
-      '@type': 'MedicalBusiness',
-      '@id': `${SITE_URL}/#business`,
-      name: 'Pitonne',
-      url: `${SITE_URL}/ja/`,
-      telephone: '03-6821-8285',
-      description: info.description,
-      knowsLanguage: [
-        { '@type': 'Language', name: 'English', alternateName: 'en' },
-        {
-          '@type': 'Language',
-          name: getDictionary('ja').languageSwitcher.ja,
-          alternateName: 'ja'
-        }
-      ],
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
-        addressLocality: locality,
-        addressRegion: region,
-        postalCode: '106-0031',
-        addressCountry: 'JP'
-      },
-      openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map(item => ({
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: item.day,
-        opens: item.opens,
-        closes: item.closes
-      }))
-    })
-    expect(websiteJsonLd('ja')).toEqual({
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}/#website`,
-      name: 'Pitonne',
-      url: `${SITE_URL}/ja/`,
-      publisher: { '@id': `${SITE_URL}/#business` },
-      inLanguage: 'ja'
-    })
+    expect(getBusinessInfo('ja').addressLine1).toContain(`${region}${locality}`)
+    expect(businessJsonLd('ja')).toEqual(
+      expectedBusiness('ja', {
+        japanese: getDictionary('ja').languageSwitcher.ja,
+        locality,
+        region
+      })
+    )
+    expect(websiteJsonLd('ja')).toEqual(expectedWebsite('ja'))
 
     const markup = renderToStaticMarkup(
       await LocaleLayout({ children: <div>Body</div>, params: Promise.resolve({ locale: 'ja' }) })
@@ -228,43 +239,11 @@ describe('structured data parity', () => {
   })
 
   it('describes the business and the site on English pages as it always has', () => {
-    const info = getBusinessInfo('en')
-    expectSameJson(businessJsonLd('en'), {
-      '@context': 'https://schema.org',
-      '@type': 'MedicalBusiness',
-      '@id': `${SITE_URL}/#business`,
-      name: 'Pitonne',
-      url: SITE_URL,
-      telephone: '03-6821-8285',
-      description: info.description,
-      knowsLanguage: [
-        { '@type': 'Language', name: 'English', alternateName: 'en' },
-        { '@type': 'Language', name: 'Japanese', alternateName: 'ja' }
-      ],
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
-        addressLocality: 'Minato City',
-        addressRegion: 'Tokyo',
-        postalCode: '106-0031',
-        addressCountry: 'JP'
-      },
-      openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map(item => ({
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: item.day,
-        opens: item.opens,
-        closes: item.closes
-      }))
-    })
-    expectSameJson(websiteJsonLd('en'), {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}/#website`,
-      name: 'Pitonne',
-      url: SITE_URL,
-      publisher: { '@id': `${SITE_URL}/#business` },
-      inLanguage: 'en'
-    })
+    expectSameJson(
+      businessJsonLd('en'),
+      expectedBusiness('en', { japanese: 'Japanese', locality: 'Minato City', region: 'Tokyo' })
+    )
+    expectSameJson(websiteJsonLd('en'), expectedWebsite('en'))
   })
 
   it('describes every English post as it always has, naming its Japanese translation', () => {
