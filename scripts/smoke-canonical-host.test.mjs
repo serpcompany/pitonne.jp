@@ -18,7 +18,12 @@ describe('canonical-host smoke test', () => {
   const checks = allChecks.map(({ fresh: _fresh, ...check }) => check)
   const isSlashedFile = check => /\.\w+\/$/.test(new URL(check.url).pathname)
   const fileChecks = checks.filter(isSlashedFile)
-  const redirects = checks.filter(check => check.expect.status === 308 && !isSlashedFile(check))
+  const redirects = checks.filter(
+    check =>
+      check.expect.status === 308 &&
+      check.expect.location?.startsWith('https://pitonne.jp/') &&
+      !isSlashedFile(check)
+  )
 
   it('redirects pages.dev, the deployment URL and www to the same path and query on pitonne.jp', () => {
     for (const origin of ['https://pitonne-jp.pages.dev', deploymentUrl]) {
@@ -56,7 +61,7 @@ describe('canonical-host smoke test', () => {
       status: 200,
       contentType: 'text/html'
     })
-    expect(byPath['/en/'].expect).toEqual({ status: 301, location: '/' })
+    expect(byPath['/en/'].expect).toEqual({ status: 308, location: '/' })
     expect(byPath['/sitemap.xml'].expect).toEqual({ status: 200, contentType: 'application/xml' })
     expect(byPath['/no-such-page-smoke-test/'].expect).toEqual({ status: 404 })
     for (const check of Object.values(byPath)) expect(check.headers).toEqual(SMOKE_HEADERS)
@@ -120,10 +125,10 @@ describe('canonical-host smoke test', () => {
     expect(evaluate(keystatic, { status: 404, contentType: 'text/html; charset=utf-8' }).ok).toBe(
       false
     )
-    expect(evaluate(legacy, { status: 301, location: '/' }).ok).toBe(true)
-    expect(evaluate(legacy, { status: 301, location: 'https://x.test/' }).ok).toBe(true)
-    expect(evaluate(legacy, { status: 301, location: 'https://x.test/en/' }).ok).toBe(false)
-    expect(evaluate(legacy, { status: 301, location: 'https://pitonne.jp/' }).ok).toBe(false)
+    expect(evaluate(legacy, { status: 308, location: '/' }).ok).toBe(true)
+    expect(evaluate(legacy, { status: 308, location: 'https://x.test/' }).ok).toBe(true)
+    expect(evaluate(legacy, { status: 301, location: '/' }).ok).toBe(false)
+    expect(evaluate(legacy, { status: 308, location: 'https://x.test/en/' }).ok).toBe(false)
     expect(evaluate(legacy, { status: 308, location: 'https://pitonne.jp/' }).ok).toBe(false)
     expect(
       evaluate(sitemap, { status: 200, contentType: 'application/xml; charset=utf-8' }).ok

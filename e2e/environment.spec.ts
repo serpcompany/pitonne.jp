@@ -73,8 +73,8 @@ test.describe(`the ${environment} build as Pages serves it`, () => {
     ['/about', 308, '/about/'],
     ['/ja/contact', 308, '/ja/contact/'],
     ['/robots.txt/', 308, '/robots.txt'],
-    ['/en/', 301, '/'],
-    ['/en/services/', 301, '/services/'],
+    ['/en/', 308, '/'],
+    ['/en/services/', 308, '/services/'],
     ['/services/medications/', 301, '/services/medication/']
   ] as const) {
     test(`redirects ${from} to ${to} with one ${status}`, async ({ request }) => {

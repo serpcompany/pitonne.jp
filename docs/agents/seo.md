@@ -19,6 +19,7 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
   writes that page as `out/404/index.html` and `out/_not-found/index.html`, and the Function
   answers their URLs, and `/404`, with 404 too
   ([`hosts.md`](hosts.md#the-404-pages-own-urls)).
+- `/en` and `/en/<path>` answer one 308 to the bare path (`public/_redirects`).
 - URLs are written on the build's own origin, `siteOrigin()`
   ([`environments.md`](environments.md)): Staging's canonicals, hreflang, `og:url`, JSON-LD ids
   and sitemaps name https://staging.pitonne.jp.

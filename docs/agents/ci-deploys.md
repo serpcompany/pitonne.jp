@@ -60,7 +60,7 @@ of redirected; the redirect and password checks leave it off.
 - **Production:** `scripts/smoke-canonical-host.mjs <deployment-url>` checks the host redirects
   ([`hosts.md`](hosts.md)): each non-canonical host gives one 308 to https://pitonne.jp with the
   path and query, a `_redirects` rule is folded into that hop, a file URL with a slash gives one
-  308 to the file, and behind the Function the Keystatic app, a legacy 301, the sitemap's content
+  308 to the file, and behind the Function the Keystatic app, the `/en/` 308, the sitemap's content
   type and a 404 still come from the static files. Then
   `scripts/smoke-environment.mjs production` on `pitonne-jp.pages.dev` and
   https://pitonne.jp: `/` and `/ja/` answer 200 without `noindex`, `robots.txt` allows crawling
