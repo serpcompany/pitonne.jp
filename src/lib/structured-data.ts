@@ -20,11 +20,6 @@ import { absoluteUrl, localizedCanonicalUrl, SITE_NAME } from '@/lib/seo'
 const businessId = () => `${siteOrigin()}/#business`
 const websiteId = () => `${siteOrigin()}/#website`
 
-const businessArea: Record<Locale, { locality: string; region: string }> = {
-  en: { locality: 'Minato City', region: 'Tokyo' },
-  ja: { locality: '港区', region: '東京都' }
-}
-
 export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusiness> {
   const info = getBusinessInfo(locale)
   return {
@@ -46,8 +41,8 @@ export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusine
     address: {
       '@type': 'PostalAddress',
       streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
-      addressLocality: businessArea[locale].locality,
-      addressRegion: businessArea[locale].region,
+      addressLocality: info.addressLocality,
+      addressRegion: info.addressRegion,
       postalCode: '106-0031',
       addressCountry: 'JP'
     },

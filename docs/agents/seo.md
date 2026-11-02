@@ -59,7 +59,8 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
 - **A `/ja/` page describes itself in Japanese where the data has Japanese,** as SERP's
   [Localization](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#strings)
   asks: the business's `addressLocality` and `addressRegion` (港区 and 東京都, the parts of its
-  Japanese address) and the name of Japanese in `knowsLanguage` (`languageSwitcher.ja`); a
+  Japanese address, from `getBusinessInfo('ja')`) and the name of Japanese in `knowsLanguage`
+  (`languageSwitcher.ja`); a
   video's `titleJa`, and its `descriptionJa`, else its `metaDescriptionJa`; the video list's name
   (`videos.pitonneVideos`); and the video breadcrumbs, as the visible ones on `/watch/` and
   `/ja/watch/` do. A `VideoObject`'s `@id`, `url`, `mainEntityOfPage` and `WatchAction` target
