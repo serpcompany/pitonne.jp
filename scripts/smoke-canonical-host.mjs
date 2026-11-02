@@ -11,8 +11,8 @@ export const MISSING_PAGE_PATH = '/no-such-page-smoke-test/'
 const ATTEMPTS = 12
 const LATER_ATTEMPTS = 2
 const FRESH_DEPLOYMENT_MS = 120_000
-const RETRY_DELAY_MS = 5000
-const REQUEST_TIMEOUT_MS = 10_000
+export const RETRY_DELAY_MS = 5000
+export const REQUEST_TIMEOUT_MS = 10_000
 
 const redirect = (url, location, extra = {}) => ({
   url,
@@ -62,7 +62,7 @@ export function smokeChecks({ deploymentUrl, marker }) {
   const checks = [
     ...redirectChecks(PAGES_ORIGIN, marker),
     ...passThroughChecks(PAGES_ORIGIN),
-    ...slashedFileChecks(CANONICAL_ORIGIN, marker),
+    ...slashedFileChecks(CANONICAL_ORIGIN, marker).map(check => ({ ...check, zone: true })),
     redirect(`${WWW_ORIGIN}/ja/services/${query}`, `${CANONICAL_ORIGIN}/ja/services/${query}`, {
       zone: true
     })

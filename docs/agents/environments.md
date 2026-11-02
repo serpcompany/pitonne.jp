@@ -55,10 +55,19 @@ The password keeps search engines and the public out.
   calls on every request. A request is Staging's when `CF_PAGES_BRANCH` is `staging`, or its host
   is `staging.pitonne.jp` or `staging.pitonne-jp.pages.dev`; the host check keeps the gate on if
   the branch variable never reaches the Function.
-- **Order:** first the host redirect (every Staging host but `staging.pitonne.jp` gets one 308 to
-  the same path there), then the exemptions, then the password, then the slashed-file redirect and
-  the files themselves. A Staging build's `_routes.json` sends every path through the Function, so
-  images and scripts are gated too.
+- **Not proven yet:** Cloudflare documents `CF_PAGES_BRANCH` for Pages builds, but not that it
+  reaches the Function of a deployment made by direct upload, as `deploy.yml` makes them. Without
+  it, the host check still gates both Staging hosts, and only a Staging deployment's own
+  `<hash>.pitonne-jp.pages.dev` URL answers as Production's do, with a 308 to `pitonne.jp`. The
+  first Staging deploy's smoke check of that URL, "expected 308 to" `staging.pitonne.jp`, settles
+  it ([`ci-deploys.md`](ci-deploys.md#smoke-tests)). If it fails, the Function needs its
+  environment some other way, such as a variable set for the preview environment.
+- **Order:** first the host redirect: a host under `pitonne-jp.pages.dev`, the `staging` alias or
+  a deployment URL, gets one 308 to the same path on `staging.pitonne.jp`. Every other host goes
+  through the gate as `staging.pitonne.jp` does, so a Staging deployment never sends a host such as
+  `pitonne.jp` to Staging, and fails closed if one ever reaches it. Then come the exemptions, the
+  password, the slashed-file redirect and the files themselves. A Staging build's `_routes.json`
+  sends every path through the Function, so images and scripts are gated too.
 - **The password** is SERP's shared, public `stagingpassword`, the plain variable
   `STAGING_PASSWORD` in `wrangler.toml` (`[env.preview.vars]`, which Pages applies to every
   deployment but Production's), never a secret. Only the password is checked; any username works.
@@ -69,6 +78,11 @@ The password keeps search engines and the public out.
   `Cache-Control: no-store` and `X-Robots-Tag: noindex, nofollow`.
 - **A request that passes** reaches the files without its `Authorization` header and gets no
   `noindex`.
+- **No shared cache keeps what the gate serves:** every answer it lets through, with the password
+  or exempt, carries `Cache-Control: private, no-store`, replacing the file's own, such as a
+  sitemap's `s-maxage`. A shared cache may otherwise reuse a response to a request that carried
+  `Authorization` when the response allows it ([RFC 9111 §3.5](https://www.rfc-editor.org/rfc/rfc9111#section-3.5)),
+  and a cache key never includes the smoke-test header.
 - **Exemptions,** each served with `X-Robots-Tag: noindex, nofollow`, even when it carries the
   password: requests with the smoke-test header (`x-pitonne-smoke-test`), so CI's smoke tests reach
   every Staging host, and `/robots.txt`, so a crawler that reaches Staging reads its disallow. The

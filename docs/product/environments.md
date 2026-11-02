@@ -44,14 +44,17 @@ preview.
 a Basic challenge, `Cache-Control: no-store` and `X-Robots-Tag: noindex, nofollow`, and serves
 nothing, images and scripts included. Any username works with the shared password that
 [`docs/agents/environments.md`](../agents/environments.md#the-staging-gate) gives. A browser asks
-for it once per session.
+for it once per session. Whatever the gate lets through, with the password or without it, is
+marked `Cache-Control: private, no-store`, so no shared cache serves it to someone without the
+password.
 
 - Source: SERP's
   [Staging Access](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/staging-access.md)
   standard.
 - Check: `src/lib/staging-gate.test.ts`, "staging password gate > answers 401 with a Basic
   challenge to %s, without serving anything", "checks only the password, whatever the username
-  (%j)", "fails closed when STAGING_PASSWORD is missing or empty" and "gates %s like any page";
+  (%j)", "fails closed when STAGING_PASSWORD is missing or empty", "gates %s like any page" and
+  "keeps every answer it serves out of shared caches, whatever the file itself allows";
   `scripts/environment-headers.test.mjs`, "environment routes > sends every staging path through
   the Function, so the password gate covers static files"; `scripts/audit-out.mjs`, "so the
   password gate must cover every path"; `scripts/smoke-environment.mjs`, on
@@ -80,11 +83,17 @@ smoke-test requests.
   expected 200", "doesn't disallow all crawlers" and "doesn't list" for `/robots.txt`.
 
 **Staging's other hosts.** `staging.pitonne-jp.pages.dev` and Staging's deployment URLs answer
-one 308 to the same path on https://staging.pitonne.jp before asking for the password.
+one 308 to the same path on https://staging.pitonne.jp before asking for the password. Any other
+host that reaches a Staging deployment asks for the password, as staging.pitonne.jp does, and is
+never sent to Staging. Whether a Staging deployment's own URL is told it is Staging isn't proven
+yet: if it isn't, that URL answers as Production's do, with a 308 to https://pitonne.jp, and the
+first Staging deploy's smoke check shows which
+([`docs/agents/environments.md`](../agents/environments.md#the-staging-gate)).
 
 - Check: `src/lib/staging-gate.test.ts`, "staging canonical host > sends %s to %s in one 308,
-  before asking for the password", "folds a _redirects rule into the same hop" and "gates the
-  staging hosts when CF_PAGES_BRANCH is %j"; `scripts/smoke-environment.mjs`, "expected 308 to"
+  before asking for the password", "gates %s as it gates the staging host, never sending it to
+  Staging", "folds a _redirects rule into the same hop" and "gates the staging hosts when
+  CF_PAGES_BRANCH is %j"; `scripts/smoke-environment.mjs`, "expected 308 to"
   `https://staging.pitonne.jp/contact/`, for `/contact` on the other two hosts.
 
 **No password elsewhere.** Production and previews never ask for one.

@@ -49,7 +49,8 @@ host.
   /ja/contact/ with one 308" and "redirects /robots.txt/ to /robots.txt with one 308"; smoke
   (`scripts/smoke-canonical-host.mjs`),
   `https://pitonne.jp/sitemap-index.xml/?smoke=<sha>: 308 -> https://pitonne.jp/sitemap-index.xml?smoke=<sha>`
-  and `https://pitonne.jp/robots.txt/: 308 -> https://pitonne.jp/robots.txt`.
+  and `https://pitonne.jp/robots.txt/: 308 -> https://pitonne.jp/robots.txt`, where a Cloudflare
+  challenge is only a warning.
 
 **Two exceptions.** On Production and previews, a static file kept off the Pages Function, under
 `/images/`, `/_next/` or `/screenshots/`, or an icon or `/sitemap.xsl`, answers 404 with a

@@ -2,7 +2,12 @@
 import { DEPLOY_ENVIRONMENTS, siteOrigin } from '../src/lib/deploy-environment.mts'
 import { blocksEverything } from './robots-txt.mjs'
 import { runMain } from './run-main.mjs'
-import { MISSING_PAGE_PATH, SMOKE_HEADERS } from './smoke-canonical-host.mjs'
+import {
+  MISSING_PAGE_PATH,
+  REQUEST_TIMEOUT_MS,
+  RETRY_DELAY_MS,
+  SMOKE_HEADERS
+} from './smoke-canonical-host.mjs'
 
 const sitemapLine = origin => `Sitemap: ${origin}/sitemap-index.xml`
 export const SITEMAP_LINE = sitemapLine(siteOrigin('production'))
@@ -15,8 +20,6 @@ const ENVIRONMENTS = new Set(DEPLOY_ENVIRONMENTS)
 
 const ATTEMPTS = 2
 const SETTLE_MS = 120_000
-const RETRY_DELAY_MS = 5000
-const REQUEST_TIMEOUT_MS = 10_000
 
 const robotsMetaTags = html =>
   [...html.matchAll(/<meta[^>]+name="robots"[^>]*content="([^"]*)"/gi)].map(match => match[1])

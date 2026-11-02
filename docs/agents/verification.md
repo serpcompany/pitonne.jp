@@ -155,9 +155,8 @@ without any of those.
 
 **The Staging gate locally:** `DEPLOY_ENV=staging pnpm build`, then serve it with
 `pnpm preview --binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword`.
-The Function sends every Staging host but `staging.pitonne.jp` to that host, so send its name:
-`curl -I -H "Host: staging.pitonne.jp" http://127.0.0.1:8788/` answers 401, and with
-`-u any:stagingpassword` it answers 200 without `X-Robots-Tag`.
+The Function gates `127.0.0.1` as it gates `staging.pitonne.jp`: `curl -I http://127.0.0.1:8788/`
+answers 401, and with `-u any:stagingpassword` it answers 200 without `X-Robots-Tag`.
 
 **PR previews** (`https://pr-<n>.pitonne-jp.pages.dev`) are non-indexable, with canonicals on
 https://pitonne.jp, so they're evidence for behavior, not for Production's SEO output; the

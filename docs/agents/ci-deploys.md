@@ -9,7 +9,7 @@ in [`ci.md`](ci.md#ciyml) and [`docs/gitflow.md`](../gitflow.md#what-ci-deploys)
 A reusable workflow that builds the export, uploads it to Cloudflare Pages and smoke-tests the
 environment. Run by hand (Actions → Deploy → Run workflow), it uploads the current tip of the
 branch it runs from, `main` to Production or `staging` to Staging, and skips CI's checks. The
-job has 30 minutes. It receives one secret, `CLOUDFLARE_API_TOKEN`; the release deploy key never
+job has 40 minutes: the smoke tests' worst case and ten more ([Retries](#smoke-tests)). It receives one secret, `CLOUDFLARE_API_TOKEN`; the release deploy key never
 reaches a deploy or a preview. It grants `deployments: write`, so wrangler can record a GitHub
 deployment, and `packages: read` for the install ([`ci.md`](ci.md#installing-the-private-package)).
 
@@ -70,12 +70,16 @@ of redirected; the redirect and password checks leave it off.
   challenge, `no-store` and `noindex`; with the password, `/` and `/ja/` answer 200 with no
   `noindex` and a Staging canonical; `/robots.txt` answers 200, disallows `*` and lists Staging's
   sitemap. On the other two, `/contact` without the header answers 308 to
-  https://staging.pitonne.jp/contact/, which proves the branch variable reached the Function.
+  https://staging.pitonne.jp/contact/. On the deployment URL, that 308 proves the branch variable
+  reached the Function ([`environments.md`](environments.md#the-staging-gate)): without it, the
+  URL answers as Production's do.
 - **Previews:** `smoke-environment.mjs preview` on the `pr-<n>` alias and the deployment URL: the
   page, `robots.txt` and 404 checks, with `noindex` in both the header and the meta tag.
 
 The branded hosts sit behind Bot Fight Mode, which may challenge the runner: a challenge there is
-a warning, any other wrong answer still fails. The pages.dev hosts are always checked.
+a warning, any other wrong answer still fails. The pages.dev hosts are always checked. The gate's
+own checks, the 401 without the password and the 200 with it, run only on staging.pitonne.jp, a
+branded host, so a run whose gate checks were challenged proves nothing about the gate.
 
 **Retries.** A new deployment takes a while to replace the old one at the edge, and a brand-new
 deployment URL can answer 404 for some paths for over a minute while others work (seen on
@@ -88,11 +92,14 @@ hangs costs 15 seconds.
 - `smoke-canonical-host.mjs` gives its first check 12 tries, every later one 2, and the deployment
   URL's checks until 120 seconds after the first of them started.
 - If every request hung until its timeout, an origin's first check would take 130 seconds (9
-  tries) and each later one 25 (2 tries). Production's smoke tests would then take about 22
-  minutes: about 14 for the host checks (12 on the pages.dev and branded hosts, 11 on the
-  deployment URL) and about 4 for each of the environment checks' two origins (5 checks each).
-  Staging's would take about 14: about 4 for each of the alias and the deployment URL, and 6 for
-  staging.pitonne.jp's 10 checks. Both fit the job's 30 minutes with the build and the upload.
+  tries), the host checks' first 175 (12 tries), and each later one 25 (2 tries). Production's
+  smoke tests would then take 21.5 minutes: 13 minutes 50 seconds for the host checks (12 on the
+  pages.dev and branded hosts, 11 on the deployment URL) and 3 minutes 50 seconds for each of the
+  environment checks' two origins (5 checks each). Staging's would take 13 minutes 35 seconds,
+  and a preview's under 7.
+- The job's 40 minutes leave ten for checkout, install, build and upload after Production's worst
+  case; those took about a minute and a half on 2026-10-27. `tools/checks/deploy-timeout.test.ts`
+  runs both scripts with every request timing out and fails if the limit stops leaving that.
 
 **A late deploy, 2026-10-27.** Run 40513860827, a promotion push to `main`, had GitHub create its
 deploy job 19 minutes after its only prerequisite finished. No concurrency group, queue or

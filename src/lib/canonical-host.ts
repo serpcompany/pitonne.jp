@@ -67,7 +67,7 @@ const PRODUCTION_HOSTS: HostRule = { origin: CANONICAL_ORIGIN, redirects: isNonC
 
 const STAGING_HOSTS: HostRule = {
   origin: STAGING_ORIGIN,
-  redirects: host => normalizeHost(host) !== STAGING_HOST
+  redirects: host => normalizeHost(host).endsWith(`.${PAGES_HOST}`)
 }
 
 export function canonicalRedirectLocation(
@@ -162,6 +162,7 @@ export interface FunctionEnv {
 
 const STAGING_REALM = 'Basic realm="Pitonne staging", charset="UTF-8"'
 const NOINDEX = 'noindex, nofollow'
+const PRIVATE = 'private, no-store'
 const GATE_EXEMPT_PATHS = new Set(['/robots.txt'])
 
 type WorkersSubtleCrypto = SubtleCrypto & {
@@ -198,9 +199,10 @@ function withoutAuthorization(request: Request): Request {
   return new Request(request, { headers })
 }
 
-function withNoindex(response: Response): Response {
+function keptPrivate(response: Response, noindex: boolean): Response {
   const marked = new Response(response.body, response)
-  marked.headers.set('X-Robots-Tag', NOINDEX)
+  marked.headers.set('Cache-Control', PRIVATE)
+  if (noindex) marked.headers.set('X-Robots-Tag', NOINDEX)
   return marked
 }
 
@@ -226,9 +228,9 @@ async function serveStaging(
   const serve = async () => (await slashedFileRedirect(forwarded, next)) ?? next(forwarded)
   const exempt =
     request.headers.has(SMOKE_TEST_HEADER) || GATE_EXEMPT_PATHS.has(new URL(request.url).pathname)
-  if (exempt) return withNoindex(await serve())
+  if (exempt) return keptPrivate(await serve(), true)
   if (!(await hasStagingPassword(request, password))) return passwordRequired()
-  return serve()
+  return keptPrivate(await serve(), false)
 }
 
 const STAGING_DEPLOYMENT_HOSTS = new Set([STAGING_HOST, `${STAGING_BRANCH}.${PAGES_HOST}`])

@@ -25,11 +25,11 @@ afterAll(() => {
   Reflect.deleteProperty(subtle, 'timingSafeEqual')
 })
 
-function assets() {
+function assets(headers: Record<string, string> = { 'Content-Type': 'text/html' }) {
   const asked: Request[] = []
   const next: AssetServer = async request => {
     if (request) asked.push(request)
-    return new Response('static asset', { headers: { 'Content-Type': 'text/html' } })
+    return new Response('static asset', { headers })
   }
   return { asked, next }
 }
@@ -126,6 +126,7 @@ describe('staging password gate', () => {
     })
     expect(response.headers.has('x-robots-tag')).toBe(false)
     expect(response.headers.has('www-authenticate')).toBe(false)
+    expect(response.headers.get('cache-control')).toBe('private, no-store')
     expect(asked[0].headers.has('authorization')).toBe(false)
     expect(asked[0].headers.get('accept')).toBe('text/html')
     expect(asked[0].url).toBe(page)
@@ -139,6 +140,7 @@ describe('staging password gate', () => {
       const { response, asked } = await serve(url, { ...headers, authorization: 'Basic %%%' }, env)
       expect(response.status).toBe(200)
       expect(response.headers.get('x-robots-tag')).toMatch(/\bnoindex\b/)
+      expect(response.headers.get('cache-control')).toBe('private, no-store')
       expect(response.headers.has('www-authenticate')).toBe(false)
       expect(asked).toHaveLength(1)
       expect(asked[0].headers.has('authorization')).toBe(false)
@@ -168,6 +170,25 @@ describe('staging password gate', () => {
     expect(response.status).toBe(308)
     expect(response.headers.get('location')).toBe(`${STAGING_ORIGIN}/sitemap-index.xml?a=1`)
     expect(response.headers.has('x-robots-tag')).toBe(false)
+    expect(response.headers.get('cache-control')).toBe('private, no-store')
+  })
+
+  it('keeps every answer it serves out of shared caches, whatever the file itself allows', async () => {
+    const cacheable = {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, s-maxage=86400'
+    }
+    const sitemap = `${STAGING_ORIGIN}/sitemap-index.xml`
+    for (const [url, headers] of [
+      [sitemap, { authorization: basic(`x:${PASSWORD}`) }],
+      [sitemap, { [SMOKE_TEST_HEADER]: '1' }],
+      [`${STAGING_ORIGIN}/robots.txt`, {}]
+    ] as const) {
+      const { response } = await serve(url, headers, staging, assets(cacheable))
+      expect(response.status).toBe(200)
+      expect(response.headers.get('cache-control')).toBe('private, no-store')
+      expect(response.headers.get('content-type')).toBe('application/xml')
+    }
   })
 
   it.each([
@@ -191,14 +212,28 @@ describe('staging canonical host', () => {
   it.each([
     ['https://staging.pitonne-jp.pages.dev/ja/services/?a=1', `${STAGING_ORIGIN}/ja/services/?a=1`],
     ['https://d49a67b6.pitonne-jp.pages.dev/contact', `${STAGING_ORIGIN}/contact/`],
-    ['https://STAGING.pitonne-jp.pages.dev/robots.txt/', `${STAGING_ORIGIN}/robots.txt`],
-    ['https://pitonne.jp/about', `${STAGING_ORIGIN}/about/`],
-    ['http://localhost:8788/', `${STAGING_ORIGIN}/`]
+    ['https://STAGING.pitonne-jp.pages.dev/robots.txt/', `${STAGING_ORIGIN}/robots.txt`]
   ])('sends %s to %s in one 308, before asking for the password', async (url, location) => {
     const { response } = await serve(url)
     expect(response.status).toBe(308)
     expect(response.headers.get('location')).toBe(location)
     expect(response.headers.has('www-authenticate')).toBe(false)
+  })
+
+  it.each([
+    'https://pitonne.jp/about',
+    'https://www.pitonne.jp/',
+    'https://pitonne-jp.pages.dev/',
+    'http://localhost:8788/',
+    'http://127.0.0.1:8788/ja/'
+  ])('gates %s as it gates the staging host, never sending it to Staging', async url => {
+    const { response, asked } = await serve(url)
+    expectChallenge(response)
+    expect(response.headers.has('location')).toBe(false)
+    expect(asked).toHaveLength(0)
+    const verified = await serve(url, { authorization: basic(`x:${PASSWORD}`) })
+    expect(verified.response.status).toBe(200)
+    expect(verified.response.headers.has('location')).toBe(false)
   })
 
   it('folds a _redirects rule into the same hop', async () => {

@@ -63,17 +63,18 @@ pnpm test:e2e` runs the browser journeys on it (`docs/agents/verification.md`, B
   an old one still holds while the old one answers, so first confirm that the build answering is
   yours, for example from its `robots.txt`.
 
-**A Staging build, served locally.** The Function sends every Staging host but
-`staging.pitonne.jp` there, so name that host in each request:
+**A Staging build, served locally.** The Function gates every host outside `pitonne-jp.pages.dev`
+as it gates `staging.pitonne.jp`, `127.0.0.1` among them, and sends the `pitonne-jp.pages.dev`
+ones to `staging.pitonne.jp`:
 
 ```sh
 DEPLOY_ENV=staging pnpm build
 pnpm preview --binding CF_PAGES_BRANCH=staging --binding STAGING_PASSWORD=stagingpassword
-curl -sI http://127.0.0.1:8788/                                    # 308 to https://staging.pitonne.jp/
-curl -sI -H "Host: staging.pitonne.jp" http://127.0.0.1:8788/      # 401, Basic challenge, no-store, noindex
-curl -sI -H "Host: staging.pitonne.jp" -u any:stagingpassword http://127.0.0.1:8788/ja/   # 200, no X-Robots-Tag
-curl -sI -H "Host: staging.pitonne.jp" http://127.0.0.1:8788/robots.txt                  # 200, noindex
-curl -sI -H "x-pitonne-smoke-test: 1" http://127.0.0.1:8788/       # 200, noindex
+curl -sI http://127.0.0.1:8788/                                    # 401, Basic challenge, no-store, noindex
+curl -sI -u any:stagingpassword http://127.0.0.1:8788/ja/          # 200, private, no-store, no X-Robots-Tag
+curl -sI http://127.0.0.1:8788/robots.txt                          # 200, private, no-store, noindex
+curl -sI -H "x-pitonne-smoke-test: 1" http://127.0.0.1:8788/       # 200, private, no-store, noindex
+curl -sI -H "Host: staging.pitonne-jp.pages.dev" http://127.0.0.1:8788/   # 308 to https://staging.pitonne.jp/
 ```
 
 Leaving out `STAGING_PASSWORD` shows the gate failing closed: every request but the exemptions

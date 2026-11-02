@@ -16,11 +16,8 @@ const deploymentUrl = 'https://d49a67b6.pitonne-jp.pages.dev'
 describe('canonical-host smoke test', () => {
   const allChecks = smokeChecks({ deploymentUrl, marker: 'abc1234' })
   const checks = allChecks.map(({ fresh: _fresh, ...check }) => check)
-  const fileChecks = [
-    ...slashedFileChecks('https://pitonne.jp', 'abc1234'),
-    ...slashedFileChecks(deploymentUrl, 'abc1234', SMOKE_HEADERS)
-  ]
   const isSlashedFile = check => /\.\w+\/$/.test(new URL(check.url).pathname)
+  const fileChecks = checks.filter(isSlashedFile)
   const redirects = checks.filter(check => check.expect.status === 308 && !isSlashedFile(check))
 
   it('redirects pages.dev, the deployment URL and www to the same path and query on pitonne.jp', () => {
@@ -66,27 +63,36 @@ describe('canonical-host smoke test', () => {
   })
 
   it('redirects slashed file URLs to the file on the same host, on pitonne.jp and behind the smoke-test header', () => {
-    expect(checks).toEqual(expect.arrayContaining(fileChecks))
-    expect(fileChecks.map(({ url, expect, headers }) => [url, expect, headers])).toEqual([
+    expect(fileChecks.map(({ zone: _zone, ...check }) => check)).toEqual([
+      ...slashedFileChecks('https://pitonne.jp', 'abc1234'),
+      ...slashedFileChecks(deploymentUrl, 'abc1234', SMOKE_HEADERS)
+    ])
+    expect(
+      fileChecks.map(({ url, expect, headers, zone }) => [url, expect, headers, zone])
+    ).toEqual([
       [
         'https://pitonne.jp/sitemap-index.xml/?smoke=abc1234',
         { status: 308, location: 'https://pitonne.jp/sitemap-index.xml?smoke=abc1234' },
-        undefined
+        undefined,
+        true
       ],
       [
         'https://pitonne.jp/robots.txt/',
         { status: 308, location: 'https://pitonne.jp/robots.txt' },
-        undefined
+        undefined,
+        true
       ],
       [
         `${deploymentUrl}/sitemap-index.xml/?smoke=abc1234`,
         { status: 308, location: `${deploymentUrl}/sitemap-index.xml?smoke=abc1234` },
-        SMOKE_HEADERS
+        SMOKE_HEADERS,
+        undefined
       ],
       [
         `${deploymentUrl}/robots.txt/`,
         { status: 308, location: `${deploymentUrl}/robots.txt` },
-        SMOKE_HEADERS
+        SMOKE_HEADERS,
+        undefined
       ]
     ])
   })
@@ -127,16 +133,25 @@ describe('canonical-host smoke test', () => {
     expect(evaluate(missing, { status: 200 }).ok).toBe(false)
   })
 
-  it('requires a 308 from www, and only warns when Cloudflare challenges the runner', () => {
-    const www = checks.find(check => check.zone)
-    const { location } = www.expect
-    expect(evaluate(www, { status: 308, location })).toMatchObject({ ok: true })
-    expect(evaluate(www, { status: 301, location }).ok).toBe(false)
-    expect(evaluate(www, { status: 403, location: null, mitigated: true })).toMatchObject({
-      ok: true,
-      warning: true
-    })
-    expect(evaluate(www, { status: 301, location: 'https://pitonne.jp/' }).ok).toBe(false)
+  it('requires a 308 from www and pitonne.jp, and only warns when Cloudflare challenges the runner there', () => {
+    const zoneChecks = checks.filter(check => check.zone)
+    expect(zoneChecks.map(check => new URL(check.url).hostname)).toEqual([
+      'pitonne.jp',
+      'pitonne.jp',
+      'www.pitonne.jp'
+    ])
+    for (const check of zoneChecks) {
+      const { location } = check.expect
+      expect(evaluate(check, { status: 308, location })).toMatchObject({ ok: true })
+      expect(evaluate(check, { status: 301, location }).ok).toBe(false)
+      expect(evaluate(check, { status: 403, location: null, mitigated: true })).toMatchObject({
+        ok: true,
+        warning: true
+      })
+      expect(evaluate(check, { status: 301, location: 'https://pitonne.jp/' }).ok).toBe(false)
+    }
+    const pagesDev = checks.find(check => check.url.startsWith('https://pitonne-jp.pages.dev'))
+    expect(evaluate(pagesDev, { status: 403, location: null, mitigated: true }).ok).toBe(false)
   })
 
   it('retries until a check passes, and reports the last failure otherwise', async () => {
