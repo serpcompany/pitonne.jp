@@ -107,13 +107,14 @@ upload and smoke tests live in `.github/workflows/deploy.yml`, which CI calls.
 
 | Push | Deploys | Waits for the checks? |
 | --- | --- | --- |
+| Only docs changed (Markdown under `docs/` or `.claude/skills/`, or at the root) | Nothing (the built site is unchanged); only `verify`'s docs and secrets checks run | – |
 | Only draft blog posts changed | Nothing (the built site is unchanged) | – |
 | Only CMS content changed | Now (`Deploy content` job), as soon as the build succeeds | No, never |
-| A commit that already passed every check (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
+| A commit that already passed every check, or a docs commit on one (a promotion of a tested `staging` commit) | Now (`Deploy content` job) | No |
 | Any other change | After this run's checks pass (`Deploy` job) | Yes, for this run's deploy |
 
-Every row uploads the branch tip, so code already on the branch also goes live with the next
-content deploy, even before its own checks finish.
+Every row that deploys uploads the branch tip, so code already on the branch also goes live with
+the next content deploy, even before its own checks finish.
 
 - **Content is never blocked by the checks.** A CMS save goes live as soon as it builds, whatever
   the checks say about it or any earlier commit. A failing check on `main` alerts instead: the run

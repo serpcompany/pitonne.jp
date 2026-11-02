@@ -52,9 +52,9 @@ jobs:
             for check in $CHECKS; do
               state=$(gh api "repos/$GITHUB_REPOSITORY/commits/$HEAD_SHA/check-runs?check_name=$check&filter=latest" \
                 --jq '.check_runs | sort_by(.started_at) | last | if . == null then "missing" elif .status != "completed" then "running" else .conclusion end') || state=unknown
-              case "$state" in
-                success) ;;
-                missing|running|unknown) pending="$pending $check" ;;
+              case "$check=$state" in
+                *=success|test=skipped) ;;
+                *=missing|*=running|*=unknown) pending="$pending $check" ;;
                 *) failed="$failed $check ($state)" ;;
               esac
             done

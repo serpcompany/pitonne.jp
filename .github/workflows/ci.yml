@@ -24,7 +24,7 @@ jobs:
       contents: read
       actions: read
     outputs:
-      docs: ${{ github.event_name == 'pull_request' && steps.classify.outputs.docs_only || 'false' }}
+      docs: ${{ steps.classify.outputs.docs_only }}
       skip: ${{ steps.classify.outputs.skip }}
       fast: ${{ steps.fast.outputs.fast }}
       tree: ${{ steps.tree.outputs.tree }}
@@ -39,7 +39,7 @@ jobs:
           DIFF_BASE: ${{ github.event_name == 'push' && github.event.before || 'HEAD^1' }}
         run: node scripts/draft-only-change.mjs "$DIFF_BASE" "$GITHUB_SHA"
       - id: fast
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.classify.outputs.docs_only != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           CONTENT_ONLY: ${{ steps.classify.outputs.content_only }}
@@ -57,7 +57,9 @@ jobs:
       - id: tree
         run: echo "tree=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_OUTPUT"
       - id: receipts
-        if: github.event_name == 'push' && steps.classify.outputs.content_only != 'true'
+        if: >-
+          github.event_name == 'push' && steps.classify.outputs.content_only != 'true' &&
+          steps.classify.outputs.docs_only != 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           TREE: ${{ steps.tree.outputs.tree }}
@@ -72,6 +74,8 @@ jobs:
           done
 
   verify:
+    needs: changes
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -85,21 +89,27 @@ jobs:
         uses: ./.github/actions/setup-node-pnpm
         with:
           token: ${{ github.token }}
-      - name: Every shared check, at the version the lockfile pins
+      - name: The shared checks the change can affect, at the version the lockfile pins
         env:
           SERP_VERIFY_BASE: HEAD^1
-        run: pnpm verify
+          CHECKS: ${{ needs.changes.outputs.docs == 'true' && 'docs,secrets' || '' }}
+        run: |
+          if [ -n "$CHECKS" ]; then
+            pnpm verify "$CHECKS"
+          else
+            pnpm verify
+          fi
 
   test:
     needs: changes
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && needs.changes.outputs.docs != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: read
       packages: read
     env:
-      BUILD: ${{ needs.changes.outputs.docs != 'true' && (github.event_name == 'pull_request' || needs.changes.outputs.e2e != 'passed' || needs.changes.outputs.lighthouse != 'passed') }}
+      BUILD: ${{ github.event_name == 'pull_request' || needs.changes.outputs.e2e != 'passed' || needs.changes.outputs.lighthouse != 'passed' }}
     steps:
       - name: Stop when the change couldn't be classified
         if: needs.changes.result != 'success'
@@ -139,14 +149,16 @@ jobs:
 
   e2e:
     needs: [changes, test]
-    if: github.event_name == 'push' || github.event.pull_request.draft == false
+    if: >-
+      needs.changes.outputs.docs != 'true' &&
+      (github.event_name == 'push' || github.event.pull_request.draft == false)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: read
       packages: read
     env:
-      RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.e2e != 'passed' }}
+      RUN: ${{ needs.changes.outputs.e2e != 'passed' }}
       RECEIPT: ${{ github.event_name == 'push' }}
       TREE: ${{ needs.changes.outputs.tree }}
     steps:
@@ -196,14 +208,16 @@ jobs:
 
   lighthouse:
     needs: [changes, test]
-    if: github.event_name == 'push' || github.event.pull_request.draft == false
+    if: >-
+      needs.changes.outputs.docs != 'true' &&
+      (github.event_name == 'push' || github.event.pull_request.draft == false)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
       packages: read
     env:
-      RUN: ${{ needs.changes.outputs.docs != 'true' && needs.changes.outputs.lighthouse != 'passed' }}
+      RUN: ${{ needs.changes.outputs.lighthouse != 'passed' }}
       RECEIPT: ${{ github.event_name == 'push' }}
       TREE: ${{ needs.changes.outputs.tree }}
     steps:
@@ -237,7 +251,9 @@ jobs:
   deploy-content:
     name: Deploy content
     needs: changes
-    if: github.event_name == 'push' && needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
+    if: >-
+      github.event_name == 'push' && needs.changes.outputs.docs != 'true' &&
+      needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast == 'true'
     permissions:
       contents: read
       deployments: write
@@ -251,7 +267,9 @@ jobs:
   deploy:
     name: Deploy
     needs: [changes, verify, test, e2e, lighthouse]
-    if: github.event_name == 'push' && needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
+    if: >-
+      github.event_name == 'push' && needs.changes.outputs.docs != 'true' &&
+      needs.changes.outputs.skip != 'true' && needs.changes.outputs.fast != 'true'
     permissions:
       contents: read
       deployments: write
@@ -267,7 +285,7 @@ jobs:
     needs: [changes, verify, test, e2e, lighthouse, deploy-content, deploy]
     if: >-
       always() && github.event_name == 'push' && github.ref_name == 'main' &&
-      contains(needs.*.result, 'failure')
+      needs.changes.outputs.docs != 'true' && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     concurrency:
@@ -306,9 +324,9 @@ jobs:
 
   preview:
     name: Deploy PR preview
-    needs: test
+    needs: [changes, test]
     if: >-
-      github.event_name == 'pull_request' &&
+      github.event_name == 'pull_request' && needs.changes.outputs.docs != 'true' &&
       contains(fromJSON('["staging", "main"]'), github.event.pull_request.base.ref) &&
       github.event.pull_request.head.repo.full_name == github.repository
     permissions:

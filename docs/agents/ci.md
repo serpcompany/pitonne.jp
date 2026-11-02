@@ -37,12 +37,15 @@ workflows and the action to this doc:
 The `staging` and `main` rulesets require `test`. Once these workflows are on both branches, the
 owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and may add `e2e` and
 `lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
-required workflow starts on every pull request, with no `paths` filter, so its check always
-reports: a docs-only pull request skips work inside the jobs, never the jobs. `Code review` isn't a
-required check, as SERP's standard sets: its findings are review threads, which are meant to be
-resolved before the merge. Neither ruleset enforces that yet (`required_review_thread_resolution`
-is off in both, checked on 2026-11-01), so until the owner turns it on ([below](#owner-steps)),
-whoever merges checks the threads.
+required workflow starts on every pull request, with no `paths` filter, so its checks always
+report. CI scopes its work to what a change can affect: on a docs-only change
+([`changes`](#ciyml)), the job-level `if:` of `test`, `e2e`, `lighthouse` and `preview` skips
+them, and GitHub counts a skipped required check as passed; `verify` runs only its `docs` and
+`secrets` checks, and `pull-request.yml`'s checks and `Code review` run as on any pull request.
+`Code review` isn't a required check, as SERP's standard sets: its findings are review threads,
+which are meant to be resolved before the merge. Neither ruleset enforces that yet
+(`required_review_thread_resolution` is off in both, checked on 2026-11-01), so until the owner
+turns it on ([below](#owner-steps)), whoever merges checks the threads.
 
 ## Installing the private package
 
@@ -72,15 +75,18 @@ to `staging` and `main` gets a run of its own, so none is cancelled. It starts o
 `scripts/draft-only-change.mjs <before> <after>` compares the pushed commits, or a pull
 request's merge commit with its base:
 
-- `docs` (pull requests): every changed file is a doc, a Markdown file under `docs/` or
-  `.claude/skills/` or at the root, which no build, test or script reads. Two files there aren't
-  docs: `docs/agents/ci.md`, whose table of pinned actions `tools/checks/workflow-rules.test.ts`
-  reads, and `docs/image-audit/sheet-image-manifest.json`, which a test reads and Biome lints.
-  `scripts/draft-only-change.test.mjs` fails when code, a test, a script or a root config names a
-  doc. A push is never docs-only: its checks also
-  stand for the commits under it, which promotion and the fast path trust, so a docs commit on
-  top of one that failed `e2e` must fail `e2e` too. A push builds and runs both suites unless
-  its tree has receipts.
+- `docs`: every changed file is a doc, a Markdown file under `docs/` or `.claude/skills/` or at
+  the root, which no build, test or script reads. Two files there aren't docs:
+  `docs/agents/ci.md`, whose table of pinned actions `tools/checks/workflow-rules.test.ts` reads,
+  and `docs/image-audit/sheet-image-manifest.json`, which a test reads and Biome lints; content
+  under `content/` never is. `scripts/draft-only-change.test.mjs` fails when code, a test, a
+  script or a root config names a doc. A pull request is classified over its whole change, its
+  merge commit against `HEAD^1`; a push against the commit before it (`github.event.before`), so
+  a push of several commits is docs-only only when all of them are. A docs-only push runs only
+  `verify`'s docs and secrets checks and deploys nothing, since the site it would build is the
+  one its parent built, and looks up neither the fast path nor receipts. Its own run then vouches
+  for nothing under it, so promotion and the fast path count a docs-only commit as passed only
+  through a tested commit under it ([`ci-deploys.md`](ci-deploys.md#promoteyml)).
 - `skip` (pushes): the push changes only blog posts that are drafts before and after, such as a
   draft saved in the CMS, so the built site doesn't change and nothing deploys.
 - `fast` (pushes): deploy without waiting for this run's checks, because either the push changes
@@ -101,7 +107,11 @@ request's merge commit with its base:
 It is a job of its own, so a skipped deploy never joins the deploy concurrency group.
 
 **`verify`** runs `pnpm verify`, every shared check at the `@serpcompany/verify` the lockfile
-pins, including actionlint on these workflows. It checks out the commit with its parent
+pins, including actionlint on these workflows. On a docs-only change it runs
+`pnpm verify docs,secrets`, the two checks that read Markdown: the others read code, and
+`serp-verify` counts `.md` files as prose. The names reach the script as `CHECKS`, through `env:`.
+It needs `changes` and runs unless the run is cancelled (`!cancelled()`), so a failed
+classification runs every check rather than none. It checks out the commit with its parent
 (`fetch-depth: 2`) and names the parent `SERP_VERIFY_BASE` (`HEAD^1`), so the checks' lists can
 only shrink. On a pull request into `staging` that parent is `staging`'s tip: the run checks out
 the merge commit GitHub makes, whose first parent is the base branch. It gives the docs check no
@@ -115,9 +125,11 @@ than a workflow of its own, so the code deploy can need it.
 the production export, runs `pnpm audit:out` and `pnpm audit:seo` on it, and hands it to `e2e`
 and `lighthouse` as the `site-production` artifact. These are the steps of `pnpm check` after
 `pnpm verify`, listed rather than calling `pnpm check`, so a step added to one is added to the
-other by hand. It skips the build and the audits on a docs-only pull request, and on a push
-whose tree has both suites' receipts. It needs `changes`, and fails when `changes` didn't
-succeed: a skipped required check would count as passed.
+other by hand. A docs-only change skips the job
+(`if: ${{ !cancelled() && needs.changes.outputs.docs != 'true' }}`), and a push whose tree has
+both suites' receipts skips the build and the audits. It needs `changes`, and runs and fails
+when `changes` didn't succeed, whose `docs` is then empty: a failed classification must never
+skip the required check, which would count as passed.
 
 **`e2e`** runs the browser journeys ([`verification.md`](verification.md#browser-journeys)) on
 that export: it installs Chromium (`~/.cache/ms-playwright` is cached under the lockfile's hash),
@@ -133,9 +145,9 @@ those cookies is [issue #51](https://github.com/serpcompany/pitonne.jp/issues/51
 Google Tag Manager, LeadConnector and msgsndr, so only this repository's code is scored: tags that
 load through GTM, such as the LeadConnector chat widget, behaved differently between runs.
 
-Both are slow suites, so a draft pull request skips them (`draft == false`), and a docs-only
-pull request or a receipt skips their steps, never the jobs, so the deploy that needs them still
-runs.
+Both are slow suites, so a draft pull request skips them (`draft == false`), and so does a
+docs-only change, by the same job-level `if:`. A receipt skips their steps, never the jobs, so
+the deploy that needs them still runs. When `changes` fails they're skipped, and `test` fails.
 
 ### Receipts
 
@@ -144,7 +156,9 @@ When `e2e` or `lighthouse` passes in a run for a push, it uploads `passed-<suite
 `changes` looks one up for the pushed tree with `scripts/ci-passed.mjs`: an unexpired one counts
 only when this repository's `ci.yml` uploaded it in a run for a push to `staging` or `main`. A
 match skips that suite's steps, and an error looking means running it. So a promotion, which
-lands the tree `staging` tested, skips both suites.
+lands the tree `staging` tested, skips both suites. A docs-only push runs neither suite and
+uploads no receipt, so promoting a docs commit that `main` doesn't yet have under it runs both
+again on `main`, beside the deploy the fast path starts.
 
 A pull request's run uploads none, and a feature branch's push run's receipts never count: those
 runs execute the branch's own code, `ci.yml` aside. A step there can write `BASH_ENV` to
@@ -165,22 +179,26 @@ Manager), so "once" means once per commit and environment:
 - A push to `main` that wasn't tested before, a CMS save or a hotfix, builds production twice:
   in `test`, for the checks, and in the deploy, which for content can't wait for them.
 
-**`deploy-content`** ("Deploy content") runs when the push isn't skipped and is `fast`: CMS
-content and already-tested commits deploy at once. **`deploy`** runs when it isn't skipped and
-isn't `fast`: a code push's deploy needs `verify`, `test`, `e2e` and `lighthouse`. Both call
-`deploy.yml` for Production on `main` and Staging on `staging`, and both upload the branch tip
-([`ci-deploys.md`](ci-deploys.md#deployyml)).
+**`deploy-content`** ("Deploy content") runs when the push isn't docs-only or skipped and is
+`fast`: CMS content and already-tested commits deploy at once. **`deploy`** runs when it isn't
+docs-only or skipped and isn't `fast`: a code push's deploy needs `verify`, `test`, `e2e` and
+`lighthouse`. A docs-only push deploys nothing, and each of the two says so in its own `if:`. Both
+call `deploy.yml` for Production on `main` and Staging on `staging`, and both upload the branch
+tip ([`ci-deploys.md`](ci-deploys.md#deployyml)).
 
-**`alert`** ("Alert on red main") runs when, on a push to `main`, any check, the classification or
-a Production deploy failed. A failing check never holds back a CMS save, and CMS commits come
-from a bot, so nobody gets the failure email: the job opens one issue titled "CI is failing on
-main" that mentions the owner's account, or comments on the open one, until someone fixes `main`
-and closes it. It runs one at a time (`alert-red-main`, never cancelled), so two red runs can't
-open two issues. It needs `issues: write`.
+**`alert`** ("Alert on red main") runs when, on a push to `main` that isn't docs-only, any check,
+the classification or a Production deploy failed. A docs-only push changes nothing live, so a
+failing `verify` on one opens no issue and the red run is the signal; a failed classification
+leaves `docs` empty, so it still alerts. A failing check never holds back a CMS save, and CMS
+commits come from a bot, so nobody gets the failure email: the job opens one issue titled "CI is
+failing on main" that mentions the owner's account, or comments on the open one, until someone
+fixes `main` and closes it. It runs one at a time (`alert-red-main`, never cancelled), so two red
+runs can't open two issues. It needs `issues: write`.
 
-**`preview`** ("Deploy PR preview") needs `test` and runs only for same-repository pull requests
-into `staging` or `main`: a forked pull request gets no secrets and no preview. It deploys the
-pull request's head commit to its `pr-<n>` alias.
+**`preview`** ("Deploy PR preview") needs `changes` and `test`, and runs only for
+same-repository pull requests into `staging` or `main` that aren't docs-only: a forked pull
+request gets no secrets and no preview, and a docs-only one has no site of its own to show. It
+deploys the pull request's head commit to its `pr-<n>` alias.
 
 **Caches:** the pnpm store (through `actions/setup-node`, in the setup action), `.next/cache` per
 environment under the lockfile's and the sources' hashes, and Playwright's browsers. The export

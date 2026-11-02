@@ -114,7 +114,8 @@ route handler in `src/app/sitemap-<group>.xml/route.ts` that `src/lib/sitemaps.t
    types, tests, the production build and its audits), then `e2e` (the browser journeys) and
    `lighthouse` on that build once it's ready for review. A same-repository pull request also
    gets a preview at `pr-<n>.pitonne-jp.pages.dev`, and the `Pull request` and `Code review`
-   workflows check its title, issue link and code.
+   workflows check its title, issue link and code. A change of docs only runs `verify`'s docs and
+   secrets checks, and a docs-only push deploys nothing.
 2. A push to `staging` deploys Staging; a push to `main`, a promotion or a CMS save, deploys
    Production. `deploy.yml` builds the branch tip with the environment's `DEPLOY_ENV`, checks the
    output, uploads `out/` with `wrangler pages deploy` and smoke-tests the result.

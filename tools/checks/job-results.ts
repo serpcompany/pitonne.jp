@@ -194,15 +194,27 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
     )
   }
 
+  function stepOf(id: string, name: string) {
+    const step = workflow.jobs[id]?.steps?.find(
+      each => each.name === name || each.id === name || each.run === name
+    )
+    if (!step) throw new Error(`${id} has no step ${name}`)
+    return step
+  }
+
   for (const id of Object.keys(workflow.jobs)) resultOf(id)
   return {
     results,
-    stepRuns: (id: string, name: string) => {
-      const step = workflow.jobs[id]?.steps?.find(
-        each => each.name === name || each.id === name || each.run === name
+    stepRuns: (id: string, name: string) =>
+      resultOf(id) !== 'skipped' && stepRunsIn(id, stepOf(id, name).if),
+    stepEnv: (id: string, name: string) => {
+      const scope = scopeOf(id)
+      return Object.fromEntries(
+        Object.entries(stepOf(id, name).env ?? {}).map(([key, value]) => [
+          key,
+          interpolate(String(value), scope)
+        ])
       )
-      if (!step) throw new Error(`${id} has no step ${name}`)
-      return resultOf(id) !== 'skipped' && stepRunsIn(id, step.if)
     }
   }
 }

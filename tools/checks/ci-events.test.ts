@@ -13,8 +13,8 @@ type Classified = {
   receipts?: boolean
 }
 
-const lookedUp = (content: boolean, receipts: boolean): Record<string, string> => {
-  if (content) return {}
+const lookedUp = (skipped: boolean, receipts: boolean): Record<string, string> => {
+  if (skipped) return {}
   const state = receipts ? 'passed' : 'run'
   return { e2e: state, lighthouse: state }
 }
@@ -28,9 +28,9 @@ const steps = ({
 }: Classified) => ({
   changes: {
     classify: { docs_only: String(docs), content_only: String(content), skip: String(skip) },
-    fast: { fast: String(fast) },
+    fast: (docs ? {} : { fast: String(fast) }) as Record<string, string>,
     tree: { tree: 'a1b2c3' },
-    receipts: lookedUp(content, receipts)
+    receipts: lookedUp(content || docs, receipts)
   }
 })
 
@@ -72,10 +72,14 @@ const ran = (scenario: Scenario) =>
 const checks = ['changes', 'verify', 'test', 'e2e', 'lighthouse']
 const SETUP = 'Set up Node and pnpm, and install'
 const SUITES = ['e2e', 'lighthouse']
+const VERIFY = 'The shared checks the change can affect, at the version the lockfile pins'
+const verified = (scenario: Scenario) => run(scenario).stepEnv('verify', VERIFY).CHECKS
+const DOCS_ONLY = ['changes', 'verify']
 
 describe('what CI runs on a pull request into staging', () => {
   it('checks a ready one in full and previews it', () => {
     expect(ran(pullRequest({}))).toEqual([...checks, 'preview'])
+    expect(verified(pullRequest({}))).toBe('')
   })
 
   it('skips the browser journeys and Lighthouse on a draft, until it is marked ready', () => {
@@ -87,40 +91,41 @@ describe('what CI runs on a pull request into staging', () => {
     expect(ran(pullRequest({ fork: true }))).toEqual(checks)
   })
 
-  it('reports every check on a docs-only change, but builds and drives nothing', () => {
-    const docs = run(pullRequest({ docs: true }))
-    expect(ran(pullRequest({ docs: true }))).toEqual([...checks, 'preview'])
-    expect(docs.stepRuns('test', 'pnpm test')).toBe(true)
-    expect(docs.stepRuns('test', 'Build the production export')).toBe(false)
-    expect(
-      docs.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
-    ).toBe(false)
-    expect(docs.stepRuns('lighthouse', 'Score eight pages with Lighthouse')).toBe(false)
-    const code = run(pullRequest({}))
-    expect(code.stepRuns('test', 'Build the production export')).toBe(true)
-    expect(
-      code.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
-    ).toBe(true)
+  it('runs only verify’s docs and secrets checks on a docs-only one, ready or draft, and previews nothing', () => {
+    for (const draft of [false, true]) {
+      const docs = pullRequest({ docs: true, draft })
+      expect(ran(docs), String(draft)).toEqual(DOCS_ONLY)
+      expect(run(docs).results, String(draft)).toMatchObject({
+        test: 'skipped',
+        e2e: 'skipped',
+        lighthouse: 'skipped',
+        preview: 'skipped'
+      })
+      expect(verified(docs), String(draft)).toBe('docs,secrets')
+    }
   })
 
   it('sets up and installs in every check, and in a slow suite only when it runs', () => {
     for (const id of ['verify', 'test', ...SUITES])
       expect(run(pullRequest({})).stepRuns(id, SETUP), id).toBe(true)
-    const docs = run(pullRequest({ docs: true }))
-    expect(docs.stepRuns('verify', SETUP)).toBe(true)
-    expect(docs.stepRuns('test', SETUP)).toBe(true)
-    for (const suite of SUITES) expect(docs.stepRuns(suite, SETUP), suite).toBe(false)
+    expect(run(pullRequest({ docs: true })).stepRuns('verify', SETUP)).toBe(true)
     const tested = run(push('staging', { receipts: true }))
     for (const suite of SUITES) expect(tested.stepRuns(suite, SETUP), suite).toBe(false)
   })
 
-  it('fails test, the required check, when the change could not be classified, rather than skip it', () => {
-    expect(run(pullRequest({}, ['changes'])).results).toMatchObject({
-      changes: 'failure',
-      test: 'failure',
-      e2e: 'skipped',
-      preview: 'skipped'
-    })
+  it('runs every shared check and fails test, the required check, when the change could not be classified, rather than skip them', () => {
+    for (const docs of [false, true]) {
+      const failed = pullRequest({ docs }, ['changes'])
+      expect(run(failed).results, String(docs)).toMatchObject({
+        changes: 'failure',
+        verify: 'success',
+        test: 'failure',
+        e2e: 'skipped',
+        lighthouse: 'skipped',
+        preview: 'skipped'
+      })
+      expect(verified(failed), String(docs)).toBe('')
+    }
   })
 
   it('records no receipt, since the pull request’s own code ran in the job that would', () => {
@@ -135,18 +140,37 @@ describe('what CI runs on a pull request into staging', () => {
 describe('what CI runs on a push', () => {
   it('checks a code push to staging in full, then deploys Staging', () => {
     expect(ran(push('staging'))).toEqual([...checks, 'deploy'])
+    expect(verified(push('staging'))).toBe('')
   })
 
-  it('builds and drives a docs-only push like any other, since its checks vouch for the commits under it', () => {
-    const docs = run(push('staging', { docs: true }))
-    expect(ran(push('staging', { docs: true }))).toEqual([...checks, 'deploy'])
-    expect(docs.stepRuns('test', 'Build the production export')).toBe(true)
-    expect(
-      docs.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
-    ).toBe(true)
-    expect(docs.stepRuns('lighthouse', 'Score eight pages with Lighthouse')).toBe(true)
-    const tested = run(push('staging', { docs: true, receipts: true }))
-    expect(tested.stepRuns('test', 'Build the production export')).toBe(false)
+  it.each([
+    'staging',
+    'main'
+  ])('runs only verify’s docs and secrets checks on a docs-only push to %s, and deploys nothing', branch => {
+    const docs = push(branch, { docs: true })
+    expect(ran(docs)).toEqual(DOCS_ONLY)
+    expect(verified(docs)).toBe('docs,secrets')
+    expect(run(docs).results).toMatchObject({
+      test: 'skipped',
+      e2e: 'skipped',
+      lighthouse: 'skipped',
+      deploy: 'skipped',
+      'deploy-content': 'skipped',
+      alert: 'skipped'
+    })
+    for (const step of ['fast', 'receipts'])
+      expect(run(docs).stepRuns('changes', step), step).toBe(false)
+  })
+
+  it('alerts on no docs-only push to main, but on one whose classification failed', () => {
+    expect(ran(push('main', { docs: true }, ['verify']))).toEqual(['changes', 'verify:failure'])
+    expect(run(push('main', { docs: true }, ['changes'])).results).toMatchObject({
+      verify: 'success',
+      test: 'failure',
+      deploy: 'skipped',
+      'deploy-content': 'skipped',
+      alert: 'success'
+    })
   })
 
   it('skips the slow suites and the check build on a tree whose receipts it found', () => {
@@ -172,8 +196,9 @@ describe('what CI runs on a push', () => {
   })
 
   it('deploys a CMS save on main at once, beside the checks, whatever they say', () => {
-    expect(ran(push('main', { fast: true }))).toEqual([...checks, 'deploy-content'])
-    expect(ran(push('main', { fast: true }, ['e2e']))).toEqual([
+    expect(ran(push('main', { content: true, fast: true }))).toEqual([...checks, 'deploy-content'])
+    expect(verified(push('main', { content: true, fast: true }))).toBe('')
+    expect(ran(push('main', { content: true, fast: true }, ['e2e']))).toEqual([
       'changes',
       'verify',
       'test',

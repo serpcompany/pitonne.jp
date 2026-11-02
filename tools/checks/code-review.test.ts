@@ -109,10 +109,13 @@ describe('the Code review workflow', () => {
     expect(checkout.with?.['persist-credentials']).toBe(false)
   })
 
-  it('starts only once verify and test passed on the head commit, and reviews nothing after a failure', () => {
+  it('starts only once verify and test passed on the head commit, test by being skipped on a docs-only change, and reviews nothing after a failure', () => {
     const wait = step(reviewer, 'fast')
     expect(wait.env?.CHECKS).toBe('verify test')
     expect(wait.run).toContain('commits/$HEAD_SHA/check-runs?check_name=$check')
+    expect(wait.run).toContain('case "$check=$state" in')
+    expect(wait.run).toContain('*=success|test=skipped) ;;')
+    expect(wait.run).not.toContain('verify=skipped')
     const later = reviewer.steps?.slice((reviewer.steps ?? []).indexOf(wait) + 1) ?? []
     for (const each of later)
       expect(each.if ?? '', each.name ?? each.uses).toContain("steps.fast.outputs.passed == 'true'")

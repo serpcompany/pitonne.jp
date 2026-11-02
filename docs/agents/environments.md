@@ -96,7 +96,8 @@ per session; Ahrefs Site Audit takes it in its crawl settings.
 ## PR previews
 
 Same-repository pull requests into `staging` or `main` get a preview at
-`https://pr-<n>.pitonne-jp.pages.dev` once CI's `test` job passes. It is a `preview` build:
+`https://pr-<n>.pitonne-jp.pages.dev` once CI's `test` job passes; a docs-only pull request
+gets none. It is a `preview` build:
 non-indexable, with canonicals on https://pitonne.jp, so it shows behavior, not Production's SEO
 output. The production-like local preview shows that
 ([`verification.md`](verification.md#evidence)). Forked pull requests get no secrets and no

@@ -47,6 +47,26 @@ describe('CI and deploy workflows', () => {
     expect(allText(gated)).not.toContain('always()')
   })
 
+  it('deploys, previews and alerts on nothing for a docs-only change, each by a condition of its own', () => {
+    for (const id of ['deploy', 'deploy-content', 'preview', 'alert']) {
+      expect(needs(job(ci, id)), id).toContain('changes')
+      expect(job(ci, id).if, id).toContain("needs.changes.outputs.docs != 'true'")
+    }
+    for (const id of ['test', 'e2e', 'lighthouse'])
+      expect(job(ci, id).if, id).toContain("needs.changes.outputs.docs != 'true'")
+    expect(job(ci, 'test').if).toBe(
+      expression("!cancelled() && needs.changes.outputs.docs != 'true'")
+    )
+    const changes = job(ci, 'changes')
+    expect(changes.outputs?.docs).toBe(expression('steps.classify.outputs.docs_only'))
+    expect(step(changes, 'classify').env?.DIFF_BASE).toBe(
+      expression("github.event_name == 'push' && github.event.before || 'HEAD^1'")
+    )
+    expect(changes.steps?.[0].with?.['fetch-depth']).toBe(
+      expression("github.event_name == 'pull_request' && 2 || 0")
+    )
+  })
+
   it('deploys CMS content as soon as it builds, whatever any test result says', () => {
     const content = job(ci, 'deploy-content')
     expect(needs(content)).toEqual(['changes'])
@@ -67,7 +87,10 @@ describe('CI and deploy workflows', () => {
     )
     const receipts = step(changes, 'receipts')
     expect(receipts.if).toBe(
-      "github.event_name == 'push' && steps.classify.outputs.content_only != 'true'"
+      "github.event_name == 'push' && steps.classify.outputs.content_only != 'true' && steps.classify.outputs.docs_only != 'true'"
+    )
+    expect(fast.if).toBe(
+      "github.event_name == 'push' && steps.classify.outputs.docs_only != 'true'"
     )
     expect(receipts.run).toContain('if node scripts/ci-passed.mjs receipt "$suite" "$TREE"; then')
     expect(changes.permissions).toEqual({ contents: 'read', actions: 'read' })
@@ -77,10 +100,19 @@ describe('CI and deploy workflows', () => {
 
   it('runs pnpm verify against the commit’s parent, with no app key, which would reach any pull request that edits a workflow', () => {
     const verify = job(ci, 'verify')
+    expect(needs(verify)).toEqual(['changes'])
+    expect(verify.if).toBe(expression('!cancelled()'))
     expect(verify.steps?.[0].with?.['fetch-depth']).toBe(2)
-    const shared = step(verify, 'Every shared check, at the version the lockfile pins')
-    expect(shared.run).toBe('pnpm verify')
-    expect(shared.env).toEqual({ SERP_VERIFY_BASE: 'HEAD^1' })
+    const shared = step(
+      verify,
+      'The shared checks the change can affect, at the version the lockfile pins'
+    )
+    expect(shared.run).toContain('pnpm verify "$CHECKS"')
+    expect(shared.run).toMatch(/else\n\s+pnpm verify\n/)
+    expect(shared.env).toEqual({
+      SERP_VERIFY_BASE: 'HEAD^1',
+      CHECKS: expression("needs.changes.outputs.docs == 'true' && 'docs,secrets' || ''")
+    })
     expect(verify.env).toBeUndefined()
     for (const file of workflowFiles())
       expect(allText(readWorkflow(file)), file).not.toMatch(/SERP_AGENT_|create-github-app-token/)
@@ -108,7 +140,7 @@ describe('CI and deploy workflows', () => {
 
   it('previews same-repository PRs into staging or main after validation', () => {
     const preview = job(ci, 'preview')
-    expect(needs(preview)).toEqual(['test'])
+    expect(needs(preview)).toEqual(['changes', 'test'])
     expect(preview.if).toContain(
       `contains(fromJSON('["staging", "main"]'), github.event.pull_request.base.ref)`
     )
@@ -248,6 +280,7 @@ describe('staging sync and promotion workflows', () => {
       each.uses?.startsWith('actions/checkout@')
     )
     expect(checkout?.with?.['sparse-checkout']).toBeUndefined()
+    expect(checkout?.with?.['fetch-depth']).toBe(0)
     expect(script).toContain('git push origin "$STAGING_SHA:refs/heads/main"')
     expect(allText(promote)).not.toMatch(/--force|\+refs|-f /)
   })

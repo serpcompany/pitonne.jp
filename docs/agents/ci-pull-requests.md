@@ -91,7 +91,10 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
 - **Once the fast checks pass:** the review job waits, up to 20 minutes, for `verify` and `test`
   on the pull request's head commit, so no tokens go to a change that fails lint, types or the
   tests. When either fails it reviews nothing and says so; the next push that passes is reviewed.
-  It doesn't wait for `e2e` or `lighthouse`, so findings arrive while they run.
+  It doesn't wait for `e2e` or `lighthouse`, so findings arrive while they run. A docs-only pull
+  request is reviewed too: CI skips its `test` ([`ci.md`](ci.md#ciyml)), and the wait counts a
+  skipped `test`, and only `test`, as passed. `verify` is skipped only when its run was
+  cancelled, so a skipped `verify` still means no review.
 - **The scripts** that gather the review's context, post its summary and judge it come from
   `@serpcompany/verify`'s `dist/review/`, from the package the default branch's lockfile pins: the
   job downloads that tarball with its own token and checks it against the lockfile's integrity

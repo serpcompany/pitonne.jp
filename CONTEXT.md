@@ -71,6 +71,12 @@ the CMS edits or its commit already passed `verify`, `test`, `e2e` and `lighthou
 changes only docs, through the tested commit under it): the `Deploy content` job.
 _Avoid_: hotfix (a pull request into `main` with code)
 
+**Docs-only change**:
+A pull request or push that changes only Markdown under `docs/` or `.claude/skills/`, or at the
+root, other than `docs/agents/ci.md` (`isDocsOnlyChange` in `scripts/draft-only-change.mjs`). CI
+runs only `verify`'s docs and secrets checks on it and deploys nothing.
+_Avoid_: content change (`content/` is the site itself, which builds and deploys)
+
 **Smoke test**:
 The checks `deploy.yml` runs against a deployment right after uploading it, from
 `scripts/smoke-environment.mjs` and, on Production, `scripts/smoke-canonical-host.mjs`.
