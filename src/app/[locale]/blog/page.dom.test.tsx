@@ -2,12 +2,31 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import BlogPage from '@/app/[locale]/blog/page'
 import { getAllBlogPosts } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import { locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { defined } from '@/test/defined'
 
 const dict = getDictionary('en')
 
 describe('blog index page', () => {
+  it.each(
+    locales
+  )('features the newest post, then lists the rest newest first (%s)', async locale => {
+    const { container } = render(await BlogPage({ params: Promise.resolve({ locale }) }))
+    const postPath = new RegExp(`^${localizedRoute('/blog/', locale)}(?!category/)[^/]+/?$`)
+    const shown = Array.from(container.querySelectorAll('a'), link =>
+      link.getAttribute('href')
+    ).filter((href): href is string => href !== null && postPath.test(href))
+    const posts = getAllBlogPosts(locale)
+
+    expect([...new Set(shown)].map(href => href.replace(/\/?$/, '/'))).toEqual(
+      posts.map(post => localizedRoute(`/blog/${post.slug}/`, locale))
+    )
+    const dates = posts.map(post => post.publishedAt)
+    expect(dates).toEqual([...dates].sort().reverse())
+  })
+
   it('does not render the standalone top image below the hero', async () => {
     render(await BlogPage({ params: Promise.resolve({ locale: 'en' }) }))
 

@@ -7,6 +7,12 @@ import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { getAllServiceSlugs, getService } from '@/lib/data/services'
 import { pitonneVideos } from '@/lib/data/videos'
 import { type Locale, locales } from '@/lib/i18n/config'
+import {
+  fixture,
+  removeContentFixture,
+  withContent,
+  writeContentFixture
+} from '@/test/content-fixture'
 import { defined } from '@/test/defined'
 
 type Params = Record<string, string | string[] | undefined>
@@ -180,6 +186,40 @@ describe('routes', async () => {
     expect(builtOf(categoryRoute)).toEqual(
       locales.flatMap(locale => localized(categoryRoutes(locale), locale)).sort()
     )
+  })
+
+  it('builds no page for a draft, in either language, beside the posts published with it', async () => {
+    const contentRoot = writeContentFixture()
+    try {
+      const params = await withContent(contentRoot, async () => {
+        const english = await import('@/app/(en)/blog/[post]/page')
+        const japanese = await import('@/app/[locale]/blog/[post]/page')
+        return [
+          ...english.generateStaticParams().map(({ post }) => `en:${post}`),
+          ...(await japanese.generateStaticParams()).map(({ locale, post }) => `${locale}:${post}`)
+        ]
+      })
+      expect(params).toEqual(
+        expect.arrayContaining([`en:${fixture.englishOnly}`, `ja:${fixture.japaneseOnly}`])
+      )
+      expect(params).not.toContain(`ja:${fixture.englishOnly}`)
+      expect(params).not.toContain(`en:${fixture.japaneseOnly}`)
+      expect(params.filter(param => param.endsWith(`:${fixture.draft}`))).toEqual([])
+    } finally {
+      removeContentFixture(contentRoot)
+    }
+  }, 600_000)
+
+  it('sends each old blog image URL to an image that exists, in one 301', () => {
+    const images = redirectRules().filter(rule => rule.source.startsWith('/images/'))
+    expect(images.length).toBeGreaterThan(0)
+    for (const rule of images) {
+      expect(rule.status).toBe('301')
+      expect(fs.existsSync(path.join(root, 'public', rule.destination)), rule.destination).toBe(
+        true
+      )
+      expect(fs.existsSync(path.join(root, 'public', rule.source)), rule.source).toBe(false)
+    }
   })
 
   it('redirects the old medications URL to the medication service', () => {

@@ -10,12 +10,20 @@ import {
   estimateReadingTime,
   getAllBlogPosts,
   getAllCategories,
+  getBlogPostsForService,
+  getRelatedServiceSlugsForPost,
   loadBlogPostsFromDirectory,
   localizeBlogContentHref,
   withoutLeadingTitleHeading
 } from '@/lib/data/blog-posts'
 import { localizedHreflangAlternates } from '@/lib/seo'
 import { sitemapEntriesForPath } from '@/lib/sitemaps'
+import {
+  fixture,
+  removeContentFixture,
+  withContent,
+  writeContentFixture
+} from '@/test/content-fixture'
 import { defined } from '@/test/defined'
 
 const SITE_URL = 'https://pitonne.jp'
@@ -280,6 +288,31 @@ describe('blog content model', () => {
     }
   })
 
+  it('lists a service’s posts, or the three newest when no post names it', () => {
+    for (const locale of ['en', 'ja'] as const) {
+      const posts = getAllBlogPosts(locale)
+      expect(getBlogPostsForService('a-service-no-post-names', 3, locale)).toEqual(
+        posts.slice(0, 3)
+      )
+      for (const slug of new Set(posts.flatMap(getRelatedServiceSlugsForPost))) {
+        for (const post of getBlogPostsForService(slug, 3, locale)) {
+          expect(getRelatedServiceSlugsForPost(post)).toContain(slug)
+        }
+      }
+    }
+  })
+
+  it('relates IV Therapy to an IV therapy post that names no service, and nothing to any other', () => {
+    expect(getRelatedServiceSlugsForPost({ categorySlug: 'iv-therapy' })).toEqual(['iv-therapy'])
+    expect(
+      getRelatedServiceSlugsForPost({ categorySlug: 'iv-therapy', relatedServiceSlugs: [] })
+    ).toEqual(['iv-therapy'])
+    expect(getRelatedServiceSlugsForPost({ categorySlug: 'medication' })).toEqual([])
+    expect(
+      getRelatedServiceSlugsForPost({ categorySlug: 'medication', relatedServiceSlugs: ['nmn'] })
+    ).toEqual(['nmn'])
+  })
+
   it('drops a leading title heading from the body', () => {
     expect(withoutLeadingTitleHeading('# My Title\n\nIntro paragraph.\n\n## Section')).toBe(
       'Intro paragraph.\n\n## Section'
@@ -329,6 +362,40 @@ describe('single-locale blog posts', () => {
       languages: { ja: `${SITE_URL}/ja/blog/ja-only/`, 'x-default': `${SITE_URL}/ja/blog/ja-only/` }
     })
   })
+
+  it('names only its own language and x-default in a one-language post’s and category’s hreflang', async () => {
+    const contentRoot = writeContentFixture()
+    try {
+      const [english, japanese, category] = await withContent(contentRoot, async () => {
+        const post = await import('@/app/[locale]/blog/[post]/page')
+        const categoryPage = await import('@/app/[locale]/blog/category/[category]/page')
+        return Promise.all([
+          post.generateMetadata({
+            params: Promise.resolve({ locale: 'en', post: fixture.englishOnly })
+          }),
+          post.generateMetadata({
+            params: Promise.resolve({ locale: 'ja', post: fixture.japaneseOnly })
+          }),
+          categoryPage.generateMetadata({
+            params: Promise.resolve({ locale: 'en', category: fixture.englishOnlyCategory })
+          })
+        ])
+      })
+      const only = (url: string, locale: string) => ({
+        canonical: url,
+        languages: { [locale]: url, 'x-default': url }
+      })
+      expect(english.alternates).toEqual(only(`${SITE_URL}/blog/${fixture.englishOnly}/`, 'en'))
+      expect(japanese.alternates).toEqual(
+        only(`${SITE_URL}/ja/blog/${fixture.japaneseOnly}/`, 'ja')
+      )
+      expect(category.alternates).toEqual(
+        only(`${SITE_URL}/blog/category/${fixture.englishOnlyCategory}/`, 'en')
+      )
+    } finally {
+      removeContentFixture(contentRoot)
+    }
+  }, 600_000)
 
   it('lists only the published locale in the sitemap', () => {
     const enOnly = sitemapEntriesForPath('/blog/en-only/', ['en'])

@@ -2,22 +2,18 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 import LocaleLayout from '@/app/[locale]/layout'
 import { ServiceDetailTemplate } from '@/components/services/service-detail-template'
+import { getAllBlogPosts } from '@/lib/data/blog-posts'
 import { getService, getServicesFromSlugs } from '@/lib/data/services'
 import { businessHours, isOpenBusinessHours } from '@/lib/data/site'
-import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { blogPostingJsonLd, businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
 import { englishBlogPost } from '@/test/blog-post'
 import { defined } from '@/test/defined'
+import { jsonLdFrom } from '@/test/json-ld'
 
 vi.mock('next/font/google', () => ({
   Inter: () => ({ variable: 'font-inter' }),
   Playfair_Display: () => ({ variable: 'font-playfair' })
 }))
-
-function jsonLdFrom(markup: string) {
-  return [
-    ...markup.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)
-  ].map(match => JSON.parse(match[1]))
-}
 
 describe('structured data parity', () => {
   it('renders organization and website JSON-LD in the root layout', async () => {
@@ -99,8 +95,15 @@ describe('structured data parity', () => {
     )
   })
 
-  it('renders BlogPosting JSON-LD on blog post pages', () => {
-    const { post, template } = englishBlogPost('iv-therapy-for-hangover')
+  it('names the language of the site and of each post', () => {
+    for (const locale of ['en', 'ja'] as const) {
+      expect(websiteJsonLd(locale).inLanguage).toBe(locale)
+      expect(blogPostingJsonLd(getAllBlogPosts(locale)[0], locale).inLanguage).toBe(locale)
+    }
+  })
+
+  it('renders BlogPosting JSON-LD on blog post pages', async () => {
+    const { post, template } = await englishBlogPost('iv-therapy-for-hangover')
     const markup = renderToStaticMarkup(template)
     const schemas = jsonLdFrom(markup)
 

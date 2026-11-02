@@ -16,8 +16,9 @@ the editor's Featured box: it's always the newest.
 - Check: `src/app/[locale]/blog/page.dom.test.tsx`, "blog index page > renders supplied featured
   images with descriptive alt text and accessible active category contrast" and "does not render
   the standalone top image below the hero"; `e2e/pages.spec.ts`, "a blog post opens from the blog
-  index, and a category lists posts that open". The order, and the Featured box having no effect:
-  no automated check yet.
+  index, and a category lists posts that open"; `src/app/[locale]/blog/page.dom.test.tsx`, "blog
+  index page > features the newest post, then lists the rest newest first (%s)". The Featured box
+  having no effect: no automated check yet.
 
 ## Posts
 
@@ -38,10 +39,11 @@ posts.
 body, where a post in the IV therapy category that names none lists IV Therapy. A post with no
 service to list shows neither.
 
-- Check: `src/lib/data/blog-posts.test.ts`, "blog content model > offers every service as a CMS
-  related-service option and only links existing services", which checks the services a post may
-  name, not what the page shows. The sidebar's list, the box's and the IV Therapy default: no
-  automated check yet.
+- Check: `src/app/[locale]/blog/[post]/page.dom.test.tsx`, "blog post sidebar > lists the
+  services the post names (%s)"; `src/lib/data/blog-posts.test.ts`, "blog content model > relates
+  IV Therapy to an IV therapy post that names no service, and nothing to any other" and "offers
+  every service as a CMS related-service option and only links existing services". The box's own
+  list: no automated check yet.
 
 **Reading time and date.** The reading time is computed from the body, at 200 words a minute in
 English and 500 characters a minute in Japanese, unless the post's `readingTime` sets it. The date
@@ -110,11 +112,20 @@ only, opens the other language's blog index. A translation pairs with its origin
   published in, with no alternate for a missing translation"; `src/lib/data/routes.test.ts`,
   "routes > builds blog post and category pages only for published posts, in their own locale";
   `src/lib/i18n/content-parity.test.ts`, "i18n content file parity > pairs blog translations by
-  identical filename and slug". The switcher opening the blog index: no automated check yet.
+  identical filename and slug". With a post and a category in one language added to a copy of the
+  content: `src/lib/data/blog-posts.test.ts`, "single-locale blog posts > names only its own
+  language and x-default in a one-language post’s and category’s hreflang";
+  `src/lib/sitemaps.test.ts`, "sitemap URLs > with a draft and a post in one language added to a
+  copy of the content > lists a post in one language at its one URL, with no alternate in the
+  other"; `src/components/header.dom.test.tsx`, "the language switcher with posts in one language
+  added to a copy of the content > on a %s page at %s, links the other language at %s".
 
 **Drafts.** A post saved as a draft is in no build, in any environment: no page, no index or
 category entry, no sitemap URL.
 
 - Source: [ADR 0001](../adr/0001-blog-cms.md).
-- Check: `src/lib/data/blog-posts.test.ts`, "blog content model > excludes draft posts";
-  `src/lib/sitemaps.test.ts`, "sitemap URLs > leaves out draft posts".
+- Check: `src/lib/data/blog-posts.test.ts`, "blog content model > excludes draft posts"; with a
+  draft added to a copy of the content, `src/lib/sitemaps.test.ts`, "sitemap URLs > with a draft
+  and a post in one language added to a copy of the content > leaves out the draft in both
+  languages, and lists the post published beside it", and `src/lib/data/routes.test.ts`, "routes >
+  builds no page for a draft, in either language, beside the posts published with it".

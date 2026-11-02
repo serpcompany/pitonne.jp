@@ -1,5 +1,8 @@
 import { expect } from 'vitest'
 
+const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 export function routeHref(path: string) {
-  return expect.stringMatching(new RegExp(`^${path.replace(/\/$/, '')}/?$`))
+  const bare = path.replace(/\/$/, '')
+  return bare === '' ? '/' : expect.stringMatching(new RegExp(`^${escaped(bare)}/?$`))
 }

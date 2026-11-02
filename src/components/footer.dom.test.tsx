@@ -64,6 +64,28 @@ describe.each(locales)('footer (%s)', locale => {
     }
   })
 
+  it('shows a map of the clinic, eight areas, and its social and podcast accounts, each in a new tab', () => {
+    const { container } = render(<Footer locale={locale} dict={dict} />)
+
+    expect(screen.getByTitle(dict.footer.mapTitle)).toHaveAttribute(
+      'src',
+      expect.stringMatching(/^https:\/\/www\.google\.com\/maps\/embed\?/)
+    )
+    const outside = Array.from(container.querySelectorAll('a[target="_blank"]'))
+    expect(outside.map(link => link.getAttribute('rel'))).toEqual(
+      outside.map(() => expect.stringContaining('noopener'))
+    )
+    expect(screen.getByRole('link', { name: dict.common.getDirections })).toHaveAttribute(
+      'target',
+      '_blank'
+    )
+    const areaLinks = Array.from(container.querySelectorAll('a'), link =>
+      link.getAttribute('href')
+    ).filter(href => href?.startsWith(localizedRoute('/areas-served/', locale).replace(/\/$/, '')))
+    expect(new Set(areaLinks).size).toBe(9)
+    expect(outside).toHaveLength(15)
+  })
+
   it('shows the address, phone and opening hours for the locale', () => {
     const info = getBusinessInfo(locale)
     const { container } = render(<Footer locale={locale} dict={dict} />)

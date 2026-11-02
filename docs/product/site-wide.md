@@ -18,9 +18,9 @@ the logo and a menu button.
   header to 1280 pixels because it wrapped between 1024 and 1279.
 - Check: `e2e/navigation.spec.ts`, "the header links each section, one page after another, without
   reloading" (desktop), for the six section links; `src/components/header.dom.test.tsx`, "header
-  navigation (%s) > links Videos from the primary navigation and the mobile menu". The header
-  staying pinned, the switch at 1280 pixels, the logo's link, and where the switcher, the LINE
-  icon and Contact Us sit and lead: no automated check yet.
+  navigation (%s) > links Videos from the primary navigation and the mobile menu" and "opens the
+  contact page in this language from Contact Us". The header staying pinned, the switch at 1280
+  pixels, the logo's link and where the switcher sits: no automated check yet.
 
 **Header menus.** About, Services and Areas Served are links to their pages, and each opens a menu
 while the pointer is over it: About lists About and FAQs; Services, each service category, linking
@@ -30,9 +30,10 @@ clinic's number. These menus open on hover only, not by click or keyboard, and t
 the page only while open.
 
 - Check: `src/components/header.dom.test.tsx`, "header navigation (%s) > keeps FAQs out of the
-  primary navigation and reveals it only in the desktop About dropdown" and "offers only the Japan
-  number in the phone menu and the mobile menu". The Services and Areas Served menus: no automated
-  check yet.
+  primary navigation and reveals it only in the desktop About dropdown", "lists each service
+  category with its services, and each ward with its areas, in its desktop menus" and "offers
+  only the Japan number in the phone menu and the mobile menu". That the menus open on hover only:
+  no automated check yet.
 
 **Phone menu.** Below 1280 pixels the menu button, named for screen readers, opens a menu under
 the header: the language switcher first, then the sections, where About, Services and Areas Served
@@ -55,8 +56,8 @@ among them, and four podcast listings, each opening in a new tab; and the copyri
 
 - Check: `src/components/footer.dom.test.tsx`, "footer (%s) > links Videos, Legal and all services
   with the locale's dictionary text and localized paths" and "shows the address, phone and opening
-  hours for the locale". The map, the areas and the social and podcast links: no automated check
-  yet.
+  hours for the locale", and "shows a map of the clinic, eight areas, and its social and podcast
+  accounts, each in a new tab".
 
 **Opening hours.** Monday to Friday 9:00 to 17:00, Saturday 9:00 to 13:00, closed on Sunday. The
 footer, the contact page and the business's structured data show the same hours.
@@ -81,7 +82,9 @@ No image is over 5 MB.
 - Check: `src/lib/data/sheet-images.dom.test.tsx`, "rendered site images > renders only local
   image files on the %s page (%s)" and "shows no demo template assets on the %s page (%s)", and
   "sheet image integration > keeps every image the site renders from data as a local file rather
-  than a Google Drive link"; `scripts/audit-seo-build.mjs`, "image is … MB (max … MB)".
+  than a Google Drive link", and "Google Drive images > are named in no file of the site’s code
+  or content" and "are on no %s page (%s), inline backgrounds included";
+  `scripts/audit-seo-build.mjs`, "image is … MB (max … MB)".
 
 **No errors in the browser.** No page logs a console error or throws an uncaught error while a
 visitor loads it, follows its links or opens its menus.
@@ -117,9 +120,11 @@ home page, About, the contact page, and the service and post sidebars, in the br
 **Contact buttons.** Every contact button, in the header, the phone menu, the blog index, posts,
 categories, the areas pages and the legal index, opens the contact page in the page's language.
 
-- Check: `src/components/shared/brand-color.dom.test.tsx`, "brand color > keeps the Pitonne green
-  on the contact and booking buttons (%s)", for their colour. Where they lead: no automated check
-  yet.
+- Check: `src/components/shared/contact-button.dom.test.tsx`, "contact button > opens the contact
+  page in the page’s language (%s)"; `src/components/header.dom.test.tsx`, "header navigation (%s)
+  > opens the contact page in this language from Contact Us";
+  `src/components/shared/brand-color.dom.test.tsx`, "brand color > keeps the Pitonne green on the
+  contact and booking buttons (%s)".
 
 **The phone number.** The site shows one number, the clinic's Japan number, as a link that calls
 it: in the header's Phone dropdown, the phone menu, the footer and the contact page. The U.S.
@@ -138,7 +143,10 @@ a LINE row in the phone menu, and a LINE row on the contact page, each opening L
 English pages have no LINE link.
 
 - Source: [#112](https://github.com/serpcompany/pitonne.jp/issues/112).
-- Check: No automated check yet.
+- Check: `src/components/header.dom.test.tsx`, "header navigation (%s) > offers the clinic’s LINE
+  account in a new tab on Japanese pages only, beside the phone and in the phone menu";
+  `src/app/[locale]/contact/page.dom.test.tsx`, "contact page > offers the clinic’s LINE account
+  in a new tab on the Japanese page only (%s)".
 
 ## Analytics
 

@@ -1,14 +1,17 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { render } from '@testing-library/react'
+import { render, within } from '@testing-library/react'
 import postcss from 'postcss'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { describe, expect, it } from 'vitest'
 import BlogPostPage from '@/app/[locale]/blog/[post]/page'
 import { getAllBlogPosts } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import { getService } from '@/lib/data/services'
 import { locales } from '@/lib/i18n/config'
 import { defined } from '@/test/defined'
+import { routeHref } from '@/test/route-href'
 
 const newestPosts = locales.flatMap(locale =>
   getAllBlogPosts(locale)
@@ -43,6 +46,30 @@ function styledSelectors(): string[] {
   })
   return selectors
 }
+
+describe('blog post sidebar', () => {
+  it.each(locales)('lists the services the post names (%s)', async locale => {
+    const post = defined(
+      getAllBlogPosts(locale).find(
+        candidate =>
+          candidate.relatedServiceSlugs.length > 0 &&
+          candidate.relatedServiceSlugs.every(slug => getService(slug, locale))
+      )
+    )
+    const { container } = render(
+      await BlogPostPage({ params: Promise.resolve({ locale, post: post.slug }) })
+    )
+    const sidebar = within(defined(container.querySelector('aside')))
+
+    for (const slug of post.relatedServiceSlugs) {
+      const service = defined(getService(slug, locale))
+      expect(sidebar.getByRole('link', { name: service.name })).toHaveAttribute(
+        'href',
+        routeHref(localizedRoute(service.canonicalPath, locale))
+      )
+    }
+  })
+})
 
 describe('blog post body', () => {
   it.each(

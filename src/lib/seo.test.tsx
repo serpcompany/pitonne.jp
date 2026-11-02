@@ -22,7 +22,7 @@ import {
 import { generateMetadata as servicesMetadata } from '@/app/[locale]/services/page'
 import robots from '@/app/robots'
 import { getAllAreas, wards } from '@/lib/data/areas'
-import { blogPosts, getAllCategories } from '@/lib/data/blog-posts'
+import { blogPosts, getAllBlogPosts, getAllCategories } from '@/lib/data/blog-posts'
 import { services } from '@/lib/data/services'
 import { pitonneVideos } from '@/lib/data/videos'
 import { sitemapEntries, sitemapEntriesByGroup, urlsetXml } from '@/lib/sitemaps'
@@ -329,6 +329,24 @@ describe('SEO parity', () => {
 
     const previewMarkup = await withDeployEnv('preview', layoutMarkup)
     expect(previewMarkup).not.toContain('GTM-TJ94H7LQ')
+  })
+
+  it('names each page’s language for sharing, and marks a post as an article with its date', async () => {
+    for (const [locale, ogLocale] of [
+      ['en', 'en_US'],
+      ['ja', 'ja_JP']
+    ] as const) {
+      const params = Promise.resolve({ locale })
+      expect((await localeLayoutMetadata({ params })).openGraph).toMatchObject({ locale: ogLocale })
+      expect((await contactMetadata({ params })).openGraph).toMatchObject({ locale: ogLocale })
+      const post = getAllBlogPosts(locale)[0]
+      const metadata = await postMetadata({ params: Promise.resolve({ locale, post: post.slug }) })
+      expect(metadata.openGraph).toMatchObject({
+        locale: ogLocale,
+        type: 'article',
+        publishedTime: post.publishedAt
+      })
+    }
   })
 
   it('generates Japanese paths from the locale segment and bare paths from English wrappers', async () => {

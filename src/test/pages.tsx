@@ -7,6 +7,7 @@ import BlogPostPage from '@/app/[locale]/blog/[post]/page'
 import BlogCategoryPage from '@/app/[locale]/blog/category/[category]/page'
 import BlogPage from '@/app/[locale]/blog/page'
 import ContactPage from '@/app/[locale]/contact/page'
+import FaqsPage from '@/app/[locale]/faqs/page'
 import DisclaimerPage from '@/app/[locale]/legal/disclaimer/page'
 import LegalPage from '@/app/[locale]/legal/page'
 import PrivacyPolicyPage from '@/app/[locale]/legal/privacy-policy/page'
@@ -14,16 +15,18 @@ import TermsConditionsPage from '@/app/[locale]/legal/terms-conditions/page'
 import HomePage from '@/app/[locale]/page'
 import ServicePage from '@/app/[locale]/services/[service]/page'
 import ServicesPage from '@/app/[locale]/services/page'
+import VideosPage from '@/app/[locale]/videos/page'
+import WatchPage from '@/app/[locale]/watch/[video]/page'
 import { Footer } from '@/components/footer'
-import { Header } from '@/components/header'
-import { getHeaderText } from '@/components/header-text'
+import { NotFoundPage } from '@/components/not-found-page'
 import { getAllAreas, wards } from '@/lib/data/areas'
 import { getAllBlogPosts, getAllCategories } from '@/lib/data/blog-posts'
-import { localizedRoute } from '@/lib/data/routes'
-import { getServiceCategorySections, services } from '@/lib/data/services'
+import { services } from '@/lib/data/services'
+import { pitonneVideos } from '@/lib/data/videos'
 import { type Locale, locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { defined } from '@/test/defined'
+import { siteHeader } from '@/test/site-header'
 
 export type PageCase = [name: string, locale: Locale, page: () => Promise<ReactElement>]
 type NamedPage = [name: string, page: () => Promise<ReactElement>]
@@ -31,26 +34,6 @@ type NamedPage = [name: string, page: () => Promise<ReactElement>]
 const firstArea = getAllAreas()[0]
 const parentService = defined(services.find(service => service.kind === 'parent'))
 const leafService = defined(services.find(service => service.kind === 'leaf'))
-
-export function siteHeader(locale: Locale, languageSwitcherPath?: string): ReactElement {
-  const serviceNavigation = getServiceCategorySections(locale).map(section => ({
-    name: section.title,
-    href: section.href,
-    items: section.services.map(service => ({
-      name: service.name,
-      href: localizedRoute(service.canonicalPath, locale)
-    }))
-  }))
-
-  return (
-    <Header
-      locale={locale}
-      text={getHeaderText(locale)}
-      serviceNavigation={serviceNavigation}
-      languageSwitcherPath={languageSwitcherPath}
-    />
-  )
-}
 
 function heroPages(locale: Locale): NamedPage[] {
   const params = <T extends object>(values: T) => ({
@@ -91,7 +74,20 @@ export const heroPageCases = forEveryLocale(heroPages)
 
 export const sitePageCases = forEveryLocale(locale => [
   ['home', () => HomePage({ params: Promise.resolve({ locale }) })],
-  ['site header', async () => siteHeader(locale)],
+  ['site header', () => siteHeader(locale)],
   ['site footer', async () => <Footer locale={locale} dict={getDictionary(locale)} />],
   ...heroPages(locale)
 ])
+
+export const everyPageCases: PageCase[] = [
+  ...sitePageCases,
+  ...forEveryLocale(locale => [
+    ['FAQs', () => FaqsPage({ params: Promise.resolve({ locale }) })],
+    ['videos', () => VideosPage({ params: Promise.resolve({ locale }) })],
+    [
+      'watch',
+      () => WatchPage({ params: Promise.resolve({ locale, video: pitonneVideos[0].slug }) })
+    ],
+    ['404', async () => <NotFoundPage locale={locale} />]
+  ])
+]

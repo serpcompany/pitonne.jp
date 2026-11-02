@@ -16,8 +16,9 @@ service cards, which the English page doesn't have.
 
 - Check: `src/app/[locale]/page.dom.test.tsx`, "home page > uses an accessible green CTA style
   and opens the hero booking link in a new tab"; `e2e/language.spec.ts`, "the home page loads in
-  English and in Japanese, each in its own language". The service cards, the newest posts and the
-  Japanese-only section: no automated check yet.
+  English and in Japanese, each in its own language"; `src/app/[locale]/page.dom.test.tsx`, "home
+  page > opens the four service categories, the three newest posts and the blog (%s)" and "adds
+  the section on why to choose Pitonne on the Japanese home page only".
 
 **The first screen.** The headline and the booking button fill the first screen at every width,
 and the clinic photo below them isn't fetched ahead of them.
@@ -30,7 +31,8 @@ and the clinic photo below them isn't fetched ahead of them.
 **About.** `/about/`: why the clinic exists, how its visit-based care works, with a booking
 button, and the three members of its team with their roles and bios.
 
-- Check: No automated check yet.
+- Check: `src/app/[locale]/about/page.dom.test.tsx`, "about page (%s) > introduces the three
+  members of the team with their roles and bios, and offers booking".
 
 **FAQs.** `/faqs/`: the clinic's questions, each a heading with its answer, the same questions in
 both languages. The header reaches the page only through the About menu, and the phone menu's
@@ -42,7 +44,8 @@ About section; the footer and the 404 page link it directly. Search engines get 
   "i18n dictionary parity > faqs.items arrays have the same length";
   `src/components/header.dom.test.tsx`, "header navigation (%s) > keeps FAQs out of the primary
   navigation and reveals it only in the desktop About dropdown" and "keeps FAQs out of the mobile
-  menu until the About section is expanded". The `FAQPage` data: no automated check yet.
+  menu until the About section is expanded"; `src/app/[locale]/faqs/page.dom.test.tsx`, "FAQs page
+  > gives search engines its questions and answers as FAQPage data (%s)".
 
 ## Services
 
@@ -77,8 +80,9 @@ related, or the three newest when none does. The old `/services/medications/` re
   `src/app/[locale]/services/[service]/page.dom.test.tsx`, "service page hero > is a plain hero
   with breadcrumbs back to Services on %s (%s)";
   `src/lib/data/routes.test.ts`, "routes > serves every service at its canonical path (%s)";
-  `e2e/pages.spec.ts`, "a service page opens from the services index and leads back to it". The
-  newest-posts fallback: no automated check yet.
+  `e2e/pages.spec.ts`, "a service page opens from the services index and leads back to it";
+  `src/lib/data/blog-posts.test.ts`, "blog content model > lists a service’s posts, or the three
+  newest when no post names it".
 
 ## Areas served
 
@@ -88,15 +92,18 @@ with its Japanese name below. Then come the three kinds of visit, at home, at a 
 office, and a contact button for an area that isn't listed.
 
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
-  index", which follows the first ward's link. The areas' names, the kinds of visit and the
-  contact button: no automated check yet.
+  index", which follows the first ward's link; `src/app/[locale]/areas-served/page.dom.test.tsx`,
+  "areas served (%s) > names each area of each ward in English and in Japanese on the areas
+  index". The kinds of visit and the contact button: no automated check yet.
 
 **Ward pages.** `/areas-served/<ward>/`: the ward's description, its areas as cards, a Google map
 of the ward, every service category and service as links, the steps to get started with a contact
 button, the latest posts, and a link back to all areas.
 
 - Check: `e2e/pages.spec.ts`, "an area page opens from its ward, which opens from the areas
-  index", which follows the ward's first area link. The description, the map, the services, the
+  index", which follows the ward's first area link;
+  `src/app/[locale]/areas-served/page.dom.test.tsx`, "areas served (%s) > shows %s with a Google
+  map of the ward and each area named in both languages". The description, the services, the
   steps, the latest posts and the link back: no automated check yet.
 
 **Area pages.** `/areas-served/<ward>/<area>/` has breadcrumbs through its ward, then every
@@ -125,8 +132,8 @@ Japanese page shows a video's Japanese title where it has one, and its English t
 
 - Check: `src/app/[locale]/videos/page.test.tsx`, "Pitonne video pages > renders a videos index
   and watch page with embedded YouTube players", "builds watch paths, embed URLs, and lookups from
-  slugs" and "generates static params and metadata for watch pages". The Japanese title's
-  fallback: no automated check yet.
+  slugs", "generates static params and metadata for watch pages" and "titles a Japanese watch
+  page with the video’s Japanese title, or its English one without".
 
 ## Contact
 

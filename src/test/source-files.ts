@@ -30,9 +30,14 @@ export function importBase(from: string, specifier: string): string | undefined 
   return undefined
 }
 
+const NAMED_EXTENSION = /\.(?:tsx?|mts|mjs|json)$/
+
 export function resolveSourceFile(
   base: string,
   exists: (file: string) => boolean = sourceExists
 ): string | undefined {
-  return [`${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`].find(exists)
+  const named = NAMED_EXTENSION.test(base) ? [base] : []
+  return [...named, `${base}.tsx`, `${base}.ts`, `${base}/index.tsx`, `${base}/index.ts`].find(
+    exists
+  )
 }

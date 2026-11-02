@@ -54,7 +54,8 @@ post with its published date.
 
 - Check: `scripts/audit-seo-build.mjs`, "missing Open Graph tags: …";
   `src/lib/site-origin.test.tsx`, "URLs a %s build writes > puts canonicals, og:url, hreflang and
-  social images on its own host". The post's type and date: no automated check yet.
+  social images on its own host"; `src/lib/seo.test.tsx`, "SEO parity > names each page’s
+  language for sharing, and marks a post as an article with its date".
 
 **Internal links.** Every link from one page of the site to another reaches a page that exists,
 directly, without a redirect, and on the canonical host.
@@ -75,7 +76,8 @@ environment's origin.
   "renders Service JSON-LD on service detail pages" and "renders BlogPosting JSON-LD on blog post
   pages"; `src/app/[locale]/videos/page.test.tsx`, "Pitonne video pages > generates VideoObject,
   ItemList, and breadcrumb schema"; `src/lib/site-origin.test.tsx`, "URLs a %s build writes >
-  writes structured-data ids and URLs on its own host". The `FAQPage`: no automated check yet.
+  writes structured-data ids and URLs on its own host"; `src/app/[locale]/faqs/page.dom.test.tsx`,
+  "FAQs page > gives search engines its questions and answers as FAQPage data (%s)".
 
 ## Sitemaps and robots.txt
 
@@ -101,7 +103,8 @@ an hour, and styled for a browser by `/sitemap.xsl`.
   multiple sitemaps: …", "URL has no trailing slash: …", "lists URL that is not a page: …" and
   "does not match the page canonical"; `scripts/audit-out.mjs`, "missing out/…";
   `scripts/smoke-environment.mjs`, "expected 200 with a <sitemapindex>" for
-  `https://pitonne.jp/sitemap-index.xml`. The styling: no automated check yet.
+  `https://pitonne.jp/sitemap-index.xml`; `src/lib/sitemaps.test.ts`, "sitemap URLs > styles
+  every sitemap for a browser with /sitemap.xsl".
 
 **Production's robots.txt.** It allows every crawler everywhere but `/keystatic/`, and lists
 `https://pitonne.jp/sitemap-index.xml`. It is served as plain text, cached for five minutes.

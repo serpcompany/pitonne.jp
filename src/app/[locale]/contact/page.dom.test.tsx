@@ -59,6 +59,20 @@ describe('contact page', () => {
     expect(info).not.toHaveProperty('email')
   })
 
+  it.each([
+    'en',
+    'ja'
+  ] as const)('offers the clinic’s LINE account in a new tab on the Japanese page only (%s)', async locale => {
+    const { container } = render(await ContactPage({ params: Promise.resolve({ locale }) }))
+    const line = Array.from(container.querySelectorAll('a[href^="https://line.me/"]'))
+
+    expect(line).toHaveLength(locale === 'ja' ? 2 : 0)
+    for (const link of line) {
+      expect(link).toHaveAttribute('href', getBusinessInfo(locale).lineUrl)
+      expect(link).toHaveAttribute('target', '_blank')
+    }
+  })
+
   it('does not offer the English-only contact form on the Japanese contact page', async () => {
     const jaDict = getDictionary('ja')
 

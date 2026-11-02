@@ -1,8 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import matter from 'gray-matter'
 import { SaxesParser } from 'saxes'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { GET as sitemapAlias } from '@/app/sitemap.xml/route'
 import { GET as areasSitemap } from '@/app/sitemap-areas.xml/route'
 import { GET as blogSitemap } from '@/app/sitemap-blog.xml/route'
@@ -12,7 +11,6 @@ import { GET as pagesSitemap } from '@/app/sitemap-pages.xml/route'
 import { GET as servicesSitemap } from '@/app/sitemap-services.xml/route'
 import { GET as videosSitemap } from '@/app/sitemap-videos.xml/route'
 import { getAllBlogPostSlugs, getBlogPostLocales } from '@/lib/data/blog-posts'
-import { locales } from '@/lib/i18n/config'
 import {
   MAX_SITEMAP_URLS,
   SITEMAP_INDEX_FILE,
@@ -23,6 +21,12 @@ import {
   sitemapOrigin,
   urlsetXml
 } from '@/lib/sitemaps'
+import {
+  fixture,
+  removeContentFixture,
+  withContent,
+  writeContentFixture
+} from '@/test/content-fixture'
 
 const SITE_URL = 'https://pitonne.jp'
 const childRoutes: Record<(typeof sitemapGroups)[number], () => Response> = {
@@ -171,19 +175,42 @@ describe('sitemap URLs', () => {
     }
   })
 
-  it('leaves out draft posts', () => {
-    const urls = new Set(allEntries.map(entry => entry.url))
-    for (const locale of locales) {
-      const directory = path.join(root, 'content/blog', locale === 'en' ? '' : locale)
-      for (const fileName of fs.readdirSync(directory).filter(name => name.endsWith('.md'))) {
-        if (matter(fs.readFileSync(path.join(directory, fileName), 'utf8')).data.draft !== true)
-          continue
-        const slug = fileName.replace(/\.md$/, '')
-        expect(urls.has(`${SITE_URL}${locale === 'en' ? '' : `/${locale}`}/blog/${slug}/`)).toBe(
-          false
-        )
-      }
+  describe('with a draft and a post in one language added to a copy of the content', () => {
+    const contentRoot = writeContentFixture()
+    let entries: typeof allEntries = []
+    beforeAll(async () => {
+      entries = await withContent(contentRoot, async () => {
+        const sitemaps = await import('@/lib/sitemaps')
+        return Object.values(sitemaps.sitemapEntriesByGroup()).flat()
+      })
+    }, 600_000)
+    afterAll(() => removeContentFixture(contentRoot))
+
+    it('leaves out the draft in both languages, and lists the post published beside it', () => {
+      const urls = entries.map(entry => entry.url)
+      expect(urls).toContain(`${SITE_URL}/blog/${fixture.englishOnly}/`)
+      expect(urls).not.toContain(`${SITE_URL}/blog/${fixture.draft}/`)
+      expect(urls).not.toContain(`${SITE_URL}/ja/blog/${fixture.draft}/`)
+    })
+
+    it('lists a post in one language at its one URL, with no alternate in the other', () => {
+      const byUrl = new Map(entries.map(entry => [entry.url, entry.alternates]))
+      const english = `${SITE_URL}/blog/${fixture.englishOnly}/`
+      const japanese = `${SITE_URL}/ja/blog/${fixture.japaneseOnly}/`
+      expect(byUrl.get(english)).toEqual({ en: english, xDefault: english })
+      expect(byUrl.get(japanese)).toEqual({ ja: japanese, xDefault: japanese })
+      expect(byUrl.has(`${SITE_URL}/ja/blog/${fixture.englishOnly}/`)).toBe(false)
+      expect(byUrl.has(`${SITE_URL}/blog/${fixture.japaneseOnly}/`)).toBe(false)
+    })
+  })
+
+  it('styles every sitemap for a browser with /sitemap.xsl', async () => {
+    const stylesheet =
+      '<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>'
+    for (const route of [sitemapIndex, sitemapAlias, ...Object.values(childRoutes)]) {
+      expect((await (await route()).text()).startsWith(stylesheet)).toBe(true)
     }
+    expect(fs.existsSync(path.join(root, 'public', 'sitemap.xsl'))).toBe(true)
   })
 
   it('uses the local origin under next dev', () => {

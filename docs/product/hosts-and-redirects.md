@@ -84,8 +84,9 @@ no page answers 404, including the retired legal URLs ([Pages](pages.md#legal)).
 - Check: `src/lib/data/routes.test.ts`, "routes > redirects the old medications URL to the
   medication service"; `e2e/environment.spec.ts`, "redirects /services/medications/ to
   /services/medication/ with one 301"; `src/lib/sitemaps.test.ts`, "sitemap index > has a route,
-  cache headers and no legacy duplicate for every child sitemap", for the videos sitemap. The old
-  image URLs: no automated check yet.
+  cache headers and no legacy duplicate for every child sitemap", for the videos sitemap; and
+  `src/lib/data/routes.test.ts`, "routes > sends each old blog image URL to an image that exists,
+  in one 301".
 
 ## Behind the Function
 

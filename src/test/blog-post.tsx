@@ -1,34 +1,9 @@
-import { BlogPostTemplate } from '@/components/blog/blog-post-template'
-import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from '@/lib/data/blog-posts'
-import { getServicesFromSlugs } from '@/lib/data/services'
-import { formatPostDate } from '@/lib/post-date'
+import BlogPostPage from '@/app/[locale]/blog/[post]/page'
+import { getBlogPostBySlug } from '@/lib/data/blog-posts'
 import { defined } from '@/test/defined'
 
-export function englishBlogPost(slug: string) {
+export async function englishBlogPost(slug: string) {
   const post = defined(getBlogPostBySlug(slug))
-  const template = (
-    <BlogPostTemplate
-      post={{
-        title: post.title,
-        slug: post.slug,
-        date: formatPostDate(post.publishedAt, 'en'),
-        content: post.content,
-        excerpt: post.excerpt,
-        readingTime: post.readingTime,
-        category: post.category,
-        categorySlug: post.categorySlug,
-        author: post.author,
-        featureImage: post.featureImage,
-        relatedServiceSlugs: post.relatedServiceSlugs,
-        tags: post.tags
-      }}
-      relatedPosts={getBlogPostsByCategory(post.categorySlug).filter(
-        candidate => candidate.slug !== post.slug
-      )}
-      relatedServices={getServicesFromSlugs(post.relatedServiceSlugs || [])}
-      latestPosts={getAllBlogPosts().filter(candidate => candidate.slug !== post.slug)}
-      locale="en"
-    />
-  )
+  const template = await BlogPostPage({ params: Promise.resolve({ locale: 'en', post: slug }) })
   return { post, template }
 }

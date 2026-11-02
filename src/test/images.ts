@@ -24,6 +24,15 @@ function srcsetUrls(srcset: string | null): string[] {
     .filter(Boolean)
 }
 
+function backgroundUrls(root: ParentNode): string[] {
+  return Array.from(root.querySelectorAll('[style]')).flatMap(element =>
+    Array.from(
+      (element.getAttribute('style') ?? '').matchAll(/url\(\s*['"]?([^'")]+)/g),
+      match => match[1]
+    )
+  )
+}
+
 export function renderedImageUrls(root: ParentNode): string[] {
   const images = Array.from(root.querySelectorAll('img')).flatMap(image => [
     image.getAttribute('src') ?? '',
@@ -32,5 +41,5 @@ export function renderedImageUrls(root: ParentNode): string[] {
   const sources = Array.from(root.querySelectorAll('source')).flatMap(source =>
     srcsetUrls(source.getAttribute('srcset'))
   )
-  return [...images, ...sources].map(unwrapOptimizedImage)
+  return [...images, ...sources, ...backgroundUrls(root)].map(unwrapOptimizedImage)
 }

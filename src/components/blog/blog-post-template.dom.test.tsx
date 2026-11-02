@@ -78,8 +78,8 @@ describe('blog post parity', () => {
     expect(post?.content).not.toContain('<h2>')
   })
 
-  it('renders markdown prose plus live discovery sections around the final takeaway', () => {
-    const { post, template } = englishBlogPost('iv-therapy-for-dehydration')
+  it('renders markdown prose plus live discovery sections around the final takeaway', async () => {
+    const { post, template } = await englishBlogPost('iv-therapy-for-dehydration')
     const { container } = render(template)
 
     expect(container.querySelector('.blog-prose')).toBeInTheDocument()
@@ -93,7 +93,7 @@ describe('blog post parity', () => {
     expect(screen.queryByText('Share This')).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'X' })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Facebook' })).not.toBeInTheDocument()
-    expect(screen.getByRole('img', { name: post.title })).toHaveClass(
+    expect(screen.getByRole('img', { name: post.featureImageAlt ?? post.title })).toHaveClass(
       'max-h-[420px]',
       'object-cover'
     )
@@ -108,8 +108,8 @@ describe('blog post parity', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('renders blog video markers as YouTube embeds', () => {
-    const { template } = englishBlogPost('iv-therapy-for-hangover-in-tokyo')
+  it('renders blog video markers as YouTube embeds', async () => {
+    const { template } = await englishBlogPost('iv-therapy-for-hangover-in-tokyo')
     const { container } = render(template)
 
     expect(

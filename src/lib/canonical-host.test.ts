@@ -345,6 +345,16 @@ describe('Pages middleware', () => {
     expect(response.headers.get('location')).toBe('https://pitonne.jp/ja/')
   })
 
+  it('picks no language for a visitor: / is served as asked, whatever the browser’s languages or cookies', async () => {
+    const request = new Request('https://pitonne.jp/', {
+      headers: { 'accept-language': 'ja,en;q=0.5', cookie: 'NEXT_LOCALE=ja' }
+    })
+    const response = await onRequest({ request, next })
+
+    expect(response).toBe(passthrough)
+    expect(response.headers.has('set-cookie')).toBe(false)
+  })
+
   it('passes everything else to static assets', async () => {
     expect(await onRequest({ request: new Request('https://pitonne.jp/ja/'), next })).toBe(
       passthrough

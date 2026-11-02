@@ -17,8 +17,10 @@ answers at every URL under `/keystatic/`
 
 - Source: [ADR 0001](../adr/0001-blog-cms.md); [#64](https://github.com/serpcompany/pitonne.jp/issues/64).
 - Check: smoke (`scripts/smoke-canonical-host.mjs`),
-  `https://pitonne-jp.pages.dev/keystatic/branch/main (with x-pitonne-smoke-test): 200 [text/html]`.
-  Signing in and the two collections: no automated check yet.
+  `https://pitonne-jp.pages.dev/keystatic/branch/main (with x-pitonne-smoke-test): 200 [text/html]`;
+  `src/lib/keystatic-config.test.ts`, "the CMS > signs editors in through Keystatic Cloud, to edit
+  the blog in two languages and its categories" and "edits local files only when started for
+  that".
 
 **The rules on each field.** The editor shows the site's rules on each field before a save: a
 title; a slug of lowercase words and hyphens; an excerpt of 70 to 160 characters; an optional SEO
@@ -29,7 +31,10 @@ build, and the live site stays as it was.
 
 - Check: `src/lib/data/blog-posts.test.ts`, "blog content model > rejects %s", "rejects a slug
   that does not match the filename" and "rejects a publishedAt timestamp instead of shifting it to
-  another day". The editor's own messages and its heading levels: no automated check yet.
+  another day"; `src/lib/keystatic-config.test.ts`, "the CMS > refuses an excerpt, meta
+  description or category description outside the build’s limits". The heading levels, which
+  Keystatic keeps inside its editor, and the clamp on pasted headings, a patch to Keystatic: no
+  automated check yet.
 
 **Translations.** An English post and a Japanese post with the same slug are each other's
 translation: the language switcher and hreflang then link them. A post without one is published in

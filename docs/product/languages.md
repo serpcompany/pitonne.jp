@@ -33,7 +33,8 @@ build writes no page under `/en/` ([Hosts and redirects](hosts-and-redirects.md#
 cookie or anything else, and never redirects between languages: the URL is the language.
 
 - Source: SERP's Localization standard.
-- Check: No automated check yet.
+- Check: `src/lib/canonical-host.test.ts`, "Pages middleware > picks no language for a visitor: /
+  is served as asked, whatever the browser’s languages or cookies".
 
 ## What each language shows
 
@@ -70,7 +71,11 @@ with its Japanese name below, on both languages' pages. The header's Areas Serve
 ward's English name with its Japanese name under it, and each area by its English name, in both
 languages. A video with no Japanese title shows its English title on the Japanese pages.
 
-- Check: No automated check yet.
+- Check: `src/app/[locale]/areas-served/page.dom.test.tsx`, "areas served (%s) > names each area
+  of each ward in English and in Japanese on the areas index" and "shows %s with a Google map of
+  the ward and each area named in both languages"; `src/app/[locale]/videos/page.test.tsx`,
+  "Pitonne video pages > titles a Japanese watch page with the video’s Japanese title, or its
+  English one without". The header's Areas Served menu: no automated check yet.
 
 ## The language switcher
 
@@ -87,8 +92,9 @@ index, and on the 404 page the Japanese home page.
 
 - Check: `e2e/language.spec.ts`, "the language switch leads to the same page in the other language
   and back"; `src/components/header.dom.test.tsx`, "header navigation (%s) > points the language
-  switcher at a given path in the other language". The blog-index fallback: no automated check
-  yet.
+  switcher at a given path in the other language" and "the language switcher with posts in one
+  language added to a copy of the content > on a %s page at %s, links the other language at
+  %s".
 
 ## Search engines
 
@@ -111,11 +117,12 @@ origin, `https://pitonne.jp`.
 
 **`og:locale`.** Every page names its language for sharing: `en_US` or `ja_JP`.
 
-- Check: No automated check yet.
+- Check: `src/lib/seo.test.tsx`, "SEO parity > names each page’s language for sharing, and marks
+  a post as an article with its date".
 
 **Translations in structured data.** The business lists English and Japanese among the languages
 it speaks. The site and each post name their language, and a post names its translation.
 
 - Check: `src/lib/structured-data.test.tsx`, "structured data parity > renders organization and
-  website JSON-LD in the root layout", for the business's two languages. The site's and the
-  posts' language, and a post naming its translation: no automated check yet.
+  website JSON-LD in the root layout", for the business's two languages, and "names the language
+  of the site and of each post". A post naming its translation: no automated check yet.

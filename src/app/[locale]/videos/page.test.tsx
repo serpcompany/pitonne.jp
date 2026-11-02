@@ -178,6 +178,26 @@ describe('Pitonne video pages', () => {
     })
   })
 
+  it('titles a Japanese watch page with the video’s Japanese title, or its English one without', async () => {
+    const titleOf = async (slug: string) =>
+      renderToStaticMarkup(
+        await WatchPage({ params: Promise.resolve({ locale: 'ja', video: slug }) })
+      ).match(/<h1[^>]*>([^<]*)<\/h1>/)?.[1]
+    const [first] = pitonneVideos
+    const { titleJa: _title, descriptionJa: _description, ...english } = first
+    const englishOnly = { ...english, slug: 'a-video-with-no-japanese-title' }
+
+    expect(await titleOf(first.slug)).toBe(first.titleJa)
+    pitonneVideos.push(englishOnly)
+    try {
+      expect(await titleOf(englishOnly.slug)).toBe(
+        renderToStaticMarkup(<h1>{englishOnly.title}</h1>).slice('<h1>'.length, -'</h1>'.length)
+      )
+    } finally {
+      pitonneVideos.pop()
+    }
+  })
+
   it('serves a Google video sitemap', async () => {
     const response = await videoSitemap()
     const xml = await response.text()

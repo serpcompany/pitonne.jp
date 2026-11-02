@@ -26,7 +26,7 @@ import {
   publicAssetExists,
   renderedImageUrls
 } from '@/test/images'
-import { sitePageCases } from '@/test/pages'
+import { everyPageCases, sitePageCases } from '@/test/pages'
 
 const root = process.cwd()
 const demoTemplateAsset = /placeholder|logoipsum|glowence/i
@@ -214,6 +214,36 @@ describe.each(locales)('sheet images on rendered templates (%s)', locale => {
 
     expect(sources).not.toContain('/images/content/sheet/blog/blog.jpg')
     for (const source of sources) expect(featureImages).toContain(source)
+  })
+})
+
+const driveHosts = [
+  ['drive', 'google', 'com'],
+  ['lh3', 'googleusercontent', 'com']
+].map(parts => parts.join('.'))
+
+function filesUnder(directory: string): string[] {
+  return fs
+    .readdirSync(path.join(root, directory), { recursive: true, withFileTypes: true })
+    .filter(entry => entry.isFile())
+    .map(entry => path.join(entry.parentPath, entry.name))
+}
+
+describe('Google Drive images', () => {
+  it('are named in no file of the site’s code or content', () => {
+    const offenders = ['src', 'content']
+      .flatMap(filesUnder)
+      .filter(file => driveHosts.some(host => fs.readFileSync(file, 'utf8').includes(host)))
+
+    expect(offenders.map(file => path.relative(root, file))).toEqual([])
+  })
+
+  it.each(
+    everyPageCases
+  )('are on no %s page (%s), inline backgrounds included', async (_name, _locale, page) => {
+    const { container } = render(await page())
+
+    expect(renderedImageUrls(container).filter(url => googleDriveImage.test(url))).toEqual([])
   })
 })
 
