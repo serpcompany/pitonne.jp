@@ -260,7 +260,7 @@ describe('staging canonical host', () => {
 
   it('folds a _redirects rule into the same hop', async () => {
     const legacy: AssetServer = async () =>
-      new Response(null, { status: 308, headers: { location: '/' } })
+      new Response(null, { status: 301, headers: { location: '/' } })
     const response = await onRequest({
       request: new Request('https://staging.pitonne-jp.pages.dev/en/?a=1'),
       next: legacy,

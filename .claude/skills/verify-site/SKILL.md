@@ -46,7 +46,7 @@ answered:
 ```sh
 curl -sI http://127.0.0.1:8788/about            # 308, Location: /about/
 curl -sI http://127.0.0.1:8788/robots.txt/      # 308 to /robots.txt
-curl -sI http://127.0.0.1:8788/en/about/        # 308, Location: /about/
+curl -sI http://127.0.0.1:8788/en/about/        # 301, Location: /about/
 curl -sI http://127.0.0.1:8788/no-such-page/    # 404
 curl -sI http://127.0.0.1:8788/404/             # 404, as are /404, /404.html and /_not-found/
 curl -sI http://127.0.0.1:8788/images/x.jpg/    # 404, the _routes.json exception

@@ -42,6 +42,10 @@ routes here, and in this repository this list wins over the standard it names. A
 - **Trailing slashes:** on Production and previews, the slashed form of a path
   `public/_routes.json` excludes answers 404, and `/keystatic/*` is left as requested
   ([`hosts.md`](hosts.md#exceptions-to-the-trailing-slash-standard)).
+- **`/en/` answers 301,** where SERP's
+  [Localization](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#urls)
+  says 308. The owner chose 301 on 2026-11-02: both are permanent for search engines, and 308's
+  method-keeping matters to APIs, not to pages ([`docs/i18n.md`](../i18n.md#url-structure)).
 - **English text under `/ja/`:** the videos show a video's English text where it has no Japanese,
   and a missing `/ja/` URL gets the English 404, where Localization's
   [Content](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#content)

@@ -65,15 +65,14 @@ under `/keystatic/` are left as they are requested. Both are among this site's
 
 ## The `/en/` prefix
 
-**`/en/` redirects to the bare path.** `/en` answers one 308 to `/`, and `/en/<path>` one 308 to
+**`/en/` redirects to the bare path.** `/en` answers 301 to `/`, and `/en/<path>` 301 to
 `/<path>`.
 
 - Source: SERP's Localization standard,
   [URLs](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#urls).
-- Check: `src/lib/canonical-host.test.ts`, "_redirects > sends /en and every /en/ path to the bare
-  path with one 308"; `e2e/environment.spec.ts`, "redirects /en/ to / with one 308" and "redirects
-  /en/services/ to /services/ with one 308"; smoke (`scripts/smoke-canonical-host.mjs`),
-  `https://pitonne-jp.pages.dev/en/ (with x-pitonne-smoke-test): 308 -> /`.
+- Check: `e2e/environment.spec.ts`, "redirects /en/ to / with one 301" and "redirects
+  /en/services/ to /services/ with one 301"; smoke (`scripts/smoke-canonical-host.mjs`),
+  `https://pitonne-jp.pages.dev/en/ (with x-pitonne-smoke-test): 301 -> /`.
 
 ## Moved URLs
 

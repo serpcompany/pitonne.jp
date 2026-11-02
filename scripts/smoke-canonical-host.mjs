@@ -38,7 +38,7 @@ export function passThroughChecks(origin, headers = SMOKE_HEADERS) {
       headers,
       expect: { status: 200, contentType: 'text/html' }
     },
-    { url: `${origin}/en/`, headers, expect: { status: 308, location: '/' } },
+    { url: `${origin}/en/`, headers, expect: { status: 301, location: '/' } },
     {
       url: `${origin}/sitemap.xml`,
       headers,

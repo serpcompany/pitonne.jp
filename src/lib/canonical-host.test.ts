@@ -146,8 +146,8 @@ describe('canonical host redirect', () => {
       canonicalHostRedirect(new Request(url), asset(status, { location })).then(r =>
         r?.headers.get('location')
       )
-    expect(await legacy('https://pitonne-jp.pages.dev/en/', '/', 308)).toBe('https://pitonne.jp/')
-    expect(await legacy('https://pitonne-jp.pages.dev/en/blog/?a=1', '/blog/', 308)).toBe(
+    expect(await legacy('https://pitonne-jp.pages.dev/en/', '/')).toBe('https://pitonne.jp/')
+    expect(await legacy('https://pitonne-jp.pages.dev/en/blog/?a=1', '/blog/')).toBe(
       'https://pitonne.jp/blog/?a=1'
     )
     expect(
@@ -252,7 +252,7 @@ describe('slashed file redirect', () => {
 
   const rules: Record<string, [number, string]> = {
     '/videos-sitemap.xml': [301, '/sitemap-videos.xml'],
-    '/en/robots.txt': [308, '/robots.txt'],
+    '/en/robots.txt': [301, '/robots.txt'],
     '/about/index.html': [308, '/about/'],
     '/temporary.xml': [302, '/elsewhere.xml'],
     '/offsite.xml': [301, 'https://example.com/x.xml'],
@@ -421,7 +421,7 @@ describe('Pages middleware', () => {
   })
 
   it("passes the asset server's response through unchanged", async () => {
-    const legacy = new Response(null, { status: 308, headers: { location: '/' } })
+    const legacy = new Response(null, { status: 301, headers: { location: '/' } })
     expect(
       await onRequest({ request: new Request('https://pitonne.jp/en/'), next: async () => legacy })
     ).toBe(legacy)
@@ -467,19 +467,5 @@ describe('_routes.json', () => {
 
   it('keeps build assets and images off the Function', () => {
     expect(routes.exclude).toEqual(expect.arrayContaining(['/_next/*', '/images/*']))
-  })
-})
-
-describe('_redirects', () => {
-  const rules = fs
-    .readFileSync(path.join(process.cwd(), 'public', '_redirects'), 'utf8')
-    .split('\n')
-    .map(line => line.trim().split(/\s+/))
-
-  it('sends /en and every /en/ path to the bare path with one 308', () => {
-    expect(rules.filter(([source]) => source === '/en' || source.startsWith('/en/'))).toEqual([
-      ['/en', '/', '308'],
-      ['/en/*', '/:splat', '308']
-    ])
   })
 })

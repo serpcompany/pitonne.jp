@@ -21,13 +21,13 @@ languages, but for a blog post or category published in one ([Blog](blog.md#lang
   paths from English wrappers"; `e2e/language.spec.ts`, "the home page loads in English and in
   Japanese, each in its own language".
 
-**`/en/` is never a public URL.** `/en` and `/en/<path>` answer one 308 to the bare path, and the
+**`/en/` is never a public URL.** `/en` and `/en/<path>` answer one 301 to the bare path, and the
 build writes no page under `/en/` ([Hosts and redirects](hosts-and-redirects.md#the-en-prefix)).
 
 - Source: SERP's Localization standard,
   [URLs](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#urls).
-- Check: `e2e/environment.spec.ts`, "redirects /en/ to / with one 308" and "redirects
-  /en/services/ to /services/ with one 308"; `scripts/audit-out.mjs`, "unexpected out/…".
+- Check: `e2e/environment.spec.ts`, "redirects /en/ to / with one 301" and "redirects
+  /en/services/ to /services/ with one 301"; `scripts/audit-out.mjs`, "unexpected out/…".
 
 **No automatic language.** The site never picks a language for a visitor, from the browser, a
 cookie or anything else, and never redirects between languages: the URL is the language.
