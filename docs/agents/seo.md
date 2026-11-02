@@ -56,8 +56,22 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
   as `translationOfWork`, and the English one names the Japanese as `workTranslation`. Each is
   named only when it is published: the template passes `getBlogPostLocales(slug)`, so a post in
   one language names no translation, as its hreflang and sitemap entry list none.
-- The video breadcrumbs follow the page's locale, as the visible breadcrumbs on `/watch/` and
-  `/ja/watch/` do.
+- **A `/ja/` page describes itself in Japanese where the data has Japanese,** as SERP's
+  [Localization](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#strings)
+  asks: the business's `addressLocality` and `addressRegion` (港区 and 東京都, the parts of its
+  Japanese address) and the name of Japanese in `knowsLanguage` (`languageSwitcher.ja`); a
+  video's `titleJa`, and its `descriptionJa`, else its `metaDescriptionJa`; the video list's name
+  (`videos.pitonneVideos`); and the video breadcrumbs, as the visible ones on `/watch/` and
+  `/ja/watch/` do. A `VideoObject`'s `@id`, `url`, `mainEntityOfPage` and `WatchAction` target
+  are the watch page in the page's language, as a post's and a service's ids are.
+- **The business and the site keep one `@id` in both languages,** `/#business` and `/#website`:
+  one clinic and one site, whose `url` follows the page.
+- **Left in English for want of Japanese data:** the name of English in `knowsLanguage`, a
+  `Service`'s `areaServed` (`Tokyo`), and a video's text where it has none in Japanese
+  ([`deviations.md`](deviations.md#urls-and-languages)). Brand names and identifiers, such as
+  `dayOfWeek` and `serviceType`, aren't text to translate.
+- `src/lib/structured-data.test.tsx` holds the English pages' business, site, post and video
+  JSON-LD, key order included, as they were before the Japanese pages were localized.
 
 ## Sitemaps
 

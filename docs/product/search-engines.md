@@ -69,17 +69,23 @@ directly, without a redirect, and on the canonical host.
 hours and languages, and the site as a `WebSite`. A service page adds a `Service`, a post a
 `BlogPosting`, which names the post in its other language only when that is published, the FAQs a
 `FAQPage`, the videos index an `ItemList`, and a watch page a `VideoObject` and its breadcrumbs as
-a `BreadcrumbList`. Every id and URL in it is on the page's environment's origin.
+a `BreadcrumbList`. Every id and URL in it is on the page's environment's origin. A Japanese page
+describes itself in Japanese where the site has the Japanese, at its Japanese URLs, and the clinic
+and the site keep one id in both languages
+([Languages](languages.md#search-engines)).
 
 - Check: `src/lib/structured-data.test.tsx`, "structured data parity > renders organization and
   website JSON-LD in the root layout", "writes the Japanese homepage URL with its trailing slash",
   "renders Service JSON-LD on service detail pages", "renders BlogPosting JSON-LD on blog post
-  pages" and "names a post’s translation only when the post is published in the other language",
-  and "a post published in one language, added to a copy of the content > names no translation in
-  its page’s BlogPosting"; `src/app/[locale]/videos/page.test.tsx`, "Pitonne video pages > generates VideoObject,
-  ItemList, and breadcrumb schema"; `src/lib/site-origin.test.tsx`, "URLs a %s build writes >
-  writes structured-data ids and URLs on its own host"; `src/app/[locale]/faqs/page.dom.test.tsx`,
-  "FAQs page > gives search engines its questions and answers as FAQPage data (%s)".
+  pages", "names a post’s translation only when the post is published in the other language" and
+  "describes the business and the site in Japanese on Japanese pages, as the same entities", and
+  "a post published in one language, added to a copy of the content > names no translation in its
+  page’s BlogPosting"; `src/app/[locale]/videos/page.test.tsx`, "Pitonne video pages > generates
+  VideoObject, ItemList, and breadcrumb schema" and "describes each video in Japanese on the
+  Japanese pages, at its /ja/ watch page"; `src/lib/site-origin.test.tsx`, "URLs a %s build
+  writes > writes structured-data ids and URLs on its own host";
+  `src/app/[locale]/faqs/page.dom.test.tsx`, "FAQs page > gives search engines its questions and
+  answers as FAQPage data (%s)".
 
 ## Sitemaps and robots.txt
 

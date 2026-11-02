@@ -47,6 +47,12 @@ routes here, and in this repository this list wins over the standard it names. A
   [Content](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#content)
   never serves an English body under `/ja/`. **Open**
   ([`docs/i18n.md`](../i18n.md#pages-with-english-text-under-ja)).
+- **English in the `/ja/` pages' structured data** where the site has no Japanese for it: the name
+  of English in the business's `knowsLanguage`, and a service's `areaServed` (Tokyo), where
+  Localization's
+  [Strings](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#strings)
+  takes structured data from the dictionary or language-aware data. **Open**
+  ([`seo.md`](seo.md#structured-data)).
 - **The language switcher is one link** to the other language, falling back to its blog index, not
   the menu SERP's
   [Language Switcher](https://github.com/serpcompany/serp/blob/main/docs/engineering/websites/features/language-switcher.md#behavior)

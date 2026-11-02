@@ -6,6 +6,7 @@ import { getAllBlogPosts, getBlogPostLocales } from '@/lib/data/blog-posts'
 import { getService, getServicesFromSlugs } from '@/lib/data/services'
 import { businessHours, getBusinessInfo, isOpenBusinessHours } from '@/lib/data/site'
 import { type PitonneVideo, pitonneVideos } from '@/lib/data/videos'
+import { getDictionary } from '@/lib/i18n/dictionaries'
 import {
   blogPostingJsonLd,
   businessJsonLd,
@@ -170,6 +171,60 @@ describe('structured data parity', () => {
       expect(schema).not.toHaveProperty('workTranslation')
       expect(schema).not.toHaveProperty('translationOfWork')
     }
+  })
+
+  it('describes the business and the site in Japanese on Japanese pages, as the same entities', async () => {
+    const info = getBusinessInfo('ja')
+    const locality = '港区'
+    const region = '東京都'
+    expect(info.addressLine1).toContain(`${region}${locality}`)
+    expect(businessJsonLd('ja')).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'MedicalBusiness',
+      '@id': `${SITE_URL}/#business`,
+      name: 'Pitonne',
+      url: `${SITE_URL}/ja/`,
+      telephone: '03-6821-8285',
+      description: info.description,
+      knowsLanguage: [
+        { '@type': 'Language', name: 'English', alternateName: 'en' },
+        {
+          '@type': 'Language',
+          name: getDictionary('ja').languageSwitcher.ja,
+          alternateName: 'ja'
+        }
+      ],
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
+        addressLocality: locality,
+        addressRegion: region,
+        postalCode: '106-0031',
+        addressCountry: 'JP'
+      },
+      openingHoursSpecification: businessHours.filter(isOpenBusinessHours).map(item => ({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: item.day,
+        opens: item.opens,
+        closes: item.closes
+      }))
+    })
+    expect(websiteJsonLd('ja')).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: 'Pitonne',
+      url: `${SITE_URL}/ja/`,
+      publisher: { '@id': `${SITE_URL}/#business` },
+      inLanguage: 'ja'
+    })
+
+    const markup = renderToStaticMarkup(
+      await LocaleLayout({ children: <div>Body</div>, params: Promise.resolve({ locale: 'ja' }) })
+    )
+    expect(jsonLdFrom(markup)).toEqual(
+      expect.arrayContaining([businessJsonLd('ja'), websiteJsonLd('ja')])
+    )
   })
 
   it('describes the business and the site on English pages as it always has', () => {

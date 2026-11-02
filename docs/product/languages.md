@@ -134,3 +134,21 @@ doesn't exist.
   the other language"; with a post in each language alone added to a copy of the content, "a post
   published in one language, added to a copy of the content > names no translation in its page’s
   BlogPosting".
+
+**Structured data in the page's language.** A Japanese page's structured data is in Japanese
+where the site has the Japanese: the clinic's ward and prefecture, the name of Japanese among its
+languages, the videos list's name, and each video's title and description, or its Japanese search
+description when it has no Japanese description. Its URLs are the Japanese pages', while the
+clinic and the site keep one identity in both languages. The name of English and a service's area
+served, Tokyo, stay in English, since the site has no Japanese for them. An English page's
+structured data is as it was before the Japanese pages were localized.
+
+- Source: SERP's Localization standard,
+  [Strings](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/web-stack/localization.md#strings).
+- Check: `src/lib/structured-data.test.tsx`, "structured data parity > describes the business and
+  the site in Japanese on Japanese pages, as the same entities", and, for the English pages,
+  "describes the business and the site on English pages as it always has", "describes every
+  English post as it always has, naming its Japanese translation" and "describes every video and
+  the video list on English pages as it always has"; `src/app/[locale]/videos/page.test.tsx`,
+  "Pitonne video pages > describes each video in Japanese on the Japanese pages, at its /ja/ watch
+  page".

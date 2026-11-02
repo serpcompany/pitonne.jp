@@ -15,10 +15,15 @@ import type { PitonneVideo } from '@/lib/data/videos'
 import { siteOrigin } from '@/lib/deploy-environment.mts'
 import type { Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { absoluteUrl, canonicalUrl, localizedCanonicalUrl, SITE_NAME } from '@/lib/seo'
+import { absoluteUrl, localizedCanonicalUrl, SITE_NAME } from '@/lib/seo'
 
 const businessId = () => `${siteOrigin()}/#business`
 const websiteId = () => `${siteOrigin()}/#website`
+
+const businessArea: Record<Locale, { locality: string; region: string }> = {
+  en: { locality: 'Minato City', region: 'Tokyo' },
+  ja: { locality: '港区', region: '東京都' }
+}
 
 export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusiness> {
   const info = getBusinessInfo(locale)
@@ -32,13 +37,17 @@ export function businessJsonLd(locale: Locale = 'en'): WithContext<MedicalBusine
     description: info.description,
     knowsLanguage: [
       { '@type': 'Language', name: 'English', alternateName: 'en' },
-      { '@type': 'Language', name: 'Japanese', alternateName: 'ja' }
+      {
+        '@type': 'Language',
+        name: locale === 'ja' ? getDictionary('ja').languageSwitcher.ja : 'Japanese',
+        alternateName: 'ja'
+      }
     ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: `${info.addressLine1}, ${info.addressLine2}`,
-      addressLocality: 'Minato City',
-      addressRegion: 'Tokyo',
+      addressLocality: businessArea[locale].locality,
+      addressRegion: businessArea[locale].region,
       postalCode: '106-0031',
       addressCountry: 'JP'
     },
@@ -115,15 +124,21 @@ export function blogPostingJsonLd(
   }
 }
 
-export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject> {
-  const watchUrl = canonicalUrl(video.watchPath)
+export function videoObjectJsonLd(
+  video: PitonneVideo,
+  locale: Locale = 'en'
+): WithContext<VideoObject> {
+  const watchUrl = localizedCanonicalUrl(video.watchPath, locale)
+  const ja = locale === 'ja'
 
   return {
     '@context': 'https://schema.org',
     '@type': 'VideoObject',
     '@id': `${watchUrl}#video`,
-    name: video.title,
-    description: video.description,
+    name: ja ? (video.titleJa ?? video.title) : video.title,
+    description: ja
+      ? (video.descriptionJa ?? video.metaDescriptionJa ?? video.description)
+      : video.description,
     thumbnailUrl: [absoluteUrl(video.thumbnailUrl)],
     uploadDate: video.uploadDate,
     duration: video.duration,
@@ -141,16 +156,19 @@ export function videoObjectJsonLd(video: PitonneVideo): WithContext<VideoObject>
   }
 }
 
-export function videoListJsonLd(videos: PitonneVideo[]): WithContext<ItemList> {
+export function videoListJsonLd(
+  videos: PitonneVideo[],
+  locale: Locale = 'en'
+): WithContext<ItemList> {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `${SITE_NAME} Videos`,
+    name: getDictionary(locale).videos.pitonneVideos,
     itemListElement: videos.map((video, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      url: canonicalUrl(video.watchPath),
-      item: videoObjectJsonLd(video)
+      url: localizedCanonicalUrl(video.watchPath, locale),
+      item: videoObjectJsonLd(video, locale)
     }))
   }
 }

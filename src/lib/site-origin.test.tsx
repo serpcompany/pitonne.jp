@@ -118,7 +118,8 @@ describe.each(environments)('URLs a %s build writes', environment => {
       blogPostingJsonLd(post, 'en', locales),
       blogPostingJsonLd(post, 'ja', locales),
       videoBreadcrumbJsonLd(video, 'ja'),
-      { ...videoObjectJsonLd(video), description: '', name: '' }
+      { ...videoObjectJsonLd(video), description: '', name: '' },
+      { ...videoObjectJsonLd(video, 'ja'), description: '', name: '' }
     ]
     expect(businessJsonLd()).toMatchObject({ '@id': `${origin}/#business` })
     expect(blogPostingJsonLd(post, 'en', locales)).toMatchObject({

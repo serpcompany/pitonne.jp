@@ -9,6 +9,7 @@ import { GET as videoSitemap } from '@/app/sitemap-videos.xml/route'
 import { getVideoBySlug, pitonneVideos } from '@/lib/data/videos'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { videoBreadcrumbJsonLd, videoListJsonLd, videoObjectJsonLd } from '@/lib/structured-data'
+import { jsonLdFrom } from '@/test/json-ld'
 
 const SITE_URL = 'https://pitonne.jp'
 
@@ -131,6 +132,45 @@ describe('Pitonne video pages', () => {
         }
       ]
     })
+  })
+
+  it('describes each video in Japanese on the Japanese pages, at its /ja/ watch page', async () => {
+    for (const video of pitonneVideos) {
+      const watchUrl = `${SITE_URL}/ja/watch/${video.slug}/`
+      expect(videoObjectJsonLd(video, 'ja')).toEqual({
+        ...videoObjectJsonLd(video, 'en'),
+        '@id': `${watchUrl}#video`,
+        name: video.titleJa ?? video.title,
+        description: video.descriptionJa ?? video.metaDescriptionJa ?? video.description,
+        url: watchUrl,
+        mainEntityOfPage: watchUrl,
+        potentialAction: {
+          '@type': 'WatchAction',
+          target: { '@type': 'EntryPoint', urlTemplate: watchUrl }
+        }
+      })
+    }
+    expect(videoListJsonLd(pitonneVideos, 'ja')).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: getDictionary('ja').videos.pitonneVideos,
+      itemListElement: pitonneVideos.map((video, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_URL}/ja/watch/${video.slug}/`,
+        item: videoObjectJsonLd(video, 'ja')
+      }))
+    })
+
+    const [video] = pitonneVideos
+    const watchPage = renderToStaticMarkup(
+      await WatchPage({ params: Promise.resolve({ locale: 'ja', video: video.slug }) })
+    )
+    expect(jsonLdFrom(watchPage)).toContainEqual(videoObjectJsonLd(video, 'ja'))
+    const videosPage = renderToStaticMarkup(
+      await VideosPage({ params: Promise.resolve({ locale: 'ja' }) })
+    )
+    expect(jsonLdFrom(videosPage)).toContainEqual(videoListJsonLd(pitonneVideos, 'ja'))
   })
 
   it('renders a videos index and watch page with embedded YouTube players', async () => {
