@@ -38,7 +38,9 @@ The `staging` and `main` rulesets require `test`. Once these workflows are on bo
 owner adds `verify`, `title`, `issue-link`, `fix-test` and `text` to both, and may add `e2e` and
 `lighthouse`, which run on every ready pull request (owner steps, [below](#owner-steps)). Each
 required workflow starts on every pull request, with no `paths` filter, so its checks always
-report. CI scopes its work to what a change can affect: on a docs-only change
+report. CI scopes its work to what a change can affect, as SERP's
+[CI Scope](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/ci-scope.md)
+sets: on a docs-only change
 ([`changes`](#ciyml)), the job-level `if:` of `test`, `e2e`, `lighthouse` and `preview` skips
 them, and GitHub counts a skipped required check as passed; `verify` runs only its `docs` and
 `secrets` checks, and `pull-request.yml`'s checks and `Code review` run as on any pull request.

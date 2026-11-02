@@ -2,7 +2,8 @@
 
 What to run while editing, before a push and at the finish gate, and the evidence each kind of
 change needs. Commands here and in the skills are POSIX shell: on Windows, run them in Git Bash.
-In PowerShell, set a variable first instead, as in `$env:DEPLOY_ENV = 'production'; pnpm build`. The rules are SERP's
+In PowerShell, set a variable first instead, as in `$env:DEPLOY_ENV = 'production'; pnpm build`.
+The rules are SERP's
 [Verification Cadence](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification-cadence.md);
 this doc holds this repository's commands for them.
 
@@ -38,14 +39,35 @@ would match no commit.
 - **Never use the finish gate as the inner loop.**
 - **Run it once per state.** If the tree hasn't changed since the last green run (no commit,
   rebase or lockfile change), cite that run instead of repeating it.
-- **A fix re-runs what it could have broken:** the check that failed and the tests for the code
-  you changed, not every suite again.
+- **A fix re-runs only what it could have affected** ([below](#heavy-suites-and-re-runs)).
 - **CI on the final commit is the record** of what CI runs, which is all of it
   ([below](#where-ci-runs-what)).
 - **Docker installed but not running** fails the shared checks' linters step: `@serpcompany/verify`
   0.1.1 reads Docker's "failed to connect to the docker API" as actionlint failing, instead of
   falling back. Start Docker, or run with Docker's folder off `PATH` and an installed actionlint
   1.7.12 on it.
+
+### Heavy suites and re-runs
+
+SERP's
+[Heavy suites and re-runs](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification-cadence.md#heavy-suites-and-re-runs)
+sets the rule; here, the heavy suites are the browser journeys and Lighthouse.
+
+- **They run in full once, when the work is ready to verify:** in CI, which runs both on every
+  ready pull request, or locally when the change's evidence needs them. The inner loop never runs
+  them in full.
+- **A fix re-runs only what it could have affected:** the check or tests that failed, the unit
+  tests for what it touched (`pnpm exec vitest related --run <files>`), and the journeys that
+  cross it, by file and title, as in
+  `DEPLOY_ENV=production pnpm test:e2e e2e/pages.spec.ts --grep "contact page"`. A fix to one
+  page's component re-runs that page's journey. A fix to a shared component, such as the header,
+  the footer or `ContactButton`, re-runs every journey that passes through it; find them by
+  searching `e2e/` and the component's uses.
+- **The whole suite re-runs when a change's reach is wide or unknown:** the `[locale]` layout,
+  `src/app/globals.css`, `next.config.mjs`, routing or the data layer, the Pages Function,
+  `public/_redirects` or `_headers`, a dependency upgrade, or anything whose reach you can't bound.
+- **Report what ran:** the pull request's evidence says what ran in full, what ran scoped and
+  why, and what was left to CI. A scoped run is never reported as a full pass.
 
 ## Browser journeys
 
@@ -91,7 +113,9 @@ uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, 
 CI runs the whole finish gate, split into jobs, on every pull request and every push to `staging`
 and `main` ([`ci.md`](ci.md#ciyml)), so CI on the final commit is the record of it. A docs-only
 change, Markdown under `docs/` or `.claude/skills/` or at the root that nothing else reads, runs
-only `pnpm verify docs,secrets` and deploys nothing:
+only `pnpm verify docs,secrets` and deploys nothing, as SERP's
+[CI Scope](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/ci-scope.md)
+sets:
 
 | Check | Locally | In CI |
 | --- | --- | --- |
