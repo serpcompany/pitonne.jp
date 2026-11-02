@@ -141,8 +141,11 @@ describe('CI and deploy workflows', () => {
     expect(stepIndex(pagesDeploy, 'Check out the chosen commit')).toBe(
       stepIndex(pagesDeploy, 'target') + 1
     )
-    expect(stepIndex(pagesDeploy, 'Build static export')).toBeGreaterThan(
+    expect(stepIndex(pagesDeploy, 'Set up Node and pnpm, and install')).toBeGreaterThan(
       stepIndex(pagesDeploy, 'Check out the chosen commit')
+    )
+    expect(stepIndex(pagesDeploy, 'Build static export')).toBeGreaterThan(
+      stepIndex(pagesDeploy, 'Set up Node and pnpm, and install')
     )
     expect(allText(deploy)).not.toContain('outputs.skip')
   })

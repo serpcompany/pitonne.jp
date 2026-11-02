@@ -1,9 +1,11 @@
 # GitHub Actions
 
-The workflows are in `.github/workflows/`. Workflow files hold no comments, so what starts each
-one, what it runs and why it's built that way are here and in the two docs this one links;
-change a workflow's section in the same pull request as the workflow. The flow they implement
-(which push deploys what, and when) is in [`docs/gitflow.md`](../gitflow.md#what-ci-deploys).
+The workflows are in `.github/workflows/`, and the one action of their own, which sets up Node and
+pnpm and installs, is in `.github/actions/` ([below](#installing-the-private-package)). These
+files hold no comments, so what starts each workflow, what it runs and why it's built that way are
+here and in the two docs this one links; change a file's section in the same pull request as the
+file. The flow they implement (which push deploys what, and when) is in
+[`docs/gitflow.md`](../gitflow.md#what-ci-deploys).
 
 | Workflow | File | Starts on | Section |
 | --- | --- | --- | --- |
@@ -16,12 +18,13 @@ change a workflow's section in the same pull request as the workflow. The flow t
 | Code review | `code-review.yml` | Every push to a pull request that isn't a draft | [`ci-pull-requests.md`](ci-pull-requests.md#code-review) |
 
 Every job runs on `ubuntu-latest` with a time limit, and a workflow's top-level permissions only
-read: each write is granted to the one job that needs it. No `run:` script holds a `${{ }}`
-expression; values reach scripts through `env:`. These tests hold the workflows to this doc:
+read: each write is granted to the one job that needs it. No `run:` script, in a workflow or the
+action, holds a `${{ }}` expression; values reach scripts through `env:`. These tests hold the
+workflows and the action to this doc:
 
 | Test | Holds |
 | --- | --- |
-| `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install, no expressions in scripts |
+| `tools/checks/workflow-rules.test.ts` | Pinned actions, time limits, permissions, version files, the private install through the setup action, no expressions in scripts |
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
 | `scripts/ci-passed.test.mjs` | Which CI runs and receipts count as passed |
@@ -43,14 +46,21 @@ whoever merges checks the threads.
 
 ## Installing the private package
 
+Every job that installs, CI's four checks and the deploy, does it through one composite action,
+`.github/actions/setup-node-pnpm/action.yml`, right after its own checkout and under the same
+condition. The action runs `pnpm/action-setup`, which takes pnpm from `packageManager` in
+`package.json`; `actions/setup-node`, which takes Node from `.node-version` and caches the pnpm
+store; then `pnpm install --frozen-lockfile`. The checkout stays in each job, since the jobs check
+out different commits, and a job runs the action as its own checkout has it: a deploy sets up as
+the commit it deploys says.
+
 `@serpcompany/verify` is a private package on GitHub Packages, so each job that installs grants
-`packages: read`, `actions/setup-node` sends the `@serpcompany` scope to
-`https://npm.pkg.github.com`, and the install step alone gets the job's own token as
-`NODE_AUTH_TOKEN`. That token reads the package only once the package's settings give this
-repository Read under Manage Actions access, an owner step; until then the install fails, and the
-step after it says what to grant. No other token can stand in: GitHub Packages takes only Actions'
-own token or a personal access token (classic), no app's. Node comes from `.node-version` and pnpm
-from `packageManager` in `package.json`; `actions/setup-node` caches the pnpm store.
+`packages: read` and passes its own token as the action's `token` input. `actions/setup-node`
+sends the `@serpcompany` scope to `https://npm.pkg.github.com`, and the install step alone gets the
+token as `NODE_AUTH_TOKEN`. That token reads the package only once the package's settings give
+this repository Read under Manage Actions access, an owner step; until then the install fails, and
+the action's next step says what to grant. No other token can stand in: GitHub Packages takes only
+Actions' own token or a personal access token (classic), no app's.
 
 ## ci.yml
 
@@ -166,9 +176,9 @@ open two issues. It needs `issues: write`.
 into `staging` or `main`: a forked pull request gets no secrets and no preview. It deploys the
 pull request's head commit to its `pr-<n>` alias.
 
-**Caches:** the pnpm store (through `actions/setup-node`), `.next/cache` per environment under
-the lockfile's and the sources' hashes, and Playwright's browsers. The export itself is never
-cached: each run builds it or takes it from its own `test`.
+**Caches:** the pnpm store (through `actions/setup-node`, in the setup action), `.next/cache` per
+environment under the lockfile's and the sources' hashes, and Playwright's browsers. The export
+itself is never cached: each run builds it or takes it from its own `test`.
 
 ## deploy.yml
 
@@ -178,20 +188,20 @@ and their retry times are in [`ci-deploys.md`](ci-deploys.md#deployyml).
 
 ## Pinned actions
 
-Each workflow runs every action at a commit, never a tag, which can be moved to new code: the
-deploy jobs hold the Cloudflare token, the review holds Claude's, and every install holds a token
-that reads the private package. Each commit is the one its tag named on 2026-11-01.
-`checkout`, `setup-node` and `pnpm/action-setup` moved then from `v4` to the majors SERP's
-standards use; `wrangler-action` stays at the commit `v3` named, so the deploy runs the code it
-ran before. To move one, pin the new release's commit and change its row here in the same pull
+Each workflow, and the setup action, runs every action at a commit, never a tag, which can be
+moved to new code: the deploy jobs hold the Cloudflare token, the review holds Claude's, and every
+install holds a token that reads the private package. Each commit is the one its tag named on
+2026-11-01. `checkout`, `setup-node` and `pnpm/action-setup` moved then from `v4` to the majors
+SERP's standards use; `wrangler-action` stays at the commit `v3` named, so the deploy runs the code
+it ran before. To move one, pin the new release's commit and change its row here in the same pull
 request; `tools/checks/workflow-rules.test.ts` fails on an action that isn't pinned, or isn't in
-this table beside the workflows that use it.
+this table beside the workflows and the action that use it.
 
 | Action | Commit | Version | Used in |
 | --- | --- | --- | --- |
 | `actions/checkout` | `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09` | v5.1.0 | `ci.yml`, `close-issues.yml`, `code-review.yml`, `deploy.yml`, `promote.yml`, `pull-request.yml`, `sync-staging.yml` |
-| `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `ci.yml`, `code-review.yml`, `deploy.yml` |
-| `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `ci.yml`, `deploy.yml` |
+| `actions/setup-node` | `a0853c24544627f65ddf259abe73b1d18a591444` | v5.0.0 | `.github/actions/setup-node-pnpm/action.yml`, `code-review.yml` |
+| `pnpm/action-setup` | `0977fd99725f1db4007ccb2928dbb4e90d06cc86` | v6.0.10 | `.github/actions/setup-node-pnpm/action.yml` |
 | `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |
 | `actions/upload-artifact` | `cf430e030ddbb5b0abf93d22962f4752f3646cd9` | v7.0.2 | `ci.yml`, `code-review.yml` |
 | `actions/download-artifact` | `9000827ccba6bdab643e8b6fd33ac0654aef8333` | v8.0.2 | `ci.yml` |

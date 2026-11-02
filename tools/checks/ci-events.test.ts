@@ -70,6 +70,8 @@ const ran = (scenario: Scenario) =>
     .map(([id, result]) => (result === 'success' ? id : `${id}:${result}`))
 
 const checks = ['changes', 'verify', 'test', 'e2e', 'lighthouse']
+const SETUP = 'Set up Node and pnpm, and install'
+const SUITES = ['e2e', 'lighthouse']
 
 describe('what CI runs on a pull request into staging', () => {
   it('checks a ready one in full and previews it', () => {
@@ -99,6 +101,17 @@ describe('what CI runs on a pull request into staging', () => {
     expect(
       code.stepRuns('e2e', 'Run the browser journeys on the export, served as Pages serves it')
     ).toBe(true)
+  })
+
+  it('sets up and installs in every check, and in a slow suite only when it runs', () => {
+    for (const id of ['verify', 'test', ...SUITES])
+      expect(run(pullRequest({})).stepRuns(id, SETUP), id).toBe(true)
+    const docs = run(pullRequest({ docs: true }))
+    expect(docs.stepRuns('verify', SETUP)).toBe(true)
+    expect(docs.stepRuns('test', SETUP)).toBe(true)
+    for (const suite of SUITES) expect(docs.stepRuns(suite, SETUP), suite).toBe(false)
+    const tested = run(push('staging', { receipts: true }))
+    for (const suite of SUITES) expect(tested.stepRuns(suite, SETUP), suite).toBe(false)
   })
 
   it('fails test, the required check, when the change could not be classified, rather than skip it', () => {

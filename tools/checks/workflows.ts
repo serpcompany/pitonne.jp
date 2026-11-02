@@ -8,6 +8,7 @@ export type WorkflowStep = {
   if?: string
   uses?: string
   run?: string
+  shell?: string
   env?: Record<string, string>
   with?: Record<string, string | number | boolean>
   'continue-on-error'?: boolean | string
@@ -45,7 +46,15 @@ export type Workflow = {
   jobs: Record<string, WorkflowJob>
 }
 
+export type LocalAction = {
+  name: string
+  description: string
+  inputs?: Record<string, { description: string; required?: boolean; default?: string }>
+  runs: { using: string; steps: WorkflowStep[] }
+}
+
 const workflowsFolder = path.join(process.cwd(), '.github', 'workflows')
+const actionsFolder = path.join(process.cwd(), '.github', 'actions')
 
 export function workflowFiles(): string[] {
   return fs
@@ -56,6 +65,17 @@ export function workflowFiles(): string[] {
 
 export function readWorkflow(file: string): Workflow {
   return parse(fs.readFileSync(path.join(workflowsFolder, file), 'utf8')) as Workflow
+}
+
+export function localActions(): string[] {
+  return fs.readdirSync(actionsFolder).sort()
+}
+
+export const actionFile = (name: string) =>
+  path.posix.join('.github', 'actions', name, 'action.yml')
+
+export function readAction(name: string): LocalAction {
+  return parse(fs.readFileSync(actionFile(name), 'utf8')) as LocalAction
 }
 
 export function job(workflow: Workflow, id: string): WorkflowJob {
