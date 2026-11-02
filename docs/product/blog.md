@@ -18,7 +18,8 @@ the editor's Featured box: it's always the newest.
   the standalone top image below the hero"; `e2e/pages.spec.ts`, "a blog post opens from the blog
   index, and a category lists posts that open"; `src/app/[locale]/blog/page.dom.test.tsx`, "blog
   index page > features the newest post, then lists the rest newest first (%s)". The Featured box
-  having no effect: no automated check yet.
+  having no effect: no automated check yet
+  ([#122](https://github.com/serpcompany/pitonne.jp/issues/122)).
 
 ## Posts
 

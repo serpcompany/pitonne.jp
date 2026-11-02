@@ -40,7 +40,8 @@ areas' names and links, not their descriptions, highlights or landmarks.
   ward and area in the Areas Served %s in this language" and "offers only the Japan number in the
   phone menu and the mobile menu";
   `src/lib/i18n/client-imports.test.ts`, "client components > %s bundles no area descriptions,
-  only area names". That the menus open on hover only: no automated check yet.
+  only area names". That the menus open on hover only: no automated check yet
+  ([#124](https://github.com/serpcompany/pitonne.jp/issues/124)).
 
 **Phone menu.** Below 1280 pixels the menu button, named for screen readers, opens a menu under
 the header: the language switcher first, then the sections, where About, Services and Areas Served
