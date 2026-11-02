@@ -18,9 +18,11 @@ the logo and a menu button.
   header to 1280 pixels because it wrapped between 1024 and 1279.
 - Check: `e2e/navigation.spec.ts`, "the header links each section, one page after another, without
   reloading" (desktop), for the six section links; `src/components/header.dom.test.tsx`, "header
-  navigation (%s) > links Videos from the primary navigation and the mobile menu" and "opens the
-  contact page in this language from Contact Us". The header staying pinned, the switch at 1280
-  pixels, the logo's link and where the switcher sits: no automated check yet.
+  navigation (%s) > links Videos from the primary navigation and the mobile menu", "opens the
+  contact page in this language from Contact Us", "links the logo to the home page in this
+  language" and "shows the section links, then the language switcher, the Phone dropdown, LINE
+  where offered and Contact Us". The header staying pinned and the switch at 1280 pixels: no
+  automated check yet.
 
 **Header menus.** About, Services and Areas Served are links to their pages, and each opens a menu
 while the pointer is over it: About lists About and FAQs; Services, each service category, linking

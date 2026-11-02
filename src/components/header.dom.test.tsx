@@ -204,6 +204,42 @@ describe.each(locales)('header navigation (%s)', locale => {
     }
   })
 
+  it('links the logo to the home page in this language', async () => {
+    await renderHeader(locale)
+
+    expect(screen.getByRole('link', { name: dict.common.logoAlt })).toHaveAttribute(
+      'href',
+      routeHref(localizedRoute(canonicalRoutes.home, locale))
+    )
+  })
+
+  it('shows the section links, then the language switcher, the Phone dropdown, LINE where offered and Contact Us', async () => {
+    const { container } = await renderHeader(locale)
+    const other = locales.find(candidate => candidate !== locale) ?? locale
+    const sections = [
+      dict.nav.home,
+      dict.nav.about,
+      dict.nav.services,
+      dict.nav.areasServed,
+      dict.nav.blog,
+      dict.nav.videos
+    ]
+    const row = [
+      ...sections.map(name => screen.getByRole('link', { name })),
+      screen.getByRole('link', { name: dict.languageSwitcher[other] }),
+      screen.getByRole('button', { name: dict.nav.phone }),
+      ...screen.queryAllByRole('link', { name: dict.contact.lineContact }),
+      screen.getByRole('link', { name: dict.common.contactUs })
+    ]
+    const label = (control: Element) => control.getAttribute('aria-label') ?? control.textContent
+
+    expect(
+      Array.from(container.querySelectorAll('a, button'))
+        .filter(control => row.includes(control as HTMLElement))
+        .map(label)
+    ).toEqual(row.map(label))
+  })
+
   it('opens the contact page in this language from Contact Us', async () => {
     await renderHeader(locale)
 
