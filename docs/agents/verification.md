@@ -53,9 +53,10 @@ SERP's
 [Heavy suites and re-runs](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification-cadence.md#heavy-suites-and-re-runs)
 sets the rule; here, the heavy suites are the browser journeys and Lighthouse.
 
-- **They run in full once, when the work is ready to verify:** in CI, which runs both on every
-  ready pull request, or locally when the change's evidence needs them. The inner loop never runs
-  them in full.
+- **Locally, run only the journeys that cover what changed, at the finish too.** The inner loop,
+  the push and the finish gate never run either suite in full: a change to one page runs that
+  page's journeys, not the suite. CI runs both in full on every ready pull request that isn't
+  docs-only, and its run on the final commit is the record.
 - **A fix re-runs only what it could have affected:** the check or tests that failed, the unit
   tests for what it touched (`pnpm exec vitest related --run <files>`), and the journeys that
   cross it, by file and title, as in
@@ -63,9 +64,10 @@ sets the rule; here, the heavy suites are the browser journeys and Lighthouse.
   page's component re-runs that page's journey. A fix to a shared component, such as the header,
   the footer or `ContactButton`, re-runs every journey that passes through it; find them by
   searching `e2e/` and the component's uses.
-- **The whole suite re-runs when a change's reach is wide or unknown:** the `[locale]` layout,
-  `src/app/globals.css`, `next.config.mjs`, routing or the data layer, the Pages Function,
+- **The whole suite runs locally only when a change's reach is wide or unknown:** the `[locale]`
+  layout, `src/app/globals.css`, `next.config.mjs`, routing or the data layer, the Pages Function,
   `public/_redirects` or `_headers`, a dependency upgrade, or anything whose reach you can't bound.
+  Otherwise no change runs the journeys it can't reach.
 - **Report what ran:** the pull request's evidence says what ran in full, what ran scoped and
   why, and what was left to CI. A scoped run is never reported as a full pass.
 
