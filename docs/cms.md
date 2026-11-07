@@ -1,7 +1,8 @@
 # Blog CMS
 
 The blog is edited in [Keystatic](https://keystatic.com) at **https://pitonne.jp/keystatic**. Background and the
-decision record are in [ADR 0001](adr/0001-blog-cms.md).
+decision record are in [ADR 0001](adr/0001-blog-cms.md); [ADR 0002](adr/0002-payload-d1.md) records why moving the blog
+to Payload CMS on Cloudflare D1 was a no-go.
 
 ## For editors
 
@@ -56,8 +57,9 @@ posts are moved to another category.
 - **Local editing**: `pnpm cms` edits files in your checkout; `pnpm cms:cloud` uses Keystatic Cloud and commits to
   GitHub. Open http://127.0.0.1:3000/keystatic (Keystatic switches `localhost` to `127.0.0.1`).
 - **Publishing flow**: the Keystatic Cloud GitHub app is on the `main` ruleset's bypass list, so CMS saves commit
-  straight to `main` and deploy to Production without waiting for a promotion. This is the one documented exception to
-  the staging → main flow in [gitflow.md](gitflow.md): code goes through Staging, content goes live immediately.
+  straight to `main` and deploy to Production without waiting for a promotion or any check, one of the differences
+  from SERP's standards in [`agents/deviations.md`](agents/deviations.md#branches-deploys-and-ci): code goes through
+  Staging, content goes live immediately ([gitflow.md](gitflow.md#content-cms-saves-go-straight-to-main)).
   - A save that changes only CMS files (`content/blog/`, `content/blog-categories/`, `public/images/content/blog/`)
     deploys as soon as the site builds, never waiting for CI's tests; a build that fails isn't deployed. If CI's tests
     then fail on `main`, an issue titled "CI is failing on main" alerts the owner, but later saves keep publishing.
@@ -73,5 +75,5 @@ posts are moved to another category.
   team). The project's URLs must include every domain the CMS is opened from (currently `https://pitonne.jp`). Open the
   CMS only on https://pitonne.jp: https://staging.pitonne.jp/keystatic would also save to `main`, so it isn't a place
   to try changes.
-- **Rules**: field limits live in `lib/blog-rules.ts`, shared by `keystatic.config.ts` and the zod schemas in
-  `lib/data/blog-posts.ts` and `lib/data/blog-categories.ts`.
+- **Rules**: field limits live in `src/lib/blog-rules.ts`, shared by `keystatic.config.ts` and the zod schemas in
+  `src/lib/data/blog-posts.ts` and `src/lib/data/blog-categories.ts`.

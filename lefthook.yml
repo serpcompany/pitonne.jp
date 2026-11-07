@@ -1,0 +1,14 @@
+extends:
+  - node_modules/@serpcompany/verify/configs/lefthook.yml
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{ts,tsx,mts,js,mjs,cjs,json,jsonc,css}"
+      run: pnpm --silent exec biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+
+pre-push:
+  commands:
+    fast-check:
+      run: pnpm --silent lint && pnpm --silent typecheck && pnpm --silent test

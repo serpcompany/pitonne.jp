@@ -1,0 +1,128 @@
+import { render, screen, within } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import AreaPage from '@/app/[locale]/areas-served/[ward]/[area]/page'
+import { AreaDetailPage } from '@/components/area-detail-page'
+import { getAllAreas, getArea } from '@/lib/data/areas'
+import { locales } from '@/lib/i18n/config'
+import { defined } from '@/test/defined'
+
+const areaPages = locales.flatMap(locale =>
+  getAllAreas().map(({ ward, area }) => [`${ward.slug}/${area.slug}`, locale, ward, area] as const)
+)
+
+function renderHirooAreaDetail() {
+  const area = defined(getArea('minato', 'hiroo'))
+
+  render(
+    <AreaDetailPage
+      areaName={area.area.name}
+      areaNameJa={area.area.nameJa}
+      wardName={area.ward.name}
+      wardNameJa={area.ward.nameJa}
+      wardSlug={area.ward.slug}
+      description={area.area.description}
+      descriptionJa={area.area.descriptionJa}
+      highlights={area.area.highlights}
+      highlightsJa={area.area.highlightsJa}
+      landmarks={area.area.landmarks}
+      landmarksJa={area.area.landmarksJa}
+      otherAreas={[]}
+    />
+  )
+}
+
+function expectLink(name: string, href: string, root: HTMLElement | Document = document) {
+  expect(within(root as HTMLElement).getByRole('link', { name })).toHaveAttribute(
+    'href',
+    expect.stringMatching(new RegExp(`^${href.replaceAll('/', '\\/')}\\/?$`))
+  )
+}
+
+describe('area detail parity', () => {
+  it('does not treat Tokyo Station as a Chiyoda area', () => {
+    expect(getArea('chiyoda', 'tokyo-station')).toBeUndefined()
+  })
+
+  it('renders the live-style area template with map, local access, and contact actions', () => {
+    renderHirooAreaDetail()
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'IV Therapy, Stem Cells, Medications & Blood Testing in Hiroo, Minato, Tokyo'
+      })
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Care Available' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'How To Get Started' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Local Access' })).toBeInTheDocument()
+    expect(screen.getByTitle('Hiroo, Minato, Tokyo map')).toHaveAttribute(
+      'src',
+      expect.stringContaining('output=embed')
+    )
+    expect(screen.getByRole('link', { name: 'Contact Pitonne' })).toHaveAttribute(
+      'href',
+      '/contact'
+    )
+    expect(screen.queryByRole('link', { name: /Call:/ })).not.toBeInTheDocument()
+  })
+
+  it('links every care available category and real service page', () => {
+    renderHirooAreaDetail()
+
+    const expectedCategories = [
+      ['IV Therapy', '/services/iv-therapy'],
+      ['Stem Cell Therapy', '/services/stem-cell-therapy'],
+      ['Medications', '/services/medication'],
+      ['Blood Tests', '/services/blood-tests']
+    ] as const
+
+    for (const [name, href] of expectedCategories) {
+      const heading = screen.getByRole('heading', { level: 3, name })
+      expectLink(name, href, heading)
+    }
+
+    const expectedServices = [
+      ['Exosome IV Drip', '/services/exosome-iv-drip'],
+      ['Hangover IV Drip', '/services/hangover-iv-drip'],
+      ['Energy & Fatigue Recovery IV', '/services/energy-fatigue-recovery-iv'],
+      ['Skin Brightening IV Drip', '/services/skin-brightening-iv-drip'],
+      ['Immune Boost IV Therapy', '/services/immune-boost-iv-therapy'],
+      ['Custom Vitamin IV & Injection', '/services/iv-vitamin-therapy'],
+      ['High Dose Vitamin C IV Therapy', '/services/high-dose-vitamin-c-iv-therapy'],
+      ['NMN IV Therapy', '/services/nmn-iv-therapy'],
+      ['Stem Cell Nasal Spray', '/services/stem-cell-nasal-spray'],
+      ['ED Medication', '/services/ed-medication'],
+      ['AGA Medication', '/services/androgenetic-alopecia-medicine'],
+      ['Hormone Blood Testing', '/services/hormone-blood-testing'],
+      ['Nutrition Blood Testing', '/services/nutrition-blood-testing'],
+      ['Tumor Marker Blood Testing', '/services/tumor-marker-blood-testing']
+    ] as const
+
+    for (const [name, href] of expectedServices) {
+      expect(
+        screen
+          .getAllByRole('link', { name })
+          .some(link => link.getAttribute('href')?.match(`^${href}/?$`))
+      ).toBe(true)
+    }
+
+    expect(screen.queryByText('Regenerative wellness planning')).not.toBeInTheDocument()
+    expect(screen.queryByText('Discreet consultation')).not.toBeInTheDocument()
+    expect(screen.queryByText('Prescription guidance')).not.toBeInTheDocument()
+  })
+
+  it.each(areaPages)('embeds a Google map of %s (%s)', async (_path, locale, ward, area) => {
+    const { container } = render(
+      await AreaPage({ params: Promise.resolve({ locale, ward: ward.slug, area: area.slug }) })
+    )
+    const maps = Array.from(
+      container.querySelectorAll('iframe'),
+      frame => new URL(frame.src)
+    ).filter(url => url.hostname === 'www.google.com' && url.pathname === '/maps')
+
+    expect(maps).toHaveLength(1)
+    expect(maps[0].searchParams.get('output')).toBe('embed')
+    expect(maps[0].searchParams.get('q')).toContain(area.name)
+    expect(maps[0].searchParams.get('q')).toContain(ward.name)
+  })
+})

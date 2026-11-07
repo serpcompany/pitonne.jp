@@ -1,0 +1,138 @@
+import { GoogleTagManager } from '@next/third-parties/google'
+import type { Metadata } from 'next'
+import { Inter, Playfair_Display } from 'next/font/google'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { getHeaderText } from '@/components/header-text'
+import { JsonLd } from '@/components/shared/json-ld'
+import { getUntranslatedBlogPaths } from '@/lib/data/blog-posts'
+import { localizedRoute } from '@/lib/data/routes'
+import { getServiceCategorySections } from '@/lib/data/services'
+import { hasAnalytics, siteOrigin } from '@/lib/deploy-environment.mts'
+import type { Locale } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import {
+  absoluteUrl,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  deploymentRobots,
+  GTM_CONTAINER_ID,
+  SITE_NAME
+} from '@/lib/seo'
+import { businessJsonLd, websiteJsonLd } from '@/lib/structured-data'
+import { localeStaticParams } from './locale-page'
+
+export const dynamicParams = false
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter'
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair'
+})
+
+export const generateStaticParams = localeStaticParams
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const dict = getDictionary(locale as Locale)
+
+  return {
+    metadataBase: new URL(siteOrigin()),
+    title: {
+      default: dict.common.siteTitle,
+      template: `%s | ${SITE_NAME}`
+    },
+    description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
+    openGraph: {
+      title: dict.common.siteTitle,
+      description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
+      siteName: SITE_NAME,
+      images: [
+        {
+          url: absoluteUrl(DEFAULT_OG_IMAGE),
+          width: 1200,
+          height: 630,
+          alt: dict.common.ogImageAlt
+        }
+      ],
+      locale: locale === 'ja' ? 'ja_JP' : 'en_US',
+      type: 'website'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.common.siteTitle,
+      description: locale === 'ja' ? dict.home.heroDescription : DEFAULT_DESCRIPTION,
+      images: [absoluteUrl(DEFAULT_OG_IMAGE)]
+    },
+    robots: deploymentRobots(),
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+        { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+        { url: '/icon.svg', type: 'image/svg+xml' }
+      ],
+      apple: '/apple-icon.png'
+    }
+  }
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+  ...headerOptions
+}: Readonly<{
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+  languageSwitcherPath?: string
+}>) {
+  const { locale } = await params
+  const typedLocale = locale as Locale
+  const showAnalytics = hasAnalytics()
+  const dict = getDictionary(typedLocale)
+
+  return (
+    <html lang={locale} className={`${inter.variable} ${playfair.variable}`}>
+      <body className="font-sans antialiased bg-background">
+        {showAnalytics && <GoogleTagManager gtmId={GTM_CONTAINER_ID} />}
+        {showAnalytics && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        )}
+        <JsonLd data={businessJsonLd(typedLocale)} />
+        <JsonLd data={websiteJsonLd(typedLocale)} />
+        <Header
+          locale={typedLocale}
+          text={getHeaderText(typedLocale)}
+          serviceNavigation={getServiceCategorySections(typedLocale).map(section => ({
+            name: section.title,
+            href: section.href,
+            items: section.services.map(service => ({
+              name: service.name,
+              href: localizedRoute(service.canonicalPath, typedLocale)
+            }))
+          }))}
+          untranslatedPaths={getUntranslatedBlogPaths(typedLocale)}
+          {...headerOptions}
+        />
+        <main className="min-h-screen">{children}</main>
+        <Footer locale={typedLocale} dict={dict} />
+      </body>
+    </html>
+  )
+}

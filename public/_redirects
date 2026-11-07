@@ -4,11 +4,7 @@
 /services/medications/ /services/medication/ 301
 /ja/services/medications /ja/services/medication/ 301
 /ja/services/medications/ /ja/services/medication/ 301
-
-# The video sitemap became a child of /sitemap-index.xml (issue #80)
 /videos-sitemap.xml /sitemap-videos.xml 301
-
-# Blog feature images moved to per-post folders for the CMS (issue #64)
 /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo.jpg /images/content/blog/blood-tests-before-regular-iv-therapy-tokyo/featureImage.jpg 301
 /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo.jpg /images/content/blog/high-dose-vitamin-c-50g-g6pd-test-tokyo/featureImage.jpg 301
 /images/content/blog/how-long-does-iv-therapy-take-tokyo.jpg /images/content/blog/how-long-does-iv-therapy-take-tokyo/featureImage.jpg 301
@@ -25,6 +21,4 @@
 /images/content/sheet/blog/iv-therapy-for-nausea.jpg /images/content/blog/iv-therapy-for-nausea/featureImage.jpg 301
 /images/content/sheet/blog/iv-therapy-for-relaxation.jpg /images/content/blog/iv-therapy-for-relaxation/featureImage.jpg 301
 /images/content/sheet/blog/iv-therapy-for-stress.jpg /images/content/blog/iv-therapy-for-stress/featureImage.jpg 301
-
-# The blog CMS is a single-page app exported only at /keystatic/; serve it for every /keystatic/* path
 /keystatic/* /keystatic/ 200

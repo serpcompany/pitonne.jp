@@ -1,0 +1,101 @@
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { BlogPostTemplate, type BlogPostViewModel } from '@/components/blog/blog-post-template'
+import {
+  getAllBlogPosts,
+  getBlogPostBySlug,
+  getBlogPostLocales,
+  getBlogPostsByCategory
+} from '@/lib/data/blog-posts'
+import { getServicesFromSlugs } from '@/lib/data/services'
+import type { Locale } from '@/lib/i18n/config'
+import { nonDefaultLocales } from '@/lib/i18n/config'
+import { getDictionary } from '@/lib/i18n/dictionaries'
+import { formatPostDate } from '@/lib/post-date'
+import { absoluteUrl, localizedPageMetadata } from '@/lib/seo'
+
+export const dynamicParams = false
+
+interface Props {
+  params: Promise<{ locale: string; post: string }>
+}
+
+export async function generateStaticParams() {
+  return nonDefaultLocales.flatMap(locale =>
+    getAllBlogPosts(locale).map(post => ({ locale, post: post.slug }))
+  )
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, post: postSlug } = await params
+  const typedLocale = locale as Locale
+
+  const post = getBlogPostBySlug(postSlug, typedLocale)
+  if (post) {
+    const metaTitle = post.metaTitle ?? post.title
+    const metaDescription = post.metaDescription ?? post.excerpt
+
+    const metadata = localizedPageMetadata({
+      title: metaTitle,
+      description: metaDescription,
+      path: `/blog/${post.slug}/`,
+      locale: typedLocale,
+      availableLocales: getBlogPostLocales(post.slug),
+      images: post.featureImage ? [absoluteUrl(post.featureImage)] : undefined
+    })
+
+    return {
+      ...metadata,
+      openGraph: { ...metadata.openGraph, type: 'article', publishedTime: post.publishedAt }
+    }
+  }
+
+  return { title: getDictionary(typedLocale).common.notFoundPost }
+}
+
+export default async function BlogPostPage({ params }: Props) {
+  const { locale, post: postSlug } = await params
+  const typedLocale = locale as Locale
+
+  const staticPost = getBlogPostBySlug(postSlug, typedLocale)
+
+  if (!staticPost) {
+    notFound()
+  }
+
+  const post: BlogPostViewModel = {
+    title: staticPost.title,
+    slug: staticPost.slug,
+    publishedAt: staticPost.publishedAt,
+    date: formatPostDate(staticPost.publishedAt, typedLocale),
+    content: staticPost.content,
+    excerpt: staticPost.excerpt,
+    featureImage: staticPost.featureImage,
+    featureImageAlt: staticPost.featureImageAlt,
+    readingTime: staticPost.readingTime,
+    category: staticPost.category,
+    categorySlug: staticPost.categorySlug,
+    relatedServiceSlugs: staticPost.relatedServiceSlugs,
+    tags: staticPost.tags,
+    author: {
+      name: staticPost.author.name,
+      role: staticPost.author.role
+    }
+  }
+
+  const relatedPosts = getBlogPostsByCategory(post.categorySlug, typedLocale)
+    .filter(p => p.slug !== postSlug)
+    .slice(0, 3)
+
+  const relatedServices = getServicesFromSlugs(staticPost.relatedServiceSlugs, typedLocale)
+
+  return (
+    <BlogPostTemplate
+      post={post}
+      relatedPosts={relatedPosts}
+      relatedServices={relatedServices}
+      latestPosts={getAllBlogPosts(typedLocale).filter(candidate => candidate.slug !== postSlug)}
+      locale={typedLocale}
+    />
+  )
+}

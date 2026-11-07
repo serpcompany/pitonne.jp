@@ -1,0 +1,28 @@
+diff --git a/wrangler-dist/cli.js b/wrangler-dist/cli.js
+index 461ca04fe5a2b8d516dd2425c7b4809561a174cd..a4db76520660db202569bc8607ec8b34b170255e 100644
+--- a/wrangler-dist/cli.js
++++ b/wrangler-dist/cli.js
+@@ -359759,6 +359759,14 @@ async function generateASSETSBinding(options) {
+     }
+   };
+ }
++function lstatUnlessUnderAFile(filepath) {
++  try {
++    return fs11.lstatSync(filepath, { throwIfNoEntry: false });
++  } catch (error) {
++    if (error.code === "ENOTDIR") return void 0;
++    throw error;
++  }
++}
+ async function generateAssetsFetch(directory, log2, signal) {
+   directory = path3.resolve(directory);
+   const polyfill2 = (await Promise.resolve().then(() => (init_miniflare2(), miniflare_exports2))).default;
+@@ -359842,7 +359850,7 @@ async function generateAssetsFetch(directory, log2, signal) {
+         if (!filepath.startsWith(directory)) {
+           return null;
+         }
+-        if (fs11.lstatSync(filepath, { throwIfNoEntry: false })?.isFile() && !ignoredFiles.includes(filepath)) {
++        if (lstatUnlessUnderAFile(filepath)?.isFile() && !ignoredFiles.includes(filepath)) {
+           const hash3 = hashFile(filepath);
+           assetKeyEntryMap.set(hash3, filepath);
+           return hash3;

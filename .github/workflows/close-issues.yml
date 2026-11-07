@@ -1,0 +1,31 @@
+name: Close issues
+
+on:
+  push:
+    branches:
+      - staging
+
+permissions:
+  contents: read
+
+jobs:
+  close:
+    name: Close the issues the pull requests this push merged name
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          sparse-checkout: |
+            tools/checks/pull-request.mjs
+            tools/checks/close-issues.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Comment on each issue a merged pull request names, then close it
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/checks/close-issues.mjs
