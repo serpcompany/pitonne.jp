@@ -109,6 +109,24 @@ describe('the Code review workflow', () => {
     expect(checkout.with?.['persist-credentials']).toBe(false)
   })
 
+  it('has the tests reviewer flag each of the test review’s four kinds of padding as blocking', () => {
+    const prompt = String(claude.with?.prompt)
+    const testsReviewer = prompt
+      .split('\n')
+      .find(line => line.includes('- the issue, tests and docs:'))
+    expect(testsReviewer).toMatch(
+      /https:\/\/github\.com\/serpcompany\/serp\/blob\/main\/docs\/engineering\/standards\/verification\/tests\/\S+#the-test-review/
+    )
+    for (const kind of [
+      'asserts nothing, or only that nothing threw',
+      'restating the implementation',
+      'mocks the unit under test',
+      'exists only to reach a line'
+    ])
+      expect(testsReviewer).toContain(kind)
+    expect(testsReviewer).toContain('Each padding test is blocking')
+  })
+
   it('starts only once verify and test passed on the head commit, test by being skipped on a docs-only change, and reviews nothing after a failure', () => {
     const wait = step(reviewer, 'fast')
     expect(wait.env?.CHECKS).toBe('verify test')

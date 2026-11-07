@@ -115,7 +115,11 @@ standard sets, after serp's own `review.yml`, which this repository can't call.
 - **What it does:** it reads every patch, starts three reviewers in parallel (bugs, the
   repository's rules, and the issue, tests and docs), keeps the real new findings, posts each as
   a comment on its line, marked **blocking** or **suggestion**, and writes a summary that says
-  how many of the changed files it read. The workflow posts the summary, or updates the earlier one,
+  how many of the changed files it read. The tests reviewer also flags, as blocking, each added
+  or changed test that is padding, by SERP's
+  [test review](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification/tests/README.md#the-test-review):
+  one that asserts nothing or only that nothing threw, restates the implementation, mocks the
+  unit under test, or exists only to reach a line. The workflow posts the summary, or updates the earlier one,
   as `github-actions[bot]`, and keeps the transcript for a week.
 - **Time and failure:** the wait has 25 minutes and the review 20, inside the job's 60. The job
   fails only when no review ran or its summary couldn't be posted; findings never turn it red.
