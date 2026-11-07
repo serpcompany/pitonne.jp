@@ -80,6 +80,14 @@ it: Playwright starts `pnpm preview` (`wrangler pages dev out`, with the wrangle
 uploads with) on port 8791 (`E2E_PORT` changes it), which applies `_redirects`, `_headers`,
 `_routes.json` and the Function, and it refuses to reuse a server already on that port.
 
+- **The wrangler patch:** `patches/wrangler@4.103.0.patch` makes `wrangler pages dev` count a path
+  under a file as missing. The Function answers the 404 page's own URLs by asking for
+  `/404.html/` ([`hosts.md`](hosts.md)); on Linux, wrangler's asset lookup threw `ENOTDIR` there
+  and answered 502, where Pages and Windows answer 404. Still unfixed in wrangler 4.158.0. It
+  touches only the local server, not the deploy's upload; `e2e/environment.spec.ts`, "answers the
+  404 page's own URLs with 404", fails without it on Linux. Move it with wrangler: a new version
+  needs the patch made again with `pnpm patch`, or dropped once wrangler fixes the lookup.
+
 - **Run them:** `DEPLOY_ENV=production pnpm build`, then `DEPLOY_ENV=production pnpm test:e2e`.
   They read `DEPLOY_ENV` as `pnpm audit:seo` does, to know which indexing signals the build must
   send, so export the value the build used; `pnpm build` and `pnpm test:e2e` with neither test
