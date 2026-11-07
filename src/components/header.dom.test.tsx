@@ -72,7 +72,7 @@ describe.each(locales)('header navigation (%s)', locale => {
     expect(screen.queryByRole('link', { name: dict.nav.faqs })).not.toBeInTheDocument()
   })
 
-  it('keeps FAQs out of the mobile menu until the About section is expanded', async () => {
+  it('keeps FAQs out of the mobile menu until the About section is expanded, and again once it is folded', async () => {
     await renderHeader(locale)
 
     fireEvent.click(screen.getByRole('button', { name: dict.common.toggleMenu }))
@@ -86,6 +86,9 @@ describe.each(locales)('header navigation (%s)', locale => {
       'href',
       routeHref(faqsHref)
     )
+
+    fireEvent.click(screen.getByRole('button', { name: dict.nav.about }))
+    expect(screen.queryByRole('link', { name: dict.nav.faqs })).not.toBeInTheDocument()
   })
 
   it('links Videos from the primary navigation and the mobile menu', async () => {
@@ -187,6 +190,9 @@ describe.each(locales)('header navigation (%s)', locale => {
 
     expect(container.querySelector(`a[href="${retiredPhoneHref}"]`)).not.toBeInTheDocument()
     expect(container).not.toHaveTextContent(retiredPhoneText)
+
+    fireEvent.mouseLeave(screen.getByRole('button', { name: dict.nav.phone }))
+    expect(phoneLinks(container)).toHaveLength(1)
   })
 
   it('offers the clinic’s LINE account in a new tab on Japanese pages only, beside the phone and in the phone menu', async () => {
@@ -259,6 +265,20 @@ describe.each(locales)('header navigation (%s)', locale => {
     )
   })
 
+  it('closes the mobile menu and folds its open section when a link in it is followed', async () => {
+    await renderHeader(locale)
+    const toggle = screen.getByRole('button', { name: dict.common.toggleMenu })
+
+    fireEvent.click(toggle)
+    fireEvent.click(screen.getByRole('button', { name: dict.nav.about }))
+    fireEvent.click(screen.getByRole('link', { name: dict.nav.faqs }))
+
+    expect(screen.getAllByRole('link', { name: dict.nav.videos })).toHaveLength(1)
+    fireEvent.click(toggle)
+    expect(screen.getAllByRole('link', { name: dict.nav.videos })).toHaveLength(2)
+    expect(screen.queryByRole('link', { name: dict.nav.faqs })).not.toBeInTheDocument()
+  })
+
   it('labels the menu toggle with the dictionary text for the locale', async () => {
     await renderHeader(locale)
 
@@ -269,6 +289,17 @@ describe.each(locales)('header navigation (%s)', locale => {
         screen.queryByRole('button', { name: getDictionary(other).common.toggleMenu })
       ).not.toBeInTheDocument()
     }
+  })
+})
+
+describe('the language switcher on the Japanese home page', () => {
+  it('links the English home page when the address has no trailing slash', async () => {
+    pathname.current = '/ja'
+    await renderHeader('ja')
+
+    expect(
+      screen.getByRole('link', { name: getDictionary('ja').languageSwitcher.en })
+    ).toHaveAttribute('href', '/')
   })
 })
 

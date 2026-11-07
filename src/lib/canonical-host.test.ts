@@ -185,6 +185,20 @@ describe('canonical host redirect', () => {
     expect(response?.headers.get('location')).toBe('https://pitonne.jp/en/?a=1')
   })
 
+  it('still folds a _redirects rule whose response body fails', async () => {
+    const failedBody = new ReadableStream({
+      start(controller) {
+        controller.error(new Error('stream failed'))
+      }
+    })
+    const response = await canonicalHostRedirect(
+      new Request('https://pitonne-jp.pages.dev/en/'),
+      async () => new Response(failedBody, { status: 301, headers: { location: '/' } })
+    )
+    expect(response?.status).toBe(308)
+    expect(response?.headers.get('location')).toBe('https://pitonne.jp/')
+  })
+
   it("ignores asset responses that aren't redirects", async () => {
     for (const status of [200, 404, 405]) {
       const response = await canonicalHostRedirect(

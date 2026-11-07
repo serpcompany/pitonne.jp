@@ -58,37 +58,36 @@ export default async function BlogPostPage({ params }: Props) {
   const typedLocale = locale as Locale
 
   const staticPost = getBlogPostBySlug(postSlug, typedLocale)
-  const post: BlogPostViewModel | null = staticPost
-    ? {
-        title: staticPost.title,
-        slug: staticPost.slug,
-        publishedAt: staticPost.publishedAt,
-        date: formatPostDate(staticPost.publishedAt, typedLocale),
-        content: staticPost.content,
-        excerpt: staticPost.excerpt,
-        featureImage: staticPost.featureImage,
-        featureImageAlt: staticPost.featureImageAlt,
-        readingTime: staticPost.readingTime,
-        category: staticPost.category,
-        categorySlug: staticPost.categorySlug,
-        relatedServiceSlugs: staticPost.relatedServiceSlugs,
-        tags: staticPost.tags,
-        author: {
-          name: staticPost.author.name,
-          role: staticPost.author.role
-        }
-      }
-    : null
 
-  if (!post) {
+  if (!staticPost) {
     notFound()
+  }
+
+  const post: BlogPostViewModel = {
+    title: staticPost.title,
+    slug: staticPost.slug,
+    publishedAt: staticPost.publishedAt,
+    date: formatPostDate(staticPost.publishedAt, typedLocale),
+    content: staticPost.content,
+    excerpt: staticPost.excerpt,
+    featureImage: staticPost.featureImage,
+    featureImageAlt: staticPost.featureImageAlt,
+    readingTime: staticPost.readingTime,
+    category: staticPost.category,
+    categorySlug: staticPost.categorySlug,
+    relatedServiceSlugs: staticPost.relatedServiceSlugs,
+    tags: staticPost.tags,
+    author: {
+      name: staticPost.author.name,
+      role: staticPost.author.role
+    }
   }
 
   const relatedPosts = getBlogPostsByCategory(post.categorySlug, typedLocale)
     .filter(p => p.slug !== postSlug)
     .slice(0, 3)
 
-  const relatedServices = getServicesFromSlugs(post.relatedServiceSlugs ?? [], typedLocale)
+  const relatedServices = getServicesFromSlugs(staticPost.relatedServiceSlugs, typedLocale)
 
   return (
     <BlogPostTemplate

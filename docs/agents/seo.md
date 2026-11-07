@@ -83,7 +83,7 @@ listed in [`docs/i18n.md`](../i18n.md#seo-signals).
   `src/app/sitemap-<group>.xml/route.ts`.
 - `/sitemap.xml` serves the same XML as the index, for clients that still ask for it, and
   `/videos-sitemap.xml` answers 301 to `/sitemap-videos.xml` (`public/_redirects`).
-- A URL belongs to the first group that lists it, so each is in exactly one child. Each lists
+- No two groups list the same URL, so each is in exactly one child (`src/lib/sitemaps.test.ts`). Each lists
   its published locales as `xhtml:link` alternates, and both locales of a page sit in the same
   child. A child holds at most 50,000 URLs (`MAX_SITEMAP_URLS`); past that, the group needs a
   second file listed in the index.

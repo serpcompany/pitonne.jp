@@ -36,41 +36,24 @@ function normalizePageContent(content: string) {
     .trim()
 }
 
-function getMarkdownPage(relativePath: string): MarkdownPage
-function getMarkdownPage(relativePath: string, locale: Locale): MarkdownPage | null
-function getMarkdownPage(relativePath: string, locale: Locale = 'en'): MarkdownPage | null {
-  let sourcePath: string
-  let absolutePath: string
+function localizedPagePath(relativePath: string, locale: Locale): string {
+  if (locale === 'en') return relativePath
+  return path.posix.join(
+    path.posix.dirname(relativePath),
+    locale,
+    path.posix.basename(relativePath)
+  )
+}
 
-  if (locale === 'ja') {
-    const dir = path.dirname(relativePath)
-    const file = path.basename(relativePath)
-    const jaRelativePath = dir === '.' ? `ja/${file}` : `${dir}/ja/${file}`
-    sourcePath = `content/pages/${jaRelativePath}`
-    absolutePath = pageContentPath(jaRelativePath)
-
-    if (!fs.existsSync(absolutePath)) {
-      return null
-    }
-  } else {
-    sourcePath = `content/pages/${relativePath}`
-    absolutePath = pageContentPath(relativePath)
-  }
-
-  const parsed = matter(fs.readFileSync(absolutePath, 'utf8'))
+export function getLegalPage(key: LegalPageKey, locale: Locale = 'en'): MarkdownPage {
+  const relativePath = localizedPagePath(legalPagePaths[key], locale)
+  const parsed = matter(fs.readFileSync(pageContentPath(relativePath), 'utf8'))
   const frontmatter = pageFrontmatterSchema.parse(parsed.data)
 
   return {
     title: frontmatter.title,
     slug: frontmatter.slug,
     content: normalizePageContent(parsed.content),
-    sourcePath
+    sourcePath: `content/pages/${relativePath}`
   }
-}
-
-export function getLegalPage(key: LegalPageKey): MarkdownPage
-export function getLegalPage(key: LegalPageKey, locale: Locale): MarkdownPage
-export function getLegalPage(key: LegalPageKey, locale: Locale = 'en'): MarkdownPage {
-  const path = legalPagePaths[key]
-  return getMarkdownPage(path, locale) ?? getMarkdownPage(path)
 }

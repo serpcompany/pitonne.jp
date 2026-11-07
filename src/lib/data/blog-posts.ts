@@ -14,8 +14,7 @@ import {
 import {
   BLOG_CATEGORIES_SUBDIR,
   type BlogCategory,
-  blogCategories,
-  getBlogCategory
+  blogCategories
 } from '@/lib/data/blog-categories'
 import { serviceSlugForCmsValue } from '@/lib/data/services'
 import { type Locale, locales } from '@/lib/i18n/config'
@@ -77,7 +76,7 @@ export interface BlogPost {
   }
   readingTime: number
   featureImage?: string
-  featureImageAlt?: string
+  featureImageAlt: string
   featured?: boolean
   relatedServiceSlugs: string[]
   tags: string[]
@@ -211,9 +210,7 @@ export function loadBlogPostsFromDirectory(
             fallbackMetaDescription(frontmatter.excerpt, content, locale),
           readingTime: readingTime ?? estimateReadingTime(content, locale),
           featureImage: frontmatter.featureImage || undefined,
-          featureImageAlt: frontmatter.featureImage
-            ? frontmatter.featureImageAlt || frontmatter.title
-            : undefined,
+          featureImageAlt: frontmatter.featureImageAlt || frontmatter.title,
           featured: frontmatter.featured ?? false,
           relatedServiceSlugs: (frontmatter.relatedServiceSlugs ?? []).map(serviceSlugForCmsValue),
           tags: frontmatter.tags ?? [],
@@ -237,7 +234,7 @@ const blogPostsByLocale = { en: loadBlogPosts('en'), ja: loadBlogPosts('ja') }
 export const blogPosts: BlogPost[] = blogPostsByLocale.en
 
 function getPostsForLocale(locale: Locale): BlogPost[] {
-  return blogPostsByLocale[locale] ?? blogPostsByLocale.en
+  return blogPostsByLocale[locale]
 }
 
 export function getAllBlogPosts(locale: Locale = 'en'): BlogPost[] {
@@ -324,31 +321,17 @@ export function getAllCategories(
   locale: Locale = 'en'
 ): { name: string; description: string; ctaDescription?: string; slug: string; count: number }[] {
   const posts = getPostsForLocale(locale)
-  const categoryMap = new Map<
-    string,
-    { name: string; description: string; ctaDescription?: string; slug: string; count: number }
-  >()
+  const slugs = Array.from(new Set(posts.map(post => post.categorySlug)))
 
-  for (const post of posts) {
-    const existing = categoryMap.get(post.categorySlug)
-    if (existing) {
-      existing.count++
-    } else {
-      const category = getBlogCategory(post.categorySlug)
-      if (!category) {
-        throw new Error(
-          `${post.sourcePath} has categorySlug "${post.categorySlug}", but ${BLOG_CATEGORIES_SUBDIR}/${post.categorySlug}.json does not exist`
-        )
-      }
-      categoryMap.set(post.categorySlug, {
+  return slugs.flatMap(slug =>
+    blogCategories
+      .filter(category => category.slug === slug)
+      .map(category => ({
         name: category.name[locale],
         description: category.description[locale],
         ctaDescription: category.ctaDescription[locale],
-        slug: post.categorySlug,
-        count: 1
-      })
-    }
-  }
-
-  return Array.from(categoryMap.values())
+        slug,
+        count: posts.filter(post => post.categorySlug === slug).length
+      }))
+  )
 }

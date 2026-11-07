@@ -83,7 +83,3 @@ export function loadBlogCategoriesFromDirectory(
 export const blogCategories: BlogCategory[] = loadBlogCategoriesFromDirectory(
   path.join(process.cwd(), BLOG_CATEGORIES_SUBDIR)
 )
-
-export function getBlogCategory(slug: string): BlogCategory | undefined {
-  return blogCategories.find(category => category.slug === slug)
-}

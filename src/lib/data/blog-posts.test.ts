@@ -240,6 +240,12 @@ describe('blog content model', () => {
     expect(() => loadBlogCategoriesFromDirectory(dir)).toThrow(field)
   })
 
+  it('loads no posts and no categories once the CMS deletes the last file and git drops the folder', () => {
+    const gone = path.join(writeCategories({}), 'ja')
+    expect(loadBlogPostsFromDirectory(gone, 'ja', 'content/blog/ja')).toEqual([])
+    expect(loadBlogCategoriesFromDirectory(gone)).toEqual([])
+  })
+
   it('rejects a category file that is not valid JSON or not named by a kebab-case slug', () => {
     expect(() =>
       loadBlogCategoriesFromDirectory(writeCategories({ 'nutrition.json': '{ name: ' }))
@@ -455,6 +461,9 @@ describe('single-locale blog posts', () => {
     expect(localizeBlogContentHref('/ja/services/', 'ja')).toBe('/ja/services/')
     expect(localizeBlogContentHref('/images/content/blog/example.jpg', 'ja')).toBe(
       '/images/content/blog/example.jpg'
+    )
+    expect(localizeBlogContentHref('/files/price-list.pdf?v=2', 'ja')).toBe(
+      '/files/price-list.pdf?v=2'
     )
     expect(localizeBlogContentHref('https://medlineplus.gov/', 'ja')).toBe(
       'https://medlineplus.gov/'

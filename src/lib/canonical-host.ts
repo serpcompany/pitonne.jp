@@ -151,8 +151,9 @@ export async function slashedFileRedirect(
   const fileUrl = new URL(file)
   const target = await assetRedirectTarget(fileUrl, askFor(fileUrl, request, next))
   if (!target) return redirect308(file)
-  const location = `${fileUrl.origin}${canonicalPath(target.pathname)}${target.search || fileUrl.search}`
-  return redirect308(location === request.url ? file : location)
+  return redirect308(
+    `${fileUrl.origin}${canonicalPath(target.pathname)}${target.search || fileUrl.search}`
+  )
 }
 
 const NOT_FOUND_PAGE_PATH = /^\/(?:404|_not-found)(?:\.html|\/(?:index\.html)?)?$/

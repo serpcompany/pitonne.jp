@@ -104,57 +104,42 @@ export default async function BlogCategoryPage({ params }: Props) {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          {categoryPosts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-              {categoryPosts.map(post => (
-                <Link
-                  key={post.slug}
-                  href={localizedRoute(`/blog/${post.slug}/`, typedLocale)}
-                  className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#7A8F87] transition-all"
-                >
-                  <div className="aspect-video overflow-hidden bg-[#f5ebe0]">
-                    {post.featureImage ? (
-                      <img
-                        src={post.featureImage}
-                        alt={post.featureImageAlt || post.title}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <div className="h-16 w-16 rounded-full bg-white/50" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
-                      <time>{formatPostDate(post.publishedAt, typedLocale)}</time>
-                      <span>&middot;</span>
-                      <span>
-                        {post.readingTime} {dict.common.minRead}
-                      </span>
-                    </div>
-                    <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-                    <p className="text-muted-foreground text-sm line-clamp-3">{post.excerpt}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#f5ebe0] flex items-center justify-center mb-4">
-                <div className="w-8 h-8 rounded-full bg-[#d4c4a8]" />
-              </div>
-              <p className="text-muted-foreground mb-6">{dict.blog.noArticlesFound}</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
+            {categoryPosts.map(post => (
               <Link
-                href={localizedRoute('/blog/', typedLocale)}
-                className="text-[#7A8F87] hover:underline"
+                key={post.slug}
+                href={localizedRoute(`/blog/${post.slug}/`, typedLocale)}
+                className="group block bg-card rounded-lg border border-border overflow-hidden hover:shadow-lg hover:border-[#7A8F87] transition-all"
               >
-                {dict.blog.viewAllArticles}
+                <div className="aspect-video overflow-hidden bg-[#f5ebe0]">
+                  {post.featureImage ? (
+                    <img
+                      src={post.featureImage}
+                      alt={post.featureImageAlt}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <div className="h-16 w-16 rounded-full bg-white/50" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                    <time>{formatPostDate(post.publishedAt, typedLocale)}</time>
+                    <span>&middot;</span>
+                    <span>
+                      {post.readingTime} {dict.common.minRead}
+                    </span>
+                  </div>
+                  <h2 className="text-lg font-semibold text-foreground mb-2 group-hover:text-[#7A8F87] transition-colors line-clamp-2">
+                    {post.title}
+                  </h2>
+                  <p className="text-muted-foreground text-sm line-clamp-3">{post.excerpt}</p>
+                </div>
               </Link>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </section>
 

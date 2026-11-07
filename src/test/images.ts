@@ -10,11 +10,11 @@ export function publicAssetExists(assetPath: string): boolean {
 
 function unwrapOptimizedImage(url: string): string {
   if (!url.startsWith('/_next/image?')) return url
-  return new URLSearchParams(url.slice(url.indexOf('?') + 1)).get('url') ?? url
+  return Object.fromEntries(new URLSearchParams(url.slice(url.indexOf('?') + 1))).url
 }
 
 export function imageSource(image: Element): string {
-  return unwrapOptimizedImage(image.getAttribute('src') ?? '')
+  return unwrapOptimizedImage(String(image.getAttribute('src')))
 }
 
 function srcsetUrls(srcset: string | null): string[] {
@@ -27,7 +27,7 @@ function srcsetUrls(srcset: string | null): string[] {
 function backgroundUrls(root: ParentNode): string[] {
   return Array.from(root.querySelectorAll('[style]')).flatMap(element =>
     Array.from(
-      (element.getAttribute('style') ?? '').matchAll(/url\(\s*['"]?([^'")]+)/g),
+      String(element.getAttribute('style')).matchAll(/url\(\s*['"]?([^'")]+)/g),
       match => match[1]
     )
   )
@@ -35,7 +35,7 @@ function backgroundUrls(root: ParentNode): string[] {
 
 export function renderedImageUrls(root: ParentNode): string[] {
   const images = Array.from(root.querySelectorAll('img')).flatMap(image => [
-    image.getAttribute('src') ?? '',
+    String(image.getAttribute('src')),
     ...srcsetUrls(image.getAttribute('srcset'))
   ])
   const sources = Array.from(root.querySelectorAll('source')).flatMap(source =>

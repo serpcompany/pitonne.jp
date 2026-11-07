@@ -69,10 +69,11 @@ rules are in [`blog.md`](blog.md).
 - **The header's menu** reads only `area-names.ts`, so the browser downloads the names and not
   every area's text. `src/lib/i18n/client-imports.test.ts` fails if a client component reaches
   `areas.ts` or a ward's file.
-- **Videos** are in `src/lib/data/videos.ts`. `titleJa`, `descriptionJa` and `metaDescriptionJa`
-  are optional, and the Japanese pages fall back to the English text without them. `metaTitle`
-  and `metaDescription` override the watch page's English title and description, since YouTube
-  descriptions are too long for a meta description.
+- **Videos** are in `src/lib/data/videos.ts`. `titleJa` and `descriptionJa` are optional, and the
+  Japanese pages fall back to the English title and to `metaDescriptionJa` without them.
+  `metaDescription` and `metaDescriptionJa` are required: they are the watch page's meta
+  descriptions, since YouTube descriptions are too long for one. `metaTitle` overrides the watch
+  page's English title.
 - **Business data** (address, hours, phone, booking link) comes from `getBusinessInfo(locale)` in
   `src/lib/data/site.ts`, never from `businessInfo` directly. `lineUrl`, the clinic's LINE
   account, is set for Japanese only. `src/lib/data/site.test.ts` holds the phone, address and
@@ -86,8 +87,8 @@ rules are in [`blog.md`](blog.md).
 - The business, service, FAQ and image content was first collected in the Google Sheet the
   [README](../../README.md) links.
 - `pnpm audit:sheet-images` compares the sheet's image list with
-  `docs/image-audit/sheet-image-manifest.json`, which `src/lib/data/sheet-images.dom.test.tsx`
-  also reads.
+  `docs/image-audit/sheet-image-manifest.json`, and rewrites the manifest from the sheet, which
+  `src/lib/data/sheet-images.dom.test.tsx` also reads.
 - `pnpm drafts:fetch` downloads the Google Docs tabs listed in `scripts/google-docs-blog-drafts.mjs`
   as markdown blog drafts for review.
 - `pnpm translate` drafts Japanese files for English services and posts with DeepL

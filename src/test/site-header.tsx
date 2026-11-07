@@ -7,13 +7,7 @@ import { defined } from '@/test/defined'
 export type HeaderProps = Parameters<typeof Header>[0]
 
 function findElement(node: ReactNode, type: unknown): ReactElement | undefined {
-  if (Array.isArray(node)) {
-    for (const child of node) {
-      const found = findElement(child, type)
-      if (found) return found
-    }
-    return undefined
-  }
+  if (Array.isArray(node)) return node.map(child => findElement(child, type)).find(Boolean)
   if (!isValidElement(node)) return undefined
   if (node.type === type) return node
   return findElement((node.props as { children?: ReactNode }).children, type)

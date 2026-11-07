@@ -10,10 +10,11 @@ import {
   Youtube
 } from 'lucide-react'
 import Link from 'next/link'
-import { getArea, getWard } from '@/lib/data/areas'
+import { getAllAreas, wards } from '@/lib/data/areas'
 import { canonicalRoutes, localizedRoute } from '@/lib/data/routes'
 import { getServiceCategorySections } from '@/lib/data/services'
 import { getBusinessInfo } from '@/lib/data/site'
+import type { Area, Ward } from '@/lib/data/wards/ward'
 import type { Locale } from '@/lib/i18n/config'
 import type { Dictionary } from '@/lib/i18n/dictionaries'
 
@@ -131,16 +132,19 @@ function FooterLinkList({ links }: { links: { name: string; href: string }[] }) 
   )
 }
 
+const wardsBySlug: Record<string, Ward> = Object.fromEntries(wards.map(ward => [ward.slug, ward]))
+const areasBySlug: Record<string, Area> = Object.fromEntries(
+  getAllAreas().map(({ ward, area }) => [`${ward.slug}/${area.slug}`, area])
+)
+
 function wardName(wardSlug: string, locale: Locale): string {
-  const ward = getWard(wardSlug)
-  if (!ward) throw new Error(`Unknown ward ${wardSlug}`)
+  const ward = wardsBySlug[wardSlug]
   return locale === 'ja' ? ward.nameJa : ward.name
 }
 
 function areaName(wardSlug: string, areaSlug: string, locale: Locale): string {
-  const found = getArea(wardSlug, areaSlug)
-  if (!found) throw new Error(`Unknown area ${wardSlug}/${areaSlug}`)
-  return locale === 'ja' ? found.area.nameJa : found.area.name
+  const area = areasBySlug[`${wardSlug}/${areaSlug}`]
+  return locale === 'ja' ? area.nameJa : area.name
 }
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {

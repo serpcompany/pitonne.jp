@@ -7,5 +7,5 @@ export type Dictionary = typeof en
 const dictionaries: Record<Locale, Dictionary> = { en, ja }
 
 export function getDictionary(locale: Locale): Dictionary {
-  return dictionaries[locale] ?? dictionaries.en
+  return dictionaries[locale]
 }

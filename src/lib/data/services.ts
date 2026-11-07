@@ -35,7 +35,7 @@ const serviceFrontmatterSchema = z.object({
   keyPoints: z.array(z.string().min(1)),
   faqs: z.array(faqSchema),
   relatedServices: z.array(z.string().min(1)),
-  image: z.string().optional(),
+  image: z.string(),
   imageSourcePath: z.string().optional()
 })
 
@@ -62,7 +62,7 @@ export interface Service {
   keyPoints: string[]
   faqs: FAQ[]
   relatedServices: string[]
-  image?: string
+  image: string
 }
 
 export interface ServiceCategorySection {
@@ -72,10 +72,11 @@ export interface ServiceCategorySection {
   serviceSlugs: string[]
 }
 
-const serviceCategorySections: ServiceCategorySection[] = [
+const serviceCategorySections: (ServiceCategorySection & { titleJa: string })[] = [
   {
     slug: 'iv-therapy',
     title: 'IV Therapy',
+    titleJa: '点滴療法',
     href: '/services/iv-therapy/',
     serviceSlugs: [
       'exosome-iv-drip',
@@ -91,29 +92,25 @@ const serviceCategorySections: ServiceCategorySection[] = [
   {
     slug: 'stem-cell-therapy',
     title: 'Stem Cell Therapy',
+    titleJa: '幹細胞療法',
     href: '/services/stem-cell-therapy/',
     serviceSlugs: ['stem-cell-nasal-spray']
   },
   {
     slug: 'medication',
     title: 'Medications',
+    titleJa: '処方薬',
     href: '/services/medication/',
     serviceSlugs: ['ed-medication', 'androgenetic-alopecia-medicine']
   },
   {
     slug: 'blood-tests',
     title: 'Blood Tests',
+    titleJa: '血液検査',
     href: '/services/blood-tests/',
     serviceSlugs: ['hormone-blood-testing', 'nutrition-blood-testing', 'tumor-marker-blood-testing']
   }
 ]
-
-const serviceCategoryTitlesJa: Record<string, string> = {
-  'IV Therapy': '点滴療法',
-  'Stem Cell Therapy': '幹細胞療法',
-  Medications: '処方薬',
-  'Blood Tests': '血液検査'
-}
 
 const serviceOrder = [
   'iv-therapy',
@@ -124,10 +121,6 @@ const serviceOrder = [
 
 function loadServices(locale: Locale): Service[] {
   const directory = serviceContentDirectory(locale)
-
-  if (!fs.existsSync(directory)) {
-    return []
-  }
 
   return fs
     .readdirSync(directory)
@@ -168,7 +161,7 @@ const servicesByLocale = { en: loadServices('en'), ja: loadServices('ja') }
 export const services: Service[] = servicesByLocale.en
 
 function getServicesForLocale(locale: Locale): Service[] {
-  return servicesByLocale[locale] ?? servicesByLocale.en
+  return servicesByLocale[locale]
 }
 
 export function getService(slug: string, locale: Locale = 'en'): Service | undefined {
@@ -196,12 +189,10 @@ export function getChildServices(parentSlug: string, locale: Locale = 'en'): Ser
 export function getServiceCategorySections(
   locale: Locale = 'en'
 ): Array<ServiceCategorySection & { services: Service[] }> {
-  return serviceCategorySections.map(section => {
-    const localizedTitle =
-      locale === 'ja' ? (serviceCategoryTitlesJa[section.title] ?? section.title) : section.title
+  return serviceCategorySections.map(({ titleJa, ...section }) => {
     return {
       ...section,
-      title: localizedTitle,
+      title: locale === 'ja' ? titleJa : section.title,
       href: localizedRoute(section.href, locale),
       services: getServicesFromSlugs(section.serviceSlugs, locale)
     }

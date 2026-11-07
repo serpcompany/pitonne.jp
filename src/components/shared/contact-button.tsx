@@ -10,10 +10,10 @@ export function ContactButton({
 }: {
   className?: string
   children: React.ReactNode
-  locale?: Locale
+  locale: Locale
   onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }) {
-  const href = locale ? localizedRoute('/contact/', locale) : '/contact/'
+  const href = localizedRoute('/contact/', locale)
   return (
     <Link
       href={href}

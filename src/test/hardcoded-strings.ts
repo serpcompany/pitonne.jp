@@ -92,9 +92,7 @@ function report(scan: Scan, node: ts.Node) {
 }
 
 function propertyName(name: ts.PropertyName): string {
-  return ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isPrivateIdentifier(name)
-    ? name.text
-    : name.getText()
+  return ts.isIdentifier(name) || ts.isStringLiteral(name) ? name.text : name.getText()
 }
 
 function propertyMode(name: string, mode: Mode): Mode | undefined {
@@ -130,6 +128,10 @@ function scopeStatements(scope: ts.Node): readonly ts.Statement[] {
   return []
 }
 
+function isFunctionNamed(statement: ts.Statement, name: string): boolean {
+  return ts.isFunctionDeclaration(statement) && !!statement.body && statement.name?.text === name
+}
+
 function declaredValues(scope: ts.Node, name: string): ts.Node[] | undefined {
   if (ts.isFunctionLike(scope)) {
     for (const parameter of scope.parameters) {
@@ -138,7 +140,7 @@ function declaredValues(scope: ts.Node, name: string): ts.Node[] | undefined {
     }
   }
   for (const statement of scopeStatements(scope)) {
-    if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) return [statement]
+    if (isFunctionNamed(statement, name)) return [statement]
     if (!ts.isVariableStatement(statement)) continue
     for (const declaration of statement.declarationList.declarations) {
       const values = bindingValues(declaration.name, name, declaration.initializer, true)
@@ -162,6 +164,7 @@ function exportedValues(sourceFile: ts.SourceFile, name: string): ts.Node[] {
     const isDefault = hasModifier(statement, ts.SyntaxKind.DefaultKeyword)
     if (
       ts.isFunctionDeclaration(statement) &&
+      statement.body &&
       (name === 'default' ? isDefault : statement.name?.text === name)
     ) {
       return [statement]
@@ -169,7 +172,7 @@ function exportedValues(sourceFile: ts.SourceFile, name: string): ts.Node[] {
     if (!ts.isVariableStatement(statement)) continue
     for (const declaration of statement.declarationList.declarations) {
       if (ts.isIdentifier(declaration.name) && declaration.name.text === name) {
-        return declaration.initializer ? [declaration.initializer] : []
+        return [declaration.initializer].filter(value => value !== undefined)
       }
     }
   }
@@ -214,14 +217,14 @@ function valuesOf(scan: Scan, identifier: ts.Identifier): ts.Node[] {
 function returnedValues(
   fn: ts.ArrowFunction | ts.FunctionExpression | ts.FunctionDeclaration
 ): ts.Node[] {
-  if (!fn.body) return []
-  if (!ts.isBlock(fn.body)) return [fn.body]
+  const body = fn.body as ts.ConciseBody
+  if (!ts.isBlock(body)) return [body]
   const values: ts.Node[] = []
   const collect = (node: ts.Node) => {
     if (ts.isReturnStatement(node) && node.expression) values.push(node.expression)
     if (!ts.isFunctionLike(node)) ts.forEachChild(node, collect)
   }
-  ts.forEachChild(fn.body, collect)
+  ts.forEachChild(body, collect)
   return values
 }
 
@@ -303,13 +306,12 @@ function isIntrinsic(element: ts.JsxOpeningLikeElement): boolean {
   return /^[a-z][\w-]*$/.test(tagName(element))
 }
 
+const trueValues = new Set(['true', "'true'", '"true"'])
+
 function isTrue(initializer: ts.JsxAttributeValue | undefined): boolean {
   if (!initializer) return true
   const value = ts.isJsxExpression(initializer) ? initializer.expression : initializer
-  if (!value) return false
-  return (
-    value.kind === ts.SyntaxKind.TrueKeyword || (ts.isStringLiteral(value) && value.text === 'true')
-  )
+  return trueValues.has(String(value?.getText()))
 }
 
 function isAriaHidden(element: ts.JsxOpeningLikeElement): boolean {

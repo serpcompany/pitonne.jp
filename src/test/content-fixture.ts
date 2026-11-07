@@ -13,12 +13,17 @@ export const fixture = {
 const excerpt =
   'A post the tests add to a copy of the content, with an excerpt long enough for a meta description.'
 
-function post(title: string, categorySlug: string, draft: boolean): string {
+export function fixturePost(
+  title: string,
+  categorySlug: string,
+  draft: boolean,
+  publishedAt = '2026-10-01'
+): string {
   return [
     '---',
     `title: ${JSON.stringify(title)}`,
     `excerpt: ${JSON.stringify(excerpt)}`,
-    "publishedAt: '2026-10-01'",
+    `publishedAt: '${publishedAt}'`,
     `categorySlug: ${categorySlug}`,
     'author:',
     '  name: Pitonne Medical Team',
@@ -42,13 +47,16 @@ export function writeContentFixture(): string {
   const content = path.join(root, 'content')
   fs.cpSync(path.join(process.cwd(), 'content'), content, { recursive: true })
   const write = (file: string, text: string) => fs.writeFileSync(path.join(content, file), text)
-  write(`blog/${fixture.draft}.md`, post('Draft fixture', 'iv-therapy', true))
-  write(`blog/ja/${fixture.draft}.md`, post('Draft fixture', 'iv-therapy', true))
+  write(`blog/${fixture.draft}.md`, fixturePost('Draft fixture', 'iv-therapy', true))
+  write(`blog/ja/${fixture.draft}.md`, fixturePost('Draft fixture', 'iv-therapy', true))
   write(
     `blog/${fixture.englishOnly}.md`,
-    post('English-only fixture', fixture.englishOnlyCategory, false)
+    fixturePost('English-only fixture', fixture.englishOnlyCategory, false)
   )
-  write(`blog/ja/${fixture.japaneseOnly}.md`, post('Japanese-only fixture', 'iv-therapy', false))
+  write(
+    `blog/ja/${fixture.japaneseOnly}.md`,
+    fixturePost('Japanese-only fixture', 'iv-therapy', false)
+  )
   write(`blog-categories/${fixture.englishOnlyCategory}.json`, JSON.stringify(category))
   return root
 }

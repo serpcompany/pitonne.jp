@@ -20,15 +20,15 @@ export interface BlogPostViewModel {
   slug: string
   title: string
   date: string
-  publishedAt?: string
+  publishedAt: string
   content: string
   excerpt: string
   featureImage?: string | null
-  featureImageAlt?: string | null
+  featureImageAlt: string
   readingTime?: number
   category: string
   categorySlug: string
-  author?: { name: string; role?: string; image?: string | null } | null
+  author?: { name: string; role: string } | null
   relatedServiceSlugs?: string[]
   tags?: string[]
 }
@@ -103,12 +103,11 @@ function MarkdownContent({ content, locale }: { content: string; locale: Locale 
           return <BlogVideoEmbed key={key} slug={segment} locale={locale} />
         }
 
-        const markdown = segment.trim()
-        return markdown ? (
+        return (
           <ReactMarkdown key={key} remarkPlugins={[remarkGfm]} components={components}>
-            {markdown}
+            {segment.trim()}
           </ReactMarkdown>
-        ) : null
+        )
       })}
     </>
   )
@@ -192,11 +191,11 @@ export function BlogPostTemplate({
               slug: post.slug,
               title: post.title,
               excerpt: post.excerpt,
-              publishedAt: post.publishedAt ?? post.date,
+              publishedAt: post.publishedAt,
               featureImage: post.featureImage || undefined,
               author: {
                 name: post.author.name,
-                role: post.author.role ?? ''
+                role: post.author.role
               }
             },
             locale,
@@ -229,17 +228,9 @@ export function BlogPostTemplate({
       >
         {post.author && (
           <div className="flex items-center gap-3">
-            {post.author.image ? (
-              <img
-                src={post.author.image}
-                alt={post.author.name}
-                className="h-12 w-12 rounded-full object-cover"
-              />
-            ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#7A8F87] font-medium text-white">
-                {post.author.name.charAt(0)}
-              </div>
-            )}
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#7A8F87] font-medium text-white">
+              {post.author.name.charAt(0)}
+            </div>
             <div>
               <span className="block font-medium text-foreground">{post.author.name}</span>
               {post.author.role && (
@@ -257,7 +248,7 @@ export function BlogPostTemplate({
               <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
                 <img
                   src={post.featureImage}
-                  alt={post.featureImageAlt || post.title}
+                  alt={post.featureImageAlt}
                   className="max-h-[420px] w-full rounded-lg object-cover shadow-lg"
                 />
               </div>

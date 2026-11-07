@@ -75,7 +75,7 @@ export function serviceJsonLd(service: Service, locale: Locale = 'en'): WithCont
     name: service.name,
     description: service.shortDescription,
     url: localizedCanonicalUrl(service.canonicalPath, locale),
-    image: service.image ? absoluteUrl(service.image) : undefined,
+    image: absoluteUrl(service.image),
     provider: { '@id': businessId() },
     areaServed: {
       '@type': 'City',
@@ -131,9 +131,7 @@ export function videoObjectJsonLd(
     '@type': 'VideoObject',
     '@id': `${watchUrl}#video`,
     name: ja ? (video.titleJa ?? video.title) : video.title,
-    description: ja
-      ? (video.descriptionJa ?? video.metaDescriptionJa ?? video.description)
-      : video.description,
+    description: ja ? (video.descriptionJa ?? video.metaDescriptionJa) : video.description,
     thumbnailUrl: [absoluteUrl(video.thumbnailUrl)],
     uploadDate: video.uploadDate,
     duration: video.duration,

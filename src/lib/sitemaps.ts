@@ -95,10 +95,7 @@ function groupPaths(): Record<SitemapGroup, SitemapPath[]> {
       video: locale => ({
         thumbnailUrl: video.thumbnailUrl,
         title: locale === 'ja' ? (video.titleJa ?? video.title) : video.title,
-        description:
-          locale === 'ja'
-            ? (video.metaDescriptionJa ?? video.descriptionJa ?? video.description)
-            : (video.metaDescription ?? video.description),
+        description: locale === 'ja' ? video.metaDescriptionJa : video.metaDescription,
         playerUrl: video.embedUrl,
         durationSeconds: durationToSeconds(video.duration),
         publicationDate: video.uploadDate
@@ -138,27 +135,14 @@ export function sitemapEntriesByGroup(
   origin: string = siteOrigin()
 ): Record<SitemapGroup, SitemapEntry[]> {
   const paths = groupPaths()
-  const seen = new Set<string>()
 
   return Object.fromEntries(
-    sitemapGroups.map(group => {
-      const unique = paths[group].filter(({ path }) => {
-        if (seen.has(path)) {
-          return false
-        }
-        seen.add(path)
-        return true
-      })
-      const entries = unique.flatMap(({ path, locales: pathLocales, video }) =>
+    sitemapGroups.map(group => [
+      group,
+      paths[group].flatMap(({ path, locales: pathLocales, video }) =>
         sitemapEntriesForPath(path, pathLocales, origin, video)
       )
-      if (entries.length > MAX_SITEMAP_URLS) {
-        throw new Error(
-          `${sitemapFile(group)} has ${entries.length} URLs (max ${MAX_SITEMAP_URLS}); split it into numbered files`
-        )
-      }
-      return [group, entries]
-    })
+    ])
   ) as Record<SitemapGroup, SitemapEntry[]>
 }
 
@@ -175,11 +159,11 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;')
 }
 
-function durationToSeconds(duration: string): number {
-  const match = duration.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/)
-  if (!match) return 0
-  const [, hours, minutes, seconds] = match
-  return Number(hours ?? 0) * 3600 + Number(minutes ?? 0) * 60 + Number(seconds ?? 0)
+export function durationToSeconds(duration: string): number {
+  const match = duration.match(/^PT(?=\d)(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/)
+  if (!match) throw new Error(`Video duration ${duration} is not an ISO 8601 PT duration`)
+  const [, hours = 0, minutes = 0, seconds = 0] = match
+  return Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds)
 }
 
 const XML_HEADER =

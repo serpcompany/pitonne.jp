@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } from 'next/constants'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   EXCERPT_MAX_LENGTH,
@@ -9,6 +10,7 @@ import {
   META_DESCRIPTION_MIN_LENGTH
 } from '@/lib/blog-rules'
 import config from '../../keystatic.config'
+import nextConfig from '../../next.config.mjs'
 
 type Field = { validate: (value: string) => unknown }
 type Collection = { label: string; path: string; schema: Record<string, Field> }
@@ -74,6 +76,36 @@ describe('the CMS', () => {
 
     expect((await import('../../keystatic.config')).default.storage).toEqual({ kind: 'local' })
   }, 120_000)
+
+  it('runs the Next.js server with its API routes only for the local CMS, under next dev with KEYSTATIC=1', () => {
+    const staticSite = {
+      output: 'export',
+      allowedDevOrigins: undefined,
+      pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+      skipTrailingSlashRedirect: false
+    }
+    const cases = [
+      [PHASE_DEVELOPMENT_SERVER, '1'],
+      [PHASE_DEVELOPMENT_SERVER, undefined],
+      [PHASE_PRODUCTION_BUILD, '1'],
+      [PHASE_PRODUCTION_BUILD, undefined]
+    ] as const
+    const configs = cases.map(([phase, keystatic]) => {
+      vi.stubEnv('KEYSTATIC', keystatic)
+      return nextConfig(phase)
+    })
+
+    expect(configs[0]).toMatchObject({
+      output: undefined,
+      allowedDevOrigins: ['127.0.0.1'],
+      pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'keystatic.tsx', 'keystatic.ts'],
+      skipTrailingSlashRedirect: true,
+      trailingSlash: true
+    })
+    for (const config of configs.slice(1)) {
+      expect(config).toMatchObject({ ...staticSite, trailingSlash: true })
+    }
+  })
 
   it('refuses an excerpt, meta description or category description outside the build’s limits', () => {
     const excerpt = [EXCERPT_MIN_LENGTH - 1, EXCERPT_MIN_LENGTH, EXCERPT_MAX_LENGTH]

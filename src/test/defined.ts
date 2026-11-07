@@ -1,6 +1,7 @@
+import { expect } from 'vitest'
+
 export function defined<T>(value: T | null | undefined): T {
-  if (value === null || value === undefined) {
-    throw new Error(`Expected a value, got ${String(value)}`)
-  }
-  return value
+  expect(value).toBeDefined()
+  expect(value).not.toBeNull()
+  return value as T
 }

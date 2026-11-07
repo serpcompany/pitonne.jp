@@ -39,12 +39,19 @@ function heroPages(locale: Locale): NamedPage[] {
   const params = <T extends object>(values: T) => ({
     params: Promise.resolve({ locale, ...values })
   })
-  const category = getAllCategories(locale)[0]
-  const post = getAllBlogPosts(locale)[0]
-  const blogPages: NamedPage[] = []
-  if (category)
-    blogPages.push(['blog category', () => BlogCategoryPage(params({ category: category.slug }))])
-  if (post) blogPages.push(['blog post', () => BlogPostPage(params({ post: post.slug }))])
+  const blogPages: NamedPage[] = [
+    ...getAllCategories(locale)
+      .slice(0, 1)
+      .map(
+        (category): NamedPage => [
+          'blog category',
+          () => BlogCategoryPage(params({ category: category.slug }))
+        ]
+      ),
+    ...getAllBlogPosts(locale)
+      .slice(0, 1)
+      .map((post): NamedPage => ['blog post', () => BlogPostPage(params({ post: post.slug }))])
+  ]
 
   return [
     ['about', () => AboutPage(params({}))],

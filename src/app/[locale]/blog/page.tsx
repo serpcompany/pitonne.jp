@@ -86,7 +86,7 @@ export default async function BlogPage({ params }: LocalePageProps) {
                   {featuredPost.featureImage ? (
                     <Image
                       src={featuredPost.featureImage}
-                      alt={featuredPost.featureImageAlt || featuredPost.title}
+                      alt={featuredPost.featureImageAlt}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       fill
                       priority
@@ -147,7 +147,7 @@ export default async function BlogPage({ params }: LocalePageProps) {
                   <div className="relative aspect-video bg-[#f5ebe0] overflow-hidden">
                     <Image
                       src={post.featureImage}
-                      alt={post.featureImageAlt || post.title}
+                      alt={post.featureImageAlt}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"

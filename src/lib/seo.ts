@@ -15,8 +15,7 @@ export function normalizePath(path: string): string {
     return '/'
   }
 
-  const withLeadingSlash = path.startsWith('/') ? path : `/${path}`
-  return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`
+  return path.endsWith('/') ? path : `${path}/`
 }
 
 function canonicalUrl(path: string): string {
@@ -30,7 +29,7 @@ export function absoluteUrl(path: string): string {
     return path
   }
 
-  return `${siteOrigin()}${path.startsWith('/') ? path : `/${path}`}`
+  return `${siteOrigin()}${path}`
 }
 
 export function onSiteOrigin(href: string): string {
@@ -59,7 +58,7 @@ export function localizedHreflangAlternates(
   }
   const xDefaultLocale = availableLocales.includes(defaultLocale)
     ? defaultLocale
-    : (availableLocales[0] ?? locale)
+    : availableLocales[0]
   languages['x-default'] = localizedCanonicalUrl(normalizedPath, xDefaultLocale)
 
   return {

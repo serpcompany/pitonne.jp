@@ -30,7 +30,7 @@ function LanguageSwitcher({
 }) {
   const pathname = usePathname() ?? '/'
   const targetLocale: Locale = locale === 'en' ? 'ja' : 'en'
-  const neutralPath = normalizePath(pathname.replace(/^\/ja(?=\/|$)/, '') || '/')
+  const neutralPath = normalizePath(pathname.replace(/^\/ja(?=\/|$)/, ''))
   const targetPath = localizedRoute(
     path ?? (untranslatedPaths.includes(neutralPath) ? canonicalRoutes.blog : neutralPath),
     targetLocale
@@ -341,9 +341,7 @@ export function Header({
                       className="flex items-center justify-between w-full py-2 text-base font-medium text-foreground"
                       onClick={() =>
                         setMobileExpandedSection(
-                          mobileExpandedSection === item.hasDropdown
-                            ? null
-                            : (item.hasDropdown ?? null)
+                          mobileExpandedSection === item.hasDropdown ? null : item.hasDropdown
                         )
                       }
                     >

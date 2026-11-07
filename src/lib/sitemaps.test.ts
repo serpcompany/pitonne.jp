@@ -11,7 +11,9 @@ import { GET as pagesSitemap } from '@/app/sitemap-pages.xml/route'
 import { GET as servicesSitemap } from '@/app/sitemap-services.xml/route'
 import { GET as videosSitemap } from '@/app/sitemap-videos.xml/route'
 import { getAllBlogPostSlugs, getBlogPostLocales } from '@/lib/data/blog-posts'
+import { pitonneVideos } from '@/lib/data/videos'
 import {
+  durationToSeconds,
   MAX_SITEMAP_URLS,
   SITEMAP_INDEX_FILE,
   sitemapEntriesByGroup,
@@ -223,9 +225,59 @@ describe('sitemap URLs', () => {
       const pages = sitemapEntriesByGroup(sitemapOrigin()).pages
       expect(urlsetXml(pages)).toContain('<loc>http://localhost:3008</loc>')
       expect(urlsetXml(pages)).not.toContain(SITE_URL)
+      delete process.env.PORT
+      expect(sitemapOrigin()).toBe('http://localhost:3000')
     } finally {
       env.NODE_ENV = previous
     }
     expect(sitemapOrigin()).toBe(SITE_URL)
+  })
+})
+
+describe('video entries', () => {
+  it.each([
+    ['PT2M14S', 134],
+    ['PT45S', 45],
+    ['PT1H', 3600],
+    ['PT1H2M3S', 3723]
+  ])('reads %s as %i seconds', (duration, seconds) => {
+    expect(durationToSeconds(duration)).toBe(seconds)
+  })
+
+  it.each([
+    '',
+    'PT',
+    '2M14S',
+    'P1D'
+  ])('refuses %j rather than list a zero-second video', duration => {
+    expect(() => durationToSeconds(duration)).toThrow('ISO 8601')
+  })
+
+  it('lists each video with its length in seconds', () => {
+    const hangover = byGroup.videos.find(
+      entry =>
+        entry.url === `${SITE_URL}/watch/iv-therapy-for-hangover-hydration-and-recovery-support/`
+    )
+
+    expect(byGroup.videos.length).toBeGreaterThan(0)
+    expect(hangover?.video?.durationSeconds).toBe(134)
+    expect(urlsetXml(byGroup.videos)).toContain('<video:duration>134</video:duration>')
+  })
+
+  it('titles a video by its Japanese title in Japanese, or by its English one without', () => {
+    const japaneseTitle = (slug: string) =>
+      sitemapEntriesByGroup().videos.find(entry => entry.url === `${SITE_URL}/ja/watch/${slug}/`)
+        ?.video?.title
+    const [first] = pitonneVideos
+    const { titleJa: _title, ...english } = first
+    const englishOnly = { ...english, slug: 'a-video-with-no-japanese-title' }
+
+    expect(japaneseTitle(first.slug)).toBe(first.titleJa)
+    pitonneVideos.push({ ...englishOnly, watchPath: `/watch/${englishOnly.slug}/` })
+    try {
+      expect(japaneseTitle(englishOnly.slug)).toBe(first.title)
+    } finally {
+      pitonneVideos.pop()
+    }
   })
 })

@@ -81,32 +81,30 @@ export function AreaDetailPage({
               <p className="mb-6 text-muted-foreground">
                 {interpolate(dict.areas.localAccessDescription, names)}
               </p>
-              {(localizedHighlights.length > 0 || localizedLandmarks.length > 0) && (
-                <div className="grid gap-6 md:grid-cols-2">
-                  {localizedHighlights.length > 0 && (
-                    <div>
-                      <h3 className="mb-3 font-semibold text-foreground">{dict.areas.areaNotes}</h3>
-                      <ul className="space-y-2 text-sm text-muted-foreground">
-                        {localizedHighlights.map(highlight => (
-                          <li key={highlight}>{highlight}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {localizedLandmarks.length > 0 && (
-                    <div>
-                      <h3 className="mb-3 font-semibold text-foreground">
-                        {dict.areas.nearbyLandmarks}
-                      </h3>
-                      <ul className="space-y-2 text-sm text-muted-foreground">
-                        {localizedLandmarks.map(landmark => (
-                          <li key={landmark}>{landmark}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
+              <div className="grid gap-6 md:grid-cols-2">
+                {localizedHighlights.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 font-semibold text-foreground">{dict.areas.areaNotes}</h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {localizedHighlights.map(highlight => (
+                        <li key={highlight}>{highlight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {localizedLandmarks.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 font-semibold text-foreground">
+                      {dict.areas.nearbyLandmarks}
+                    </h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {localizedLandmarks.map(landmark => (
+                        <li key={landmark}>{landmark}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="overflow-hidden rounded-lg border border-border bg-card">
               <iframe

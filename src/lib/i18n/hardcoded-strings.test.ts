@@ -131,6 +131,82 @@ describe('user-visible strings', () => {
     ])
   })
 
+  it('follows array holes, switch cases, quoted and computed keys, and overloaded helpers', () => {
+    expect(
+      hardcodedTexts(`function label(kind: 'short'): string
+      function label(kind: string) {
+        return 'Opening hours'
+      }
+      function status(kind) {
+        switch (kind) {
+          case 'open':
+            const open = 'Open now'
+            return open
+          default:
+            const closed = 'Closed today'
+            return closed
+        }
+      }
+      export function A({ kind, key }) {
+        const [, saved] = useState('Saved')
+        const links = [{ 'title': 'Home page' }, { [key]: 'Our team' }]
+        return (
+          <div>
+            <p>{label('short')}</p>
+            <p>{status(kind)}</p>
+            <p>{saved}</p>
+            {links.map(link => <a {...link} />)}
+          </div>
+        )
+      }`)
+    ).toEqual([
+      "'Opening hours'",
+      "'Open now'",
+      "'Closed today'",
+      "'Saved'",
+      "'Home page'",
+      "'Our team'"
+    ])
+  })
+
+  it('shows a long finding cut to 120 characters', () => {
+    const sentence = 'Our nurses visit hotels, homes and offices across central Tokyo every day. '
+    const [finding] = hardcodedTexts(`export function A() {
+      return <p>{'${sentence.repeat(3)}'}</p>
+    }`)
+
+    expect(finding).toHaveLength(120)
+    expect(finding).toBe(`'${sentence.repeat(2).slice(0, 116)}...`)
+  })
+
+  it('reads text hidden only by aria-hidden={true}, and follows a default export and overloaded exports', () => {
+    const scan = newScan({
+      'src/components/menu/tagline.ts': `const tagline = 'Book a visit'
+        export default tagline
+        export let note
+        export function caption(kind: 'short'): string
+        export function caption(kind: string) { return 'Our menu' }`,
+      'src/components/menu/menu.tsx': `import tagline, { caption, note } from './tagline'
+        export function Menu() {
+          return (
+            <nav>
+              <p>{tagline}</p>
+              <p>{note}</p>
+              <p>{caption('short')}</p>
+              <span aria-hidden={true}>Decorative arrow</span>
+              <span aria-hidden={false}>Visible label</span>
+            </nav>
+          )
+        }`
+    })
+
+    expect(scanFiles(scan, ['src/components/menu/menu.tsx']).map(finding => finding.text)).toEqual([
+      'Visible label',
+      "'Book a visit'",
+      "'Our menu'"
+    ])
+  })
+
   it('flags literal titles, descriptions and Open Graph text in metadata', () => {
     expect(
       hardcodedTexts(`export const metadata = {
@@ -180,6 +256,7 @@ describe('user-visible strings', () => {
             <JsonLd data={serviceJsonLd(post, locale)} />
             <a href="tel:03-6821-8285">{'https://pitonne.jp/contact/'}</a>
             <script>{'window.dataLayer = window.dataLayer || []'}</script>
+            <time>{String(new Date)}</time>
           </section>
         )
       }

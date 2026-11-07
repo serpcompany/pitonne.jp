@@ -50,7 +50,9 @@ describe("the 404 page's own URLs", () => {
     '/not-found/',
     '/_not-found/index.txt',
     '/404.txt',
-    '/no-such-page/'
+    '/no-such-page/',
+    '/%E3%81/',
+    '/404%'
   ])('leaves %s to the asset server', async pathname => {
     const server = assetServer()
     expect(await serve(`https://pitonne.jp${pathname}`, {}, server)).toBe(server.page)

@@ -5,8 +5,8 @@ export interface PitonneVideo {
   description: string
   descriptionJa?: string
   metaTitle?: string
-  metaDescription?: string
-  metaDescriptionJa?: string
+  metaDescription: string
+  metaDescriptionJa: string
   url: string
   youtubeId: string
   thumbnailUrl: string

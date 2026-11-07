@@ -32,6 +32,12 @@ describe('fallbackMetaDescription', () => {
     expect(description.length).toBeLessThanOrEqual(META_DESCRIPTION_MAX_LENGTH)
   })
 
+  it('leaves a short excerpt alone when the body has no finished sentence to add', () => {
+    expect(
+      fallbackMetaDescription(shortJa, '## 見出し\n\n- 箇条書き\n- 句点のない行', 'ja')
+    ).toBeUndefined()
+  })
+
   it('cuts an overlong next sentence at the limit instead of staying short', () => {
     const description = defined(fallbackMetaDescription(shortJa, `${'長い文'.repeat(80)}。`, 'ja'))
     expect(description.length).toBe(META_DESCRIPTION_MAX_LENGTH)

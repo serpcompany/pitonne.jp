@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: metaDescription,
     path: service.canonicalPath,
     locale: locale as Locale,
-    images: service.image ? [absoluteUrl(service.image)] : undefined
+    images: [absoluteUrl(service.image)]
   })
 }
 
