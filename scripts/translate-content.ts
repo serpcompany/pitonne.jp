@@ -1,21 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
+import { runMain } from './run-main.mjs'
 
-const DEEPL_API_KEY = process.env.DEEPL_API_KEY
 const DEEPL_API_URL = 'https://api-free.deepl.com/v2/translate'
 const DELAY_BETWEEN_FILES_MS = 200
 
-if (!DEEPL_API_KEY) {
-  console.error('Error: DEEPL_API_KEY environment variable is required')
-  process.exit(1)
-}
-
-const args = process.argv.slice(2)
-const force = args.includes('--force')
-const dryRun = args.includes('--dry-run')
-const fileArgIndex = args.indexOf('--file')
-const singleFile = fileArgIndex !== -1 ? args[fileArgIndex + 1] : null
+type Options = { apiKey: string; force: boolean; dryRun: boolean }
 
 const contentDirs = [
   { dir: 'content/services', type: 'service' },
@@ -36,13 +27,13 @@ const faqFields: Record<string, string> = {
   service: 'faqs'
 }
 
-async function translateBatch(texts: string[]): Promise<string[]> {
+async function translateBatch(texts: string[], apiKey: string): Promise<string[]> {
   if (texts.length === 0) return []
 
   const response = await fetch(DEEPL_API_URL, {
     method: 'POST',
     headers: {
-      Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
+      Authorization: `DeepL-Auth-Key ${apiKey}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -61,7 +52,11 @@ async function translateBatch(texts: string[]): Promise<string[]> {
   return data.translations.map((t: { text: string }) => t.text)
 }
 
-async function translateMarkdownFile(filePath: string, contentType: string): Promise<void> {
+async function translateMarkdownFile(
+  filePath: string,
+  contentType: string,
+  { apiKey, force, dryRun }: Options
+): Promise<void> {
   const absolutePath = path.join(process.cwd(), filePath)
   const dir = path.dirname(absolutePath)
   const fileName = path.basename(absolutePath)
@@ -81,7 +76,7 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
   const textsToTranslate: string[] = []
   const textKeys: string[] = []
 
-  const simpleFields = translatableFields[contentType] || []
+  const simpleFields = translatableFields[contentType]
   for (const field of simpleFields) {
     if (frontmatter[field] && typeof frontmatter[field] === 'string') {
       textsToTranslate.push(frontmatter[field])
@@ -89,7 +84,7 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
     }
   }
 
-  const arrayFields = translatableArrayFields[contentType] || []
+  const arrayFields = translatableArrayFields[contentType]
   for (const field of arrayFields) {
     if (Array.isArray(frontmatter[field])) {
       for (let i = 0; i < frontmatter[field].length; i++) {
@@ -139,9 +134,9 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
   }
 
   console.log(`  Translating ${filePath} (${textsToTranslate.length} segments)...`)
-  const translated = await translateBatch(textsToTranslate)
+  const translated = await translateBatch(textsToTranslate, apiKey)
 
-  const jaFrontmatter = { ...frontmatter }
+  const jaFrontmatter = structuredClone(frontmatter)
   let jaBody = bodyContent
 
   for (let i = 0; i < textKeys.length; i++) {
@@ -153,20 +148,15 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
       jaFrontmatter[field] = value
     } else if (key.startsWith('array:')) {
       const [, field, index] = key.split(':')
-      if (!jaFrontmatter[field]) jaFrontmatter[field] = [...frontmatter[field]]
       jaFrontmatter[field][parseInt(index, 10)] = value
     } else if (key.startsWith('faq:')) {
       const [, field, index, subField] = key.split(':')
-      if (!jaFrontmatter[field])
-        jaFrontmatter[field] = frontmatter[field].map((f: Record<string, string>) => ({ ...f }))
       jaFrontmatter[field][parseInt(index, 10)][subField] = value
     } else if (key === 'author:name') {
-      if (!jaFrontmatter.author) jaFrontmatter.author = { ...frontmatter.author }
       jaFrontmatter.author.name = value
     } else if (key === 'author:role') {
-      if (!jaFrontmatter.author) jaFrontmatter.author = { ...frontmatter.author }
       jaFrontmatter.author.role = value
-    } else if (key === 'body') {
+    } else {
       jaBody = value
     }
   }
@@ -180,7 +170,30 @@ async function translateMarkdownFile(filePath: string, contentType: string): Pro
   console.log(`  DONE ${filePath} -> ja/${fileName}`)
 }
 
-async function main() {
+export async function main(args: string[]) {
+  const apiKey = process.env.DEEPL_API_KEY
+  if (!apiKey) {
+    console.error('Error: DEEPL_API_KEY environment variable is required')
+    process.exitCode = 1
+    return
+  }
+
+  const force = args.includes('--force')
+  const dryRun = args.includes('--dry-run')
+  const fileArgIndex = args.indexOf('--file')
+  const singleFile = fileArgIndex !== -1 ? args[fileArgIndex + 1] : null
+  const options = { apiKey, force, dryRun }
+
+  try {
+    await translate(singleFile, options)
+  } catch (err) {
+    console.error('Translation failed:', err)
+    process.exitCode = 1
+  }
+}
+
+async function translate(singleFile: string | null | undefined, options: Options) {
+  const { force, dryRun } = options
   console.log('DeepL Content Translation')
   console.log(`Mode: ${dryRun ? 'DRY RUN' : force ? 'FORCE' : 'NORMAL'}`)
   console.log('')
@@ -193,9 +206,10 @@ async function main() {
         : 'unknown'
     if (type === 'unknown') {
       console.error('Cannot determine content type for:', singleFile)
-      process.exit(1)
+      process.exitCode = 1
+      return
     }
-    await translateMarkdownFile(singleFile, type)
+    await translateMarkdownFile(singleFile, type, options)
     return
   }
 
@@ -211,7 +225,7 @@ async function main() {
 
     for (const file of files) {
       const filePath = `${dir}/${file}`
-      await translateMarkdownFile(filePath, type)
+      await translateMarkdownFile(filePath, type, options)
       await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_FILES_MS))
     }
   }
@@ -219,7 +233,4 @@ async function main() {
   console.log('\nDone!')
 }
 
-main().catch(err => {
-  console.error('Translation failed:', err)
-  process.exit(1)
-})
+runMain(import.meta.url, main)

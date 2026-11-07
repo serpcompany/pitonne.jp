@@ -67,7 +67,6 @@ export const BLOG_DRAFT_SOURCES = [
   }
 ]
 
-const BLOG_DRAFT_OUT_DIR = path.join(process.cwd(), 'tmp', 'blog-drafts')
 const BLOG_DRAFT_PUBLISHED_AT = '2026-05-31'
 
 export function buildGoogleDocExportUrl({ docId, tabId }) {
@@ -199,9 +198,9 @@ export function buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown }) {
   }
 }
 
-async function fetchDocMarkdown(source, fetchImpl = fetch) {
+async function fetchDocMarkdown(source) {
   const url = buildGoogleDocExportUrl(source)
-  const response = await fetchImpl(url, { redirect: 'follow' })
+  const response = await fetch(url, { redirect: 'follow' })
 
   if (!response.ok) {
     throw new Error(`Failed to fetch ${source.docId} (${source.tabId}): ${response.status}`)
@@ -221,24 +220,16 @@ async function cleanManagedMarkdown(outDir) {
   )
 }
 
-export async function writeBlogDrafts({
-  sources = BLOG_DRAFT_SOURCES,
-  outDir = BLOG_DRAFT_OUT_DIR,
-  fetchImpl = fetch,
-  clean = true
-} = {}) {
-  if (clean) {
-    await cleanManagedMarkdown(outDir)
-  } else {
-    await fs.mkdir(outDir, { recursive: true })
-  }
+export async function writeBlogDrafts() {
+  const outDir = path.join(process.cwd(), 'tmp', 'blog-drafts')
+  await cleanManagedMarkdown(outDir)
 
   const usedSlugs = new Set()
   const drafts = []
 
-  for (let index = 0; index < sources.length; index++) {
-    const source = sources[index]
-    const rawMarkdown = await fetchDocMarkdown(source, fetchImpl)
+  for (let index = 0; index < BLOG_DRAFT_SOURCES.length; index++) {
+    const source = BLOG_DRAFT_SOURCES[index]
+    const rawMarkdown = await fetchDocMarkdown(source)
     const draft = buildDraftMarkdown({ source, index, usedSlugs, rawMarkdown })
     const outPath = path.join(outDir, draft.filename)
 

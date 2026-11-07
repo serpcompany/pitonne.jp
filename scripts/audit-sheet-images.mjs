@@ -1,11 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { runMain } from './run-main.mjs'
 
 const SHEET_CSV_URL =
   'https://docs.google.com/spreadsheets/d/1Eleu4irittacEOz_4z3omwceXgzZAoP8xSTe4kv8HR8/gviz/tq?tqx=out:csv&gid=658035943'
-
-const ROOT = process.cwd()
-const MANIFEST_PATH = path.join(ROOT, 'docs/image-audit/sheet-image-manifest.json')
 
 const transposedEntries = [
   {
@@ -86,9 +84,10 @@ const transposedEntries = [
   },
   {
     sheetName: 'blood Testing',
+    route: '/services/blood-tests/',
     driveId: '1Y5AVOlDyJuORLnZvPssEHkiiDf72j7zN',
-    localPath: '/images/content/sheet/unmapped/blood-testing.jpg',
-    status: 'unmapped'
+    localPath: '/images/content/sheet/services/blood-tests.jpg',
+    status: 'used'
   },
   {
     sheetName: 'Medications',
@@ -107,9 +106,10 @@ const transposedEntries = [
   },
   {
     sheetName: 'AGA medication',
+    route: '/services/androgenetic-alopecia-medicine/',
     driveId: '1Fi7S5RELa6x0qiBoYpIvRChItC3IElRt',
-    localPath: '/images/content/sheet/unmapped/aga-medication.jpg',
-    status: 'unmapped'
+    localPath: '/images/content/sheet/services/androgenetic-alopecia.jpg',
+    status: 'used'
   },
   {
     sheetName: 'stem cell nasal spray',
@@ -290,12 +290,17 @@ async function buildManifest() {
   }
 }
 
-const manifest = await buildManifest()
-await fs.mkdir(path.dirname(MANIFEST_PATH), { recursive: true })
-await fs.writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`)
+export async function main() {
+  const manifestPath = path.join(process.cwd(), 'docs/image-audit/sheet-image-manifest.json')
+  const manifest = await buildManifest()
+  await fs.mkdir(path.dirname(manifestPath), { recursive: true })
+  await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
 
-const used = manifest.entries.filter(entry => entry.status === 'used').length
-const unmapped = manifest.entries.filter(entry => entry.status === 'unmapped').length
-console.log(`Wrote ${MANIFEST_PATH}`)
-console.log(`Used: ${used}`)
-console.log(`Unmapped: ${unmapped}`)
+  const used = manifest.entries.filter(entry => entry.status === 'used').length
+  const unmapped = manifest.entries.filter(entry => entry.status === 'unmapped').length
+  console.log(`Wrote ${manifestPath}`)
+  console.log(`Used: ${used}`)
+  console.log(`Unmapped: ${unmapped}`)
+}
+
+await runMain(import.meta.url, main)

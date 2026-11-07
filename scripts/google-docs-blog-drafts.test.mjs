@@ -73,4 +73,82 @@ describe('google docs blog draft conversion', () => {
     expect(parsed.content).toContain('# Can IV Therapy Help with Nausea?')
     expect(parsed.content).not.toContain('# Tab 2')
   })
+
+  it('names a draft whose title has no ASCII letters after its place in the list', () => {
+    const draft = buildDraftMarkdown({
+      source: { ...BLOG_DRAFT_SOURCES[0], slug: undefined },
+      index: 0,
+      usedSlugs: new Set(),
+      rawMarkdown: '# 点滴療法\n\n本文です。'
+    })
+
+    expect(draft.slug).toBe('draft-post-01')
+    expect(draft.filename).toBe('draft-post-01.md')
+    expect(matter(draft.markdown).data.title).toBe('点滴療法')
+  })
+
+  it('gives each later draft with a taken slug the next number', () => {
+    const usedSlugs = new Set()
+    const source = BLOG_DRAFT_SOURCES[1]
+    const build = () =>
+      buildDraftMarkdown({ source, index: 1, usedSlugs, rawMarkdown: '# A title' })
+
+    expect([build().slug, build().slug, build().slug]).toEqual([
+      source.slug,
+      `${source.slug}-2`,
+      `${source.slug}-3`
+    ])
+  })
+
+  it('fills a placeholder title and excerpt for a doc with no H1 and no paragraph', () => {
+    const draft = buildDraftMarkdown({
+      source: BLOG_DRAFT_SOURCES[2],
+      index: 2,
+      usedSlugs: new Set(),
+      rawMarkdown: '## Only a subheading'
+    })
+    const parsed = matter(draft.markdown)
+
+    expect(draft.title).toBe('Draft Post 3')
+    expect(parsed.data.title).toBe('Draft Post 3')
+    expect(parsed.data.excerpt).toBe('Draft excerpt - please update.')
+    expect(parsed.data.readingTime).toBe(1)
+  })
+
+  it('takes the excerpt from the first paragraph as plain text, cut at a whole word', () => {
+    const marked = 'Hydration supports **recovery** after a *long* [flight](/blog/) day. '
+    const plain = 'Hydration supports recovery after a long flight day. '
+    const draft = buildDraftMarkdown({
+      source: BLOG_DRAFT_SOURCES[3],
+      index: 3,
+      usedSlugs: new Set(),
+      rawMarkdown: `# Title\n\n${marked.repeat(5)}\n\nSecond paragraph.`
+    })
+    const { excerpt } = matter(draft.markdown).data
+    const kept = excerpt.slice(0, -'...'.length)
+
+    expect(excerpt.length).toBeLessThanOrEqual(220)
+    expect(excerpt.endsWith('...')).toBe(true)
+    expect(plain.repeat(5).startsWith(kept)).toBe(true)
+    expect(plain.repeat(5)[kept.length]).toBe(' ')
+  })
+
+  it('keeps a short first paragraph whole as the excerpt', () => {
+    const draft = buildDraftMarkdown({
+      source: BLOG_DRAFT_SOURCES[4],
+      index: 4,
+      usedSlugs: new Set(),
+      rawMarkdown: '# Title\n\nA short   first\nparagraph.'
+    })
+
+    expect(matter(draft.markdown).data.excerpt).toBe('A short first paragraph.')
+  })
+
+  it('drops a byte order mark, export image references and the assistant follow-up line', () => {
+    expect(
+      cleanContent(
+        '﻿# Title\r\n\r\n![][image1]\r\nBody.\r\n\r\nIf you want, I can continue with the next topic now: Stress\r\n\r\n[image1]: data:image/png;base64,AAAA\r\n'
+      )
+    ).toBe('# Title\n\nBody.\n')
+  })
 })
