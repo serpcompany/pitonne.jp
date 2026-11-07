@@ -19,6 +19,11 @@ const lookedUp = (skipped: boolean, receipts: boolean): Record<string, string> =
   return { e2e: state, lighthouse: state }
 }
 
+const appKey = {
+  vars: { SERP_AGENT_APP_ID: '123456' },
+  secrets: { SERP_AGENT_PRIVATE_KEY: 'a private key made for CI' }
+}
+
 const steps = ({
   docs = false,
   content = false,
@@ -53,14 +58,16 @@ function pullRequest(
       }
     },
     steps: steps(classified),
-    failing
+    failing,
+    ...(fork ? {} : appKey)
   }
 }
 
 const push = (branch: string, classified: Classified = {}, failing: string[] = []): Scenario => ({
   github: { event_name: 'push', repository, ref_name: branch, event: {} },
   steps: steps(classified),
-  failing
+  failing,
+  ...appKey
 })
 
 const run = (scenario: Scenario) => simulate(ci, scenario)
@@ -87,8 +94,10 @@ describe('what CI runs on a pull request into staging', () => {
     expect(ci.on.pull_request?.types).toContain('ready_for_review')
   })
 
-  it('previews no pull request from a fork, which gets no secrets', () => {
-    expect(ran(pullRequest({ fork: true }))).toEqual(checks)
+  it('previews no pull request from a fork, which gets no secrets, and fails its verify for want of the app key', () => {
+    expect(ran(pullRequest({ fork: true }))).toEqual(
+      checks.map(id => (id === 'verify' ? 'verify:failure' : id))
+    )
   })
 
   it('runs only verify’s docs and secrets checks on a docs-only one, ready or draft, and previews nothing', () => {

@@ -119,11 +119,14 @@ It needs `changes` and runs unless the run is cancelled (`!cancelled()`), so a f
 classification runs every check rather than none. It checks out the commit with its parent
 (`fetch-depth: 2`) and names the parent `SERP_VERIFY_BASE` (`HEAD^1`), so the checks' lists can
 only shrink. On a pull request into `staging` that parent is `staging`'s tip: the run checks out
-the merge commit GitHub makes, whose first parent is the base branch. It gives the docs check no
-token, so links into serp's private repositories are skipped with a note, as on a pull request
-from a fork and in zenbujapanese-monorepo's CI: the `serp-agent` app's key would reach any pull
-request from this repository that edits a workflow, and the app writes across the organization.
-Locally, with a token in `GH_TOKEN`, the docs check reads those links too. It lives in CI, rather
+the merge commit GitHub makes, whose first parent is the base branch. The docs check reads the
+links into serp's private repositories, and in CI it fails on any it can't read, so the job makes
+the `serp-agent` app's short-lived token, narrowed to reading contents, issues and pull requests,
+and hands it to the check as `SERP_VERIFY_GITHUB_TOKEN`, as SERP's Verify workflow does. Without
+the app's key, as on a pull request from a fork, the job fails at once and says which owner step
+is missing. The key reaches any pull request from this repository that edits a workflow, as the
+deploy jobs' Cloudflare token does; the owner chose this on 2026-11-06 over a separate read-only
+app. Locally, with a token in `GH_TOKEN`, the docs check reads those links too. It lives in CI, rather
 than a workflow of its own, so the code deploy can need it.
 
 **`test`** runs `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm audit:meta`, then builds
@@ -235,6 +238,7 @@ this table beside the workflows and the action that use it.
 | `actions/cache` | `caa296126883cff596d87d8935842f9db880ef25` | v5.1.0 | `ci.yml`, `deploy.yml` |
 | `actions/upload-artifact` | `cf430e030ddbb5b0abf93d22962f4752f3646cd9` | v7.0.2 | `ci.yml`, `code-review.yml` |
 | `actions/download-artifact` | `9000827ccba6bdab643e8b6fd33ac0654aef8333` | v8.0.2 | `ci.yml` |
+| `actions/create-github-app-token` | `64ab729a6294000f5aa4a4bc0b73d1f32bc45510` | v3.3.0 | `ci.yml` |
 | `cloudflare/wrangler-action` | `9acf94ace14e7dc412b076f2c5c20b8ce93c79cd` | v3.15.0 | `deploy.yml` |
 | `anthropics/claude-code-action` | `6b6870e649b5ff408753befeaee5fc7989d4e6a9` | v1.0.258 | `code-review.yml` |
 
@@ -252,11 +256,15 @@ stop deploying.
 1. **Read access to the package:** in serpcompany's `@serpcompany/verify` package settings,
    Manage Actions access, add `serpcompany/pitonne.jp` with the Read role. Until then every job
    that installs fails, with a note saying so.
-2. **Claude's review:** add the Actions secret `CLAUDE_CODE_OAUTH_TOKEN`, made with
+2. **The `serp-agent` app's key**, so `verify`'s docs check can read the links into serp's private
+   repositories: give this repository the Actions variable `SERP_AGENT_APP_ID` and the Actions
+   secret `SERP_AGENT_PRIVATE_KEY` (a private key made for CI), or select it on the organization
+   ones, and install the app on `serpcompany/serp`. Until then `verify` fails, saying so.
+3. **Claude's review:** add the Actions secret `CLAUDE_CODE_OAUTH_TOKEN`, made with
    `claude setup-token` on the account that pays for the reviews. The review posts with the job's
    own token, so it needs no GitHub app. Until the secret is set, `Code review` notes that it
    skipped.
-3. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
+4. **Required checks:** add `verify`, `title`, `issue-link`, `fix-test` and `text` to the
    `staging` and `main` rulesets beside `test`, and optionally `e2e` and `lighthouse`.
-4. **Resolved review threads:** turn on "Require conversation resolution before merging" in the
+5. **Resolved review threads:** turn on "Require conversation resolution before merging" in the
    `main` and `staging` rulesets, so a pull request can't merge with a review finding left open.

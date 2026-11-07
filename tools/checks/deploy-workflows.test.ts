@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { simulate } from './job-results'
 import {
   allText,
   branches,
@@ -22,6 +23,8 @@ const promote = readWorkflow('promote.yml')
 const pagesDeploy = job(deploy, 'deploy')
 const cloudflareTokenOnly = { CLOUDFLARE_API_TOKEN: expression('secrets.CLOUDFLARE_API_TOKEN') }
 const CHECKS = ['verify', 'test', 'e2e', 'lighthouse']
+const VERIFY_STEP = 'The shared checks the change can affect, at the version the lockfile pins'
+const STOP_STEP = "Stop when the serp-agent app's key isn't available to this repository"
 
 function permissionGrants(workflow: Workflow, exceptJobs: string[] = []): Record<string, string>[] {
   const jobGrants = Object.entries(workflow.jobs)
@@ -101,24 +104,86 @@ describe('CI and deploy workflows', () => {
       expect(allText(workflow)).not.toMatch(/check-runs|actions\/artifacts/)
   })
 
-  it('runs pnpm verify against the commit’s parent, with no app key, which would reach any pull request that edits a workflow', () => {
+  it('runs pnpm verify against the commit’s parent, with the serp-agent app’s token narrowed to reading', () => {
     const verify = job(ci, 'verify')
     expect(needs(verify)).toEqual(['changes'])
     expect(verify.if).toBe(expression('!cancelled()'))
+    expect(verify.permissions).toEqual({ contents: 'read', packages: 'read' })
     expect(verify.steps?.[0].with?.['fetch-depth']).toBe(2)
-    const shared = step(
-      verify,
-      'The shared checks the change can affect, at the version the lockfile pins'
-    )
-    expect(shared.run).toContain('pnpm verify "$CHECKS"')
-    expect(shared.run).toMatch(/else\n\s+pnpm verify\n/)
-    expect(shared.env).toEqual({
-      SERP_VERIFY_BASE: 'HEAD^1',
-      CHECKS: expression("needs.changes.outputs.docs == 'true' && 'docs,secrets' || ''")
+    expect(step(verify, VERIFY_STEP)).toEqual({
+      name: VERIFY_STEP,
+      env: {
+        SERP_VERIFY_GITHUB_TOKEN: expression('steps.app-token.outputs.token'),
+        SERP_VERIFY_BASE: 'HEAD^1',
+        CHECKS: expression("needs.changes.outputs.docs == 'true' && 'docs,secrets' || ''")
+      },
+      run: 'if [ -n "$CHECKS" ]; then\n  pnpm verify "$CHECKS"\nelse\n  pnpm verify\nfi\n'
     })
-    expect(verify.env).toBeUndefined()
-    for (const file of workflowFiles())
-      expect(allText(readWorkflow(file)), file).not.toMatch(/SERP_AGENT_|create-github-app-token/)
+    expect(step(verify, 'app-token')).toEqual({
+      name: "A short-lived token that reads the organization's private repositories",
+      id: 'app-token',
+      uses: expect.stringMatching(/^actions\/create-github-app-token@[0-9a-f]{40}$/),
+      with: {
+        'app-id': expression('vars.SERP_AGENT_APP_ID'),
+        'private-key': expression('secrets.SERP_AGENT_PRIVATE_KEY'),
+        owner: expression('github.repository_owner'),
+        'permission-contents': 'read',
+        'permission-issues': 'read',
+        'permission-pull-requests': 'read'
+      }
+    })
+    expect(stepIndex(verify, 'app-token')).toBeLessThan(stepIndex(verify, VERIFY_STEP))
+    const configured = simulate(ci, {
+      github: { event_name: 'pull_request', repository: 'serpcompany/pitonne.jp', event: {} },
+      vars: { SERP_AGENT_APP_ID: '123' },
+      secrets: { SERP_AGENT_PRIVATE_KEY: 'key' }
+    })
+    expect(configured.stepRuns('verify', 'app-token')).toBe(true)
+    expect(configured.stepRuns('verify', VERIFY_STEP)).toBe(true)
+  })
+
+  it('keeps the serp-agent app’s key and token in verify’s three steps that need them', () => {
+    const verify = job(ci, 'verify')
+    const holders = [STOP_STEP, 'app-token', VERIFY_STEP]
+    const keyOrToken = /SERP_AGENT_|create-github-app-token|app-token/
+    for (const each of verify.steps ?? [])
+      if (!holders.some(name => [each.name, each.id].includes(name)))
+        expect(allText(each), String(each.name ?? each.uses)).not.toMatch(keyOrToken)
+    expect(verify.env).toEqual({
+      HAS_APP_KEY: expression(
+        "secrets.SERP_AGENT_PRIVATE_KEY != '' && vars.SERP_AGENT_APP_ID != ''"
+      )
+    })
+    for (const [id, other] of Object.entries(ci.jobs).filter(([id]) => id !== 'verify'))
+      expect(allText(other), id).not.toMatch(keyOrToken)
+    expect(allText({ ...ci, jobs: {} }), 'ci.yml outside its jobs').not.toMatch(keyOrToken)
+    for (const file of workflowFiles().filter(name => name !== 'ci.yml'))
+      expect(allText(readWorkflow(file)), file).not.toMatch(keyOrToken)
+  })
+
+  it('stops verify with the owner step to take when the app’s key or ID is missing, and only then', () => {
+    const scenario = (vars: Record<string, string>, secrets: Record<string, string>) =>
+      simulate(ci, {
+        github: { event_name: 'pull_request', repository: 'serpcompany/pitonne.jp', event: {} },
+        vars,
+        secrets
+      })
+    const verify = job(ci, 'verify')
+    const id = { SERP_AGENT_APP_ID: '123' }
+    const key = { SERP_AGENT_PRIVATE_KEY: 'key' }
+    expect(scenario(id, key).stepRuns('verify', STOP_STEP)).toBe(false)
+    expect(scenario(id, {}).stepRuns('verify', STOP_STEP)).toBe(true)
+    expect(scenario({}, key).stepRuns('verify', STOP_STEP)).toBe(true)
+    expect(scenario({}, {}).stepRuns('verify', STOP_STEP)).toBe(true)
+    expect(step(verify, STOP_STEP)).toEqual({
+      name: STOP_STEP,
+      if: "env.HAS_APP_KEY != 'true'",
+      run: expect.stringMatching(
+        /^echo "::error title=[^"$]*::Without SERP_AGENT_APP_ID and SERP_AGENT_PRIVATE_KEY [^"$]*"\nexit 1\n$/
+      )
+    })
+    expect(allText(verify), 'verify carries on past no step').not.toContain('continue-on-error')
+    expect(stepIndex(verify, STOP_STEP)).toBeLessThan(stepIndex(verify, 'app-token'))
   })
 
   it('alerts the owner when a check or a Production deploy fails on main instead of blocking publishing', () => {
