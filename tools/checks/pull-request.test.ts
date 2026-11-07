@@ -10,6 +10,7 @@ import {
   linesWithLocalPaths,
   localPathRule,
   localPathsExemption,
+  main,
   matchesAnyGlob,
   noIssueReason,
   otherBase,
@@ -369,6 +370,11 @@ describe('text', () => {
     expect(verdict.passed).toBe(false)
     expect(verdict.message).toContain('(line 3): Wrote /tmp/report.txt')
     expect(verdict.message).toContain(localPathRule)
+    const exempt = await check(
+      'text',
+      pull({ body: 'Local paths: it documents the hook\nWrote /tmp/report.txt' })
+    )
+    expect(exempt).toEqual({ passed: true, message: 'Exempt: Local paths: it documents the hook' })
   })
 })
 
@@ -399,13 +405,13 @@ describe('every check', () => {
       method === 'GET' && path === `/repos/${repository}/issues/3`
         ? { status: 200, body: { number: 3, state: 'open' } }
         : undefined
-    const linked = await runAgainstGitHub('tools/checks/pull-request.mjs', ['issue-link'], {
+    const linked = await runAgainstGitHub(main, ['issue-link'], {
       event,
       route
     })
     expect(linked.status).toBe(0)
     expect(linked.output).toContain('Closes #3')
-    const titled = await runAgainstGitHub('tools/checks/pull-request.mjs', ['title'], {
+    const titled = await runAgainstGitHub(main, ['title'], {
       event: { ...event, pull_request: { ...event.pull_request, title: 'Make $(rm -rf .) work' } },
       route
     })

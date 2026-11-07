@@ -48,7 +48,7 @@ async function passingRun(read, { repository, sha, checks, branches }) {
   const listed = await read(
     `/repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=100`
   )
-  for (const run of listed.workflow_runs ?? []) {
+  for (const run of listed.workflow_runs) {
     if (!isCiPush(run, { branches, sha })) continue
     const { jobs = [] } = await read(
       `/repos/${repository}/actions/runs/${run.id}/jobs?filter=latest&per_page=100`
@@ -87,7 +87,7 @@ export const gitIn = cwd => args =>
   execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
 
 const changedPaths = (git, from, to) =>
-  git(['diff', '--name-only', from, to]).split('\n').filter(Boolean)
+  git(['diff', '--no-renames', '--name-only', from, to]).split('\n').filter(Boolean)
 
 export function docsOnlyChain(git, sha, limit = walkLimit) {
   const chain = []
@@ -98,9 +98,6 @@ export function docsOnlyChain(git, sha, limit = walkLimit) {
     if (chain.length > limit) return null
     commit = parent
   }
-  const since = changedPaths(git, chain.at(-1), chain[0])
-  if (since.length && !isDocsOnlyChange(since))
-    throw new Error(`${chain.at(-1)}..${chain[0]} changes more than docs`)
   return chain
 }
 
@@ -132,7 +129,7 @@ export async function receiptPassed(read, { repository, repositoryId, suite, tre
     const listed = await read(
       `/repos/${repository}/actions/artifacts?name=${encodeURIComponent(name)}&per_page=100`
     )
-    for (const artifact of listed.artifacts ?? []) {
+    for (const artifact of listed.artifacts) {
       if (artifact.name !== name || artifact.expired) continue
       if (String(artifact.workflow_run?.head_repository_id) !== String(repositoryId)) continue
       if (!protectedBranches.includes(artifact.workflow_run?.head_branch)) continue
@@ -151,13 +148,13 @@ export async function receiptPassed(read, { repository, repositoryId, suite, tre
 const usage =
   'Run it as: ci-passed.mjs checks <sha> <branch>[,<branch>] "<check> ...", or ci-passed.mjs receipt <suite> <tree>.'
 
-async function main([what, ...given]) {
+export async function main([what, ...given]) {
   const environment = process.env
   const read = gitHubReader({
-    token: environment.GITHUB_TOKEN ?? '',
+    token: environment.GITHUB_TOKEN,
     api: environment.GITHUB_API_URL
   })
-  const repository = environment.GITHUB_REPOSITORY ?? ''
+  const repository = environment.GITHUB_REPOSITORY
   const log = line => console.log(line)
   let passed
   const [sha, branches, ...names] = given

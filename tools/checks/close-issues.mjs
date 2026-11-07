@@ -2,13 +2,13 @@ import {
   closedOnMergeInto,
   closingReferences,
   gitHubApi,
-  isMain,
   pullRequestOf,
-  readEvent
+  readEvent,
+  runMain
 } from './pull-request.mjs'
 
 export const closingComment = pull =>
-  `Closed by #${pull.number}, merged into \`${pull.base}\`${pull.mergeCommit ? ` as ${pull.mergeCommit.slice(0, 7)}` : ''}. GitHub closes issues only for pull requests into the default branch, \`main\`, so this workflow does it for \`${closedOnMergeInto}\`. The change reaches Production with the next promotion.`
+  `Closed by #${pull.number}, merged into \`${pull.base}\` as ${pull.mergeCommit.slice(0, 7)}. GitHub closes issues only for pull requests into the default branch, \`main\`, so this workflow does it for \`${closedOnMergeInto}\`. The change reaches Production with the next promotion.`
 
 const pauseFor = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds))
 
@@ -21,11 +21,7 @@ export const commitsOf = event => {
 }
 
 export const pullNamedBy = message => {
-  const found = /\(#(\d+)\)$/.exec(
-    String(message ?? '')
-      .split('\n')[0]
-      .trim()
-  )
+  const found = /\(#(\d+)\)$/.exec(message.split('\n')[0].trim())
   return found ? Number(found[1]) : null
 }
 
@@ -95,9 +91,7 @@ export async function closeIssuesOfPush({
   const closed = []
   let failures = 0
   if (event.ref !== `refs/heads/${closedOnMergeInto}`) {
-    log(
-      `The push is to ${event.ref ?? 'no branch'}, not ${closedOnMergeInto}, so it closes nothing.`
-    )
+    log(`The push is to ${event.ref}, not ${closedOnMergeInto}, so it closes nothing.`)
     return { closed, failures }
   }
   for (const commit of commitsOf(event)) {
@@ -123,17 +117,18 @@ export async function closeIssuesOfPush({
   return { closed, failures }
 }
 
-if (isMain(import.meta.url)) {
+export async function main() {
   const environment = process.env
-  const event = readEvent(environment)
   const { failures } = await closeIssuesOfPush({
-    event,
-    repository: environment.GITHUB_REPOSITORY ?? event.repository?.full_name ?? '',
-    api: gitHubApi({ token: environment.GITHUB_TOKEN ?? '', api: environment.GITHUB_API_URL }),
+    event: readEvent(environment),
+    repository: environment.GITHUB_REPOSITORY,
+    api: gitHubApi({ token: environment.GITHUB_TOKEN, api: environment.GITHUB_API_URL }),
     log: line => console.log(line)
   })
   if (failures) {
     console.log(`::error::${failures} step(s) failed; the log above names each.`)
-    process.exit(1)
+    process.exitCode = 1
   }
 }
+
+await runMain(import.meta.url, main)

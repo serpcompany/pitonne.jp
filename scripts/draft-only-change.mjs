@@ -45,12 +45,14 @@ function fileAt(sha, path) {
   }
 }
 
-function main([before, after]) {
+export function main([before, after]) {
   let skip = false
   let contentOnly = false
   let docsOnly = false
   if (before && after && !/^0+$/.test(before)) {
-    const paths = execFileSync('git', ['diff', '--name-only', before, after], { encoding: 'utf8' })
+    const paths = execFileSync('git', ['diff', '--no-renames', '--name-only', before, after], {
+      encoding: 'utf8'
+    })
       .split('\n')
       .filter(Boolean)
     skip = isDraftOnlyChange(

@@ -37,4 +37,11 @@ describe('robots.txt groups', () => {
     expect(blocksEverything(separate, 'a')).toBe(false)
     expect(blocksEverything(separate, 'b')).toBe(true)
   })
+
+  it('merges the rules of every group that names the same user agent', () => {
+    const repeated =
+      'User-Agent: a\nDisallow: /\n\nUser-Agent: b\nAllow: /\n\nUser-Agent: a\nDisallow: /keystatic/\n'
+    expect(blocksEverything(repeated, 'a')).toBe(true)
+    expect(blocksEverything(repeated, 'b')).toBe(false)
+  })
 })

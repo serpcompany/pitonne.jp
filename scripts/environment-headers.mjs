@@ -20,11 +20,12 @@ export function environmentRoutes(committedRoutes, environment) {
   return hasPasswordGate(environment) ? GATED_ROUTES : committedRoutes
 }
 
-function main([outDir = 'out']) {
+export function main([outDir = 'out']) {
   const file = path.resolve(outDir, '_headers')
   if (!fs.existsSync(file)) {
     console.error(`Missing ${file}; run \`next build\` first.`)
-    process.exit(1)
+    process.exitCode = 1
+    return
   }
   const environment = deployEnvironment(process.env)
   fs.writeFileSync(file, environmentHeaders(fs.readFileSync(file, 'utf8'), environment))

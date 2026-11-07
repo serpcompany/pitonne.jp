@@ -52,7 +52,7 @@ const closingKeyword =
 export function closingReferences(body, ownRepository = '') {
   const text = whereGitHubLinksNothing.reduce(
     (rest, pattern) => (typeof pattern === 'function' ? pattern(rest) : rest.replace(pattern, ' ')),
-    String(body ?? '')
+    body
   )
   const named = new Map()
   for (const [, short, linked, number] of text.matchAll(closingKeyword)) {
@@ -289,14 +289,14 @@ export function pullRequestOf(event) {
   if (!pull) return null
   return {
     number: pull.number,
-    title: pull.title ?? '',
+    title: pull.title,
     body: pull.body ?? '',
-    author: pull.user?.login ?? '',
-    base: pull.base?.ref ?? '',
-    head: pull.head?.ref ?? '',
-    fromThisRepository: pull.head?.repo?.full_name === pull.base?.repo?.full_name,
+    author: pull.user.login,
+    base: pull.base.ref,
+    head: pull.head.ref,
+    fromThisRepository: pull.head.repo?.full_name === pull.base.repo.full_name,
     merged: pull.merged === true,
-    mergeCommit: pull.merge_commit_sha ?? ''
+    mergeCommit: pull.merge_commit_sha
   }
 }
 
@@ -395,27 +395,29 @@ export function gitHubApi({ token, api = 'https://api.github.com', pause = pause
   }
 }
 
-export function readEvent(environment = process.env) {
-  return JSON.parse(
-    environment.GITHUB_EVENT_PATH ? readFileSync(environment.GITHUB_EVENT_PATH, 'utf8') : '{}'
-  )
+export const readEvent = environment =>
+  JSON.parse(readFileSync(environment.GITHUB_EVENT_PATH, 'utf8'))
+
+export async function runMain(moduleUrl, main) {
+  if (process.argv[1] && moduleUrl === pathToFileURL(process.argv[1]).href) {
+    await main(process.argv.slice(2))
+  }
 }
 
-export const isMain = moduleUrl =>
-  Boolean(process.argv[1]) && moduleUrl === pathToFileURL(process.argv[1]).href
-
-if (isMain(import.meta.url)) {
+export async function main(argv) {
   const environment = process.env
   const event = readEvent(environment)
-  const verdict = await runCheck(process.argv[2] ?? '', {
+  const verdict = await runCheck(argv[0], {
     pull: pullRequestOf(event),
-    repository: environment.GITHUB_REPOSITORY ?? event.repository?.full_name ?? '',
-    defaultBranch: event.repository?.default_branch ?? '',
+    repository: environment.GITHUB_REPOSITORY,
+    defaultBranch: event.repository.default_branch,
     tests: testsOf(process.cwd()),
     api: gitHubApi({ token: environment.GITHUB_TOKEN ?? '', api: environment.GITHUB_API_URL }),
     attempts: 3,
     pause: 5000
   })
   console.log(verdict.message)
-  process.exit(verdict.passed ? 0 : 1)
+  process.exitCode = verdict.passed ? 0 : 1
 }
+
+await runMain(import.meta.url, main)

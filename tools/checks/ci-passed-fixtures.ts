@@ -53,14 +53,19 @@ export function scratchHistory() {
     }).trim()
   run('init', '--quiet', '--initial-branch=staging')
   let edits = 0
-  const commit = (...files: string[]) => {
-    for (const file of files) {
-      fs.mkdirSync(path.join(folder, path.dirname(file)), { recursive: true })
-      fs.writeFileSync(path.join(folder, file), `edit ${++edits}\n`)
+  const save = (files: Record<string, string | null>) => {
+    for (const [file, text] of Object.entries(files)) {
+      if (text === null) fs.rmSync(path.join(folder, file))
+      else {
+        fs.mkdirSync(path.join(folder, path.dirname(file)), { recursive: true })
+        fs.writeFileSync(path.join(folder, file), text)
+      }
     }
     run('add', '--all')
-    run('commit', '--quiet', '-m', files.join(' '))
+    run('commit', '--quiet', '-m', Object.keys(files).join(' '))
     return run('rev-parse', 'HEAD')
   }
-  return { folder, run, commit, git: gitIn(folder) }
+  const commit = (...files: string[]) =>
+    save(Object.fromEntries(files.map(file => [file, `edit ${++edits}\n`])))
+  return { folder, run, commit, save, git: gitIn(folder) }
 }

@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   closeIssuesOfPush,
   closeNamedIssues,
   closingComment,
   commitsOf,
+  main,
   mergedAs,
   pullNamedBy
 } from './close-issues.mjs'
@@ -98,6 +99,18 @@ describe('closing the issues a merged pull request names', () => {
     expect(result).toEqual({ closed: [2], failed: [1] })
     expect(done).toEqual([`comment #2: ${closingComment(merged(''))}`, 'close #2'])
     expect(lines[0]).toBe("::error::Couldn't close #1, which #42 names: comment #1 returned 502")
+  })
+
+  it('says so when the pull request names no issue with a closing keyword', async () => {
+    const { api, done } = fakeApi({ 3: 'open' })
+    const { lines, log } = logged()
+    const pull = merged('Part of #3')
+    expect(await closeNamedIssues({ pull, repository, api, log })).toEqual({
+      closed: [],
+      failed: []
+    })
+    expect(done).toEqual([])
+    expect(lines).toEqual(['#42 names no issue with a closing keyword.'])
   })
 
   it('says which pull request closed the issue, and that Production gets it with the next promotion', () => {
@@ -232,6 +245,25 @@ describe('waiting for GitHub to link a squash merge to its commit', () => {
     expect(done.at(-1)).toBe('close #7')
   })
 
+  it('waits ten seconds of real time between asks by default', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'] })
+    try {
+      const { api, calls } = slowApi([[], [listed(42, 'Closes #7', squash)]])
+      const closing = closeIssuesOfPush({
+        event: pushOf('feat: the form opens (#42)'),
+        repository,
+        api,
+        log: logged().log
+      })
+      await vi.advanceTimersByTimeAsync(9999)
+      expect(calls()).toBe(1)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(await closing).toEqual({ closed: [7], failures: 0 })
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('fails, naming the pull request, when GitHub never links it', async () => {
     const { api, calls } = slowApi([[]])
     const { lines, log } = logged()
@@ -280,7 +312,7 @@ describe('the Close issues script against GitHub’s API', () => {
   const issue = (number: number) => `/repos/${repository}/issues/${number}`
 
   async function closeFor(body: string, failingComment?: number) {
-    const run = await runAgainstGitHub('tools/checks/close-issues.mjs', [], {
+    const run = await runAgainstGitHub(main, [], {
       event: { ref: 'refs/heads/staging', commits: [{ id: squash }] },
       route: ({ method, path }) => {
         if (method === 'GET' && path === pulls)

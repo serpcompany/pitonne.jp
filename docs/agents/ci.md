@@ -28,7 +28,9 @@ workflows and the action to this doc:
 | `tools/checks/ci-events.test.ts` | Which CI jobs and steps run on each event, played out as GitHub settles them |
 | `tools/checks/deploy-workflows.test.ts` | The deploy, promotion and sync rules |
 | `scripts/ci-passed.test.mjs`, `scripts/ci-passed-docs-only.test.mjs` | Which CI runs and receipts count as passed, and how a docs-only commit counts through the commit under it |
-| `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `close-issues.test.ts` | The pull request checks and the issue closing |
+| `scripts/draft-only-change.test.mjs`, `scripts/draft-only-change-cli.test.mjs` | How a change is classified as draft-only, content-only or docs-only |
+| `tools/checks/pull-request-workflows.test.ts`, `pull-request.test.ts`, `pull-request-cli.test.ts`, `pull-request-rules.test.ts`, `github-api.test.ts`, `close-issues.test.ts` | The pull request checks, their calls to GitHub's API, and the issue closing |
+| `tools/checks/workflow-helpers.test.ts` | That the workflow simulator fails on a workflow it can't read, rather than misread it |
 | `tools/checks/code-review.test.ts` | Who gets a review, when, and with which model |
 | `tools/checks/lighthouse-ci.test.ts`, `e2e.test.ts` | Lighthouse's setup and the browser journeys' rules |
 
@@ -78,7 +80,8 @@ to `staging` and `main` gets a run of its own, so none is cancelled. It starts o
 request's merge commit with its base:
 
 - `docs`: every changed file is a doc, a Markdown file under `docs/` or `.claude/skills/` or at
-  the root, which no build, test or script reads. Two files there aren't docs:
+  the root, which no build, test or script reads. A moved file counts by its old path and its
+  new one, so moving code into `docs/` is never docs-only. Two files there aren't docs:
   `docs/agents/ci.md`, whose table of pinned actions `tools/checks/workflow-rules.test.ts` reads,
   and `docs/image-audit/sheet-image-manifest.json`, which a test reads and Biome lints; content
   under `content/` never is. `scripts/draft-only-change.test.mjs` fails when code, a test, a
@@ -127,7 +130,10 @@ than a workflow of its own, so the code deploy can need it.
 the production export, runs `pnpm audit:out` and `pnpm audit:seo` on it, and hands it to `e2e`
 and `lighthouse` as the `site-production` artifact. These are the steps of `pnpm check` after
 `pnpm verify`, listed rather than calling `pnpm check`, so a step added to one is added to the
-other by hand. A docs-only change skips the job
+other by hand. `pnpm test` runs the tests with coverage, then SERP's coverage check
+([`code.md`](code.md#coverage)), which reads the stage from `AGENTS.md` at the base: the job checks
+out the commit with its parent (`fetch-depth: 2`) and names it `SERP_VERIFY_BASE` (`HEAD^1`) on
+that step, as `verify` does. A docs-only change skips the job
 (`if: ${{ !cancelled() && needs.changes.outputs.docs != 'true' }}`), and a push whose tree has
 both suites' receipts skips the build and the audits. It needs `changes`, and runs and fails
 when `changes` didn't succeed, whose `docs` is then empty: a failed classification must never

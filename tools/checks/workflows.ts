@@ -92,16 +92,15 @@ export function step(owner: WorkflowJob, idOrName: string): WorkflowStep {
   return found
 }
 
-export function stepIndex(owner: WorkflowJob, idOrName: string): number {
-  return (owner.steps ?? []).indexOf(step(owner, idOrName))
-}
+export const stepIndex = (owner: WorkflowJob, idOrName: string): number =>
+  (owner.steps as WorkflowStep[]).indexOf(step(owner, idOrName))
 
-export function needs(owner: WorkflowJob): string[] {
-  return [owner.needs ?? []].flat()
-}
+export const needs = (owner: WorkflowJob): string[] => [owner.needs as string | string[]].flat()
 
 export function scripts(owner: WorkflowJob): string {
-  return (owner.steps ?? []).flatMap(candidate => (candidate.run ? [candidate.run] : [])).join('\n')
+  return (owner.steps as WorkflowStep[])
+    .flatMap(candidate => (candidate.run ? [candidate.run] : []))
+    .join('\n')
 }
 
 export function workflowScripts(workflow: Workflow): string {

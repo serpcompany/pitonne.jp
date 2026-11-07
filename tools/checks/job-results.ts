@@ -1,4 +1,4 @@
-import type { Workflow, WorkflowJob } from './workflows'
+import type { Workflow, WorkflowJob, WorkflowStep } from './workflows'
 
 type Value = string | number | boolean | null | Value[] | { [key: string]: Value }
 type Call = (...values: Value[]) => Value
@@ -6,7 +6,6 @@ type Result = 'success' | 'failure' | 'skipped'
 
 export type Scenario = {
   github: { [key: string]: Value }
-  outputs?: Record<string, Record<string, string>>
   steps?: Record<string, Record<string, Record<string, string>>>
   failing?: readonly string[]
   vars?: Record<string, string>
@@ -22,16 +21,15 @@ const isRecord = (value: Value): value is { [key: string]: Value } =>
 
 function lookUp(scope: Value, path: string): Value {
   return path.split('.').reduce<Value>((value, key) => {
-    if (key === '*') return isRecord(value) ? Object.values(value) : []
-    if (Array.isArray(value))
-      return value.map(each => (isRecord(each) ? (each[key] ?? null) : null))
+    if (key === '*') return Object.values(value as { [key: string]: Value })
+    if (Array.isArray(value)) return value.map(each => (each as { [key: string]: Value })[key])
     return isRecord(value) ? (value[key] ?? null) : null
   }, scope)
 }
 
 function evaluate(text: string, scope: Value, calls: Record<string, Call>): Value {
   const expression = unwrapped(text)
-  const parts = expression.match(tokens) ?? []
+  const parts = [...expression.matchAll(tokens)].map(([part]) => part)
   let at = 0
   const either = (): Value => {
     let left = both()
@@ -64,7 +62,7 @@ function evaluate(text: string, scope: Value, calls: Record<string, Call>): Valu
     return !negated()
   }
   const single = (): Value => {
-    const part = parts[at++] ?? ''
+    const part = parts[at++]
     if (part === '(') {
       const inner = either()
       at++
@@ -72,7 +70,6 @@ function evaluate(text: string, scope: Value, calls: Record<string, Call>): Valu
     }
     if (part.startsWith("'")) return part.slice(1, -1)
     if (part === 'true' || part === 'false') return part === 'true'
-    if (/^\d+$/.test(part)) return Number(part)
     if (parts[at] !== '(') {
       const found = lookUp(scope, part)
       return found === null && /^(secrets|vars)\./.test(part) ? '' : found
@@ -94,13 +91,7 @@ function evaluate(text: string, scope: Value, calls: Record<string, Call>): Valu
 }
 
 const functions: Record<string, Call> = {
-  contains: (list, item) =>
-    Array.isArray(list)
-      ? list.includes(item)
-      : String(list ?? '')
-          .toLowerCase()
-          .includes(String(item ?? '').toLowerCase()),
-  startsWith: (text, start) => String(text ?? '').startsWith(String(start ?? '')),
+  contains: (list, item) => (list as Value[]).includes(item),
   fromJSON: text => JSON.parse(String(text)) as Value
 }
 
@@ -130,8 +121,6 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
     )
 
   function outputsOf(id: string): Record<string, string> {
-    const given = scenario.outputs?.[id]
-    if (given) return given
     const scope = { github: scenario.github, steps: stepsOf(id) }
     return Object.fromEntries(
       Object.entries(workflow.jobs[id]?.outputs ?? {}).map(([name, value]) => [
@@ -170,7 +159,6 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
       ...functions,
       always: () => true,
       success: () => earlier.every(result => result === 'success'),
-      failure: () => earlier.includes('failure'),
       cancelled: () => false
     }
   }
@@ -187,19 +175,19 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
   }
 
   function stepRunsIn(id: string, condition = 'success()') {
-    const calls = { ...callsOf(id), success: () => true, failure: () => false }
+    const calls = { ...callsOf(id), success: () => true }
     const text = unwrapped(condition)
     return Boolean(
       evaluate(statusCheck.test(text) ? text : `success() && (${text})`, scopeOf(id), calls)
     )
   }
 
-  function stepOf(id: string, name: string) {
-    const step = workflow.jobs[id]?.steps?.find(
+  function stepOf(id: string, name: string): WorkflowStep {
+    const found = workflow.jobs[id]?.steps?.find(
       each => each.name === name || each.id === name || each.run === name
     )
-    if (!step) throw new Error(`${id} has no step ${name}`)
-    return step
+    if (!found) throw new Error(`${id} has no step ${name}`)
+    return found
   }
 
   for (const id of Object.keys(workflow.jobs)) resultOf(id)
@@ -210,7 +198,7 @@ export function simulate(workflow: Workflow, scenario: Scenario) {
     stepEnv: (id: string, name: string) => {
       const scope = scopeOf(id)
       return Object.fromEntries(
-        Object.entries(stepOf(id, name).env ?? {}).map(([key, value]) => [
+        Object.entries(stepOf(id, name).env as Record<string, string>).map(([key, value]) => [
           key,
           interpolate(String(value), scope)
         ])

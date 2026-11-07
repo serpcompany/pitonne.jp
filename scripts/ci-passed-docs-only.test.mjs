@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import {
   allPassed,
@@ -107,6 +109,16 @@ describe('a commit that changes only docs counts as passed only through a tested
     const results = { [docs]: 'docs', [data]: 'docs', [content]: 'docs', [code]: 'passed' }
     expect((await passedFrom(git, docs, results)).passed).toBe(false)
     expect(docsOnlyChain(git, content)).toEqual([content])
+  })
+
+  it('counts a commit that moves code into docs as more than docs, since it deletes the code', () => {
+    const { folder, commit, run, git } = scratchHistory()
+    commit('src/a.ts')
+    fs.mkdirSync(path.join(folder, 'docs'))
+    run('mv', 'src/a.ts', 'docs/a.md')
+    run('commit', '--quiet', '-m', 'move')
+    const moved = run('rev-parse', 'HEAD')
+    expect(docsOnlyChain(git, moved)).toEqual([moved])
   })
 
   it('walks through a merge that brings in only docs, and needs one that brings in more to pass itself', async () => {

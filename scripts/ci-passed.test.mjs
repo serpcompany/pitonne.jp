@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   allPassed,
   checks,
@@ -12,7 +12,14 @@ import {
   scratchHistory
 } from '../tools/checks/ci-passed-fixtures'
 import { runAgainstGitHub } from '../tools/checks/github-stub'
-import { checksPassed, ciWorkflow, gitHubReader, isCiPush, receiptPassed } from './ci-passed.mjs'
+import {
+  checksPassed,
+  ciWorkflow,
+  gitHubReader,
+  isCiPush,
+  main,
+  receiptPassed
+} from './ci-passed.mjs'
 
 const repositoryId = 1228099867
 const sha = '651a854324ed4cc4f9800ac5d7d79ef483213601'
@@ -195,17 +202,47 @@ describe('a receipt counts only when CI uploaded it in a push run on staging or 
 })
 
 describe('the GitHub reader', () => {
-  const answering = statuses => {
+  const answering = (statuses, pausing = true) => {
     const pauses = []
     let call = 0
     const original = globalThis.fetch
     globalThis.fetch = async () => {
       const status = statuses[Math.min(call++, statuses.length - 1)]
+      if (status === 0) throw new TypeError('fetch failed')
       return { ok: status === 200, status, json: async () => ({ status }) }
     }
-    const read = gitHubReader({ token: 't', pause: async ms => pauses.push(ms) })
+    const pause = async ms => pauses.push(ms)
+    const read = gitHubReader(pausing ? { token: 't', pause } : { token: 't' })
     return { read, pauses, calls: () => call, restore: () => (globalThis.fetch = original) }
   }
+
+  it('waits real seconds between asks unless told how to wait', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'] })
+    const flaky = answering([502, 200], false)
+    try {
+      const answer = flaky.read('/x')
+      await vi.advanceTimersByTimeAsync(4999)
+      expect(flaky.calls()).toBe(1)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(await answer).toEqual({ status: 200 })
+      expect(flaky.calls()).toBe(2)
+    } finally {
+      flaky.restore()
+      vi.useRealTimers()
+    }
+  })
+
+  it('asks again when GitHub can’t be reached, then says it got no answer', async () => {
+    const down = answering([0])
+    try {
+      await expect(down.read('/x')).rejects.toThrow(
+        'GET /x got no answer (TypeError: fetch failed)'
+      )
+      expect(down.calls()).toBe(3)
+    } finally {
+      down.restore()
+    }
+  })
 
   it('asks again after 5 and 15 seconds when GitHub fails, then gives up', async () => {
     const flaky = answering([502, 503, 200])
@@ -251,22 +288,24 @@ describe('the command line', () => {
       [runsPathOf(code)]: { workflow_runs: [ciPushRun(5, { head_sha: code })] },
       [jobsPath(5)]: { jobs: [job('verify'), job('test')] }
     }
-    const passed = await runAgainstGitHub(
-      'scripts/ci-passed.mjs',
-      ['checks', docs, 'staging,main', 'verify test'],
-      { event: {}, env: environment, route: answering(answers), cwd: folder }
-    )
+    const passed = await runAgainstGitHub(main, ['checks', docs, 'staging,main', 'verify test'], {
+      event: {},
+      env: environment,
+      route: answering(answers),
+      cwd: folder
+    })
     expect(passed.status).toBe(0)
     expect(passed.requests.map(({ method, path }) => `${method} ${path}`)).toEqual([
       `GET ${runsPathOf(docs)}`,
       `GET ${runsPathOf(code)}`,
       `GET ${jobsPath(5)}`
     ])
-    const refused = await runAgainstGitHub(
-      'scripts/ci-passed.mjs',
-      ['checks', code, 'staging', 'verify'],
-      { event: {}, env: environment, route: () => ({ status: 403, body: {} }), cwd: folder }
-    )
+    const refused = await runAgainstGitHub(main, ['checks', code, 'staging', 'verify'], {
+      event: {},
+      env: environment,
+      route: () => ({ status: 403, body: {} }),
+      cwd: folder
+    })
     expect(refused.status).toBe(1)
     expect(refused.output).toContain("::warning::Couldn't tell whether verify passed")
   })
@@ -284,13 +323,13 @@ describe('the command line', () => {
       },
       [runPath(6)]: ciRun(6)
     }
-    const found = await runAgainstGitHub('scripts/ci-passed.mjs', ['receipt', 'lighthouse', tree], {
+    const found = await runAgainstGitHub(main, ['receipt', 'lighthouse', tree], {
       event: {},
       env: environment,
       route: answering(answers)
     })
     expect(found.status).toBe(0)
-    const wrong = await runAgainstGitHub('scripts/ci-passed.mjs', ['checks', sha, 'staging'], {
+    const wrong = await runAgainstGitHub(main, ['checks', sha, 'staging'], {
       event: {},
       env: environment,
       route: answering(answers)

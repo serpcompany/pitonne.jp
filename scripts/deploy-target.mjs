@@ -29,17 +29,19 @@ export function readTip(branch, run = git) {
   }
 }
 
-function main([branch, sha]) {
+export function main([branch, sha]) {
   if (!DEPLOY_BRANCHES.includes(branch) || !sha) {
     console.error('Usage: node scripts/deploy-target.mjs <main|staging> <sha>')
-    process.exit(2)
+    process.exitCode = 2
+    return
   }
   const tip = readTip(branch)
   if (!tip) {
     console.log(
       `::error::Couldn't read the tip of origin/${branch}, so nothing deploys: only the branch tip may replace a deploy. Run the deploy again.`
     )
-    process.exit(1)
+    process.exitCode = 1
+    return
   }
   const decision = chooseDeploy({ sha, tip })
   console.log(decision.reason)
