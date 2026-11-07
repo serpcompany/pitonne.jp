@@ -1,73 +1,39 @@
-import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { main } from './audit-out.mjs'
+import { robots, runAudit, tempTrees } from './audit-test-helpers.mjs'
 import { environmentHeaders, environmentRoutes } from './environment-headers.mjs'
 
-const script = path.resolve('scripts/audit-out.mjs')
 const committedHeaders = fs.readFileSync(path.join('public', '_headers'), 'utf8')
 const committedRoutes = fs.readFileSync(path.join('public', '_routes.json'), 'utf8')
 const ENVIRONMENTS = ['production', 'staging', 'preview']
-const folders = []
-
-afterEach(() => {
-  for (const folder of folders.splice(0)) fs.rmSync(folder, { recursive: true, force: true })
-})
-
-const robots = {
-  production: [
-    'User-Agent: *',
-    'Allow: /',
-    'Disallow: /keystatic/',
-    '',
-    'Sitemap: https://pitonne.jp/sitemap-index.xml'
-  ],
-  staging: [
-    'User-Agent: *',
-    'Disallow: /',
-    '',
-    'User-Agent: AhrefsSiteAudit',
-    'Allow: /',
-    'Disallow: /keystatic/',
-    '',
-    'Sitemap: https://staging.pitonne.jp/sitemap-index.xml'
-  ],
-  preview: ['User-Agent: *', 'Disallow: /', '', 'Sitemap: https://pitonne.jp/sitemap-index.xml']
-}
+const tree = tempTrees()
 
 function built(environment, changes = {}) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), `audit-out-${environment}-`))
-  folders.push(root)
-  const files = {
-    'index.html': '<html lang="en"></html>',
-    'ja/index.html': '<html lang="ja"></html>',
-    '404.html':
-      '<html lang="en"><head><meta name="robots" content="noindex"></head><a href="/">Home</a></html>',
-    'robots.txt': `${robots[environment].join('\n')}\n`,
-    _headers: environmentHeaders(committedHeaders, environment),
-    _redirects: '/en/* /:splat 301\n',
-    '_routes.json': environmentRoutes(committedRoutes, environment),
-    'sitemap-index.xml':
-      '<sitemapindex><sitemap><loc>https://pitonne.jp/sitemap-pages.xml</loc></sitemap></sitemapindex>',
-    'sitemap-pages.xml': '<urlset></urlset>',
-    'sitemap.xml': '<urlset></urlset>',
-    ...changes
-  }
-  for (const [file, content] of Object.entries(files)) {
-    if (content === null) continue
-    const target = path.join(root, 'out', file)
-    fs.mkdirSync(path.dirname(target), { recursive: true })
-    fs.writeFileSync(target, content)
-  }
-  return root
+  return tree(
+    `audit-out-${environment}-`,
+    {
+      'index.html': '<html lang="en"></html>',
+      'ja/index.html': '<html lang="ja"></html>',
+      '404.html':
+        '<html lang="en"><head><meta name="robots" content="noindex"></head><a href="/">Home</a></html>',
+      'robots.txt': `${robots[environment].join('\n')}\n`,
+      _headers: environmentHeaders(committedHeaders, environment),
+      _redirects: '/en/* /:splat 301\n',
+      '_routes.json': environmentRoutes(committedRoutes, environment),
+      'sitemap-index.xml':
+        '<sitemapindex><sitemap><loc>https://pitonne.jp/sitemap-pages.xml</loc></sitemap></sitemapindex>',
+      'sitemap-pages.xml': '<urlset></urlset>',
+      'sitemap.xml': '<urlset></urlset>',
+      ...changes
+    },
+    'out'
+  )
 }
 
 function audit(root, deployEnv = {}) {
-  const env = { ...process.env, ...deployEnv }
-  for (const name of ['DEPLOY_ENV', 'NEXT_PUBLIC_DEPLOY_ENV'])
-    if (!(name in deployEnv)) delete env[name]
-  const run = spawnSync(process.execPath, [script], { cwd: root, env, encoding: 'utf8' })
+  const run = runAudit(main, [], { cwd: root, env: deployEnv })
   const problems = run.stderr
     .split('\n')
     .filter(line => line.startsWith('- '))
@@ -165,5 +131,108 @@ describe('pnpm audit:out', () => {
     const result = audit(root, deployEnv)
     expect(result.status).toBe(1)
     expect(result.problems).toEqual(['missing out/_redirects', 'unexpected out/en'])
+  })
+})
+
+describe('pnpm audit:out on a broken export', () => {
+  const problemsOf = (environment, changes, deployEnv) => {
+    const result = audit(built(environment, changes), deployEnv)
+    expect(result.status).toBe(1)
+    expect(result.log).toContain('Export audit failed (run `pnpm build` first):')
+    return result.problems
+  }
+
+  it('names the sitemap index and the routes file when they are missing', () => {
+    expect(problemsOf('production', { 'sitemap-index.xml': null, '_routes.json': null })).toEqual([
+      'missing out/_routes.json',
+      'missing out/sitemap-index.xml'
+    ])
+  })
+
+  it('fails a sitemap index that lists no sitemaps, and one that lists a missing sitemap', () => {
+    expect(
+      problemsOf('production', { 'sitemap-index.xml': '<sitemapindex></sitemapindex>' })
+    ).toEqual(['out/sitemap-index.xml lists no sitemaps'])
+    expect(problemsOf('production', { 'sitemap-pages.xml': null })).toEqual([
+      'missing out/sitemap-pages.xml'
+    ])
+  })
+
+  it('fails each page under a path _routes.json keeps off the Function, and nothing else there', () => {
+    const routes = {
+      include: ['/*'],
+      exclude: ['/images/*', '/icon.svg', '/legacy.html', '/gone/*']
+    }
+    const problems = problemsOf('production', {
+      '_routes.json': JSON.stringify(routes),
+      'images/gallery/index.html': '<html lang="en"></html>',
+      'images/photo.png': 'png',
+      'icon.svg': '<svg></svg>',
+      'legacy.html': '<html lang="en"></html>'
+    })
+    const offTheFunction = file =>
+      `out/${file} is a page under a path _routes.json keeps off the Function`
+    expect(problems).toEqual([
+      offTheFunction(path.join('images', 'gallery', 'index.html')),
+      offTheFunction('legacy.html')
+    ])
+  })
+
+  it('fails robots.txt and _headers that disagree about indexing', () => {
+    expect(problemsOf('production', { 'robots.txt': `${robots.preview.join('\n')}\n` })).toEqual([
+      'out/robots.txt disallows crawling but out/_headers sends no X-Robots-Tag: noindex'
+    ])
+    const previewHeaders = environmentHeaders(committedHeaders, 'preview')
+    expect(problemsOf('production', { _headers: previewHeaders })).toEqual([
+      'out/_headers sends X-Robots-Tag: noindex but out/robots.txt allows crawling'
+    ])
+  })
+
+  it.each([
+    ['the committed routes', committedRoutes],
+    ['routes that include only the homepage', JSON.stringify({ include: ['/'], exclude: [] })]
+  ])('fails a Staging build whose password gate misses paths, with %s', (_, routes) => {
+    expect(problemsOf('staging', { '_routes.json': routes })).toContain(
+      'out/robots.txt admits only AhrefsSiteAudit, so the password gate must cover every path, but out/_routes.json keeps paths off the Function'
+    )
+  })
+
+  it('reports a missing robots.txt and _headers once, without the signals they would carry', () => {
+    expect(
+      problemsOf('preview', { 'robots.txt': null, _headers: null }, { DEPLOY_ENV: 'preview' })
+    ).toEqual(['missing out/robots.txt', 'missing out/_headers'])
+  })
+
+  it('reports a missing 404 page only as missing', () => {
+    expect(problemsOf('production', { '404.html': null })).toEqual(['missing out/404.html'])
+  })
+
+  it.each([
+    [
+      'a bare page',
+      '<p>Not found</p>',
+      [
+        'out/404.html has no <html lang="en">',
+        'out/404.html has 0 robots meta tags, expected one with noindex',
+        'out/404.html has no link to /'
+      ]
+    ],
+    [
+      'a Japanese page linking only to the Japanese home',
+      '<html lang="ja"><meta name="robots" content="noindex"><a href="/ja/">Home</a></html>',
+      ['out/404.html has no <html lang="en">', 'out/404.html has no link to /']
+    ],
+    [
+      'two robots tags',
+      '<html lang="en"><meta name="robots" content="noindex"><meta name="robots" content="noindex"><a href="/">Home</a></html>',
+      ['out/404.html has 2 robots meta tags, expected one with noindex']
+    ],
+    [
+      'an indexable robots tag',
+      '<html lang="en"><meta name="robots" content="index"><a href="/">Home</a></html>',
+      ['out/404.html has 1 robots meta tags, expected one with noindex']
+    ]
+  ])('fails a 404 page that is %s', (_, page, problems) => {
+    expect(problemsOf('production', { '404.html': page })).toEqual(problems)
   })
 })
