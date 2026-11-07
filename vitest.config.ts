@@ -5,6 +5,18 @@ export default defineConfig({
   test: {
     globals: true,
     testTimeout: 30_000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary', 'lcov'],
+      include: [
+        'src/**/*.{ts,tsx,mts}',
+        'functions/**/*.ts',
+        'scripts/**/*.{mjs,ts}',
+        'tools/**/*.{ts,mjs}',
+        'keystatic.config.ts',
+        'next.config.mjs'
+      ]
+    },
     projects: [
       {
         extends: true,

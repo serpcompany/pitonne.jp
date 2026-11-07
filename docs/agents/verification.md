@@ -17,7 +17,9 @@ this doc holds this repository's commands for them.
 
 **The inner loop:**
 
-- `pnpm exec vitest related --run <files>`: the tests that import the files you changed.
+- `pnpm exec vitest related --run --coverage <files>`: the tests that import the files you
+  changed, then `pnpm exec serp-verify coverage --changed`: the coverage gaps on the lines you
+  changed ([`code.md`](code.md#coverage)).
 - `pnpm exec vitest run <test-file>`: one test file.
 - `pnpm typecheck`, and `pnpm exec biome check <files>` (or `pnpm lint` for everything;
   `pnpm format` writes the formatting).

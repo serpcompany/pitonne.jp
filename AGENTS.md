@@ -21,8 +21,8 @@ apply; where this repository differs, the last section says so, and it wins.
 
 ## Commands
 
-- **Inner loop:** `pnpm exec vitest related --run <files>`, `pnpm exec vitest run <test-file>`,
-  `pnpm typecheck`, `pnpm exec biome check <files>`, and `pnpm verify [checks] [paths]` for SERP's
+- **Inner loop:** `pnpm exec vitest related --run --coverage <files>` then
+  `pnpm exec serp-verify coverage --changed`, `pnpm exec vitest run <test-file>`, `pnpm typecheck`, `pnpm exec biome check <files>`, and `pnpm verify [checks] [paths]` for SERP's
   shared checks on some paths.
 - **The site:** `pnpm dev` serves http://localhost:3000 (and `/ja/`); `pnpm cms` serves Keystatic
   on your local files at http://127.0.0.1:3000/keystatic.

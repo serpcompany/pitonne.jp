@@ -117,13 +117,18 @@ jobs:
           echo "::error::The Classify changes job didn't succeed, so nothing says what this run must check."
           exit 1
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 2
       - name: Set up Node and pnpm, and install
         uses: ./.github/actions/setup-node-pnpm
         with:
           token: ${{ github.token }}
       - run: pnpm lint
       - run: pnpm typecheck
-      - run: pnpm test
+      - name: The tests, with coverage, then the coverage check
+        env:
+          SERP_VERIFY_BASE: HEAD^1
+        run: pnpm test
       - run: pnpm audit:meta
       - if: env.BUILD == 'true'
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25

@@ -19,7 +19,7 @@ site's parts are in [`CONTEXT.md`](../../CONTEXT.md).
 | `src/lib/i18n/` | The locale list, the dictionaries and their loader |
 | `src/test/` | Helpers the tests share |
 | `functions/_middleware.ts` | The Cloudflare Pages Function, which calls `src/lib/canonical-host.ts` |
-| `scripts/` | Build, audit, deploy and smoke-test scripts. The deploy, smoke-test and headers scripts have tests beside them; the audits, the content tools and the local server don't |
+| `scripts/` | Build, audit, deploy, content and smoke-test scripts, each with its tests beside it |
 | `tools/checks/` | Tests that hold the workflows, the browser journeys and the Lighthouse setup to their rules |
 | `e2e/`, `playwright.config.ts` | The Playwright browser journeys on the built site ([`verification.md`](verification.md#browser-journeys)) |
 | `content/`, `public/`, `keystatic.config.ts` | Content, static files and the CMS config, at the root ([ADR 0004](../adr/0004-repository-layout.md)) |
@@ -81,6 +81,29 @@ components, need an `@source` line of their own.
   (`await expect(locator).toBeVisible()`), never `page.waitForTimeout` or a timer, and nothing
   retries it. SERP's wait check reads only Swift UI tests so far, so
   `tools/checks/e2e.test.ts` holds these rules.
+
+## Coverage
+
+Every line, branch and function of the code runs in a test, as SERP's
+[coverage check](https://github.com/serpcompany/serp/blob/main/docs/engineering/standards/verification/coverage-check/README.md)
+sets at Ship. `pnpm test` runs Vitest with v8 coverage, which writes `coverage/lcov.info`, then
+`serp-verify coverage`, which fails on each line no test runs, branch never taken and function
+never called; `coverage.reports` in `verify.json` names the report.
+
+- **What's measured:** `coverage.include` in `vitest.config.ts` names `src/`, `functions/`,
+  `scripts/`, `tools/`, `keystatic.config.ts` and `next.config.mjs`, so a file no test loads
+  reports 0%. Only test files are skipped, and the files `verify.json` marks as written by a tool.
+  The Playwright journeys in `e2e/` aren't measured: only Vitest writes the report.
+- **No exclusions:** no `coverage.exclude`, no thresholds (the check is the bar) and no
+  `/* v8 ignore */`, which the comment check refuses.
+- **Filling a gap:** write the test that drives the code as its callers do and asserts what it
+  should do, or delete the code nothing needs. A test that only reaches a line is padding, which
+  the Code review flags ([`ci-pull-requests.md`](ci-pull-requests.md#code-review)).
+- **Scripts** run their work from an exported `main` through `runMain` (`scripts/run-main.mjs`),
+  so a test imports the script and calls `main` in the same process, where coverage sees it; a
+  script run as a child process counts for nothing.
+  `tools/checks/pull-request.mjs` exports its own `runMain`, which `close-issues.mjs` uses too,
+  since their workflows check out only those files.
 
 ## The checks
 
